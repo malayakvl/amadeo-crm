@@ -14,4 +14,7 @@ module.exports = {
     defaultLocale: 'en',
     localeDetection: false
   },
+  publicRuntimeConfig: {
+    apiUrl: process.env.API_URL
+  }
 }

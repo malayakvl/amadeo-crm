@@ -16,9 +16,8 @@ apiRoutes.use(express.json({
     strict: true
 }));
 
-apiRoutes.route('/test')
-    .get(TestController.testData);
-
+apiRoutes.route('/post-test')
+    .post(TestController.testData);
 
 
 /* ================= start auth api routes ======================== */
@@ -249,7 +248,7 @@ apiRoutes.route('/test')
 // apiRoutes.route('/test')
 //     .get(SubscriptionController.test);
 //
-// apiRoutes.get('/*', defaultHandler);
+apiRoutes.get('/*', defaultHandler);
 
 export default apiRoutes;
 

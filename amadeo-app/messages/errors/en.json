@@ -1,3 +1,6 @@
 {
-  "Required field": "Required field"
+  "Required field": "Required field",
+  "Must be a valid email": "Must be a valid email",
+  "Password must be at least 6 characters": "Password must be at least 6 characters",
+  "Passwords must match": "Passwords must match"
 }

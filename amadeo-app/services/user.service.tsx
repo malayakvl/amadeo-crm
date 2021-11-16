@@ -5,7 +5,7 @@ import Router from 'next/router';
 import { fetchWrapper } from '../helpers';
 
 const { publicRuntimeConfig } = getConfig();
-const baseUrl = `${publicRuntimeConfig.apiUrl}/users`;
+const baseUrl = `${publicRuntimeConfig.apiUrl}/api`;
 const userSubject = new BehaviorSubject(process.browser && JSON.parse(localStorage.getItem("user") || "{}"));
 
 export const userService = {
@@ -14,8 +14,6 @@ export const userService = {
     login,
     logout,
     register,
-    getAll,
-    getById,
     update,
     delete: _delete
 };
@@ -39,16 +37,20 @@ function logout() {
 }
 
 function register(user:any) {
-    return fetchWrapper.post(`${baseUrl}/register`, user);
+    // return fetch(`${baseUrl}/post-test`, {
+    //     method: 'POST',
+    //     headers: {
+    //         'Accept': 'application/json',
+    //         'Content-Type': 'application/json'
+    //     },
+    //     body: JSON.stringify(user)
+    // })
+    //     .then(response => response.json())
+    //     .then(data => console.log(data))
+    //     .catch(error => console.log(error))
+    return fetchWrapper.post(`${baseUrl}/post-test`, user);
 }
 
-function getAll() {
-    return fetchWrapper.get(baseUrl);
-}
-
-function getById(id:bigint) {
-    return fetchWrapper.get(`${baseUrl}/${id}`);
-}
 
 function update(id:bigint, params:any) {
     return fetchWrapper.put(`${baseUrl}/${id}`, params)

@@ -1,10 +1,9 @@
-import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import * as Yup from 'yup';
 import { providers, getSession } from "next-auth/client";
 import LangSwitcher from "../../components/lang/switcher";
-import {useTranslations} from "next-intl";
+import { useTranslations } from "next-intl";
 import ProviderBtns from '../../components/auth/ProviderBtns';
 import { userService, alertService } from '../../services';
 
@@ -22,7 +21,7 @@ const InputText: React.FC<Props> = ({ label, type, name, register, errors } ) =>
         <div className="mb-4">
             <label htmlFor="email">{t(label)}</label>
             <input
-                {...register('email')}
+                {...register(name)}
                 type={type}
                 name={name}
                 id={name}
@@ -37,38 +36,34 @@ const InputText: React.FC<Props> = ({ label, type, name, register, errors } ) =>
 export default function Registration({providers} : {providers:any}) {
     const t = useTranslations();
 
-    const router = useRouter();
-
     // form validation rules
     const validationSchema = Yup.object().shape({
-        email: Yup.string()
+        email: Yup.string().email(t('Must be a valid email'))
             .required(t('Required field')),
         last_name: Yup.string()
             .required(t('Required field')),
         first_name: Yup.string()
             .required(t('Required field')),
-        // username: Yup.string()
-        //     .required('Username is required'),
-        // password: Yup.string()
-        //     .required('Password is required')
-        //     .min(6, 'Password must be at least 6 characters')
+        password: Yup.string()
+            .required(t('Required field'))
+            .min(6, t('Password must be at least 6 characters')),
+        password_confirmation: Yup.string()
+            .oneOf([Yup.ref('password'), null], t('Passwords must match'))
     });
     const formOptions = { resolver: yupResolver(validationSchema) };
 
     // get functions to build form with useForm() hook
     const { register, handleSubmit, formState } = useForm(formOptions);
     const { errors } = formState;
-    console.log(errors);
 
     const onSubmit = (user:any) => {
-        console.log(user);
         return userService.register(user)
             .then(() => {
-                // alertService.success({'Registration successful', { keepAfterRouteChange: true }});
                 alertService.success('Success', { keepAfterRouteChange: true });
-                router.push('login');
+                // router.push('login');
             })
             .catch(e => {
+                console.log(123)
                 alertService.error(e.message, {})
             });
     }
@@ -161,7 +156,7 @@ export default function Registration({providers} : {providers:any}) {
                                     focus:outline-none duration-100 ease-in-out"
                                 disabled={formState.isSubmitting}
                             >
-                                {formState.isSubmitting && <span className="spinner-border spinner-border-sm mr-1"></span>}
+                                {formState.isSubmitting && <span className="spinner-border spinner-border-sm mr-1" />}
                                 Registration
                             </button>
                         </div>

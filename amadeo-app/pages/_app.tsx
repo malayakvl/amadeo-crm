@@ -1,6 +1,7 @@
 import '../styles/globals.css'
 import { NextIntlProvider } from 'next-intl'
 import type { AppProps } from 'next/app'
+import {Alert} from "../components/services/Alert";
 
 function MyApp({ Component, pageProps }: AppProps) {
     return (
@@ -25,7 +26,11 @@ function MyApp({ Component, pageProps }: AppProps) {
             // in a different time zone.
             timeZone="Austria/Vienna"
         >
-            <Component {...pageProps} />
+            <div className="relative">
+                <Alert />
+                <Component {...pageProps} />
+            </div>
+
         </NextIntlProvider>
     );
 }
