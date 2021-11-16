@@ -1,0 +1,58 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+    .icon {
+        @apply hidden xl:inline-flex p-2 h-10 w-10 bg-gray-200 rounded-full text-gray-700
+            cursor-pointer hover:bg-gray-300;
+    }
+
+    .Google {
+        @apply bg-red-700 text-white w-full rounded-full
+        p-2 flex flex-row justify-center
+        gap-2 items-center rounded-sm
+        hover:bg-gray-800 duration-100 ease-in-out;
+    }
+
+    .Facebook {
+        @apply bg-blue-700 text-white w-full rounded-full
+            p-2 flex flex-row justify-center
+            gap-2 items-center rounded-sm
+            hover:bg-gray-800 duration-100 ease-in-out;
+    }
+
+    /*Form element*/
+    .txt-input {
+        @apply w-full px-3 py-2 placeholder-gray-300
+            border border-gray-300 rounded-md
+            focus:outline-none focus:ring focus:ring-indigo-100 focus:border-indigo-300
+            dark:bg-gray-700 dark:text-white dark:placeholder-gray-500 dark:border-gray-600
+            dark:focus:ring-gray-900 dark:focus:border-gray-500
+    }
+
+    label {
+        @apply text-sm text-gray-600 dark:text-gray-400;
+    }
+
+    .error-el {
+        @apply flex items-center font-medium tracking-wide text-red-500 text-xs mt-1 ml-1
+    }
+}
+
+.error-bg {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1600 900'%3E%3Cpolygon fill='%23f0b608' points='957 450 539 900 1396 900'/%3E%3Cpolygon fill='%23e6d710' points='957 450 872.9 900 1396 900'/%3E%3Cpolygon fill='%23e7af05' points='-60 900 398 662 816 900'/%3E%3Cpolygon fill='%23e7d808' points='337 900 398 662 816 900'/%3E%3Cpolygon fill='%23d8a408' points='1203 546 1552 900 876 900'/%3E%3Cpolygon fill='%23f1e213' points='1203 546 1552 900 1162 900'/%3E%3Cpolygon fill='%23f0b607' points='641 695 886 900 367 900'/%3E%3Cpolygon fill='%23e4d506' points='587 900 641 695 886 900'/%3E%3Cpolygon fill='%23eab822' points='1710 900 1401 632 1096 900'/%3E%3Cpolygon fill='%23e8da14' points='1710 900 1401 632 1365 900'/%3E%3Cpolygon fill='%23e8b008' points='1210 900 971 687 725 900'/%3E%3Cpolygon fill='%23edde14' points='943 900 1210 900 971 687'/%3E%3C/svg%3E");
+}
+.tracking-tighter-less {
+    letter-spacing: -0.75rem;
+}
+.text-shadow {
+    text-shadow: -8px 0 0 rgb(102 123 242);
+}
+
+.dropdown:focus-within .dropdown-menu {
+    opacity:1;
+    transform: translate(0) scale(1);
+    visibility: visible;
+}
+
