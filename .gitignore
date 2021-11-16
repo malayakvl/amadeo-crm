@@ -104,4 +104,6 @@ dist
 .tern-port
 
 BE/node_modules
+BE/.env
 amadeo-app/node_modules
+amadeo-app/.env
