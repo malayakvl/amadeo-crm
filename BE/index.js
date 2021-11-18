@@ -6,6 +6,7 @@ import path from 'path';
 import express from 'express';
 import cors from 'cors';
 import passport from './src/api/middleware/passport.js';
+import authRoutes from './src/api/routes/authRoute.js';
 import apiRoutes from './src/api/routes/apiRoutes.js';
 import appRoute from './src/appRoute.js';
 
@@ -40,6 +41,7 @@ app.use(passport.initialize());
  * Routes Definitions
  */
 app.use('/', appRoute);
+app.use('/auth', authRoutes);
 app.use('/api', apiRoutes);
 
 /**

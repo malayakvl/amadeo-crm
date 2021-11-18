@@ -6,7 +6,7 @@ exports.up = pgm => {
     pgm.createTable({ schema: 'data', name: 'users' }, {
         id: 'id',
         email: { type: 'varchar(100)', notNull: true, unique: true },
-        password: { type: 'varchar(255)' },
+        password: { type: 'text' },
         salt: { type: 'varchar(255)' },
         auth_provider_name: { type: 'varchar(100)' },
         auth_provider_id: { type: 'varchar(100)' },
