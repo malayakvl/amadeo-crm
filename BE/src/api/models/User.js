@@ -18,7 +18,15 @@ class User {
         const client = await pool.connect();
         try {
             const res = await client.query(`SELECT * FROM data.users WHERE email = '${email.toLowerCase()}'`);
-            return res.rows.length > 0 ? res.rows[0] : null;
+            if  (res.rows.length) {
+                delete res.rows[0].auth_provider_name;
+                delete res.rows[0].auth_provider_id;
+                delete res.rows[0].role_id;
+                return res.rows[0];
+            } else {
+                return null;
+            }
+            // return res.rows.length > 0 ? res.rows[0] : null;
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
                 logger.log(
@@ -114,6 +122,32 @@ class User {
                 delete user.salt;
                 delete user.password;
                 return { user: user, error: null };
+            } else {
+                return { user: null, error: { code: 404, message: 'User Not found' } };
+            }
+        } catch(e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error:',
+                    { message: e.message }
+                );
+            }
+            return { user: null, error: { code: 404, message: 'User Not found' } };
+        } finally {
+            client.release();
+        }
+    }
+    
+    async update(userData) {
+        const client = await pool.connect();
+        try {
+            const user = await this.findUserByEmail(userData.email);
+            const query = `SELECT common__tools._update_table_by_id('data', 'users', '${JSON.stringify(userData)}', ${user.id});`;
+            console.log(query);
+            await client.query(query);
+            if (user) {
+                return { user: userData, error: null };
             } else {
                 return { user: null, error: { code: 404, message: 'User Not found' } };
             }
