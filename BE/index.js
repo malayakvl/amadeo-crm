@@ -9,6 +9,7 @@ import passport from './src/api/middleware/passport.js';
 import authRoutes from './src/api/routes/authRoute.js';
 import apiRoutes from './src/api/routes/apiRoutes.js';
 import appRoute from './src/appRoute.js';
+import bodyParser from "body-parser";
 
 /**
  * App Variables
@@ -32,8 +33,10 @@ const corsOptions = {
  */
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "pug");
-
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
+app.use('/uploads', express.static('uploads'));
 app.use(cors(corsOptions));
 app.use(passport.initialize());
 

@@ -51,21 +51,26 @@ class AuthController {
      * @returns {Promise<*>}
      */
     async authRegister (req, res) {
-        const { user, error } = await userModel.create(req.body);
-        if (error) {
-            return res.status(error.code).json(error);
-        }
-        // sendEmail('welcome', user);
-        req.login(user, { session: false },
-            (error) => {
-                if (error) {
-                    res.send(error);
-                }
-                getTokensAndSetCookies(req, res, user.id, user.email);
-
-                res.status(200).json({ user: user });
+        const _user = await userModel.findUserByEmail(req.body.email);
+        if (_user) {
+            res.status(402).json({ user: null, error: 'Email present' });
+        } else {
+            const { user, error } = await userModel.create(req.body);
+            if (error) {
+                return res.status(error.code).json(error);
             }
-        );
+            // sendEmail('welcome', user);
+            req.login(user, { session: false },
+                (error) => {
+                    if (error) {
+                        res.send(error);
+                    }
+                    getTokensAndSetCookies(req, res, user.id, user.email);
+            
+                    res.status(200).json({ user: user });
+                }
+            );
+        }
     }
 }
 

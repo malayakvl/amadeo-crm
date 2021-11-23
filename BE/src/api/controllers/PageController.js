@@ -1,13 +1,32 @@
 import multer from 'multer';
 
-class TestController {
-    async testData (req, res) {
+class PageController {
+    async getPage (req, res) {
         let error;
         const testData = [
-            { id: 1, title: "Page 1" },
-            { id: 2, title: "Page 2" }
+            { id: 1, title: "Page 1", slug: "terms", content: "" },
         ];
-        if (testData) res.status(200).json({ user: {name: "This is Test User", id: 10, token: "dddweqeeew"} });
+        if (testData) res.status(200).json({ data: testData });
+        if (error) res.status(error.code).json({error: 'Show error message'});
+    }
+    
+    async getAll (req, res) {
+        let error;
+        const testData =
+            [
+                {
+                    params: {
+                        slug: 'terms'
+                    }
+                },
+                {
+                    params: {
+                        slug: 'price'
+                    }
+                }
+            ]
+        ;
+        if (testData) res.status(200).json({ data: testData });
         if (error) res.status(error.code).json({error: 'Show error message'});
     }
     
@@ -28,9 +47,9 @@ class TestController {
                 return res.status(500).json(err)
             }
             return res.status(200).send(req.file)
-
+            
         })
     }
 }
 
-export default new TestController();
+export default new PageController();

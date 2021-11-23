@@ -22,6 +22,7 @@ exports.up = pgm => {
         identification_number: { type: 'varchar(100)' },
         vat: { type: 'boolean' },
         phone: { type: 'varchar(255)' },
+        full_address: { type: 'varchar(255)' },
         created_at: {
             type: 'timestamp',
             notNull: true,
@@ -40,5 +41,5 @@ exports.down = pgm => {
     pgm.dropTable({ schema: 'data', name: 'users' }, {
         ifExists: true,
         cascade: false
-    })
+    });
 };
