@@ -1,0 +1,14 @@
+{
+  "Required field": "Required field",
+  "Must be a valid email": "Must be a valid email",
+  "Password must be at least 6 characters": "Password must be at least 6 characters",
+  "Passwords must match": "Passwords must match",
+  "You must enter your email": "You must enter your email",
+  "You must enter your family name": "You must enter your family name",
+  "You must enter your first name": "You must enter your first name",
+  "You must enter your tax-ID": "You must enter your tax-ID",
+  "You must enter your address": "You must enter your address",
+  "You must enter your phone number": "You must enter your phone number",
+  "Confirm terms": "Confirm terms",
+  "Email present": "Email present"
+}
