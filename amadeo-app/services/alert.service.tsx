@@ -31,7 +31,7 @@ function success(message:string, options:any) {
     alert({ ...options, type: AlertType.Success, message });
 }
 
-function error(message:string, options:any) {
+function error(message: string, options: any) {
     alert({ ...options, type: AlertType.Error, message });
 }
 

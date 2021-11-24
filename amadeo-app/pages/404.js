@@ -1,35 +1,21 @@
 import Link from "next/link"
-import {useTranslations} from "next-intl";
 
 export default function Custom404() {
-    const t = useTranslations();
+    // const t = useTranslations();
     return (
-        <div
-            className="flex items-center justify-center
-                min-h-screen bg-indigo-500
-                bg-fixed bg-cover bg-bottom error-bg"
-        >
-            <div className="container">
-                <div className="row">
-                    <div className="col-sm-8 offset-sm-2 text-gray-50 text-center -mt-52">
-                        <div className="relative ">
-                            <h1 className="relative text-9xl tracking-tighter-less text-shadow font-sans font-bold">
-                                <span>4</span><span>0</span><span>4</span>
-                            </h1>
-                        </div>
-                        <h5 className="mt-2 mb-3 font-semibold mr-10">{t('Page not found')}</h5>
-                        <h3 className="text-gray-100 mt-10 mb-6">
-                            {t('we are sorry, but the page you requested was not found')}
-                        </h3>
-                        <Link href="/">
-                            <a
-                                className="bg-green-400  px-5 py-3 text-sm shadow-sm font-medium tracking-wider text-gray-50 rounded-full hover:shadow-lg">
-                                {t('Go to Home')}
-                            </a>
-                        </Link>
-                        
-                    </div>
-                </div>
+        <div className="container bg-white rounded-lg pt-4 pb-10 m-auto mt-6 md:mt-15 lg:px-12 xl:px-16">
+            <div className="text-center pt-8">
+                <h1 className="text-8xl text-center block">404</h1>
+                <h1 className="text-6xl font-medium py-8 text-center block">oops! Page not found</h1>
+                <p className="text-2xl pb-8 px-12 font-medium">Oops! The page you are looking for does not exist. It might
+                    have been moved or deleted.</p>
+                <Link href="/">
+                    <a className="block bg-gradient-to-r from-green-300 to-blue-300 mb-10 mt-10
+                            hover:from-pink-500 hover:to-orange-500 text-white px-4 py-2 rounded">
+                        Home
+                    </a>
+                </Link>
+                
             </div>
         </div>
     )

@@ -13,7 +13,7 @@ export default function LangSwitcher() {
 
     return (
         <div className="relative">
-            <div className="absolute right-4 inline-block text-right dropdown">
+            <div className="inline-block text-right dropdown">
                 <span className="rounded-md shadow-sm">
                     <button className="inline-flex justify-center w-full px-4
                             py-2 text-sm font-medium leading-5 text-gray-700 transition duration-150

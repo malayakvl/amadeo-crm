@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
-import { useTranslations } from "next-intl";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faExclamationTriangle, faCheckCircle, faTimesCircle, faInfoCircle  } from '@fortawesome/free-solid-svg-icons'
 import { alertService, AlertType } from "../../services";
 
 export { Alert };
@@ -19,8 +20,7 @@ Alert.defaultProps = {
 function Alert({ id, fade } : { id: string, fade: boolean }) {
     const router = useRouter();
     const [alerts, setAlerts] = useState([]);
-    const t = useTranslations();
-
+    // const t = useTranslations();
     useEffect(() => {
         // subscribe to new alert notifications
         const subscription = alertService.onAlert(id)
@@ -98,32 +98,18 @@ function Alert({ id, fade } : { id: string, fade: boolean }) {
         return classes.join(' ');
     }
 
-    const messageHeader = (alert:any) => {
-        if (!alert) return;
-
-        const titles = [];
-        const alertTypeClass = {
-            [AlertType.Success]: 'Success message',
-            [AlertType.Error]: 'alert-danger',
-            [AlertType.Info]: 'alert-info',
-            [AlertType.Warning]: 'alert-warning'
-        }
-        titles.push(alertTypeClass[alert.type]);
-
-        return titles.join(' ');
-    }
-
     if (!alerts.length) return null;
 
     return (
         <>
             {alerts.map((alert:any, index:number) =>
                 <div key={index} className={cssClasses(alert)}>
-                    <div className="flex">
-                        <div>
-                            <p className="font-bold">{t(messageHeader(alert)||'')}</p>
-                            <p className="text-sm" dangerouslySetInnerHTML={{ __html: alert.message }} />
-                        </div>
+                    <div className="flex p-3">
+                        {alert.type === 'Success' && <FontAwesomeIcon icon={faCheckCircle} className="h-4 mt-0.5 flex items-center" />}
+                        {alert.type === 'Error' && <FontAwesomeIcon icon={faTimesCircle} className="h-4 mt-0.5 flex items-center" />}
+                        {alert.type === 'Info' && <FontAwesomeIcon icon={faInfoCircle} className="h-4 mt-0.5 flex items-center" />}
+                        {alert.type === 'Warning' && <FontAwesomeIcon icon={faExclamationTriangle} className="h-4 mt-0.5 flex items-center" />}
+                        <p className="text-sm flex-grow ml-3" dangerouslySetInnerHTML={{ __html: alert.message }} />
                     </div>
                 </div>
             )}

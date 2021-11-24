@@ -15,8 +15,8 @@ passport.use(new LocalStrategy({
                 message: 'Login and/or Password is invalid'
             });
         }
-        // delete user.salt;
-        // delete user.password;
+        delete user.salt;
+        delete user.password;
         // console.log(FgRed, '--- login LocalStrategy---');
         // console.log(FgRed, user.email);
         return done(null, user, {

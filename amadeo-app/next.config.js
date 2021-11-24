@@ -4,17 +4,15 @@ module.exports = {
   images: {
     domains: [
       "links.papareact.com",
-      "cdn0.iconfinder.com",
-      "platform-lookaside.fbsbx.com",
-      "lh3.googleusercontent.com"
+      "images.unsplash.com"
     ],
   },
   i18n: {
-    locales: ['en', 'de'],
-    defaultLocale: 'en',
+    locales: ['en', 'fr'],
+    defaultLocale: 'fr',
     localeDetection: false
   },
   publicRuntimeConfig: {
     apiUrl: process.env.API_URL
-  }
+  },
 }

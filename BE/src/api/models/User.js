@@ -21,7 +21,6 @@ class User {
             if  (res.rows.length) {
                 delete res.rows[0].auth_provider_name;
                 delete res.rows[0].auth_provider_id;
-                delete res.rows[0].role_id;
                 return res.rows[0];
             } else {
                 return null;
@@ -103,17 +102,24 @@ class User {
         const client = await pool.connect();
         try {
             const res = await client.query(`
-                INSERT INTO data.users (email, password, salt, role_id, first_name, last_name, company_name, phone)
+                INSERT INTO data.users
+                (
+                    email, password, salt, role_id, first_name, last_name, company_name,
+                    phone, vat, identification_number, full_address
+                )
                 VALUES
                 (
                     '${userData.email}',
                     '${hash}',
                     '${salt}',
                     '1',
-                    '${userData.first_name}',
-                    '${userData.last_name}',
-                    '${userData.company_name}',
-                    '${userData.phone}'
+                    '${userData.first_name || ''}',
+                    '${userData.last_name || ''}',
+                    '${userData.company_name || ''}',
+                    '${userData.phone || ''}',
+                    '${userData.vat || ''}',
+                    '${userData.identification_number || ''}',
+                    '${userData.full_address || ''}'
                 )
                 ;
             `);
