@@ -10,7 +10,7 @@ export default function ProviderBtns({ Providers, locale } : {Providers: any, lo
                             key={provider.name}
                             className={provider.name === 'Facebook' ? 'Facebook' : 'Google'}
                             onClick={() => signIn(provider.id, {
-                                callbackUrl: `${window.location.origin}${locale === 'en' ? '' : `/${locale}`}/dashboard`
+                                callbackUrl: `${window.location.origin}${locale === 'fr' ? '' : `/${locale}`}/dashboard`
                             })}
                         >
                             {provider.name}

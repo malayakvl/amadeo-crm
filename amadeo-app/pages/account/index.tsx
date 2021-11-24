@@ -75,7 +75,7 @@ export async function getServerSideProps(context:any) {
     let userData = {};
     if (!session) {
         return {
-            redirect: { destination: `/${locale === 'en' ? '' : `${locale}/`}auth/signin` },
+            redirect: { destination: `/${locale === 'fr' ? '' : `${locale}/`}auth/signin` },
         };
     } else {
         userData = await getProfile(session.user?.email);
