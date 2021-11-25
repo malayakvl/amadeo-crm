@@ -10,14 +10,28 @@ export async function getProfile(email: string|null|undefined) {
     });
     const resp = await res.json();
     if (res.ok && resp.user) {
+        return resp;
+    } else {
+        return {}
+    }
+}
+
+export async function updateProfile(data:any) {
+    const res = await fetch(`${baseUrl}/profile`, {
+        method: 'post',
+        body: JSON.stringify(data),
+        headers: { "Content-Type": "application/json" }
+    });
+    const resp = await res.json();
+    if (res.ok && resp.user) {
         return resp.user;
     } else {
         return {}
     }
 }
 
-export async function updateProfile(data: any) {
-    const res = await fetch(`${baseUrl}/profile`, {
+export async function addAddress(data:any, email:string) {
+    const res = await fetch(`${baseUrl}/address/${email}`, {
         method: 'post',
         body: JSON.stringify(data),
         headers: { "Content-Type": "application/json" }

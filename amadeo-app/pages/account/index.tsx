@@ -6,11 +6,18 @@ import Head from "next/head";
 import { useState } from "react";
 import Profile from "../../components/account/profile";
 import Address from "../../components/account/address";
+import AddressesList from "../../components/account/addressesList";
 
-function Account({userData} : {userData: any}) {
+interface ProfileProps {
+    user: any,
+    addresses: any,
+    countries: any;
+}
+
+function Account({session, infoData, locale} : {session:any, infoData:ProfileProps, locale:string}) {
     const t = useTranslations();
     const [activeTab, setActiveTab] = useState('profile');
-    const [profileData] = useState(userData);
+    const [profileData] = useState(infoData.user);
 
     const handleTabClick = (e:React.MouseEvent<HTMLElement>) => {
         const target = e.target as HTMLElement;
@@ -57,7 +64,13 @@ function Account({userData} : {userData: any}) {
                         <Profile userData={profileData} />
                     </div>
                     <div className={`w-full ${activeTab !== 'addressess' ? 'hidden' : ''}`}>
-                        <Address userAddress={{country_id: '', state: '', post_code: '', address_type: '', city: '', address_line_1:'', address_line_2: '' }} />
+                        <AddressesList />
+                        <Address
+                            userAddress={{country_id: '', state: '', post_code: '', address_type: '', city: '', address_line_1:'', address_line_2: '' }}
+                            countriesData={infoData.countries}
+                            email={session.user.email}
+                            locale={locale}
+                        />
                     </div>
                 </div>
 
@@ -72,20 +85,26 @@ export default Account;
 export async function getServerSideProps(context:any) {
     const { req, locale } = context;
     const session = await getSession({ req });
-    let userData = {};
+
+    let infoData:ProfileProps;
     if (!session) {
         return {
             redirect: { destination: `/${locale === 'fr' ? '' : `${locale}/`}auth/signin` },
         };
     } else {
-        userData = await getProfile(session.user?.email);
-
+        infoData = await getProfile(session.user?.email);
+        infoData.countries = [
+            {id: 1, code: 'AF', name: 'Afghanistan', translations: {en: {name: 'Afghanistan'}, fr: {name: "Afghanistan"}}},
+            {id: 2, code: 'EG', name: 'Egypt', translations: {en: {name: 'Afghanistan'}, fr: {name: "Égypte"}}},
+            {id: 14, code: 'AT', name: 'AUSTRIA', translations: {en: {name: 'Austria'}, fr: {name: "Austria"}}}
+        ]
     }
 
     return {
         props: {
+            session: session,
             locale: locale,
-            userData: userData,
+            infoData: infoData,
             messages: {
                 ...require(`../../messages/auth/${locale}.json`),
                 ...require(`../../messages/account/${locale}.json`),

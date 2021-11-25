@@ -2,6 +2,7 @@
   "My profile": "My profile",
   "My Addressess": "My Addressess",
   "Profile update successful": "Profile update successful",
+  "Address add successful": "Address add successful",
   "Country": "Country",
   "State": "State",
   "Post Code": "Post Code",
@@ -9,6 +10,7 @@
   "City": "City",
   "Address Line 1": "Address Line 1",
   "Address Line 2": "Address Line 2",
-  "home address": "home address",
-  "email adderss": "email adderss"
+  "home address": "adresse du domicile",
+  "email adderss": "adresses e-mail",
+  "Addresses": "Addresses"
 }
