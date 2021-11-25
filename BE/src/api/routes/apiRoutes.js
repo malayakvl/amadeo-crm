@@ -14,8 +14,15 @@ apiRoutes.route('/post-test')
     .get(TestController.testData);
 apiRoutes.route('/post-test')
     .post(TestController.testData);
+
 apiRoutes.route('/profile')
     .post(UserController.updateProfile);
+apiRoutes.route('/address/fetch/:id')
+    .get(UserController.fetchAddress);
+apiRoutes.route('/address/:email')
+    .get(UserController.fetchAddresses);
+apiRoutes.route('/address/:email')
+    .post(UserController.addAddress);
 apiRoutes.route('/profile')
     .get(UserController.getProfile);
 apiRoutes.route('/upload')

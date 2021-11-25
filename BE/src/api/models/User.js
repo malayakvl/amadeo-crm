@@ -112,7 +112,7 @@ class User {
                     '${userData.email}',
                     '${hash}',
                     '${salt}',
-                    '1',
+                    '${userData.role_id}',
                     '${userData.first_name || ''}',
                     '${userData.last_name || ''}',
                     '${userData.company_name || ''}',
@@ -145,12 +145,16 @@ class User {
         }
     }
     
+    /**
+     *
+     * @param userData - json
+     * @returns {Promise<{error: null, user}|{error: {code: number, message: string}, user: null}>}
+     */
     async update(userData) {
         const client = await pool.connect();
         try {
             const user = await this.findUserByEmail(userData.email);
             const query = `SELECT common__tools._update_table_by_id('data', 'users', '${JSON.stringify(userData)}', ${user.id});`;
-            console.log(query);
             await client.query(query);
             if (user) {
                 return { user: userData, error: null };
@@ -166,6 +170,83 @@ class User {
                 );
             }
             return { user: null, error: { code: 404, message: 'User Not found' } };
+        } finally {
+            client.release();
+        }
+    }
+    
+    async findUserAddresses(userId) {
+        const client = await pool.connect();
+        try {
+            const query = `SELECT * FROM data.addresses WHERE user_id='${userId}';`;
+            const res = await client.query(query);
+            return res.rows ? res.rows : null;
+        } catch(e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error:',
+                    { message: e.message }
+                );
+            }
+            return { addresses: null, error: { code: 404, message: 'Addresses Not found' } };
+        } finally {
+            client.release();
+        }
+    }
+    
+    async findUserAddress(userId, addressId) {
+        const client = await pool.connect();
+        try {
+            const query = `SELECT * FROM data.addresses WHERE id='${addressId}';`;
+            const res = await client.query(query);
+            return res.rows ? res.rows[0] : null;
+        } catch(e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error:',
+                    { message: e.message }
+                );
+            }
+            return { addresses: null, error: { code: 404, message: 'Addresses Not found' } };
+        } finally {
+            client.release();
+        }
+    }
+    
+    async addAddress(userId, addressData) {
+        const client = await pool.connect();
+        try {
+            // const query = `SELECT * FROM data.addresses WHERE user_id='${userId}';`;
+            const query = `INSERT INTO data.addresses
+                (
+                    user_id, country_id, state, post_code, address_type, city,
+                    address_line_1, address_line_2
+                )
+                VALUES
+                (
+                    '${userId}',
+                    '${addressData.country_id}',
+                    '${addressData.state||""}',
+                    '${addressData.post_code||""}',
+                    '${addressData.address_type||""}',
+                    '${addressData.city||""}',
+                    '${addressData.address_line_1||""}',
+                    '${addressData.address_line_2||""}'
+                )
+            ;`;
+            await client.query(query);
+            return { addresses: addressData, error: null };
+        } catch(e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error:',
+                    { message: e.message }
+                );
+            }
+            return { user: null, error: { code: 404, message: 'Addresses Not found' } };
         } finally {
             client.release();
         }
