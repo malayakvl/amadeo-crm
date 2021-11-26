@@ -21,14 +21,14 @@ class UserController {
     }
     
     async addAddress(req, res) {
+        let status;
         const user = await userModel.findUserByEmail(req.params.email);
         if (user) {
-            await userModel.addAddress(user.id, req.body);
-        }
-        if (!user) {
+            status = await userModel.addAddress(user.id, req.body);
+            return res.status(200).json({ status: status });
+        } else {
             return res.status(402).json('Something wend wrong');
         }
-        return res.status(200).json({ user: user });
     }
     
     async fetchAddresses(req, res) {
@@ -41,10 +41,17 @@ class UserController {
     }
     
     async fetchAddress(req, res) {
-        // const user = await userModel.findUserByEmail(req.params.email);
         const address = await userModel.findUserAddress('', req.params.id);
         if (address) {
             return res.status(200).json({ address: address });
+        }
+        return res.status(402).json('Something wend wrong');
+    }
+    
+    async deleteAddress(req, res) {
+        const status = await userModel.deleteAddress(req.params.id);
+        if (status) {
+            return res.status(200).json({ status: status });
         }
         return res.status(402).json('Something wend wrong');
     }

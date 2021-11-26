@@ -175,6 +175,11 @@ class User {
         }
     }
     
+    /**
+     *
+     * @param userId integer
+     * @returns {Promise<{addresses: null, error: {code: number, message: string}}|any[]|null>}
+     */
     async findUserAddresses(userId) {
         const client = await pool.connect();
         try {
@@ -195,10 +200,16 @@ class User {
         }
     }
     
+    /**
+     *
+     * @param userId integer
+     * @param addressId integer
+     * @returns {Promise<{addresses: null, error: {code: number, message: string}}|any|null>}
+     */
     async findUserAddress(userId, addressId) {
         const client = await pool.connect();
         try {
-            const query = `SELECT * FROM data.addresses WHERE id='${addressId}';`;
+            const query = `SELECT * FROM data.addresses WHERE id='${addressId}' ORDER BY id DESC;`;
             const res = await client.query(query);
             return res.rows ? res.rows[0] : null;
         } catch(e) {
@@ -215,29 +226,42 @@ class User {
         }
     }
     
+    /**
+     *
+     * @param userId integer
+     * @param addressData json object
+     * @returns {Promise<{error: {code: number, message: string}, user: null}|{success: boolean}>}
+     */
     async addAddress(userId, addressData) {
         const client = await pool.connect();
+        let query;
         try {
-            // const query = `SELECT * FROM data.addresses WHERE user_id='${userId}';`;
-            const query = `INSERT INTO data.addresses
-                (
-                    user_id, country_id, state, post_code, address_type, city,
-                    address_line_1, address_line_2
-                )
-                VALUES
-                (
-                    '${userId}',
-                    '${addressData.country_id}',
-                    '${addressData.state||""}',
-                    '${addressData.post_code||""}',
-                    '${addressData.address_type||""}',
-                    '${addressData.city||""}',
-                    '${addressData.address_line_1||""}',
-                    '${addressData.address_line_2||""}'
-                )
-            ;`;
-            await client.query(query);
-            return { addresses: addressData, error: null };
+            if (addressData.id) {
+                const addressId = addressData.id;
+                delete  addressData.id;
+                query = `SELECT common__tools._update_table_by_id('data', 'addresses', '${JSON.stringify(addressData)}', ${addressId});`;
+                await client.query(query);
+            } else {
+                const query = `INSERT INTO data.addresses
+                    (
+                        user_id, country_id, state, post_code, address_type, city,
+                        address_line_1, address_line_2
+                    )
+                    VALUES
+                    (
+                        '${userId}',
+                        '${addressData.country_id}',
+                        '${addressData.state||""}',
+                        '${addressData.post_code||""}',
+                        '${addressData.address_type||""}',
+                        '${addressData.city||""}',
+                        '${addressData.address_line_1||""}',
+                        '${addressData.address_line_2||""}'
+                    )
+                ;`;
+                await client.query(query);
+            }
+            return { success: true};
         } catch(e) {
             if (process.env.NODE_ENV === 'development') {
                 logger.log(
@@ -247,6 +271,26 @@ class User {
                 );
             }
             return { user: null, error: { code: 404, message: 'Addresses Not found' } };
+        } finally {
+            client.release();
+        }
+    }
+    
+    async deleteAddress(addressId) {
+        const client = await pool.connect();
+        try {
+            const query = `DELETE FROM data.addresses WHERE id='${addressId}'`;
+            await client.query(query);
+            return { success: true};
+        } catch(e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error:',
+                    { message: e.message }
+                );
+            }
+            return { success: false, error: { code: 404, message: 'Addresses Not found' } };
         } finally {
             client.release();
         }

@@ -17,7 +17,7 @@ exports.up = pgm => {
             unique (table_name, column_name, foreign_key, locale)
         );
         `
-    )
+    );
 };
 
 exports.down = pgm => {

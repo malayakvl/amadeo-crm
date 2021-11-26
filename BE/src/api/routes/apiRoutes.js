@@ -19,6 +19,8 @@ apiRoutes.route('/profile')
     .post(UserController.updateProfile);
 apiRoutes.route('/address/fetch/:id')
     .get(UserController.fetchAddress);
+apiRoutes.route('/address/:id')
+    .delete(UserController.deleteAddress);
 apiRoutes.route('/address/:email')
     .get(UserController.fetchAddresses);
 apiRoutes.route('/address/:email')
