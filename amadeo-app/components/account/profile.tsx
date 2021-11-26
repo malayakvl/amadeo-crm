@@ -1,14 +1,33 @@
 import * as Yup from 'yup';
 import { useTranslations } from "next-intl";
-import {useState} from "react";
+import { useEffect } from "react";
 import { alertService } from '../../services';
-import { updateProfile } from "../../lib/profile";
 import {Formik} from "formik";
 import { InputText } from "../_form";
+import {useDispatch, useSelector} from "react-redux";
+import { profileSelector, crudStatusSelector } from "../../redux/profile/selectors";
+import { fetchProfileAction, updateProfileAction, setCrudStatusAction } from "../../redux/profile";
+import {useSession} from "next-auth/client";
 
-function Profile({userData} : {userData: any}) {
+function Profile() {
+    const [session] = useSession();
     const t = useTranslations();
-    const [profileData] = useState(userData);
+    const dispatch = useDispatch();
+    const profileData = useSelector(profileSelector);
+    const crudStatus = useSelector(crudStatusSelector);
+
+    useEffect(() => {
+        dispatch(fetchProfileAction(session?.user?.email));
+    }, [dispatch, session?.user?.email]);
+
+    useEffect(() => {
+        if (crudStatus === 'yes') {
+            alertService.success(t('Profile update successful'), { keepAfterRouteChange: true });
+        } else if (crudStatus && crudStatus !== 'yes') {
+            alertService.error(crudStatus, {});
+        }
+        dispatch(setCrudStatusAction(null));
+    }, [dispatch, crudStatus, t]);
 
     const SubmitSchema = Yup.object().shape({
         email: Yup.string().email(t('Must be a valid email'))
@@ -27,16 +46,11 @@ function Profile({userData} : {userData: any}) {
 
     return (
         <Formik
+            enableReinitialize
             initialValues={profileData}
             validationSchema={SubmitSchema}
             onSubmit={values => {
-                return updateProfile(values)
-                    .then(() => {
-                        alertService.success(t('Profile update successful'), { keepAfterRouteChange: true });
-                    })
-                    .catch((e) => {
-                        alertService.error(e.message, {});
-                    });
+                dispatch(updateProfileAction(values));
             }}
         >
             {props => (
@@ -63,7 +77,7 @@ function Profile({userData} : {userData: any}) {
                                     hover:bg-indigo-600
                                     focus:outline-none duration-100 ease-in-out"
                     >
-                        Submit
+                        {t('Submit')}
                     </button>
                 </form>
             )}

@@ -1,11 +1,12 @@
-import { useSelector } from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { useTranslations } from "next-intl";
-import { addAddress } from "../../lib/profile";
 import { alertService } from "../../services";
-import { addressSelector } from "../../redux/addresses/selectors";
+import { addressSelector, crudStatusSelector } from "../../redux/addresses/selectors";
 import { InputText, InputSelect } from "../_form";
+import {addAddressAction, fetchAddressesAction, setAddressAction, setCrudStatusAction} from "../../redux/addresses";
+import {useEffect} from "react";
 
 interface CountryProps {
     id: number,
@@ -18,6 +19,19 @@ interface CountryProps {
 function Address({email, countriesData, locale} : {email:string, userAddress:any, countriesData:CountryProps[], locale:string}) {
     const t = useTranslations();
     const addressData = useSelector(addressSelector);
+    const crudStatus = useSelector(crudStatusSelector);
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        if (['create', 'update', 'delete'].includes(crudStatus)) {
+            alertService.success(t(`Address ${crudStatus} successful`), { keepAfterRouteChange: true });
+            dispatch(fetchAddressesAction(email));
+            dispatch(setAddressAction({country_id: '', state: '', post_code: '', address_type: '', city: '', address_line_1:'', address_line_2: '' }));
+        } else if (crudStatus && !['create', 'update', 'delete'].includes(crudStatus)) {
+            alertService.error(crudStatus, {});
+        }
+        dispatch(setCrudStatusAction(null));
+    }, [dispatch, crudStatus, t, email]);
 
     const SubmitSchema = Yup.object().shape({
         country_id: Yup.string()
@@ -43,14 +57,7 @@ function Address({email, countriesData, locale} : {email:string, userAddress:any
             initialValues={addressData}
             validationSchema={SubmitSchema}
             onSubmit={values => {
-                console.log(values);
-                return addAddress(values, email)
-                    .then(() => {
-                        alertService.success(t('Address add successful'), { keepAfterRouteChange: true });
-                    })
-                    .catch((e) => {
-                        alertService.error(e.message, {});
-                    });
+                dispatch(addAddressAction(values, email));
             }}
         >
             {props => (
@@ -77,7 +84,7 @@ function Address({email, countriesData, locale} : {email:string, userAddress:any
                                     hover:bg-indigo-600
                                     focus:outline-none duration-100 ease-in-out"
                     >
-                        Submit
+                        {t('Submit')}
                     </button>
                     <button
                         type="button"
@@ -85,7 +92,7 @@ function Address({email, countriesData, locale} : {email:string, userAddress:any
                                     hover:bg-indigo-600
                                     focus:outline-none duration-100 ease-in-out"
                     >
-                        Cancel
+                        {t('Cancel')}
                     </button>
                 </form>
             )}

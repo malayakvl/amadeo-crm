@@ -5,9 +5,12 @@ import thunkMiddleware from 'redux-thunk'
 import { createStore, applyMiddleware, combineReducers } from 'redux'
 import logger from 'redux-logger';
 
-import addressReducer from '../redux/addresses/index'
+import addressReducer from '../redux/addresses/index';
+import profileReducer from '../redux/profile/index';
+
 const reducers = combineReducers({
-  addresses: addressReducer
+  addresses: addressReducer,
+  profile: profileReducer
 });
 
 const initStore = (initialState = {}) => {

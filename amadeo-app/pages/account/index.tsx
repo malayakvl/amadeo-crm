@@ -1,3 +1,4 @@
+import React from 'react';
 import { getSession } from "next-auth/client";
 import { useTranslations } from "next-intl";
 import { getProfile } from "../../lib/profile";
@@ -16,13 +17,17 @@ interface ProfileProps {
 
 function Account({session, infoData, locale} : {session:any, infoData:ProfileProps, locale:string}) {
     const t = useTranslations();
+
     const [activeTab, setActiveTab] = useState('profile');
     const [profileData] = useState(infoData.user);
+
 
     const handleTabClick = (e:React.MouseEvent<HTMLElement>) => {
         const target = e.target as HTMLElement;
         setActiveTab(target.id);
     }
+
+
 
     return (
         <>
@@ -61,7 +66,7 @@ function Account({session, infoData, locale} : {session:any, infoData:ProfilePro
                 </div>
                 <div className="flex flex-col sm:flex-row">
                     <div className={`w-full ${activeTab !== 'profile' ? 'hidden' : ''}`}>
-                        <Profile userData={profileData} />
+                        <Profile  />
                     </div>
                     <div className={`w-full ${activeTab !== 'addressess' ? 'hidden' : ''}`}>
                         <AddressesList />

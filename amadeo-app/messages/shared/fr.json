@@ -2,5 +2,8 @@
   "Page not found": "Page not found",
   "we are sorry, but the page you requested was not found": "we are sorry, but the page you requested was not found",
   "Go to Home": "Go to Home",
-  "Save Changes": "Save Changes"
+  "Submit": "Submit",
+  "Edit": "Edit",
+  "Delete": "Delete",
+  "Cancel": "Cancel"
 }

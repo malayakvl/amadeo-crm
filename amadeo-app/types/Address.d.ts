@@ -1,12 +1,13 @@
 declare module Addresses {
     interface Root {
         addresses: Address[];
-        address: Address
+        address: Address;
+        crudStatus: string|null;
     }
 
     interface Address {
         id: number|null;
-        user_id:number|null;
+        user_id: number|null;
         country_id: number|null;
         state: string|null;
         post_code: string|null;

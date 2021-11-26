@@ -2,14 +2,17 @@ import { Action, handleActions } from 'redux-actions';
 import {
     fetchAddressesAction,
     fetchAddressAction,
-    setAddressAction
+    setAddressAction,
+    addAddressAction,
+    setCrudStatusAction,
+    deleteAddressAction
 } from './actions';
-// import Addresses = State.Addresses;
 
 
 const initialState: State.Addresses = {
     addresses: [],
-    address: {} as Addresses.Address
+    address: {} as Addresses.Address,
+    crudStatus: null
 };
 
 const ACTION_HANDLERS: any = {
@@ -29,12 +32,33 @@ const ACTION_HANDLERS: any = {
         ...state,
         address: action.payload,
     }),
+    [addAddressAction]: {
+        next: (state: State.Addresses, action: Action<any>): State.Addresses => ({
+            ...state,
+            crudStatus: action.payload,
+        }),
+    },
+    [setCrudStatusAction]: {
+        next: (state: State.Addresses, action: Action<any>): State.Addresses => ({
+            ...state,
+            crudStatus: action.payload,
+        }),
+    },
+    [deleteAddressAction]: {
+        next: (state: State.Addresses, action: Action<any>): State.Addresses => ({
+            ...state,
+            crudStatus: action.payload,
+        }),
+    },
 };
 
 export {
     fetchAddressesAction,
     fetchAddressAction,
-    setAddressAction
+    setAddressAction,
+    addAddressAction,
+    setCrudStatusAction,
+    deleteAddressAction
 };
 
 // ------------------------------------

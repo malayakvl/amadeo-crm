@@ -10,3 +10,4 @@ const rootSelector = createSelector(
 
 export const addressesSelector = createSelector(rootSelector, (addresses: State.Addresses): Addresses.Address[] => addresses.addresses);
 export const addressSelector = createSelector(rootSelector, (addresses: State.Addresses): Addresses.Address => addresses.address);
+export const crudStatusSelector = createSelector(rootSelector, (addresses: State.Addresses): any => addresses.crudStatus);
