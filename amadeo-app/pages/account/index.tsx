@@ -5,9 +5,7 @@ import { getProfile } from "../../lib/profile";
 import { UserCircleIcon } from '@heroicons/react/solid'
 import Head from "next/head";
 import { useState } from "react";
-import Profile from "../../components/account/profile";
-import Address from "../../components/account/address";
-import AddressesList from "../../components/account/addressesList";
+import { Address, Profile, AddressesList } from '../../components/account';
 import { getCountries } from "../../lib/staff";
 
 interface ProfileProps {

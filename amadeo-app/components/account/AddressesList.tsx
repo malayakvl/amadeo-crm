@@ -8,7 +8,7 @@ import {
 import {
     addressesSelector,
 } from '../../redux/addresses/selectors';
-import {useTranslations} from "next-intl";
+import { useTranslations } from "next-intl";
 
 function AddressesList({email} : {email:string}) {
     const dispatch = useDispatch();

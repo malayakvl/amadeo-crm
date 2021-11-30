@@ -1,5 +1,5 @@
 import { signIn } from "next-auth/client";
-import {useEffect} from "react";
+import { useEffect } from "react";
 
 export default function ActivateHash({locale, hash}:{locale:string,hash:string}) {
     useEffect(() => {

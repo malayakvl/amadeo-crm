@@ -6,7 +6,7 @@ import { getSession } from "next-auth/client";
 import { LockClosedIcon } from "@heroicons/react/solid";
 import { crudStatusSelector } from "../../redux/profile/selectors";
 import { useDispatch, useSelector } from "react-redux";
-import {useEffect} from "react";
+import { useEffect } from "react";
 import { alertService } from "../../services";
 import { setCrudStatusAction, changePasswordAction } from "../../redux/profile";
 

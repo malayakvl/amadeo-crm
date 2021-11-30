@@ -12,7 +12,7 @@ import userReducer from '../redux/user/index';
 const reducers = combineReducers({
   addresses: addressReducer,
   profile: profileReducer,
-  user: userReducer
+  user: userReducer,
 });
 
 const initStore = (initialState = {}) => {

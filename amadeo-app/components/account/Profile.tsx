@@ -7,7 +7,7 @@ import { InputText } from "../_form";
 import { useDispatch, useSelector } from "react-redux";
 import { profileSelector, crudStatusSelector } from "../../redux/profile/selectors";
 import { fetchProfileAction, updateProfileAction, setCrudStatusAction } from "../../redux/profile";
-import {useSession} from "next-auth/client";
+import { useSession } from "next-auth/client";
 
 function Profile() {
     const [session] = useSession();

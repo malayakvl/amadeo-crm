@@ -4,9 +4,14 @@ import * as Yup from 'yup';
 import { useTranslations } from "next-intl";
 import { alertService } from "../../services";
 import { addressSelector, crudStatusSelector } from "../../redux/addresses/selectors";
-import {InputText, InputSelect, InputSelectLocalize} from "../_form";
-import {addAddressAction, fetchAddressesAction, setAddressAction, setCrudStatusAction} from "../../redux/addresses";
-import {useEffect} from "react";
+import { InputText, InputSelect, InputSelectLocalize } from "../_form";
+import {
+    addAddressAction,
+    fetchAddressesAction,
+    setAddressAction,
+    setCrudStatusAction
+} from "../../redux/addresses";
+import { useEffect } from "react";
 
 interface CountryProps {
     id: number,

@@ -1,6 +1,6 @@
 import { useTranslations } from "next-intl";
-import {EyeIcon, EyeOffIcon} from "@heroicons/react/solid";
-import React, {useState} from "react";
+import { EyeIcon, EyeOffIcon } from "@heroicons/react/solid";
+import React, { useState } from "react";
 
 interface Props {
     name: string;

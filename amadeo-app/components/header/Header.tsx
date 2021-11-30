@@ -2,8 +2,8 @@ import Image from "next/image";
 import Link from 'next/link';
 import { signOut, useSession } from 'next-auth/client'
 import { Fragment, useEffect } from 'react'
-import { Menu, Transition } from '@headlessui/react'
-import { BellIcon } from '@heroicons/react/outline'
+import { Menu, Transition } from '@headlessui/react';
+import { BellIcon } from '@heroicons/react/outline';
 import LangSwitcher from "../lang/switcher";
 import { useSelector } from "react-redux";
 import { userSelector } from "../../redux/user/selectors";
@@ -111,6 +111,7 @@ const Header: React.FC = () => {
                             (
                                 <div className="hidden md:block">
                                     <div className="ml-4 flex items-center md:ml-6 md:mt-3">
+
                                         <button
                                             type="button"
                                             className="bg-white p-1 rounded-full text-gray-400 hover:text-blue-200
@@ -118,11 +119,23 @@ const Header: React.FC = () => {
                                                 focus:ring-offset-gray-800 focus:ring-blue-200"
                                         >
                                             <span className="sr-only">View notifications</span>
-                                            <BellIcon className="h-6 w-6" aria-hidden="true" />
+                                            <span className="relative inline-block">
+                                                <BellIcon className="h-6 w-6" aria-hidden="true" />
+                                                <span
+                                                    className="absolute top-0 right-0 inline-flex items-center justify-center
+                                                        px-2 py-1 text-xs
+                                                        font-bold leading-none
+                                                        text-red-100 transform
+                                                        translate-x-1/2 -translate-y-1/2
+                                                        bg-red-500 rounded-full">
+                                                    99
+                                                </span>
+                                            </span>
+
                                         </button>
 
                                         {/* Profile dropdown */}
-                                        <Menu as="div" className="ml-3 relative">
+                                        <Menu as="div" className="ml-5 relative -mt-2">
                                             <div>
                                                 <Menu.Button className="max-w-xs bg-gray-800 rounded-full flex
                                                     items-center text-sm focus:outline-none focus:ring-2

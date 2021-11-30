@@ -3,7 +3,7 @@ import { useTranslations } from 'next-intl'
 import { Formik } from "formik";
 import * as Yup from 'yup';
 import { restorePasswordAction, setValidEmailStatusAction } from "../../redux/profile";
-import {InputText} from "../../components/_form";
+import { InputText } from "../../components/_form";
 import { useDispatch, useSelector } from "react-redux";
 import { validEmailSelector } from "../../redux/profile/selectors";
 import { useEffect } from "react";
