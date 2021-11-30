@@ -40,7 +40,7 @@ export async function getServerSideProps(context:any) {
             session,
             locale,
             messages: {
-                ...require(`../../messages/auth/${locale}.json`),
+                ...require(`../../messages/${locale}.json`),
             },
         }
     }

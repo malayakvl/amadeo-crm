@@ -25,7 +25,7 @@ export const getStaticProps = ({ locale }) => {
     return {
         props: {
             messages: {
-                ...require(`../messages/shared/${locale}.json`),
+                ...require(`../messages/${locale}.json`),
             },
         },
     }

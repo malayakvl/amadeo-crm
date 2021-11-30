@@ -91,10 +91,7 @@ export async function getServerSideProps(context:any) {
             session: session,
             locale: locale,
             messages: {
-                ...require(`../../messages/auth/${locale}.json`),
-                ...require(`../../messages/account/${locale}.json`),
-                ...require(`../../messages/shared/${locale}.json`),
-                ...require(`../../messages/errors/${locale}.json`),
+                ...require(`../../messages/${locale}.json`),
             },
         },
     };

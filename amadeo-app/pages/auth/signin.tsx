@@ -123,8 +123,7 @@ export async function getServerSideProps(context:any) {
             providers: await providers(),
             locale: locale,
             messages: {
-                ...require(`../../messages/auth/${locale}.json`),
-                ...require(`../../messages/errors/${locale}.json`),
+                ...require(`../../messages/${locale}.json`),
             },
         },
     };
