@@ -9,7 +9,6 @@ const baseUrl = `${publicRuntimeConfig.apiUrl}/api`;
 export const fetchAddressesAction: any = createAction(
     'addresses/FETCH_ADDRESSES',
     async (email:string) => {
-        console.log(email);
         const res = await fetch(`${baseUrl}/address`, {
             method: 'get',
             headers: authHeader(email)
