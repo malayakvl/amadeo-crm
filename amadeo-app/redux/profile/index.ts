@@ -2,13 +2,17 @@ import { Action, handleActions } from 'redux-actions';
 import {
     fetchProfileAction,
     updateProfileAction,
-    setCrudStatusAction
+    setCrudStatusAction,
+    changePasswordAction,
+    restorePasswordAction,
+    setValidEmailStatusAction
 } from './actions';
 
 
 const initialState: State.Profile = {
     profile: {} as Profile.Profile,
-    crudStatus: null
+    crudStatus: null,
+    validEmail: null
 };
 
 const ACTION_HANDLERS: any = {
@@ -25,7 +29,25 @@ const ACTION_HANDLERS: any = {
         }),
     },
     [setCrudStatusAction]: {
-        next: (state: State.Addresses, action: Action<any>): State.Addresses => ({
+        next: (state: State.Profile, action: Action<any>): State.Profile => ({
+            ...state,
+            crudStatus: action.payload,
+        }),
+    },
+    [changePasswordAction]: {
+        next: (state: State.Profile, action: Action<any>): State.Profile => ({
+            ...state,
+            crudStatus: action.payload,
+        }),
+    },
+    [restorePasswordAction]: {
+        next: (state: State.Profile, action: Action<any>): State.Profile => ({
+            ...state,
+            validEmail: action.payload,
+        }),
+    },
+    [setValidEmailStatusAction]: {
+        next: (state: State.Profile, action: Action<any>): State.Profile => ({
             ...state,
             crudStatus: action.payload,
         }),
@@ -35,7 +57,10 @@ const ACTION_HANDLERS: any = {
 export {
     fetchProfileAction,
     updateProfileAction,
-    setCrudStatusAction
+    setCrudStatusAction,
+    changePasswordAction,
+    restorePasswordAction,
+    setValidEmailStatusAction
 };
 
 // ------------------------------------

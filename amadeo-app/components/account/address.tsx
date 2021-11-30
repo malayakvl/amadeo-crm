@@ -4,7 +4,7 @@ import * as Yup from 'yup';
 import { useTranslations } from "next-intl";
 import { alertService } from "../../services";
 import { addressSelector, crudStatusSelector } from "../../redux/addresses/selectors";
-import { InputText, InputSelect } from "../_form";
+import {InputText, InputSelect, InputSelectLocalize} from "../_form";
 import {addAddressAction, fetchAddressesAction, setAddressAction, setCrudStatusAction} from "../../redux/addresses";
 import {useEffect} from "react";
 
@@ -62,14 +62,14 @@ function Address({email, countriesData, locale} : {email:string, userAddress:any
         >
             {props => (
                 <form onSubmit={props.handleSubmit} className="lg:w-1/3 mt-5">
-                    <InputSelect locale={locale} name={'country_id'}
+                    <InputSelectLocalize locale={locale} name={'country_id'} fieldName={'nicename'}
                          label={'Country'} options={countriesData} props={props} />
 
                     <InputText name={'state'} label={'State'} props={props} />
 
                     <InputText name={'post_code'} label={'Post Code'} props={props} />
 
-                    <InputSelect locale={locale} name={'address_type'}
+                    <InputSelect name={'address_type'}
                          label={'Address Type'} options={addressTypeData} props={props} />
 
                     <InputText name={'city'} label={'City'} props={props} />
@@ -91,6 +91,7 @@ function Address({email, countriesData, locale} : {email:string, userAddress:any
                         className="ml-4 px-4 py-2 text-white bg-gray-200 rounded-md
                                     hover:bg-indigo-600
                                     focus:outline-none duration-100 ease-in-out"
+                        onClick={(() => {dispatch(setAddressAction({country_id: '', state: '', post_code: '', address_type: '', city: '', address_line_1:'', address_line_2: '' }))})}
                     >
                         {t('Cancel')}
                     </button>

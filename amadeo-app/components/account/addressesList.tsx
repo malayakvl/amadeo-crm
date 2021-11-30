@@ -10,21 +10,21 @@ import {
 } from '../../redux/addresses/selectors';
 import {useTranslations} from "next-intl";
 
-function AddressesList() {
+function AddressesList({email} : {email:string}) {
     const dispatch = useDispatch();
     const t = useTranslations();
     const addressesData = useSelector(addressesSelector);
 
 
     useEffect(() => {
-        dispatch(fetchAddressesAction('1@1.com'));
-    }, [dispatch]);
+        dispatch(fetchAddressesAction(email));
+    }, [dispatch, email]);
 
     const editAddress = (addressId:number|null) => {
-        dispatch(fetchAddressAction(addressId));
+        dispatch(fetchAddressAction(addressId, email));
     }
     const deleteAddress = (addressId:number|null) => {
-        dispatch(deleteAddressAction(addressId));
+        dispatch(deleteAddressAction(addressId, email));
     }
 
     return (

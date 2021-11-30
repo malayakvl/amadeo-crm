@@ -56,13 +56,15 @@ function Signin({providers, locale} : {providers:any, locale: string}) {
                         <div className="mb-6">
                             <div className="flex justify-between mb-2">
                                 <label htmlFor="password">{t('Password')}</label>
-                                <a href="#"
-                                   className="text-sm text-gray-400
-                                    focus:outline-none focus:text-indigo-500
-                                    hover:text-indigo-500
-                                    dark:hover:text-indigo-300">
-                                    {t('Forgot password?')}
-                                </a>
+                                <Link href={'/auth/restore'}>
+                                    <a
+                                       className="text-sm text-gray-400 cursor-pointer
+                                        focus:outline-none focus:text-indigo-500
+                                        hover:text-indigo-500
+                                        dark:hover:text-indigo-300">
+                                        {t('Forgot password?')}
+                                    </a>
+                                </Link>
                             </div>
                             <input
                                 type="password"
@@ -113,7 +115,7 @@ export async function getServerSideProps(context:any) {
     const session = await getSession({req});
     if (session) {
         return {
-            redirect: {destination: `/${locale}`},
+            redirect: {destination: `/${locale === 'fr' ? '' : locale}`},
         };
     }
     return {

@@ -8,6 +8,7 @@ import { useState } from "react";
 import Profile from "../../components/account/profile";
 import Address from "../../components/account/address";
 import AddressesList from "../../components/account/addressesList";
+import { getCountries } from "../../lib/staff";
 
 interface ProfileProps {
     user: any,
@@ -21,13 +22,10 @@ function Account({session, infoData, locale} : {session:any, infoData:ProfilePro
     const [activeTab, setActiveTab] = useState('profile');
     const [profileData] = useState(infoData.user);
 
-
     const handleTabClick = (e:React.MouseEvent<HTMLElement>) => {
         const target = e.target as HTMLElement;
         setActiveTab(target.id);
     }
-
-
 
     return (
         <>
@@ -66,10 +64,10 @@ function Account({session, infoData, locale} : {session:any, infoData:ProfilePro
                 </div>
                 <div className="flex flex-col sm:flex-row">
                     <div className={`w-full ${activeTab !== 'profile' ? 'hidden' : ''}`}>
-                        <Profile  />
+                        <Profile />
                     </div>
                     <div className={`w-full ${activeTab !== 'addressess' ? 'hidden' : ''}`}>
-                        <AddressesList />
+                        <AddressesList email={session.user.email || ''} />
                         <Address
                             userAddress={{country_id: '', state: '', post_code: '', address_type: '', city: '', address_line_1:'', address_line_2: '' }}
                             countriesData={infoData.countries}
@@ -98,11 +96,7 @@ export async function getServerSideProps(context:any) {
         };
     } else {
         infoData = await getProfile(session.user?.email);
-        infoData.countries = [
-            {id: 1, code: 'AF', name: 'Afghanistan', translations: {en: {name: 'Afghanistan'}, fr: {name: "Afghanistan"}}},
-            {id: 2, code: 'EG', name: 'Egypt', translations: {en: {name: 'Afghanistan'}, fr: {name: "Égypte"}}},
-            {id: 14, code: 'AT', name: 'AUSTRIA', translations: {en: {name: 'Austria'}, fr: {name: "Austria"}}}
-        ]
+        infoData.countries = await getCountries();
     }
 
     return {

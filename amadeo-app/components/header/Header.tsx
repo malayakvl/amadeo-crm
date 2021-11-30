@@ -1,20 +1,19 @@
 import Image from "next/image";
 import Link from 'next/link';
 import { signOut, useSession } from 'next-auth/client'
-import { Fragment } from 'react'
+import { Fragment, useEffect } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import { BellIcon } from '@heroicons/react/outline'
 import LangSwitcher from "../lang/switcher";
+import { useSelector } from "react-redux";
+import { userSelector } from "../../redux/user/selectors";
 
-const user = {
-    name: 'Tom Cook',
-    email: 'tom@example.com',
-    imageUrl:
-        'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-}
+const userProfileImg =
+    'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
 
 const userNavigation = [
     { name: 'My Account', href: '/account' },
+    { name: 'Change password', href: '/auth/changePassword' },
 ]
 
 function classNames(...classes:any) {
@@ -23,6 +22,20 @@ function classNames(...classes:any) {
 
 const Header: React.FC = () => {
     const [session] = useSession();
+    const user = useSelector(userSelector);
+
+    useEffect(function() {
+        switch (user.role_id) {
+            case 1:
+                userNavigation.push({ name: 'Products', href: '/products' });
+                break;
+            case 3:
+                userNavigation.push({ name: 'Customers', href: '/customers' });
+                userNavigation.push({ name: 'Buyers', href: '/customers' });
+                break;
+        }
+    },[user]);
+
     return (
         <header>
             <nav
@@ -115,7 +128,7 @@ const Header: React.FC = () => {
                                                     items-center text-sm focus:outline-none focus:ring-2
                                                     focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
                                                     <span className="sr-only">Open user menu</span>
-                                                    <Image src={user.imageUrl} width={35} height={35} className="rounded-full" alt="" />
+                                                    <Image src={userProfileImg} width={35} height={35} className="rounded-full" alt="" />
                                                 </Menu.Button>
                                             </div>
                                             <Transition
@@ -150,7 +163,8 @@ const Header: React.FC = () => {
                                                             href={`/api/auth/signout`}
                                                             className="block px-4 py-2 text-sm text-gray-700"
                                                             onClick={(e) => {
-                                                                e.preventDefault()
+                                                                e.preventDefault();
+                                                                window.localStorage.removeItem('user')
                                                                 signOut()
                                                             }}
                                                         >

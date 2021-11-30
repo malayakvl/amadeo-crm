@@ -1,4 +1,5 @@
 import { createAction } from 'redux-actions';
+import { authHeader } from "../../lib/functions";
 import axios from "axios";
 import getConfig from "next/config";
 const { publicRuntimeConfig } = getConfig();
@@ -8,27 +9,38 @@ const baseUrl = `${publicRuntimeConfig.apiUrl}/api`;
 export const fetchAddressesAction: any = createAction(
     'addresses/FETCH_ADDRESSES',
     async (email:string) => {
-        return await axios
-                .get(`${baseUrl}/address/${email}`)
-                .then(res => res.data.addresses);
+        console.log(email);
+        const res = await fetch(`${baseUrl}/address`, {
+            method: 'get',
+            headers: authHeader(email)
+        });
+        const resp = await res.json();
+        if (res.ok && resp.addresses) {
+            return resp.addresses;
+        } else {
+            return resp.error.message;
+        }
     }
 );
 
 export const fetchAddressAction: any = createAction(
     'addresses/FETCH_ADDRESS',
-    async (id:number) => {
+    async (id:number, email: string) => {
         return await axios
-            .get(`${baseUrl}/address/fetch/${id}`)
+            .get(`${baseUrl}/address/fetch/${id}`, {
+                headers: {
+                    ...authHeader(email)
+                }})
             .then(res => res.data.address);
     }
 );
 
 export const deleteAddressAction: any = createAction(
     'addresses/DELETE_ADDRESS',
-    async (id:number) => {
+    async (id:number, email: string) => {
         const res = await fetch(`${baseUrl}/address/${id}`, {
             method: 'delete',
-            headers: { "Content-Type": "application/json" }
+            headers: authHeader(email)
         });
         const resp = await res.json();
         if (res.ok && resp.status) {
@@ -43,10 +55,10 @@ export const deleteAddressAction: any = createAction(
 export const addAddressAction: any = createAction(
     'addresses/ADD_ADDRESS',
     async (data:any, email: string) => {
-        const res = await fetch(`${baseUrl}/address/${email}`, {
+        const res = await fetch(`${baseUrl}/address`, {
             method: 'post',
             body: JSON.stringify(data),
-            headers: { "Content-Type": "application/json" }
+            headers: { "Content-Type": "application/json", ...authHeader(email) }
         });
         const resp = await res.json();
         if (res.ok && resp.status) {

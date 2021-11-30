@@ -297,6 +297,107 @@ class User {
     }
     
     /**
+     *
+     * @param user - json object
+     * @param data - json object
+     * @returns {Promise<{error: {code: number, message: string}, user: null}|{success: boolean, error: {code: number, message: string}}|{success: boolean}>}
+     */
+    async changePassword(user, data) {
+        const client = await pool.connect();
+        try {
+            const {
+                salt,
+                hash
+            } = this.setPassword(data.password);
+            const passwordData = {
+                salt: salt,
+                password: hash
+            }
+            const query = `SELECT common__tools._update_table_by_id('data', 'users', '${JSON.stringify(passwordData)}', ${user.id});`;
+            await client.query(query);
+            return { success: true};
+            // if (!user || !this.validatePassword(data.old_password, user.salt, user.password)) {
+            //     return { success: false, error: { code: 402, message: 'Access Deny' } };
+            // } else {
+            // }
+        } catch (e) {
+            return {
+                user: null,
+                error: {
+                    code: 500,
+                    message: 'Error change password'
+                }
+            };
+        } finally {
+            client.release();
+        }
+    }
+    
+    /**
+     *
+     * @param user
+     * @returns {Promise<{error: {code: number, message: string}, user: null}|{success: boolean, hash: string}>}
+     */
+    async generateRestoreHash(user) {
+        const client = await pool.connect();
+        try {
+            const hash = crypto.randomBytes(20).toString('hex');
+            const expiredAt = new Date();
+            expiredAt.setSeconds(expiredAt.getSeconds() + process.env.EMAIL_VALIDATION_TOKEN_LIFE);
+            const query = `SELECT common__tools._update_table_by_id('data', 'users', '${JSON.stringify({ hash: hash, expired_at: expiredAt.toUTCString() })}', ${user.id});`;
+            await client.query(query);
+            return { success: true, hash: hash };
+        } catch (e) {
+            return {
+                user: null,
+                error: {
+                    code: 500,
+                    message: 'Error restore password'
+                }
+            };
+        }finally {
+            client.release();
+        }
+    }
+    
+    /**
+     * Login user via email link
+     * @param hash
+     * @returns {Promise<{error: {code: number, message: string}, user: null}|*|null>}
+     */
+    async activateByHash (hash) {
+        const client = await pool.connect();
+        const query = `SELECT * FROM common.find_user_by_hash('${hash}', false);`;
+        try {
+            const res = await client.query(query);
+            return res.rows.length > 0 ? res.rows[0] : null;
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Query:',
+                    { message: query }
+                );
+                logger.log(
+                    'error',
+                    'Model error (User activateByHash):',
+                    { message: e.message }
+                );
+            }
+            const error = {
+                code: 500,
+                message: 'Error create reset token'
+            };
+            return {
+                user: null,
+                error
+            };
+        } finally {
+            client.release();
+        }
+    }
+    
+    /**
      * Check pasword
      *
      * @param password - string

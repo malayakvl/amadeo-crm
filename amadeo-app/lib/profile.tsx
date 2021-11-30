@@ -1,44 +1,17 @@
 // import axios from 'axios';
 import getConfig from "next/config";
+import { authHeader } from "./functions";
 const { publicRuntimeConfig } = getConfig();
 const baseUrl = `${publicRuntimeConfig.apiUrl}/api`;
 
 export async function getProfile(email: string|null|undefined) {
-    const res = await fetch(`${baseUrl}/profile?email=${email}`, {
+    const res = await fetch(`${baseUrl}/profile`, {
         method: 'get',
-        headers: { "Content-Type": "application/json" }
+        headers: authHeader(email||'')
     });
     const resp = await res.json();
     if (res.ok && resp.user) {
         return resp;
-    } else {
-        return {}
-    }
-}
-
-export async function updateProfile(data:any) {
-    const res = await fetch(`${baseUrl}/profile`, {
-        method: 'post',
-        body: JSON.stringify(data),
-        headers: { "Content-Type": "application/json" }
-    });
-    const resp = await res.json();
-    if (res.ok && resp.user) {
-        return resp.user;
-    } else {
-        return {}
-    }
-}
-
-export async function addAddress(data:any, email:string) {
-    const res = await fetch(`${baseUrl}/address/${email}`, {
-        method: 'post',
-        body: JSON.stringify(data),
-        headers: { "Content-Type": "application/json" }
-    });
-    const resp = await res.json();
-    if (res.ok && resp.user) {
-        return resp.user;
     } else {
         return {}
     }

@@ -14,5 +14,9 @@
   "Address Line 2": "Address Line 2",
   "home address": "adresse du domicile",
   "email adderss": "adresses e-mail",
-  "Addresses": "Addresses"
+  "Addresses": "Addresses",
+  "Change Password": "Change Password",
+  "Current Password": "Current Password",
+  "New Password": "New Password",
+  "Password change successful": "Password change successful"
 }

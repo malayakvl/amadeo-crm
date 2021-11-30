@@ -1,6 +1,7 @@
 import passport from '../middleware/passport.js';
 import userModel from '../models/User.js';
 import { getTokensAndSetCookies } from '../lib/token.js';
+import { sendMail } from '../lib/sendMail.js';
 
 class AuthController {
     /**
@@ -71,6 +72,44 @@ class AuthController {
                 }
             );
         }
+    }
+    
+    
+    async restorePassword(req, res) {
+        const _user = await userModel.findUserByEmail(req.body.email);
+        if (_user) {
+            const { success, hash } = await userModel.generateRestoreHash(_user);
+            if (success) {
+                const link = `${process.env.APPLICATION_BASE_URL}/auth/activateHash?hash=${hash}`;
+                sendMail(
+                    req.body.email,
+                    'Amadeo CRM - restore password',
+                    `
+                        Hi, ${req.body.email}!<br>
+                        You can use following <a href='${link}'>link</a> for continue
+                        <br><br>
+                        Good luck!
+                `);
+                // remove activation code from response to user
+                console.log('RESTORE LINK', link);
+                res.status(200).json({ status: success });
+            } else {
+                res.status(402).json({ status: false });
+            }
+        } else {
+            res.status(402).json({ status: false, error: "wrong email" });
+        }
+    }
+    
+    
+    async activateHash(req, res) {
+        const user = await userModel.activateByHash(req.params.hash);
+        if (user) {
+            res.status(200).json({ user: user });
+        } else {
+            res.status(402).json({ user: null, error: "No user or token expired" });
+        }
+        
     }
 }
 

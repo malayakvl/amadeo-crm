@@ -7,10 +7,12 @@ import logger from 'redux-logger';
 
 import addressReducer from '../redux/addresses/index';
 import profileReducer from '../redux/profile/index';
+import userReducer from '../redux/user/index';
 
 const reducers = combineReducers({
   addresses: addressReducer,
-  profile: profileReducer
+  profile: profileReducer,
+  user: userReducer
 });
 
 const initStore = (initialState = {}) => {

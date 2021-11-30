@@ -41,6 +41,22 @@ export default NextAuth({
             }
         }),
         CredentialsProvider({
+            id: 'credentials_hash',
+            async authorize(credentials) {
+                const res = await fetch(`${baseUrl}/activate-hash/${credentials.hash}`, {
+                    method: 'GET',
+                    headers: { "Content-Type": "application/json" }
+                })
+                const resp = await res.json();
+                if (res.ok && resp.user) {
+                    return resp.user;
+                }
+            
+                throw `/auth/signin?message=your token expired`;
+                // return null
+            }
+        }),
+        CredentialsProvider({
             id: 'credentials_registration',
             async authorize(credentials) {
                 const _user = JSON.parse(credentials.user);

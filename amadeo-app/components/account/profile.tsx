@@ -2,9 +2,9 @@ import * as Yup from 'yup';
 import { useTranslations } from "next-intl";
 import { useEffect } from "react";
 import { alertService } from '../../services';
-import {Formik} from "formik";
+import { Formik } from "formik";
 import { InputText } from "../_form";
-import {useDispatch, useSelector} from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { profileSelector, crudStatusSelector } from "../../redux/profile/selectors";
 import { fetchProfileAction, updateProfileAction, setCrudStatusAction } from "../../redux/profile";
 import {useSession} from "next-auth/client";
@@ -50,7 +50,7 @@ function Profile() {
             initialValues={profileData}
             validationSchema={SubmitSchema}
             onSubmit={values => {
-                dispatch(updateProfileAction(values));
+                dispatch(updateProfileAction(values, session?.user?.email));
             }}
         >
             {props => (

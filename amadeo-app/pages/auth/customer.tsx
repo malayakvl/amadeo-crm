@@ -218,7 +218,7 @@ export async function getServerSideProps(context:any) {
 
     if (session) {
         return {
-            redirect: { destination: "/" },
+            redirect: {destination: `/${locale === 'fr' ? '' : locale}`},
         };
     }
 

@@ -1,14 +1,17 @@
-import {useTranslations} from "next-intl";
+import { useTranslations } from "next-intl";
+import { parseTranslation } from "../../lib/functions";
 
 interface PropsSelect {
+    locale:string;
     name: string;
     label: string,
     options: any;
     props: any;
+    fieldName: string
 }
 
-
-const InputSelect: React.FC<PropsSelect> = ({name, label, options,  props}) => {
+const InputSelectLocalize: React.FC<PropsSelect> =
+    ({locale, name, label, options,  props, fieldName = 'name'}) => {
     const t = useTranslations();
     return (
         <div className="mb-4">
@@ -22,7 +25,7 @@ const InputSelect: React.FC<PropsSelect> = ({name, label, options,  props}) => {
                 <option value="">------</option>
                 {options.map((option:any) => (
                     <option value={option.id} key={option.id}>
-                        {option.name}
+                        {parseTranslation(option, fieldName, locale)}
                     </option>
                 ))}
             </select>
@@ -31,4 +34,4 @@ const InputSelect: React.FC<PropsSelect> = ({name, label, options,  props}) => {
     )
 }
 
-export { InputSelect };
+export { InputSelectLocalize };

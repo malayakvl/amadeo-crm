@@ -5,6 +5,7 @@ exports.shorthands = undefined;
 exports.up = pgm => {
     pgm.sql(
         `
+        DROP FUNCTION IF EXISTS common__tools._update_table_by_where;
 CREATE OR REPLACE FUNCTION common__tools._update_table_by_where(_schema text, _table text, _data json, _where text DEFAULT ''::text)
  RETURNS integer
  LANGUAGE plpgsql

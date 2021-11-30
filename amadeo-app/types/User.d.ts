@@ -1,11 +1,9 @@
-declare module Profile {
+declare module User {
     interface Root {
-        profile: Profile;
-        crudStatus: string|null;
-        validEmail: string|null
+        user: User;
     }
 
-    interface Profile {
+    interface User {
         id: number;
         role_id: number;
         email: string;
