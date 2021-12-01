@@ -1,37 +1,33 @@
-import { providers, getSession } from "next-auth/client";
-import { useTranslations } from 'next-intl'
-import Link from "next/link"
+import { providers, getSession } from 'next-auth/client';
+import { useTranslations } from 'next-intl';
+import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import * as Yup from 'yup';
 import ProviderBtns from '../../components/auth/ProviderBtns';
-import { signIn } from "next-auth/client";
-import { useRouter } from 'next/router'
+import { signIn } from 'next-auth/client';
+import { useRouter } from 'next/router';
 
-function Signin({providers, locale} : {providers:any, locale: string}) {
+function Signin({ providers, locale }: { providers: any; locale: string }) {
     const t = useTranslations();
     const router = useRouter();
 
     const validationSchema = Yup.object().shape({
-        email: Yup.string().email(t('Must be a valid email'))
-            .required(t('Required field')),
-        password: Yup.string()
-            .required(t('Required field'))
+        email: Yup.string().email(t('Must be a valid email')).required(t('Required field')),
+        password: Yup.string().required(t('Required field'))
     });
     const formOptions = { resolver: yupResolver(validationSchema) };
 
     const { register, handleSubmit, formState } = useForm(formOptions);
     const { errors } = formState;
 
-    const onSubmit = (user:any) => {
-        signIn('credentials_login',
-            {
-                email: user.email,
-                password: user.password,
-                callbackUrl: `${window.location.origin}${locale === 'fr' ? '' : `/${locale}`}/dashboard`
-            }
-        )
-    }
+    const onSubmit = (user: any) => {
+        signIn('credentials_login', {
+            email: user.email,
+            password: user.password,
+            callbackUrl: `${window.location.origin}${locale === 'fr' ? '' : `/${locale}`}/dashboard`
+        });
+    };
 
     return (
         <div className="flex justify-center min-h-screen">
@@ -58,7 +54,7 @@ function Signin({providers, locale} : {providers:any, locale: string}) {
                                 <label htmlFor="password">{t('Password')}</label>
                                 <Link href={'/auth/restore'}>
                                     <a
-                                       className="text-sm text-gray-400 cursor-pointer
+                                        className="text-sm text-gray-400 cursor-pointer
                                         focus:outline-none focus:text-indigo-500
                                         hover:text-indigo-500
                                         dark:hover:text-indigo-300">
@@ -80,15 +76,15 @@ function Signin({providers, locale} : {providers:any, locale: string}) {
                                 className="w-full px-3 py-4 text-white bg-indigo-500 rounded-md
                                     hover:bg-indigo-600
                                     focus:outline-none duration-100 ease-in-out"
-                                disabled={formState.isSubmitting}
-                            >
+                                disabled={formState.isSubmitting}>
                                 {t('Sign In')}
                             </button>
                         </div>
                         <p className="text-sm text-center text-gray-400">
                             {t('Don`t have an account yet?')}
                             <Link href={'/auth/signup'}>
-                                <a className="font-semibold text-indigo-500
+                                <a
+                                    className="font-semibold text-indigo-500
                                     focus:text-indigo-600 focus:outline-none focus:underline">
                                     {t('Sign Up')}.
                                 </a>
@@ -96,12 +92,13 @@ function Signin({providers, locale} : {providers:any, locale: string}) {
                         </p>
                     </form>
                     <div className="flex flex-row justify-center mb-8">
-                        <span className="absolute bg-white px-4 text-gray-500">{t('or sign-in with')}</span>
+                        <span className="absolute bg-white px-4 text-gray-500">
+                            {t('or sign-in with')}
+                        </span>
                         <div className="w-full bg-gray-200 mt-3 h-px" />
                     </div>
 
                     <ProviderBtns Providers={providers} locale={locale} />
-
                 </div>
             </div>
         </div>
@@ -110,12 +107,12 @@ function Signin({providers, locale} : {providers:any, locale: string}) {
 
 export default Signin;
 
-export async function getServerSideProps(context:any) {
+export async function getServerSideProps(context: any) {
     const { req, locale } = context;
-    const session = await getSession({req});
+    const session = await getSession({ req });
     if (session) {
         return {
-            redirect: {destination: `/${locale === 'fr' ? '' : locale}`},
+            redirect: { destination: `/${locale === 'fr' ? '' : locale}` }
         };
     }
     return {
@@ -123,8 +120,8 @@ export async function getServerSideProps(context:any) {
             providers: await providers(),
             locale: locale,
             messages: {
-                ...require(`../../messages/${locale}.json`),
-            },
-        },
+                ...require(`../../messages/${locale}.json`)
+            }
+        }
     };
 }

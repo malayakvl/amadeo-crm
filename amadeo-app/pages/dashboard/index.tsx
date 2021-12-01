@@ -1,9 +1,9 @@
-import Head from 'next/head'
-import { getSession } from 'next-auth/client'
-import { Chart } from "react-google-charts";
+import Head from 'next/head';
+import { getSession } from 'next-auth/client';
+import { Chart } from 'react-google-charts';
 
-export default function Index({session} : {session:any}) {
-    if (!session) return <></>
+export default function Index({ session }: { session: any }) {
+    if (!session) return <></>;
 
     return (
         <div className="h-screen bg-gray-100 overflow-hidden">
@@ -15,23 +15,27 @@ export default function Index({session} : {session:any}) {
             <div className="flex">
                 <Chart
                     chartType="ScatterChart"
-                    data={[["Age", "Weight"], [4, 5.5], [8, 12]]}
+                    data={[
+                        ['Age', 'Weight'],
+                        [4, 5.5],
+                        [8, 12]
+                    ]}
                     width="100%"
                     height="400px"
                     legendToggle
                 />
             </div>
         </div>
-    )
+    );
 }
 
-export async function getServerSideProps(context:any) {
+export async function getServerSideProps(context: any) {
     const { locale } = context;
     const session = await getSession(context);
 
     if (!session) {
         return {
-            redirect: { destination: `/${locale === 'fr' ? '' : `${locale}/`}auth/signin` },
+            redirect: { destination: `/${locale === 'fr' ? '' : `${locale}/`}auth/signin` }
         };
     }
 
@@ -40,8 +44,8 @@ export async function getServerSideProps(context:any) {
             session,
             locale,
             messages: {
-                ...require(`../../messages/${locale}.json`),
-            },
+                ...require(`../../messages/${locale}.json`)
+            }
         }
-    }
+    };
 }

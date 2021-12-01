@@ -1,11 +1,11 @@
-import '../styles/globals.css'
-import { NextIntlProvider } from 'next-intl'
-import type { AppProps } from 'next/app'
-import { Provider } from "next-auth/client";
-import { Provider as ReduxProvider } from 'react-redux'
-import store from '../app/store'
-import { Alert } from "../components/services/Alert";
-import Layout from "../components/layout/Layout";
+import '../styles/globals.css';
+import { NextIntlProvider } from 'next-intl';
+import type { AppProps } from 'next/app';
+import { Provider } from 'next-auth/client';
+import { Provider as ReduxProvider } from 'react-redux';
+import store from '../app/store';
+import { Alert } from '../components/services/Alert';
+import Layout from '../components/layout/Layout';
 
 function MyApp({ Component, pageProps }: AppProps) {
     return (
@@ -26,10 +26,9 @@ function MyApp({ Component, pageProps }: AppProps) {
                     //
                     // Note: If a session has expired when keep alive is triggered, all open
                     // windows / tabs will be updated to reflect the user is signed out.
-                    keepAlive: 0,
+                    keepAlive: 0
                 }}
-                session={pageProps.session}
-            >
+                session={pageProps.session}>
                 <NextIntlProvider
                     // To achieve consistent date, time and number formatting
                     // across the app, you can define a set of global formats.
@@ -38,9 +37,9 @@ function MyApp({ Component, pageProps }: AppProps) {
                             short: {
                                 day: 'numeric',
                                 month: 'short',
-                                year: 'numeric',
-                            },
-                        },
+                                year: 'numeric'
+                            }
+                        }
                     }}
                     messages={pageProps.messages}
                     // Providing an explicit value for `now` ensures consistent formatting of
@@ -49,8 +48,7 @@ function MyApp({ Component, pageProps }: AppProps) {
                     // Also an explicit time zone is helpful to ensure dates render the
                     // same way on the client as on the server, which might be located
                     // in a different time zone.
-                    timeZone="Europe/Paris"
-                >
+                    timeZone="Europe/Paris">
                     <Layout>
                         <Alert />
                         <Component {...pageProps} />
@@ -61,4 +59,4 @@ function MyApp({ Component, pageProps }: AppProps) {
     );
 }
 
-export default MyApp
+export default MyApp;

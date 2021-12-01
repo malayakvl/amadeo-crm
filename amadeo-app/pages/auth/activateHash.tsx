@@ -1,15 +1,15 @@
-import { signIn } from "next-auth/client";
-import { useEffect } from "react";
+import { signIn } from 'next-auth/client';
+import { useEffect } from 'react';
 
-export default function ActivateHash({locale, hash}:{locale:string,hash:string}) {
+export default function ActivateHash({ locale, hash }: { locale: string; hash: string }) {
     useEffect(() => {
         if (hash) {
-            signIn('credentials_hash',
-                {
-                    hash: hash,
-                    callbackUrl: `${window.location.origin}${locale === 'fr' ? '' : `/${locale}`}/auth/changePassword`
-                }
-            )
+            signIn('credentials_hash', {
+                hash: hash,
+                callbackUrl: `${window.location.origin}${
+                    locale === 'fr' ? '' : `/${locale}`
+                }/auth/changePassword`
+            });
         }
     }, [locale, hash]);
     return (
@@ -18,16 +18,16 @@ export default function ActivateHash({locale, hash}:{locale:string,hash:string})
                 Wait untill data loading
             </div>
         </div>
-    )
+    );
 }
 
-export async function getServerSideProps(context:any) {
+export async function getServerSideProps(context: any) {
     const { req, locale } = context;
     const hash = req.__NEXT_INIT_QUERY.hash;
 
     if (!hash) {
         return {
-            redirect: { destination: `/${locale === 'fr' ? '' : `${locale}/`}auth/signin` },
+            redirect: { destination: `/${locale === 'fr' ? '' : `${locale}/`}auth/signin` }
         };
     }
 
@@ -36,8 +36,8 @@ export async function getServerSideProps(context:any) {
             locale: locale,
             hash: hash,
             messages: {
-                ...require(`../../messages/${locale}.json`),
-            },
-        },
+                ...require(`../../messages/${locale}.json`)
+            }
+        }
     };
 }

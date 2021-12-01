@@ -1,14 +1,14 @@
-import { useTranslations } from "next-intl";
+import { useTranslations } from 'next-intl';
+import React from 'react';
 
 interface PropsSelect {
     name: string;
-    label: string,
+    label: string;
     options: any;
     props: any;
 }
 
-
-const InputSelect: React.FC<PropsSelect> = ({name, label, options,  props}) => {
+const InputSelect: React.FC<PropsSelect> = ({ name, label, options, props }) => {
     const t = useTranslations();
     return (
         <div className="mb-4">
@@ -17,10 +17,9 @@ const InputSelect: React.FC<PropsSelect> = ({name, label, options,  props}) => {
                 name={name}
                 className="txt-input"
                 onChange={props.handleChange}
-                value={props.values[name] ||''}
-            >
+                value={props.values[name] || ''}>
                 <option value="">------</option>
-                {options.map((option:any) => (
+                {options.map((option: any) => (
                     <option value={option.id} key={option.id}>
                         {option.name}
                     </option>
@@ -28,7 +27,7 @@ const InputSelect: React.FC<PropsSelect> = ({name, label, options,  props}) => {
             </select>
             {props.errors[name] && <div className="error-el">{props.errors[name]}</div>}
         </div>
-    )
-}
+    );
+};
 
 export { InputSelect };

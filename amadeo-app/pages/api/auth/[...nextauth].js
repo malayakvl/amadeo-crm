@@ -1,8 +1,8 @@
-import NextAuth from "next-auth";
-import FacebookProvider from "next-auth/providers/facebook";
-import GoogleProvider from "next-auth/providers/google";
-import CredentialsProvider from "next-auth/providers/credentials";
-import getConfig from "next/config";
+import NextAuth from 'next-auth';
+import FacebookProvider from 'next-auth/providers/facebook';
+import GoogleProvider from 'next-auth/providers/google';
+import CredentialsProvider from 'next-auth/providers/credentials';
+import getConfig from 'next/config';
 const { publicRuntimeConfig } = getConfig();
 const baseUrl = `${publicRuntimeConfig.apiUrl}/auth`;
 
@@ -17,7 +17,7 @@ export default NextAuth({
     providers: [
         FacebookProvider({
             clientId: process.env.FACEBOOK_CLIENT_ID,
-            clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
+            clientSecret: process.env.FACEBOOK_CLIENT_SECRET
         }),
         GoogleProvider({
             clientId: process.env.GOOGLE_CLIENT_ID,
@@ -29,13 +29,13 @@ export default NextAuth({
                 const res = await fetch(`${baseUrl}/login`, {
                     method: 'POST',
                     body: JSON.stringify(credentials),
-                    headers: { "Content-Type": "application/json" }
-                })
+                    headers: { 'Content-Type': 'application/json' }
+                });
                 const resp = await res.json();
                 if (res.ok && resp.user) {
                     return resp.user;
                 }
-    
+
                 throw `/auth/signin?message=${resp.message}`;
                 // return null
             }
@@ -45,13 +45,13 @@ export default NextAuth({
             async authorize(credentials) {
                 const res = await fetch(`${baseUrl}/activate-hash/${credentials.hash}`, {
                     method: 'GET',
-                    headers: { "Content-Type": "application/json" }
-                })
+                    headers: { 'Content-Type': 'application/json' }
+                });
                 const resp = await res.json();
                 if (res.ok && resp.user) {
                     return resp.user;
                 }
-            
+
                 throw `/auth/signin?message=your token expired`;
                 // return null
             }
@@ -62,11 +62,11 @@ export default NextAuth({
                 const _user = JSON.parse(credentials.user);
                 const res = await fetch(`${baseUrl}/register`, {
                     method: 'POST',
-                    body: (credentials.user),
-                    headers: { "Content-Type": "application/json" }
+                    body: credentials.user,
+                    headers: { 'Content-Type': 'application/json' }
                 });
                 const user = await res.json();
-    
+
                 if (res.ok && user) {
                     return user.user;
                 }
@@ -77,7 +77,7 @@ export default NextAuth({
                 }
                 // Return null if user data could not be retrieved
             }
-        }),
+        })
     ],
     events: {
         async signIn(message) {
@@ -85,15 +85,15 @@ export default NextAuth({
             // registration/login via provider
             if (message.account?.provider) {
                 const dataUser = message.user;
-                dataUser.provider = message.account.provider
-                dataUser.providerId = message.account.id
+                dataUser.provider = message.account.provider;
+                dataUser.providerId = message.account.id;
                 await fetch(`${baseUrl}/provider`, {
                     method: 'POST',
                     body: JSON.stringify(dataUser),
-                    headers: { "Content-Type": "application/json" }
+                    headers: { 'Content-Type': 'application/json' }
                 });
             }
         }
     },
-    debug: true,
+    debug: true
 });

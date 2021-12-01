@@ -1,12 +1,13 @@
-import { useTranslations } from "next-intl";
+import { useTranslations } from 'next-intl';
+import React from 'react';
 
 interface Props {
     name: string;
-    label: string,
+    label: string;
     props: any;
 }
 
-const InputText: React.FC<Props> = ({name, label, props}) => {
+const InputText: React.FC<Props> = ({ name, label, props }) => {
     const t = useTranslations();
     return (
         <div className="mb-4">
@@ -16,12 +17,12 @@ const InputText: React.FC<Props> = ({name, label, props}) => {
                 placeholder={t(label)}
                 type="text"
                 onChange={props.handleChange}
-                value={props.values[name] ||''}
+                value={props.values[name] || ''}
                 name={name}
             />
             {props.errors[name] && <div className="error-el">{props.errors[name]}</div>}
         </div>
-    )
-}
+    );
+};
 
 export { InputText };
