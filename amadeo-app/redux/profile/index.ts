@@ -8,7 +8,6 @@ import {
     setValidEmailStatusAction
 } from './actions';
 
-
 const initialState: State.Profile = {
     profile: {} as Profile.Profile,
     crudStatus: null,
@@ -19,39 +18,39 @@ const ACTION_HANDLERS: any = {
     [fetchProfileAction]: {
         next: (state: State.Profile, action: Action<any>): State.Profile => ({
             ...state,
-            profile: action.payload,
-        }),
+            profile: action.payload
+        })
     },
     [updateProfileAction]: {
         next: (state: State.Profile, action: Action<any>): State.Profile => ({
             ...state,
-            crudStatus: action.payload,
-        }),
+            crudStatus: action.payload
+        })
     },
     [setCrudStatusAction]: {
         next: (state: State.Profile, action: Action<any>): State.Profile => ({
             ...state,
-            crudStatus: action.payload,
-        }),
+            crudStatus: action.payload
+        })
     },
     [changePasswordAction]: {
         next: (state: State.Profile, action: Action<any>): State.Profile => ({
             ...state,
-            crudStatus: action.payload,
-        }),
+            crudStatus: action.payload
+        })
     },
     [restorePasswordAction]: {
         next: (state: State.Profile, action: Action<any>): State.Profile => ({
             ...state,
-            validEmail: action.payload,
-        }),
+            validEmail: action.payload
+        })
     },
     [setValidEmailStatusAction]: {
         next: (state: State.Profile, action: Action<any>): State.Profile => ({
             ...state,
-            crudStatus: action.payload,
-        }),
-    },
+            crudStatus: action.payload
+        })
+    }
 };
 
 export {

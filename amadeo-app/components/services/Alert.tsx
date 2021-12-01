@@ -41,6 +41,7 @@ function Alert({ id, fade }: { id: string; fade: boolean }) {
                 });
             } else {
                 // add alert to array
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
                 setAlerts((alerts) => [...alerts, alert]);
 

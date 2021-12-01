@@ -1,7 +1,7 @@
 import { createAction } from 'redux-actions';
-import axios from "axios";
-import getConfig from "next/config";
-import { authHeader } from "../../lib/functions";
+import axios from 'axios';
+import getConfig from 'next/config';
+import { authHeader } from '../../lib/functions';
 
 const { publicRuntimeConfig } = getConfig();
 const baseUrl = `${publicRuntimeConfig.apiUrl}/api`;
@@ -9,23 +9,24 @@ const baseAuthUrl = `${publicRuntimeConfig.apiUrl}/auth`;
 
 export const fetchProfileAction: any = createAction(
     'profile/FETCH_PROFILE',
-    async (email:string) => {
-        return await axios
-                .get(`${baseUrl}/profile`, {
-                    headers: {
-                        ...authHeader(email)
-                    }})
-                .then(res => res.data.user);
+    async (email: string) => {
+        return axios
+            .get(`${baseUrl}/profile`, {
+                headers: {
+                    ...authHeader(email)
+                }
+            })
+            .then((res) => res.data.user);
     }
 );
 
 export const updateProfileAction: any = createAction(
     'profile/UPDATE_PROFILE',
-    async (data:any, email: string) => {
+    async (data: any, email: string) => {
         const res = await fetch(`${baseUrl}/profile`, {
             method: 'post',
             body: JSON.stringify(data),
-            headers: { "Content-Type": "application/json", ...authHeader(email) }
+            headers: { 'Content-Type': 'application/json', ...authHeader(email) }
         });
         const resp = await res.json();
         if (res.ok && resp.user) {
@@ -38,11 +39,11 @@ export const updateProfileAction: any = createAction(
 
 export const changePasswordAction: any = createAction(
     'profile/CHANGE_PASSWORD',
-    async (data:any, email:string) => {
+    async (data: any, email: string) => {
         const res = await fetch(`${baseUrl}/changePassword`, {
             method: 'post',
             body: JSON.stringify(data),
-            headers: { "Content-Type": "application/json", ...authHeader(email) }
+            headers: { 'Content-Type': 'application/json', ...authHeader(email) }
         });
         const resp = await res.json();
         if (res.ok && resp.status) {
@@ -55,11 +56,11 @@ export const changePasswordAction: any = createAction(
 
 export const restorePasswordAction: any = createAction(
     'profile/RESTORE_PASSWORD',
-    async (data:any) => {
+    async (data: any) => {
         const res = await fetch(`${baseAuthUrl}/restorePassword`, {
             method: 'post',
             body: JSON.stringify(data),
-            headers: { "Content-Type": "application/json" }
+            headers: { 'Content-Type': 'application/json' }
         });
         const resp = await res.json();
         if (res.ok && resp.status) {

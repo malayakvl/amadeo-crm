@@ -20,13 +20,14 @@ module.exports = {
         es6: true
     },
     extends: [
-        'eslint:recommended',
         'plugin:react/recommended',
+        'plugin:@typescript-eslint/recommended',
         'plugin:jsx-a11y/recommended',
         'plugin:prettier/recommended' // Make this the last element so prettier config overrides other formatting rules
     ],
     rules: {
         'react/react-in-jsx-scope': 'off',
+        '@typescript-eslint/no-explicit-any': 'off',
         'react/prop-types': 'off',
         // allow jsx syntax in js files (for next.js project)
         'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx', '.ts', '.tsx'] }],

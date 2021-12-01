@@ -1,6 +1,4 @@
-// eslint-disable-next-line no-unused-vars
-declare module Profile {
-    // eslint-disable-next-line no-unused-vars
+declare namespace Profile {
     interface Root {
         profile: Profile;
         crudStatus: string | null;

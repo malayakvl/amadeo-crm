@@ -8,7 +8,6 @@ import {
     deleteAddressAction
 } from './actions';
 
-
 const initialState: State.Addresses = {
     addresses: [],
     address: {} as Addresses.Address,
@@ -19,37 +18,40 @@ const ACTION_HANDLERS: any = {
     [fetchAddressesAction]: {
         next: (state: State.Addresses, action: Action<any>): State.Addresses => ({
             ...state,
-            addresses: action.payload,
-        }),
+            addresses: action.payload
+        })
     },
     [fetchAddressAction]: {
         next: (state: State.Addresses, action: Action<any>): State.Addresses => ({
             ...state,
-            address: action.payload,
-        }),
+            address: action.payload
+        })
     },
-    [setAddressAction]: (state: State.Addresses, action: Action<Addresses.Address>): State.Addresses => ({
+    [setAddressAction]: (
+        state: State.Addresses,
+        action: Action<Addresses.Address>
+    ): State.Addresses => ({
         ...state,
-        address: action.payload,
+        address: action.payload
     }),
     [addAddressAction]: {
         next: (state: State.Addresses, action: Action<any>): State.Addresses => ({
             ...state,
-            crudStatus: action.payload,
-        }),
+            crudStatus: action.payload
+        })
     },
     [setCrudStatusAction]: {
         next: (state: State.Addresses, action: Action<any>): State.Addresses => ({
             ...state,
-            crudStatus: action.payload,
-        }),
+            crudStatus: action.payload
+        })
     },
     [deleteAddressAction]: {
         next: (state: State.Addresses, action: Action<any>): State.Addresses => ({
             ...state,
-            crudStatus: action.payload,
-        }),
-    },
+            crudStatus: action.payload
+        })
+    }
 };
 
 export {

@@ -96,7 +96,6 @@ function Account({
     );
 }
 
-// @ts-ignore
 export default Account;
 
 export async function getServerSideProps(context: any) {

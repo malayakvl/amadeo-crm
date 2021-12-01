@@ -8,6 +8,15 @@ const rootSelector = createSelector(
     (profile: State.Profile): State.Profile => profile
 );
 
-export const profileSelector = createSelector(rootSelector, (profile: State.Profile): Profile.Profile => profile.profile);
-export const crudStatusSelector = createSelector(rootSelector, (profile: State.Profile): any => profile.crudStatus);
-export const validEmailSelector = createSelector(rootSelector, (profile: State.Profile): any => profile.validEmail);
+export const profileSelector = createSelector(
+    rootSelector,
+    (profile: State.Profile): Profile.Profile => profile.profile
+);
+export const crudStatusSelector = createSelector(
+    rootSelector,
+    (profile: State.Profile): any => profile.crudStatus
+);
+export const validEmailSelector = createSelector(
+    rootSelector,
+    (profile: State.Profile): any => profile.validEmail
+);
