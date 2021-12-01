@@ -23,10 +23,6 @@ module.exports = {
         'eslint:recommended',
         'plugin:react/recommended',
         'plugin:jsx-a11y/recommended',
-        'prettier',
-        'prettier/react',
-        'prettier/@typescript-eslint',
-        'plugin:prettier/recommended',
         'plugin:prettier/recommended' // Make this the last element so prettier config overrides other formatting rules
     ],
     rules: {

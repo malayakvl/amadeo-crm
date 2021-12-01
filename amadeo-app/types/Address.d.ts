@@ -1,4 +1,6 @@
+// eslint-disable-next-line no-unused-vars
 declare module Addresses {
+    // eslint-disable-next-line no-unused-vars
     interface Root {
         addresses: Address[];
         address: Address;

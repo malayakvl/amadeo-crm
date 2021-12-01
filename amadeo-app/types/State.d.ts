@@ -1,5 +1,8 @@
+// eslint-disable-next-line no-unused-vars
 declare module State {
+    // eslint-disable-next-line no-unused-vars
     interface Root {
+        // eslint-disable-next-line no-undef
         router: Type.RouterRootState;
         addresses: Addresses;
         profile: Profile;

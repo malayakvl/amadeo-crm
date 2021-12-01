@@ -1,4 +1,6 @@
+// eslint-disable-next-line no-unused-vars
 declare module User {
+    // eslint-disable-next-line no-unused-vars
     interface Root {
         user: User;
     }
