@@ -3,7 +3,7 @@
 exports.shorthands = undefined;
 
 exports.up = pgm => {
-    pgm.sql(`DROP FUNCTION data.find_user_by_hash(text,boolean,text);
+    pgm.sql(`
 CREATE OR REPLACE FUNCTION data.find_user_by_hash(_user_hash text, _is_deleted boolean DEFAULT false, _period_plus text DEFAULT '3 hours'::text)
  RETURNS TABLE(id integer, role_id integer, email character varying(100))
  LANGUAGE plpgsql
@@ -29,4 +29,8 @@ $function$
 `);
 };
 
+
+exports.down = pgm => {
+    pgm.sql(`DROP FUNCTION IF EXISTS data.find_user_by_hash`);
+};
 
