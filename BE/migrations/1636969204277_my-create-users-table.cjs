@@ -20,7 +20,7 @@ exports.up = pgm => {
         first_name: { type: 'varchar(255)' },
         company_name: { type: 'varchar(255)' },
         identification_number: { type: 'varchar(100)' },
-        vat: { type: 'boolean' },
+        vat: { type: 'varchar(255)' },
         phone: { type: 'varchar(255)' },
         full_address: { type: 'varchar(255)' },
         created_at: {
