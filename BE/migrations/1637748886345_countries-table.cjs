@@ -12,7 +12,7 @@ exports.up = pgm => {
             numcode integer,
             phonecode character varying(10),
             created_at timestamp without time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
-            updated_at timestamp without time zone NOT NULL DEFAULT CURRENT_TIMESTAMP`);
+            updated_at timestamp without time zone NOT NULL DEFAULT CURRENT_TIMESTAMP)`);
 };
 
 exports.down = pgm => {
