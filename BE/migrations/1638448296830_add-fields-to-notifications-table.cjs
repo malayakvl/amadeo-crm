@@ -9,6 +9,8 @@ exports.up = pgm => {
             references: '"data"."users"',
         },
         subject: { type: 'varchar(255)' }
+    }, {
+        ifNotExists: true
     });
 };
 
