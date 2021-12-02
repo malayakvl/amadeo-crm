@@ -7,6 +7,8 @@ exports.up = pgm => {
         {
             hash: { type: 'text' },
             expired_at: { type: 'timestamp' }
+        } , {
+            ifNotExists: true
         });
 };
 

@@ -33,6 +33,8 @@ exports.up = pgm => {
             notNull: true,
             default: pgm.func('current_timestamp'),
         },
+    }, {
+        ifNotExists: true
     });
     // pgm.createIndex('users', 'role_id')
 };

@@ -6,6 +6,8 @@ exports.up = pgm => {
     pgm.createTable({ schema: 'data', name: 'roles' }, {
         id: 'id',
         name: { type: 'varchar(1000)', notNull: true },
+    }, {
+        ifNotExists: true
     });
 };
 
