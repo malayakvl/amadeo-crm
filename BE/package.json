@@ -7,7 +7,8 @@
   "scripts": {
     "dev": "nodemon index.js",
     "ui": "npx browser-sync start --config bs-config.cjs",
-    "migrate": "node-pg-migrate"
+    "migrate": "node-pg-migrate",
+    "seed": "node seed"
   },
   "keywords": [],
   "author": "",
