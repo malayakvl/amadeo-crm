@@ -24,13 +24,6 @@ export const setCookie = (cookieName, cookieValue, lifeTime, req, res) => {
     }
 };
 
-export const getDomain = (req) => {
-    // const mode = process.env.NODE_ENV || 'development';
-    // let domain;
-    // if (mode === 'development') {
-    //     domain = req.hostname;
-    // } else {
-    //     domain = `.${process.env.APPLICATION_DOMAIN}`;
-    // }
+export const getDomain = () => {
     return `.${process.env.APPLICATION_URL}`;
 };

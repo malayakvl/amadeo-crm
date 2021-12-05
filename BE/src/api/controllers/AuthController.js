@@ -30,7 +30,7 @@ class AuthController {
             }
         )(req, res, next);
     }
-    
+
     /**
      * Login/Create account via providers
      * @param req
@@ -44,7 +44,7 @@ class AuthController {
         }
         res.status(200).json({ user: user });
     }
-    
+
     /**
      * Register new user via form data
      * @param req
@@ -67,16 +67,16 @@ class AuthController {
                         res.send(error);
                     }
                     getTokensAndSetCookies(req, res, user.id, user.email);
-            
+
                     res.status(200).json({ user: user });
                 }
             );
         }
     }
-    
-    
-    async restorePassword(req, res) {
+
+    async restorePassword (req, res) {
         const _user = await userModel.findUserByEmail(req.body.email);
+
         if (_user) {
             const { success, hash } = await userModel.generateRestoreHash(_user);
             if (success) {
@@ -97,19 +97,17 @@ class AuthController {
                 res.status(402).json({ status: false });
             }
         } else {
-            res.status(402).json({ status: false, error: "wrong email" });
+            res.status(402).json({ status: false, error: 'wrong email' });
         }
     }
-    
-    
-    async activateHash(req, res) {
+
+    async activateHash (req, res) {
         const user = await userModel.activateByHash(req.params.hash);
         if (user) {
             res.status(200).json({ user: user });
         } else {
-            res.status(402).json({ user: null, error: "No user or token expired" });
+            res.status(402).json({ user: null, error: 'No user or token expired' });
         }
-        
     }
 }
 

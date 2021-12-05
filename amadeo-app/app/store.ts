@@ -8,13 +8,13 @@ import logger from 'redux-logger';
 import addressReducer from '../redux/addresses/index';
 import profileReducer from '../redux/profile/index';
 import userReducer from '../redux/user/index';
-// import notificationsReducer from '../redux/notifications/index';
+import notificationsReducer from '../redux/notifications/index';
 
 const reducers = combineReducers({
     addresses: addressReducer,
     profile: profileReducer,
-    user: userReducer
-    // notifications: notificationsReducer
+    user: userReducer,
+    notifications: notificationsReducer
 });
 
 const initStore = (initialState = {}) => {

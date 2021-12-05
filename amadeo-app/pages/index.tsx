@@ -10,3 +10,15 @@ export default function Home() {
         </div>
     );
 }
+export async function getServerSideProps(context: any) {
+    const { locale } = context;
+
+    return {
+        props: {
+            locale,
+            messages: {
+                ...require(`../messages/${locale}.json`)
+            }
+        }
+    };
+}

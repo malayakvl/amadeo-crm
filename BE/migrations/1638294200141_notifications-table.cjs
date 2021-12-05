@@ -10,8 +10,8 @@ exports.up = pgm => {
             message text,
             is_read boolean DEFAULT false,
             type character varying(255),
-            created_at timestamp without time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
-            updated_at timestamp without time zone NOT NULL DEFAULT CURRENT_TIMESTAMP
+            created_at timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            updated_at timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP
         );`)
     };
 

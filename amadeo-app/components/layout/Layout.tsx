@@ -29,7 +29,6 @@ export default function Layout({ children }: { children: any }) {
                     : {};
                 if (storeUser.id !== user.id) {
                     window.localStorage.setItem('user', JSON.stringify(user));
-                    console.log('Need setup storage');
                 }
             }
         },

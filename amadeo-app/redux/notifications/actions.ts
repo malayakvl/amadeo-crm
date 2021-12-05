@@ -5,17 +5,33 @@ const { publicRuntimeConfig } = getConfig();
 const baseUrl = `${publicRuntimeConfig.apiUrl}/api`;
 
 export const fetchCntNewAction: any = createAction(
-    'addresses/FETCH_CNT_NOTIFICATIONS',
+    'notifications/FETCH_CNT_NOTIFICATIONS',
     async (email: string) => {
-        const res = await fetch(`${baseUrl}/address`, {
+        const res = await fetch(`${baseUrl}/count-notice`, {
             method: 'get',
             headers: authHeader(email)
         });
         const resp = await res.json();
-        if (res.ok && resp.addresses) {
-            return resp.addresses;
+        if (res.ok && resp.cntNotice) {
+            return resp.cntNotice;
         } else {
-            return resp.error.message;
+            return 0;
+        }
+    }
+);
+
+export const fetchNewListAction: any = createAction(
+    'notifications/FETCH_LATEST_NOTIFICATIONS',
+    async (email: string) => {
+        const res = await fetch(`${baseUrl}/new-notice`, {
+            method: 'get',
+            headers: authHeader(email)
+        });
+        const resp = await res.json();
+        if (res.ok && resp.notifications) {
+            return resp.notifications;
+        } else {
+            return [];
         }
     }
 );

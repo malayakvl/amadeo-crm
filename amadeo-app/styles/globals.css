@@ -4,6 +4,25 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer utilities {
+    .w-245 {
+        width: 245px;
+    }
+    .text-green-notice {
+        color: #00C868;
+        font-size: 0.56rem;
+        @apply block font-bold uppercase mb-1;
+    }
+    .text-gray-notice {
+        color: #4F5B84;
+        @apply block text-xs font-bold mb-1;
+    }
+    .text-m-notice {
+        color:#90A4AE;
+        @apply block text-xs font-bold mb-1;
+    }
+}
+
 @layer components {
     h1 {
         @apply mb-3 text-3xl flex;

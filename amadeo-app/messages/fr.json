@@ -61,5 +61,7 @@
   "Submit": "Submit",
   "Edit": "Edit",
   "Delete": "Delete",
-  "Cancel": "Cancel"
+  "Cancel": "Cancel",
+  "system": "System messsage",
+  "message": "User message"
 }

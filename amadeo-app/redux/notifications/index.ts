@@ -1,10 +1,11 @@
 import { Action, handleActions } from 'redux-actions';
-import { fetchCntNewAction } from './actions';
+import { fetchCntNewAction, fetchNewListAction } from './actions';
 
 const initialState: State.Notifications = {
+    cntNew: 0,
+    notificationsLatest: [],
     notifications: [],
-    notification: {} as Notifications.Notification,
-    cntNew: 0
+    notification: {} as Notifications.Notification
 };
 
 const ACTION_HANDLERS: any = {
@@ -13,10 +14,16 @@ const ACTION_HANDLERS: any = {
             ...state,
             cntNew: action.payload
         })
+    },
+    [fetchNewListAction]: {
+        next: (state: State.Notifications, action: Action<any>): State.Notifications => ({
+            ...state,
+            notificationsLatest: action.payload
+        })
     }
 };
 
-export { fetchCntNewAction };
+export { fetchCntNewAction, fetchNewListAction };
 
 // ------------------------------------
 // Reducer

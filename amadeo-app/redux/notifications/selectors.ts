@@ -12,3 +12,8 @@ export const cntNewSelector = createSelector(
     rootSelector,
     (notifications: State.Notifications): any => notifications.cntNew
 );
+
+export const latestNoticeSelector = createSelector(
+    rootSelector,
+    (notifications: State.Notifications): any => notifications.notificationsLatest
+);

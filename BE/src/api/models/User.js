@@ -18,7 +18,7 @@ class User {
         const client = await pool.connect();
         try {
             const res = await client.query(`SELECT * FROM data.users WHERE email = '${email.toLowerCase()}'`);
-            if  (res.rows.length) {
+            if (res.rows.length) {
                 delete res.rows[0].auth_provider_name;
                 delete res.rows[0].auth_provider_id;
                 return res.rows[0];
@@ -39,14 +39,14 @@ class User {
             client.release();
         }
     }
-    
+
     /**
      * Login or Register user via provider Facebook, Google, etc
      *
      * @param userData - object
      * @returns {Promise<{error: {code: number, message: string}, user: null}|{error: null, user: *}>}
      */
-    async provider(userData) {
+    async provider (userData) {
         const client = await pool.connect();
         try {
             let user;
@@ -74,7 +74,7 @@ class User {
             } else {
                 return { user: user, error: null };
             }
-        } catch(e) {
+        } catch (e) {
             if (process.env.NODE_ENV === 'development') {
                 logger.log(
                     'error',
@@ -87,14 +87,14 @@ class User {
             client.release();
         }
     }
-    
+
     /**
      * Create user
      *
      * @param userData - object
      * @returns {Promise<{error: {code: number, message: string}, user: null}|{error: null, user: *}>}
      */
-    async create(userData) {
+    async create (userData) {
         const {
             salt,
             hash
@@ -125,13 +125,25 @@ class User {
             `);
             const user = res ? await this.findUserByEmail(userData.email) : null;
             if (user) {
+                const messageQuery = `INSERT INTO data.notifications
+                (
+                    user_id, type, subject, message
+                )
+                VALUES
+                (
+                    '${user.id}',
+                    'system',
+                    'welcome',
+                    'welcome'
+                );`;
+                await client.query(messageQuery);
                 delete user.salt;
                 delete user.password;
                 return { user: user, error: null };
             } else {
                 return { user: null, error: { code: 404, message: 'User Not found' } };
             }
-        } catch(e) {
+        } catch (e) {
             if (process.env.NODE_ENV === 'development') {
                 logger.log(
                     'error',
@@ -144,13 +156,13 @@ class User {
             client.release();
         }
     }
-    
+
     /**
      *
      * @param userData - json
      * @returns {Promise<{error: null, user}|{error: {code: number, message: string}, user: null}>}
      */
-    async update(userData) {
+    async update (userData) {
         const client = await pool.connect();
         try {
             const user = await this.findUserByEmail(userData.email);
@@ -161,7 +173,7 @@ class User {
             } else {
                 return { user: null, error: { code: 404, message: 'User Not found' } };
             }
-        } catch(e) {
+        } catch (e) {
             if (process.env.NODE_ENV === 'development') {
                 logger.log(
                     'error',
@@ -174,19 +186,19 @@ class User {
             client.release();
         }
     }
-    
+
     /**
      *
      * @param userId integer
      * @returns {Promise<{addresses: null, error: {code: number, message: string}}|any[]|null>}
      */
-    async findUserAddresses(userId) {
+    async findUserAddresses (userId) {
         const client = await pool.connect();
         try {
             const query = `SELECT * FROM data.addresses WHERE user_id='${userId}';`;
             const res = await client.query(query);
             return res.rows ? res.rows : null;
-        } catch(e) {
+        } catch (e) {
             if (process.env.NODE_ENV === 'development') {
                 logger.log(
                     'error',
@@ -199,20 +211,20 @@ class User {
             client.release();
         }
     }
-    
+
     /**
      *
      * @param userId integer
      * @param addressId integer
      * @returns {Promise<{addresses: null, error: {code: number, message: string}}|any|null>}
      */
-    async findUserAddress(userId, addressId) {
+    async findUserAddress (userId, addressId) {
         const client = await pool.connect();
         try {
             const query = `SELECT * FROM data.addresses WHERE id='${addressId}' ORDER BY id DESC;`;
             const res = await client.query(query);
             return res.rows ? res.rows[0] : null;
-        } catch(e) {
+        } catch (e) {
             if (process.env.NODE_ENV === 'development') {
                 logger.log(
                     'error',
@@ -225,20 +237,20 @@ class User {
             client.release();
         }
     }
-    
+
     /**
      *
      * @param userId integer
      * @param addressData json object
      * @returns {Promise<{error: {code: number, message: string}, user: null}|{success: boolean}>}
      */
-    async addAddress(userId, addressData) {
+    async addAddress (userId, addressData) {
         const client = await pool.connect();
         let query;
         try {
             if (addressData.id) {
                 const addressId = addressData.id;
-                delete  addressData.id;
+                delete addressData.id;
                 query = `SELECT common__tools._update_table_by_id('data', 'addresses', '${JSON.stringify(addressData)}', ${addressId});`;
                 await client.query(query);
             } else {
@@ -251,18 +263,18 @@ class User {
                     (
                         '${userId}',
                         '${addressData.country_id}',
-                        '${addressData.state||""}',
-                        '${addressData.post_code||""}',
-                        '${addressData.address_type||""}',
-                        '${addressData.city||""}',
-                        '${addressData.address_line_1||""}',
-                        '${addressData.address_line_2||""}'
+                        '${addressData.state || ''}',
+                        '${addressData.post_code || ''}',
+                        '${addressData.address_type || ''}',
+                        '${addressData.city || ''}',
+                        '${addressData.address_line_1 || ''}',
+                        '${addressData.address_line_2 || ''}'
                     )
                 ;`;
                 await client.query(query);
             }
-            return { success: true};
-        } catch(e) {
+            return { success: true };
+        } catch (e) {
             if (process.env.NODE_ENV === 'development') {
                 logger.log(
                     'error',
@@ -275,14 +287,14 @@ class User {
             client.release();
         }
     }
-    
-    async deleteAddress(addressId) {
+
+    async deleteAddress (addressId) {
         const client = await pool.connect();
         try {
             const query = `DELETE FROM data.addresses WHERE id='${addressId}'`;
             await client.query(query);
-            return { success: true};
-        } catch(e) {
+            return { success: true };
+        } catch (e) {
             if (process.env.NODE_ENV === 'development') {
                 logger.log(
                     'error',
@@ -295,14 +307,14 @@ class User {
             client.release();
         }
     }
-    
+
     /**
      *
      * @param user - json object
      * @param data - json object
      * @returns {Promise<{error: {code: number, message: string}, user: null}|{success: boolean, error: {code: number, message: string}}|{success: boolean}>}
      */
-    async changePassword(user, data) {
+    async changePassword (user, data) {
         const client = await pool.connect();
         try {
             const {
@@ -312,10 +324,10 @@ class User {
             const passwordData = {
                 salt: salt,
                 password: hash
-            }
+            };
             const query = `SELECT common__tools._update_table_by_id('data', 'users', '${JSON.stringify(passwordData)}', ${user.id});`;
             await client.query(query);
-            return { success: true};
+            return { success: true };
             // if (!user || !this.validatePassword(data.old_password, user.salt, user.password)) {
             //     return { success: false, error: { code: 402, message: 'Access Deny' } };
             // } else {
@@ -332,13 +344,13 @@ class User {
             client.release();
         }
     }
-    
+
     /**
      *
      * @param user
      * @returns {Promise<{error: {code: number, message: string}, user: null}|{success: boolean, hash: string}>}
      */
-    async generateRestoreHash(user) {
+    async generateRestoreHash (user) {
         const client = await pool.connect();
         try {
             const hash = crypto.randomBytes(20).toString('hex');
@@ -355,11 +367,11 @@ class User {
                     message: 'Error restore password'
                 }
             };
-        }finally {
+        } finally {
             client.release();
         }
     }
-    
+
     /**
      * Login user via email link
      * @param hash
@@ -396,7 +408,7 @@ class User {
             client.release();
         }
     }
-    
+
     /**
      * Check pasword
      *
@@ -409,7 +421,7 @@ class User {
         const hashCheck = crypto.pbkdf2Sync(password, salt, 10000, 256, 'sha256').toString('hex');
         return hash === hashCheck;
     }
-    
+
     /**
      * Encode password
      *

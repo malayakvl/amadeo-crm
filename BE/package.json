@@ -7,14 +7,22 @@
   "scripts": {
     "dev": "nodemon index.js",
     "ui": "npx browser-sync start --config bs-config.cjs",
-    "migrate": "node-pg-migrate"
+    "migrate": "node-pg-migrate",
+    "lint": "eslint --fix ."
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "browser-sync": "^2.27.7",
-    "nodemon": "^2.0.14"
+    "eslint": "^7.6.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-import": "^2.25.3",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-config-standard": "^16.0.3",
+    "nodemon": "^2.0.14",
+    "prettier": "^2.5.1"
   },
   "dependencies": {
     "axios": "^0.24.0",
