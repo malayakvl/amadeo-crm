@@ -1,3 +1,7 @@
 .gradient-btn {
-  @apply red-yellow-gradient font-bold text-sm text-white rounded-lg p-2.5
+  @apply basic-btn red-yellow-gradient text-white 
+}
+
+.disabled-btn {
+  @apply basic-btn border-2 border-gray-300 text-gray-300
 }
