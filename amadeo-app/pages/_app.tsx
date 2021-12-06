@@ -1,4 +1,4 @@
-import '../styles/globals.css';
+import '../styles/global.scss';
 import { NextIntlProvider } from 'next-intl';
 import type { AppProps } from 'next/app';
 import { Provider } from 'next-auth/client';

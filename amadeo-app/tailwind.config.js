@@ -11,7 +11,13 @@ module.exports = {
         },
         fontSize: {
             xs: '.75rem',
-            sm: '.875rem',
+            sm: [
+                '14px',
+                {
+                    lineHeight: '21px',
+                    letterSpacing: '0.004em'
+                }
+            ],
             tiny: '.875rem',
             base: '.875rem',
             lg: '1.125rem',
@@ -24,12 +30,20 @@ module.exports = {
             '7xl': '5rem',
             '8xl': '5rem'
         },
-        extend: {}
+        extend: {
+            colors: {
+                red: {
+                    450: '#CA4573',
+                    550: '#CA4573'
+                },
+                yellow: {
+                    450: '#EFBB58'
+                }
+            }
+        }
     },
     variants: {
         extend: {}
     },
-    plugins: [
-        // require('@tailwindcss/forms')
-    ]
+    plugins: []
 };

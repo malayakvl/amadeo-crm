@@ -72,9 +72,12 @@ function Profile() {
 
                     <button
                         type="submit"
-                        className="px-4 py-2 text-white bg-indigo-500 rounded-md
+                        className="px-4 py-2 text-white text-sm font-bold rounded-md bg-gradient-to-r from-red-450 via-red-550 to-yellow-450
                                     hover:bg-indigo-600
                                     focus:outline-none duration-100 ease-in-out">
+                        {t('Submit')}
+                    </button>
+                    <button type="submit" className="gradient-btn">
                         {t('Submit')}
                     </button>
                 </form>
