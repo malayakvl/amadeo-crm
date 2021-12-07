@@ -103,124 +103,111 @@ const Header: React.FC = () => {
                     />
                 </svg>
 
-                <div className="w-2/4" id="menu">
-                    <ul className="font-bold text-sm h-full w-full flex justify-between items-center">
-                        <li>
-                            <Link href={'/'}>
-                                <a className="hover:text-purple-400">Features</a>
-                            </Link>
-                        </li>
+                <div className="font-bold text-sm flex items-center justify-end" id="menu">
+                    <Link href={'/'}>
+                        <a className="hover:text-purple-400">Features</a>
+                    </Link>
+                    <Link href={'/pages/price'}>
+                        <a className="ml-14 hover:text-purple-400">Pricing</a>
+                    </Link>
+                    <Link href={'/'}>
+                        <a className="ml-14 hover:text-purple-400">Case Studies</a>
+                    </Link>
 
-                        <li>
-                            <Link href={'/pages/price'}>
-                                <a className="hover:text-purple-400">Pricing</a>
-                            </Link>
-                        </li>
+                    <Link href={'/'}>
+                        <a className="ml-14 uppercase hover:text-purple-400">Faq</a>
+                    </Link>
 
-                        <li>
-                            <Link href={'/'}>
-                                <a className="hover:text-purple-400">Case Studies</a>
-                            </Link>
-                        </li>
+                    {!session?.user ? (
+                        <>
+                            <div className="ml-14 gradient-btn">
+                                <Link href={'/auth/signup'}>
+                                    <a>Try for free</a>
+                                </Link>
+                            </div>
+                            <div className="ml-14 disabled-btn">
+                                <Link href={'/auth/signin'}>
+                                    <a className="">Login</a>
+                                </Link>
+                            </div>
+                        </>
+                    ) : (
+                            <div className="hidden md:block">
+                                <div className="ml-4 flex items-center md:ml-6 md:mt-3">
+                                    <button
+                                        type="button"
+                                        className="bg-white p-1 rounded-full text-gray-400 hover:text-blue-200">
+                                        <span className="sr-only">View notifications</span>
+                                        <span className="relative inline-block">
+                                            <NoticeCounter delay={120000} />
+                                        </span>
+                                    </button>
 
-                        <li>
-                            <Link href={'/'}>
-                                <a className="uppercase hover:text-purple-400">Faq</a>
-                            </Link>
-                        </li>
-
-                        {!session?.user ? (
-                            <>
-                                <li className="gradient-btn">
-                                    <Link href={'/auth/signup'}>
-                                        <a className="">Try for free</a>
-                                    </Link>
-                                </li>
-
-                                <li className="disabled-btn">
-                                    <Link href={'/auth/signin'}>
-                                        <a className="">Login</a>
-                                    </Link>
-                                </li>
-                            </>
-                        ) : (
-                                <div className="hidden md:block">
-                                    <div className="ml-4 flex items-center md:ml-6 md:mt-3">
-                                        <button
-                                            type="button"
-                                            className="bg-white p-1 rounded-full text-gray-400 hover:text-blue-200">
-                                            <span className="sr-only">View notifications</span>
-                                            <span className="relative inline-block">
-                                                <NoticeCounter delay={120000} />
-                                            </span>
-                                        </button>
-
-                                        {/* Profile dropdown */}
-                                        <Menu as="div" className="ml-5 relative -mt-2">
-                                            <div>
-                                                <Menu.Button
-                                                    className="max-w-xs bg-gray-800 rounded-full flex
+                                    {/* Profile dropdown */}
+                                    <Menu as="div" className="ml-5 relative -mt-2">
+                                        <div>
+                                            <Menu.Button
+                                                className="max-w-xs bg-gray-800 rounded-full flex
                                                 items-center text-sm focus:outline-none focus:ring-2
                                                 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
-                                                    <span className="sr-only">Open user menu</span>
-                                                    <Image
-                                                        src={userProfileImg}
-                                                        width={35}
-                                                        height={35}
-                                                        className="rounded-full"
-                                                        alt=""
-                                                    />
-                                                </Menu.Button>
-                                            </div>
-                                            <Transition
-                                                as={Fragment}
-                                                enter="transition ease-out duration-100"
-                                                enterFrom="transform opacity-0 scale-95"
-                                                enterTo="transform opacity-100 scale-100"
-                                                leave="transition ease-in duration-75"
-                                                leaveFrom="transform opacity-100 scale-100"
-                                                leaveTo="transform opacity-0 scale-95">
-                                                <Menu.Items
-                                                    className="origin-top-right absolute right-0 mt-2
+                                                <span className="sr-only">Open user menu</span>
+                                                <Image
+                                                    src={userProfileImg}
+                                                    width={35}
+                                                    height={35}
+                                                    className="rounded-full"
+                                                    alt=""
+                                                />
+                                            </Menu.Button>
+                                        </div>
+                                        <Transition
+                                            as={Fragment}
+                                            enter="transition ease-out duration-100"
+                                            enterFrom="transform opacity-0 scale-95"
+                                            enterTo="transform opacity-100 scale-100"
+                                            leave="transition ease-in duration-75"
+                                            leaveFrom="transform opacity-100 scale-100"
+                                            leaveTo="transform opacity-0 scale-95">
+                                            <Menu.Items
+                                                className="origin-top-right absolute right-0 mt-2
                                                 w-48 rounded-md shadow-lg py-1 bg-white ring-1
                                                 ring-white ring-opacity-5 focus:outline-none">
-                                                    {userNavigation.map((item) => (
-                                                        <Menu.Item key={item.name}>
-                                                            {({ active }) => (
-                                                                <Link href={item.href}>
-                                                                    <a
-                                                                        className={classNames(
-                                                                            active ? 'bg-gray-100' : '',
-                                                                            'block px-4 py-2 text-sm text-gray-700'
-                                                                        )}>
-                                                                        {item.name}
-                                                                    </a>
-                                                                </Link>
-                                                            )}
-                                                        </Menu.Item>
-                                                    ))}
-                                                    <Menu.Item>
-                                                        <a
-                                                            href={`/api/auth/signout`}
-                                                            className="block px-4 py-2 text-sm text-gray-700"
-                                                            onClick={(e) => {
-                                                                e.preventDefault();
-                                                                window.localStorage.removeItem('user');
-                                                                signOut();
-                                                            }}>
-                                                            Sign out
-                                                    </a>
+                                                {userNavigation.map((item) => (
+                                                    <Menu.Item key={item.name}>
+                                                        {({ active }) => (
+                                                            <Link href={item.href}>
+                                                                <a
+                                                                    className={classNames(
+                                                                        active ? 'bg-gray-100' : '',
+                                                                        'block px-4 py-2 text-sm text-gray-700'
+                                                                    )}>
+                                                                    {item.name}
+                                                                </a>
+                                                            </Link>
+                                                        )}
                                                     </Menu.Item>
-                                                </Menu.Items>
-                                            </Transition>
-                                        </Menu>
-                                    </div>
+                                                ))}
+                                                <Menu.Item>
+                                                    <a
+                                                        href={`/api/auth/signout`}
+                                                        className="block px-4 py-2 text-sm text-gray-700"
+                                                        onClick={(e) => {
+                                                            e.preventDefault();
+                                                            window.localStorage.removeItem('user');
+                                                            signOut();
+                                                        }}>
+                                                        Sign out
+                                                    </a>
+                                                </Menu.Item>
+                                            </Menu.Items>
+                                        </Transition>
+                                    </Menu>
                                 </div>
-                            )}
-                    </ul>
+                            </div>
+                        )}
                 </div>
             </nav>
-        </header>
+        </header >
     );
 };
 
