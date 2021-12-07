@@ -5,6 +5,10 @@
 @import "tailwindcss/utilities";
 
 @layer utilities {
+  .h-144 {
+    height: 144px;
+  }
+
   .w-245 {
     width: 245px;
   }
