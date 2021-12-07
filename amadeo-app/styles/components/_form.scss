@@ -1,0 +1,12 @@
+.form-control {
+  border: 1px solid #CFD8DC;
+  @apply bg-white w-full rounded-lg p-2.5 text-sm;
+}
+
+.input-close {
+  background-image: url("../../public/images/close.svg");
+  background-repeat: no-repeat;
+  width: 24px;
+  height: 24px;
+  @apply absolute top-2.5 right-2;
+}

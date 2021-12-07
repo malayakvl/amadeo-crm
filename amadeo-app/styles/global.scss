@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,500;1,600&display=swap');
 
 @import "tailwindcss/base";
 @import "tailwindcss/components";
@@ -82,3 +82,6 @@
 
 @import "components/button";
 @import "components/alerts";
+@import "components/sidebar";
+@import "components/form";
+@import "components/sidebar-header";

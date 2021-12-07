@@ -1,0 +1,13 @@
+.divider {
+  height: 24px;
+  border: 1px solid #CFD8DC;
+  @apply ml-5 mr-5;
+}
+
+.profile-name {
+  @apply text-xs font-bold text-gray-350 pl-3;
+
+  em {
+    @apply block not-italic text-blue-350;
+  }
+}

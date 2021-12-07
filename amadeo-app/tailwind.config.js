@@ -10,7 +10,13 @@ module.exports = {
             sans: ['"Montserrat"']
         },
         fontSize: {
-            xs: '.75rem',
+            xs: [
+                '12px',
+                {
+                    lineHeight: '17px',
+                    letterSpacing: '0.004em'
+                }
+            ],
             sm: [
                 '14px',
                 {
@@ -32,12 +38,13 @@ module.exports = {
         },
         extend: {
             colors: {
-                red: {
-                    450: '#CA4573',
-                    550: '#CA4573'
+                blue: {
+                    350: '#99ABCE'
                 },
-                yellow: {
-                    450: '#EFBB58'
+                gray: {
+                    150: '#ECEFF1',
+                    250: '#FAFAFA',
+                    350: '#4F5B84'
                 }
             }
         }
