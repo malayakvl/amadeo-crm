@@ -1,5 +1,3 @@
-const { blue } = require('tailwindcss/colors');
-
 require('tailwindcss/colors');
 
 module.exports = {

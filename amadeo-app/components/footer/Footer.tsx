@@ -1,6 +1,7 @@
-import Image from 'next/image'
+import Image from 'next/image';
+import Link from 'next/link';
 
-export default function () {
+export default function Footer() {
     return (
         <footer className="w-full h-370 bottom-0 absolute">
             <div className="tracking-wide text-sm text-blue-light bg-blue-dark flex h-full justify-between flex-col py-16 px-32">
@@ -14,26 +15,33 @@ export default function () {
                             layout="fixed"
                             alt=""
                         />
-
                     </div>
                     <div className="flex">
                         <div className="mr-9">
                             <div className="mb-2 font-bold text-white">Get started</div>
-                            <div className="mb-2">Pricing</div>
-                            <div>Start your free trial</div>
-
+                            <div className="mb-2">
+                                <Link href={'/'}>Pricing</Link>
+                            </div>
+                            <div>
+                                <Link href={'/'}>Start your free trial</Link>
+                            </div>
                         </div>
                         <div>
                             <div className="mb-2 font-bold text-white">Resources</div>
-                            <div className="mb-2">Customer Stories</div>
-                            <div className="mb-2">FAQ</div>
-                            <div className="mb-2">Support Center</div>
-                            <div>Contact us</div>
-
+                            <div className="mb-2">
+                                <Link href={'/'}>Customer Stories</Link>
+                            </div>
+                            <div className="uppercase mb-2">
+                                <Link href={'/'}>Faq</Link>
+                            </div>
+                            <div className="mb-2">
+                                <Link href={'/'}>Support Center</Link>
+                            </div>
+                            <div>
+                                <Link href={'/'}>Contact us</Link>
+                            </div>
                         </div>
-
                     </div>
-
                 </div>
 
                 <div className="pt-8 flex justify-between border-t border-blue-medium">
@@ -68,24 +76,25 @@ export default function () {
                                 alt=""
                             />
                         </div>
-
                     </div>
 
                     <div className="flex">
-                        <div className="mr-5">About Liveproshop</div>
-                        <div className="mr-5">Cookies</div>
-                        <div className="mr-5">Privacy</div>
-                        <div className="mr-5">Terms</div>
+                        <div className="mr-5">
+                            <Link href={'/'}>About Liveproshop</Link>
+                        </div>
+                        <div className="mr-5">
+                            <Link href={'/'}>Cookies</Link>
+                        </div>
+                        <div className="mr-5">
+                            <Link href={'/'}>Privacy</Link>
+                        </div>
+                        <div className="mr-5">
+                            <Link href={'/'}>Terms</Link>
+                        </div>
                         <div className="text-white">@ 2021 Liveproshop</div>
-
                     </div>
-
                 </div>
-
             </div>
-
         </footer>
-    )
-
-
+    );
 }
