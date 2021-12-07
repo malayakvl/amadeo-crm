@@ -1,3 +1,5 @@
+const { blue } = require('tailwindcss/colors');
+
 require('tailwindcss/colors');
 
 module.exports = {
@@ -38,6 +40,11 @@ module.exports = {
                 },
                 yellow: {
                     450: '#EFBB58'
+                },
+                blue: {
+                    dark: '#141A3C',
+                    medium: '#435B8C',
+                    light: '#99ABCE'
                 }
             }
         }
