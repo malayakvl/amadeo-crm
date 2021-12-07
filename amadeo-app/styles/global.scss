@@ -5,24 +5,13 @@
 @import "tailwindcss/utilities";
 
 @layer utilities {
-  .w-245 {
-    width: 245px;
-  }
-  .text-green-notice {
-    color: #00C868;
-    font-size: 0.56rem;
-    @apply block font-bold uppercase mb-1;
-  }
-  .text-gray-notice {
-    color: #4F5B84;
-    @apply block text-xs font-bold mb-1;
-  }
-  .text-m-notice {
-    color:#90A4AE;
-    @apply block text-xs font-bold mb-1;
-  }
   .red-yellow-gradient {
     background: linear-gradient(45deg, #CA4573 0%, #EE5342 49.48%, #EFBB58 100%);
+  }
+  .red-yellow-gradient-text {
+    background: linear-gradient(45deg, #CA4573 0%, #EE5342 49.48%, #EFBB58 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
 }
 
