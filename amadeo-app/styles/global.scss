@@ -37,6 +37,17 @@
   .red-yellow-gradient {
     background: linear-gradient(45deg, #CA4573 0%, #EE5342 49.48%, #EFBB58 100%);
   }
+  .red-yellow-gradient-text {
+    background: linear-gradient(45deg, #CA4573 0%, #EE5342 49.48%, #EFBB58 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .block-white-4 {
+    @apply flex-row w-full bg-white rounded-lg p-4;
+  }
+  .block-white-8 {
+    @apply flex-row w-full bg-white rounded-lg p-8;
+  }
 }
 
 @layer components {
@@ -99,8 +110,8 @@
 @import "components/button";
 @import "components/alerts";
 @import "components/sidebar";
-// @import "components/form";
-// @import "components/sidebar-header";
+@import "components/form";
+@import "components/sidebar-header";
 @import "components/page-titles";
 @import "components/tables";
 @import "components/tabs";
