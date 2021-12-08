@@ -2,22 +2,52 @@ import Link from 'next/link';
 
 export default function Signup() {
     return (
-        <div className="px-4">
-            <div className="bg-white mx-auto max-w-3xl rounded-lg my-16 p-8">
-                <Link href={'/auth/customer'}>
-                    <a
-                        className="w-full block bg-gradient-to-r from-green-300 to-blue-300 mb-10
-                            hover:from-pink-500 hover:to-orange-500 text-white px-4 py-2 rounded">
-                        Register as Customer
-                    </a>
-                </Link>
-                <Link href={'/auth/buyer'}>
-                    <a
-                        className="w-full block bg-gradient-to-r from-green-300 to-blue-300
-                            hover:from-pink-500 hover:to-orange-500 text-white px-4 py-2 rounded">
-                        Register as Buyer
-                    </a>
-                </Link>
+        <div className="mt-10 w-1000 bg-white flex">
+            <div>
+                <div>
+                    Sing up <br></br>
+                    today!
+                </div>
+                <div>
+                    Lorem ipsum dolor<br></br>
+                    sit amet, consectetur<br></br>
+                    adipiscing elit.
+                </div>
+                <div>
+                    Lorem ipsum dolor sit amet,<br></br>
+                    consectetur adipiscing elit.
+                </div>
+                <div>
+                    Already have an account? Sign in here!
+                </div>
+            </div>
+            <div>
+                <div>
+                    How would you like to Sign up as? :
+                    <div>
+                        Buyer
+                    </div>
+                    <div>
+                        Merchant
+                    </div>
+                </div>
+                <div>
+                    <div>
+                        Continue with Facebook
+                    </div>
+                    <div>
+                        Continue with Twitter
+                    </div>
+                    <div>
+                        Continue with Google
+                    </div>
+                    <div>or</div>
+                    <div>Email</div>
+                    <div>
+                        I have read and acept the terms of use
+                    </div>
+                    <div>Sign up</div>
+                </div>
             </div>
         </div>
     );
