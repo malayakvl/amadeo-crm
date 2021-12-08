@@ -18,7 +18,7 @@ export default function Index({ session }: { session: any }) {
                 </h1>
                 <button className="btn-big float-right mt-4">Go live now!</button>
             </div>
-            <div className="flex-row w-full mr-10 bg-white rounded-lg p-4">
+            <div className="block-white-4 mr-10">
                 <div className="flex flex-row flex-wrap w-full">
                     <div className="flex flex-col w-full lg:w-1/4 xl:w-1/5 justify-center align-middle">
                         <span className="font-bold text-sm text-blue-350">Total Revenue</span>
@@ -56,7 +56,7 @@ export default function Index({ session }: { session: any }) {
                     </div>
                 </div>
             </div>
-            <div className="flex-row w-full mr-10 bg-white rounded-lg p-4 mt-8">
+            <div className="block-white-4 mr-10 mt-8">
                 <div className="font-bold text-gray-350 text-base pb-4 mb-2 border border-t-0 border-l-0 border-r-0">
                     Orders <span className="text-sm text-gray-180 font-normal">(Last 30 days)</span>
                     <a className="view-all float-right mr-4">See all</a>
@@ -119,7 +119,7 @@ export default function Index({ session }: { session: any }) {
                     </table>
                 </div>
             </div>
-            <div className="flex-row w-full mr-10 bg-white rounded-lg p-4 mt-8">
+            <div className="block-white-4 mr-10 mt-8">
                 <div className="font-bold text-gray-350 text-base pb-4 mb-2 border border-t-0 border-l-0 border-r-0">
                     Clients
                     <span className="text-sm text-gray-180 font-normal">(Last 30 days)</span>

@@ -1,6 +1,16 @@
 .form-control {
-  border: 1px solid #CFD8DC;
-  @apply bg-white w-full rounded-lg p-2.5 text-sm;
+  @apply bg-white w-full rounded-lg p-2.5 text-sm text-gray-350 font-medium border-gray-180 border;
+
+  &:active, &:focus, &:focus-visible {
+    @apply bg-white w-full rounded-lg p-2.5 text-sm text-gray-350 font-medium border-gray-180 border;
+  }
+}
+.form-control-icon {
+  @apply bg-white w-full rounded-lg p-2.5 pl-9 text-sm text-gray-350 font-medium border-gray-180 border;
+
+  &:active, &:focus, &:focus-visible {
+    @apply bg-white w-full rounded-lg p-2.5 pl-9 text-sm text-gray-350 font-medium border-gray-180 border;
+  }
 }
 
 .input-close {
@@ -9,4 +19,12 @@
   width: 24px;
   height: 24px;
   @apply absolute top-2.5 right-2;
+}
+
+.f-icon {
+  background-repeat: no-repeat;
+  background-position: center;
+  width: 20px;
+  height: 20px;
+  @apply absolute left-2 top-3;
 }
