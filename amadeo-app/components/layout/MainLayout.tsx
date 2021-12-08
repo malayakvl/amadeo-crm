@@ -35,7 +35,7 @@ export default function MainLayout({ children }: { children: any }) {
     );
 
     return (
-        <div className="min-h-screen flex flex-col flex-auto flex-shrink-0 antialiased bg-gray-150 text-black dark:text-white">
+        <div>
             {children}
         </div>
     );
