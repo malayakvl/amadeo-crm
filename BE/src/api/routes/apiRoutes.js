@@ -33,7 +33,6 @@ apiRoutes.use(async (req, res, next) => {
         const decodedJsonObjectString = Buffer.from(bearer[1], 'base64').toString('ascii');
         const decodedJsonObject = decodedJsonObjectString.split(':');
         req.user = await userModel.findUserByEmail(decodedJsonObject[0]);
-        // console.log("USER FROM BEAREER", req.user);
         next();
     } else {
         res.status(401).json({ code: 401, message: 'Do not have permissions' });

@@ -16,4 +16,14 @@ export const fetchUserAction: any = createAction('profile/FETCH_USER', async (em
         .then((res) => res.data.user);
 });
 
+export const updateUserAction: any = createAction('profile/UPDATE_USER', async (email: string) => {
+    return axios
+        .get(`${baseUrl}/profile`, {
+            headers: {
+                ...authHeader(email)
+            }
+        })
+        .then((res) => res.data.user);
+});
+
 export const setUserAction: any = createAction('user/SET_USER');

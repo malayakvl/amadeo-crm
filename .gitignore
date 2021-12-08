@@ -105,5 +105,6 @@ dist
 
 BE/node_modules
 BE/.env
+BE/public/uploads
 amadeo-app/node_modules
 amadeo-app/.env

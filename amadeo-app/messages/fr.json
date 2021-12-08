@@ -70,5 +70,17 @@
   "Notification": "Notification",
   "Help": "Help",
   "Logout": "Logout",
-  "See all 999 notifications": "See all 999 notifications"
+  "See all 999 notifications": "See all 999 notifications",
+  "VAT (If applicable)": "VAT (If applicable)",
+  "Phone number": "Phone number",
+  "Company ID": "Company ID",
+  "Personal Information": "Personal Information",
+  "Addressess": "Addressess",
+  "Actions": "Actions",
+  "Save": "Save",
+  "Data update successful": "Data update successful",
+  "Data create successful": "Data create successful",
+  "Data delete successful": "Data delete successful",
+  "Update your Profile picture:": "Update your Profile picture:",
+  "You can use .jpg or .png, photo file formats.": "You can use .jpg or .png, photo file formats."
 }

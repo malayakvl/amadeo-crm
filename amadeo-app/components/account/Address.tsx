@@ -37,7 +37,7 @@ function Address({
 
     useEffect(() => {
         if (['create', 'update', 'delete'].includes(crudStatus)) {
-            alertService.success(t(`Address ${crudStatus} successful`), {
+            alertService.success(t(`Data ${crudStatus} successful`), {
                 keepAfterRouteChange: true
             });
             dispatch(fetchAddressesAction(email));
@@ -80,45 +80,76 @@ function Address({
                 dispatch(addAddressAction(values, email));
             }}>
             {(props) => (
-                <form onSubmit={props.handleSubmit} className="lg:w-1/3 mt-5">
+                <form onSubmit={props.handleSubmit} className="mt-5">
                     <InputSelectLocalize
                         locale={locale}
                         name={'country_id'}
                         fieldName={'nicename'}
-                        label={'Country'}
+                        label={null}
                         options={countriesData}
+                        style={'lg:w-1/4'}
                         props={props}
                     />
 
-                    <InputText name={'state'} label={'State'} props={props} />
+                    <InputText
+                        name={'state'}
+                        label={null}
+                        icon={'f-location'}
+                        placeholder={'State'}
+                        style={'lg:w-1/4'}
+                        props={props}
+                    />
 
-                    <InputText name={'post_code'} label={'Post Code'} props={props} />
+                    <InputText
+                        label={null}
+                        icon={'f-location'}
+                        name={'post_code'}
+                        placeholder={'Post Code'}
+                        style={'lg:w-1/4'}
+                        props={props}
+                    />
 
                     <InputSelect
                         name={'address_type'}
-                        label={'Address Type'}
+                        label={null}
                         options={addressTypeData}
+                        style={'lg:w-1/4'}
                         props={props}
                     />
 
-                    <InputText name={'city'} label={'City'} props={props} />
+                    <InputText
+                        label={null}
+                        icon={'f-location'}
+                        name={'city'}
+                        placeholder={'City'}
+                        style={'lg:w-1/4'}
+                        props={props}
+                    />
 
-                    <InputText name={'address_line_1'} label={'Address Line 1'} props={props} />
+                    <InputText
+                        label={null}
+                        icon={'f-location'}
+                        name={'address_line_1'}
+                        placeholder={'Address Line 1'}
+                        style={'lg:w-1/4'}
+                        props={props}
+                    />
 
-                    <InputText name={'address_line_2'} label={'Address Line 2'} props={props} />
-
-                    <button
-                        type="submit"
-                        className="px-4 py-2 text-white bg-indigo-500 rounded-md
-                                    hover:bg-indigo-600
-                                    focus:outline-none duration-100 ease-in-out">
-                        {t('Submit')}
+                    <InputText
+                        label={null}
+                        icon={'f-location'}
+                        name={'address_line_2'}
+                        placeholder={'Address Line 2'}
+                        style={'lg:w-1/4'}
+                        props={props}
+                    />
+                    <div className="mt-10 mb-7 block border border-gray-180 border-b-0" />
+                    <button type="submit" className="gradient-btn">
+                        {t('Save')}
                     </button>
                     <button
                         type="button"
-                        className="ml-4 px-4 py-2 text-white bg-gray-200 rounded-md
-                                    hover:bg-indigo-600
-                                    focus:outline-none duration-100 ease-in-out"
+                        className="ml-3 cancel"
                         onClick={() => {
                             dispatch(
                                 setAddressAction({

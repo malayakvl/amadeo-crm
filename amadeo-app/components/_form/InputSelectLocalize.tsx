@@ -3,15 +3,17 @@ import { parseTranslation } from '../../lib/functions';
 import React from 'react';
 
 interface PropsSelect {
+    style: string | null;
     locale: string;
     name: string;
-    label: string;
+    label: string | null;
     options: any;
     props: any;
     fieldName: string;
 }
 
 const InputSelectLocalize: React.FC<PropsSelect> = ({
+    style,
     locale,
     name,
     label,
@@ -21,11 +23,11 @@ const InputSelectLocalize: React.FC<PropsSelect> = ({
 }) => {
     const t = useTranslations();
     return (
-        <div className="mb-4">
-            <label htmlFor={name}>{t(label)}</label>
+        <div className={`mb-4 ${style} relative`}>
+            {label && <label htmlFor={name}>{t(label)}</label>}
             <select
                 name={name}
-                className="txt-input"
+                className="form-control"
                 onChange={props.handleChange}
                 value={props.values[name] || ''}>
                 <option value="">------</option>

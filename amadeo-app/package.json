@@ -20,6 +20,7 @@
     "@heroicons/react": "^1.0.5",
     "@hookform/resolvers": "^2.8.3",
     "@reduxjs/toolkit": "^1.6.2",
+    "@tailwindcss/forms": "^0.3.4",
     "@use-it/interval": "^1.0.0",
     "axios": "^0.24.0",
     "formik": "^2.2.9",

@@ -7,6 +7,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { signOut, useSession } from 'next-auth/client';
 import { userSelector } from '../../redux/user/selectors';
 import { useTranslations } from 'next-intl';
+import getConfig from 'next/config';
+
+const { publicRuntimeConfig } = getConfig();
+const baseUrl = publicRuntimeConfig.apiUrl;
 
 const userProfileImg =
     'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80';
@@ -17,6 +21,7 @@ const SidebarHeader: React.FC = () => {
     const user = useSelector(userSelector);
     const dispatch = useDispatch();
     const [showProfileMenu, setShowProfileMenu] = useState(false);
+    const [userPhoto, setUserPhoto] = useState(userProfileImg);
 
     useEffect(
         function () {
@@ -26,6 +31,15 @@ const SidebarHeader: React.FC = () => {
             }
         },
         [session]
+    );
+    useEffect(
+        function () {
+            console.log('USER', user);
+            if (user.photo) {
+                setUserPhoto(baseUrl + user.photo);
+            }
+        },
+        [user]
     );
 
     return (
@@ -45,7 +59,7 @@ const SidebarHeader: React.FC = () => {
                 <div className="relative">
                     <div className="inline-block mt-1">
                         <Image
-                            src={userProfileImg}
+                            src={userPhoto}
                             width={24}
                             height={24}
                             className="rounded-full cursor-pointer"

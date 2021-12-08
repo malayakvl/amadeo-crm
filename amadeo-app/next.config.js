@@ -5,7 +5,7 @@ const path = require('path');
 module.exports = {
     reactStrictMode: true,
     images: {
-        domains: ['links.papareact.com', 'images.unsplash.com']
+        domains: ['links.papareact.com', 'images.unsplash.com', 'localhost']
     },
     i18n: {
         locales: ['en', 'fr'],

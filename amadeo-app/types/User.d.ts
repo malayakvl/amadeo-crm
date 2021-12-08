@@ -7,6 +7,7 @@ declare namespace User {
         id: number;
         role_id: number;
         email: string;
+        photo: string | null;
         first_name: string | null;
         last_name: string | null;
         company_name: string | null;

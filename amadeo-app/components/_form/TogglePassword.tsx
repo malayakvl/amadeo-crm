@@ -3,49 +3,57 @@ import { EyeIcon, EyeOffIcon } from '@heroicons/react/solid';
 import React, { useState } from 'react';
 
 interface Props {
+    style: string | null;
+    icon: string | null;
     name: string;
-    label: string;
+    label: string | null;
+    placeholder: string | null;
     props: any;
 }
 
-const TogglePassword: React.FC<Props> = ({ name, label, props }) => {
+const TogglePassword: React.FC<Props> = ({ style, icon, name, label, placeholder, props }) => {
     const t = useTranslations();
     const [showPassword, setShowPassword] = useState(false);
 
     return (
-        <div className="mb-4">
-            <label htmlFor={name}>{t(label)}</label>
-            {!showPassword ? (
-                <div className="relative">
-                    <input
-                        className="txt-input"
-                        type="password"
-                        onChange={props.handleChange}
-                        name={name}
-                    />
-                    <EyeIcon
-                        className="h-7 text-black absolute right-2 top-1.5"
-                        onClick={() => {
-                            setShowPassword(!showPassword);
-                        }}
-                    />
-                </div>
-            ) : (
-                <div className="relative">
-                    <input
-                        className="txt-input"
-                        type="text"
-                        onChange={props.handleChange}
-                        name={name}
-                    />
-                    <EyeOffIcon
-                        className="h-7 text-black absolute right-2 top-1.5"
-                        onClick={() => {
-                            setShowPassword(!showPassword);
-                        }}
-                    />
-                </div>
-            )}
+        <div className={`mb-4 ${style} relative`}>
+            {label && <label htmlFor={name}>{t(label)}</label>}
+            <div className="relative">
+                {icon && <i className={`f-icon ${icon}`} />}
+                {!showPassword ? (
+                    <>
+                        {icon && <i className={`f-icon ${icon}`} />}
+                        <input
+                            className={icon ? 'form-control-icon' : 'form-control'}
+                            type="password"
+                            onChange={props.handleChange}
+                            name={name}
+                        />
+                        <EyeIcon
+                            className="h-7 text-gray-180 absolute right-2 top-1.5"
+                            onClick={() => {
+                                setShowPassword(!showPassword);
+                            }}
+                        />
+                    </>
+                ) : (
+                    <>
+                        <input
+                            className={icon ? 'form-control-icon' : 'form-control'}
+                            type="text"
+                            placeholder={placeholder ? t(placeholder) : ''}
+                            onChange={props.handleChange}
+                            name={name}
+                        />
+                        <EyeOffIcon
+                            className="h-7 text-gray-180 absolute right-2 top-1.5"
+                            onClick={() => {
+                                setShowPassword(!showPassword);
+                            }}
+                        />
+                    </>
+                )}
+            </div>
             {props.errors[name] && <div className="error-el">{props.errors[name]}</div>}
         </div>
     );

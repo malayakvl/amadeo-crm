@@ -1,5 +1,5 @@
 .gradient-btn {
-  @apply red-yellow-gradient font-bold text-sm text-white rounded-lg p-2.5
+  @apply red-yellow-gradient font-bold text-sm text-white rounded-lg px-4 py-2.5
 }
 
 .btn-big {
@@ -15,4 +15,7 @@
     height: 25px;
     @apply absolute -top-1;
   }
+}
+.cancel {
+  @apply bg-gray-180 font-bold text-sm text-white rounded-lg px-4 py-2.5
 }

@@ -79,7 +79,9 @@ export default function Index({ session }: { session: any }) {
                             <tr>
                                 <td className="red-yellow-gradient-text">QQ-1234Z</td>
                                 <td>
-                                    <span className="inline-flex px-2 text-xs font-semibold leading-5 text-green-800 bg-green-100 rounded-full">
+                                    <span
+                                        className="inline-flex px-2 text-xs font-semibold
+                                        leading-5 text-green-800 bg-green-100 rounded-full">
                                         Payed
                                     </span>
                                 </td>
@@ -92,7 +94,9 @@ export default function Index({ session }: { session: any }) {
                             <tr>
                                 <td className="red-yellow-gradient-text">QQ-1234Z</td>
                                 <td>
-                                    <span className="inline-flex px-2 text-xs font-semibold leading-5 text-yellow-700 bg-yellow-100 rounded-full">
+                                    <span
+                                        className="inline-flex px-2 text-xs font-semibold leading-5
+                                        text-yellow-700 bg-yellow-100 rounded-full">
                                         Due
                                     </span>
                                 </td>
@@ -105,7 +109,9 @@ export default function Index({ session }: { session: any }) {
                             <tr>
                                 <td className="red-yellow-gradient-text">QQ-1234Z</td>
                                 <td>
-                                    <span className="inline-flex px-2 text-xs font-semibold leading-5 text-red-700 bg-red-100 rounded-full">
+                                    <span
+                                        className="inline-flex px-2 text-xs font-semibold leading-5
+                                        text-red-700 bg-red-100 rounded-full">
                                         Overdue
                                     </span>
                                 </td>

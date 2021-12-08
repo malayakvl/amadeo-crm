@@ -23,17 +23,19 @@ export const fetchProfileAction: any = createAction(
 export const updateProfileAction: any = createAction(
     'profile/UPDATE_PROFILE',
     async (data: any, email: string) => {
-        const res = await fetch(`${baseUrl}/profile`, {
-            method: 'post',
-            body: JSON.stringify(data),
-            headers: { 'Content-Type': 'application/json', ...authHeader(email) }
-        });
-        const resp = await res.json();
-        if (res.ok && resp.user) {
-            return 'yes';
-        } else {
-            return resp.error.message;
-        }
+        return await axios
+            .post(`${baseUrl}/profile`, data, {
+                headers: {
+                    ...authHeader(email)
+                }
+            })
+            .then((res) => {
+                // then print response status
+                window.localStorage.removeItem('user');
+                window.localStorage.setItem('user', JSON.stringify(res.data.user));
+            })
+            .then(() => 'yes')
+            .catch((err) => err.message);
     }
 );
 
@@ -66,7 +68,6 @@ export const restorePasswordAction: any = createAction(
         if (res.ok && resp.status) {
             return 'yes';
         } else {
-            console.log(resp.error);
             return resp.error.message ? resp.error.message : resp.error;
         }
     }

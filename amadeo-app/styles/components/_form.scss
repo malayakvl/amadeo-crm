@@ -1,12 +1,15 @@
 .form-control {
-  @apply bg-white w-full rounded-lg p-2.5 text-sm text-gray-350 font-medium border-gray-180 border;
+  @apply bg-white w-full rounded-lg p-2.5 text-sm text-gray-350
+    font-medium border-gray-180 border placeholder-gray-180;
 
   &:active, &:focus, &:focus-visible {
-    @apply bg-white w-full rounded-lg p-2.5 text-sm text-gray-350 font-medium border-gray-180 border;
+    @apply bg-white w-full rounded-lg p-2.5 text-sm text-gray-350
+      font-medium border-gray-180 border;
   }
 }
 .form-control-icon {
-  @apply bg-white w-full rounded-lg p-2.5 pl-9 text-sm text-gray-350 font-medium border-gray-180 border;
+  @apply bg-white w-full rounded-lg p-2.5 pl-9 text-sm text-gray-350
+    font-medium border-gray-180 border placeholder-gray-180;
 
   &:active, &:focus, &:focus-visible {
     @apply bg-white w-full rounded-lg p-2.5 pl-9 text-sm text-gray-350 font-medium border-gray-180 border;
@@ -27,4 +30,8 @@
   width: 20px;
   height: 20px;
   @apply absolute left-2 top-3;
+}
+
+.error-el {
+  @apply flex items-center font-medium tracking-wide red-yellow-gradient-text text-xs mt-1 ml-1
 }

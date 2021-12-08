@@ -4,7 +4,7 @@ import { useTranslations } from 'next-intl';
 import { getProfile } from '../../lib/profile';
 import Head from 'next/head';
 import { useState } from 'react';
-import { Address, Profile, AddressesList } from '../../components/account';
+import { Address, Profile, AddressesList, Password } from '../../components/account';
 import { getCountries } from '../../lib/staff';
 
 interface ProfileProps {
@@ -25,11 +25,23 @@ function Account({
     const t = useTranslations();
 
     const [activeTab, setActiveTab] = useState('profile');
+    const [subTitle, setSubTitle] = useState(t('Personal Information'));
     const [profileData] = useState(infoData.user);
 
     const handleTabClick = (e: React.MouseEvent<HTMLElement>) => {
         const target = e.target as HTMLElement;
         setActiveTab(target.id);
+        switch (target.id) {
+            case 'profile':
+                setSubTitle(t('Personal Information'));
+                break;
+            case 'addressess':
+                setSubTitle(t('Addresses'));
+                break;
+            case 'password':
+                setSubTitle(t('Password'));
+                break;
+        }
     };
 
     return (
@@ -41,7 +53,7 @@ function Account({
 
             <div className="page-title">
                 <h1>
-                    Profile <em /> <span>Personal Information</span>
+                    Profile <em /> <span>{subTitle}</span>
                 </h1>
             </div>
             <div className="block-white-8 mr-10">
@@ -74,21 +86,24 @@ function Account({
                         <Profile />
                     </div>
                     <div className={`w-full ${activeTab !== 'addressess' ? 'hidden' : ''}`}>
-                        {/*<AddressesList email={session.user.email || ''} />*/}
-                        {/*<Address*/}
-                        {/*    userAddress={{*/}
-                        {/*        country_id: '',*/}
-                        {/*        state: '',*/}
-                        {/*        post_code: '',*/}
-                        {/*        address_type: '',*/}
-                        {/*        city: '',*/}
-                        {/*        address_line_1: '',*/}
-                        {/*        address_line_2: ''*/}
-                        {/*    }}*/}
-                        {/*    countriesData={infoData.countries}*/}
-                        {/*    email={session.user.email}*/}
-                        {/*    locale={locale}*/}
-                        {/*/>*/}
+                        <AddressesList email={session.user.email || ''} />
+                        <Address
+                            userAddress={{
+                                country_id: '',
+                                state: '',
+                                post_code: '',
+                                address_type: '',
+                                city: '',
+                                address_line_1: '',
+                                address_line_2: ''
+                            }}
+                            countriesData={infoData.countries}
+                            email={session.user.email}
+                            locale={locale}
+                        />
+                    </div>
+                    <div className={`w-full ${activeTab !== 'password' ? 'hidden' : ''}`}>
+                        <Password session={session} />
                     </div>
                 </div>
             </div>

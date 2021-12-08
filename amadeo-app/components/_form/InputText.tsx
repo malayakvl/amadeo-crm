@@ -1,7 +1,8 @@
 import { useTranslations } from 'next-intl';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 interface Props {
+    style: string | null;
     icon: string | null;
     name: string;
     label: string | null;
@@ -9,10 +10,24 @@ interface Props {
     props: any;
 }
 
-const InputText: React.FC<Props> = ({ icon, name, label, placeholder, props }) => {
+const InputText: React.FC<Props> = ({ style, icon, name, label, placeholder, props }) => {
     const t = useTranslations();
+
+    useEffect(
+        function () {
+            setInputValue(props.values[name]);
+        },
+        [props.values[name]]
+    );
+
+    const clear = () => {
+        setInputValue('');
+        props.values[name] = '';
+    };
+
+    const [inputValue, setInputValue] = useState(props.values[name]);
     return (
-        <div className="mb-4 relative">
+        <div className={`mb-4 ${style} relative`}>
             {label && <label htmlFor={name}>{t(label)}</label>}
             {icon && <i className={`f-icon ${icon}`} />}
 
@@ -21,10 +36,10 @@ const InputText: React.FC<Props> = ({ icon, name, label, placeholder, props }) =
                 placeholder={placeholder ? t(placeholder) : ''}
                 type="text"
                 onChange={props.handleChange}
-                value={props.values[name] || ''}
+                value={inputValue || ''}
                 name={name}
             />
-            <i className="input-close" />
+            <i role="presentation" className="input-close cursor-pointer" onClick={() => clear()} />
             {props.errors[name] && <div className="error-el">{props.errors[name]}</div>}
         </div>
     );

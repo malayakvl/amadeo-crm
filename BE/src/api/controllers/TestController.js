@@ -20,7 +20,7 @@ class TestController {
                 cb(null, Date.now() + '-' + file.originalname);
             }
         });
-        const upload = multer({ storage: storage }).single('file');
+        const upload = multer({ storage: storage }).single('photo');
         upload(req, res, function (err) {
             if (err instanceof multer.MulterError) {
                 return res.status(500).json(err);

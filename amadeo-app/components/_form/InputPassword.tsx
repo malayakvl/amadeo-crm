@@ -2,19 +2,22 @@ import { useTranslations } from 'next-intl';
 import React from 'react';
 
 interface Props {
+    style: string | null;
+    icon: string | null;
     name: string;
-    label: string;
+    label: string | null;
+    placeholder: string | null;
     props: any;
 }
 
-const InputPassword: React.FC<Props> = ({ name, label, props }) => {
+const InputPassword: React.FC<Props> = ({ style, icon, name, label, placeholder, props }) => {
     const t = useTranslations();
     return (
-        <div className="mb-4">
-            <label htmlFor={name}>{t(label)}</label>
+        <div className={`mb-4 ${style} relative`}>
+            {label && <label htmlFor={name}>{t(label)}</label>}
             <input
-                className="txt-input"
-                placeholder={t(label)}
+                className={icon ? 'form-control-icon' : 'form-control'}
+                placeholder={placeholder ? t(placeholder) : ''}
                 type="password"
                 onChange={props.handleChange}
                 value={props.values[name] || ''}
