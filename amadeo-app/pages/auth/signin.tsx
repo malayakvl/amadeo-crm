@@ -7,6 +7,7 @@ import * as Yup from 'yup';
 import ProviderBtns from '../../components/auth/ProviderBtns';
 import { signIn } from 'next-auth/client';
 import { useRouter } from 'next/router';
+import FullLayout from '../../components/layout/FullLayout';
 
 function Signin({ providers, locale }: { providers: any; locale: string }) {
     const t = useTranslations();
@@ -104,6 +105,7 @@ function Signin({ providers, locale }: { providers: any; locale: string }) {
         </div>
     );
 }
+Signin.Layout = FullLayout;
 
 export default Signin;
 

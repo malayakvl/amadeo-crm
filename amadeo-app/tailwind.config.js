@@ -10,16 +10,28 @@ module.exports = {
             sans: ['"Montserrat"']
         },
         fontSize: {
-            xs: '.75rem',
+            xs: [
+                '12px',
+                {
+                    lineHeight: '17px',
+                    letterSpacing: '0.004em'
+                }
+            ],
             sm: [
                 '14px',
+                {
+                    lineHeight: '23px',
+                    letterSpacing: '0.004em'
+                }
+            ],
+            tiny: '.875rem',
+            base: [
+                '16px',
                 {
                     lineHeight: '21px',
                     letterSpacing: '0.004em'
                 }
             ],
-            tiny: '.875rem',
-            base: '.875rem',
             lg: '1.125rem',
             xl: '1.25rem',
             '2xl': '1.5rem',
@@ -32,9 +44,15 @@ module.exports = {
         },
         extend: {
             colors: {
-                red: {
-                    450: '#CA4573',
-                    550: '#CA4573'
+                blue: {
+                    350: '#99ABCE'
+                },
+                gray: {
+                    150: '#ECEFF1',
+                    180: '#CFD8DC',
+                    250: '#FAFAFA',
+                    350: '#4F5B84',
+                    450: '#90A4AE'
                 },
                 yellow: {
                     450: '#EFBB58'
@@ -43,6 +61,9 @@ module.exports = {
                     dark: '#141A3C',
                     medium: '#435B8C',
                     light: '#99ABCE'
+                },
+                green: {
+                    250: '#00C868'
                 }
             }
         }

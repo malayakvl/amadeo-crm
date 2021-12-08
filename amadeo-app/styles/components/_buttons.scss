@@ -1,0 +1,18 @@
+.gradient-btn {
+  @apply red-yellow-gradient font-bold text-sm text-white rounded-lg p-2.5
+}
+
+.btn-big {
+  @apply red-yellow-gradient text-white text-2xl font-bold px-7 py-3 rounded-lg;
+}
+.view-all {
+  @apply red-yellow-gradient-text text-xs font-bold relative;
+
+  &:after {
+    content: "";
+    background-image: url("../../public/images/arrow-right.svg");
+    width: 25px;
+    height: 25px;
+    @apply absolute -top-1;
+  }
+}

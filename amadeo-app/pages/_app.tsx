@@ -1,14 +1,28 @@
 import '../styles/global.scss';
+import type { ReactElement, ReactNode } from 'react';
+import type { NextPage } from 'next';
 import { NextIntlProvider } from 'next-intl';
 import type { AppProps } from 'next/app';
 import { Provider } from 'next-auth/client';
 import { Provider as ReduxProvider } from 'react-redux';
 import store from '../app/store';
 import { Alert } from '../components/services/Alert';
-import Layout from '../components/layout/Layout';
+import MainLayout from '../components/layout/MainLayout';
+import SidebarLayout from '../components/layout/SidebarLayout';
 
-function MyApp({ Component, pageProps }: AppProps) {
-    return (
+type NextPageWithLayout = NextPage & {
+    getLayout?: (page: ReactElement) => ReactNode;
+};
+
+type AppPropsWithLayout = AppProps & {
+    Component: NextPageWithLayout;
+};
+
+function MyApp({ Component, pageProps }: AppPropsWithLayout) {
+    const getLayout = Component.getLayout ?? ((page) => page);
+    const Layout = (Component as any).Layout || SidebarLayout;
+
+    return getLayout(
         <ReduxProvider store={store}>
             <Provider
                 // Provider options are not required but can be useful in situations where
@@ -49,10 +63,12 @@ function MyApp({ Component, pageProps }: AppProps) {
                     // same way on the client as on the server, which might be located
                     // in a different time zone.
                     timeZone="Europe/Paris">
-                    <Layout>
-                        <Alert />
-                        <Component {...pageProps} />
-                    </Layout>
+                    <MainLayout>
+                        <Layout>
+                            <Alert />
+                            <Component {...pageProps} />
+                        </Layout>
+                    </MainLayout>
                 </NextIntlProvider>
             </Provider>
         </ReduxProvider>

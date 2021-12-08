@@ -49,34 +49,71 @@ function Profile() {
                 dispatch(updateProfileAction(values, session?.user?.email));
             }}>
             {(props) => (
-                <form onSubmit={props.handleSubmit} className="lg:w-1/3 mt-5">
-                    <InputText name={'email'} label={'Email Address'} props={props} />
-
-                    <InputText name={'first_name'} label={'Name'} props={props} />
-
-                    <InputText name={'last_name'} label={'Sername'} props={props} />
-
-                    <InputText name={'company_name'} label={'Company Name'} props={props} />
-
-                    <InputText name={'full_address'} label={'Full Address'} props={props} />
-
+                <form onSubmit={props.handleSubmit} className="lg:w-1/4 mt-5">
                     <InputText
-                        name={'identification_number'}
-                        label={'Identificator Number'}
+                        icon={'f-email'}
+                        label={null}
+                        name={'email'}
+                        placeholder={'Email Address'}
                         props={props}
                     />
 
-                    <InputText name={'vat'} label={'Vat'} props={props} />
+                    <InputText
+                        icon={'f-fname'}
+                        label={null}
+                        name={'first_name'}
+                        placeholder={'Name'}
+                        props={props}
+                    />
 
-                    <InputText name={'phone'} label={'Phone'} props={props} />
+                    <InputText
+                        icon={'f-lname'}
+                        label={null}
+                        name={'last_name'}
+                        placeholder={'Sername'}
+                        props={props}
+                    />
 
-                    <button
-                        type="submit"
-                        className="px-4 py-2 text-white text-sm font-bold rounded-md bg-gradient-to-r from-red-450 via-red-550 to-yellow-450
-                                    hover:bg-indigo-600
-                                    focus:outline-none duration-100 ease-in-out">
-                        {t('Submit')}
-                    </button>
+                    <InputText
+                        icon={null}
+                        label={null}
+                        name={'company_name'}
+                        placeholder={'Company Name'}
+                        props={props}
+                    />
+
+                    <InputText
+                        icon={null}
+                        label={null}
+                        name={'full_address'}
+                        placeholder={'Full Address'}
+                        props={props}
+                    />
+
+                    <InputText
+                        icon={null}
+                        label={null}
+                        name={'identification_number'}
+                        placeholder={'Identificator Number'}
+                        props={props}
+                    />
+
+                    <InputText
+                        icon={null}
+                        label={null}
+                        name={'vat'}
+                        placeholder={'Vat'}
+                        props={props}
+                    />
+
+                    <InputText
+                        icon={null}
+                        label={null}
+                        name={'phone'}
+                        placeholder={'Phone'}
+                        props={props}
+                    />
+
                     <button type="submit" className="gradient-btn">
                         {t('Submit')}
                     </button>

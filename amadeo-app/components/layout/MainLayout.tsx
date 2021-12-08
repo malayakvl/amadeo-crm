@@ -1,12 +1,10 @@
-import Header from '../header/Header';
-import Footer from '../footer/Footer';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useSession } from 'next-auth/client';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchUserAction, setUserAction } from '../../redux/user';
 import { userSelector } from '../../redux/user/selectors';
 
-export default function Layout({ children }: { children: any }) {
+export default function MainLayout({ children }: { children: any }) {
     const [session] = useSession();
     const dispatch = useDispatch();
     const user = useSelector(userSelector);
@@ -37,10 +35,8 @@ export default function Layout({ children }: { children: any }) {
     );
 
     return (
-        <div className="min-h-screen bg-gradient-to-r from-purple-400 via-pink-500 to-red-500">
-            <Header />
-            <main className="flex items-center justify-center">{children}</main>
-            <Footer />
+        <div className="min-h-screen flex flex-col flex-auto flex-shrink-0 antialiased bg-gray-150 text-black dark:text-white">
+            {children}
         </div>
     );
 }
