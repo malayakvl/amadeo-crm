@@ -77,10 +77,10 @@ const Header: React.FC = () => {
 
     return (
         <header>
-            <nav className="bg-white flex items-center justify-between px-28 h-144">
+            <nav className="bg-white flex items-center justify-between px-32 h-144">
                 <div className="relative -top-2">
                     <Image
-                        src="/images/logo.svg"
+                        src="/images/logo-black-font.svg"
                         width={175}
                         height={52}
                         alt=""

@@ -9,7 +9,7 @@ export default function Footer() {
                     <div>
                         <Image
                             className=""
-                            src="/images/logo.svg"
+                            src="/images/logo-white-font.svg"
                             width={175}
                             height={52}
                             layout="fixed"
