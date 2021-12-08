@@ -1,4 +1,5 @@
 import Header from '../header/Header';
+import Footer from '../footer/Footer';
 import { useEffect } from 'react';
 import { useSession } from 'next-auth/client';
 import { useDispatch, useSelector } from 'react-redux';
@@ -39,6 +40,7 @@ export default function Layout({ children }: { children: any }) {
         <div className="min-h-screen bg-gradient-to-r from-purple-400 via-pink-500 to-red-500">
             <Header />
             <main className="flex items-center justify-center">{children}</main>
+            <Footer />
         </div>
     );
 }
