@@ -4,12 +4,12 @@ import Link from 'next/link';
 export default function Footer() {
     return (
         <footer className="w-full h-370 bottom-0 absolute">
-            <div className="tracking-wide text-sm text-blue-light bg-blue-dark flex h-full justify-between flex-col py-16 px-32">
+            <div className="tracking-wide text-sm text-blue-350 bg-blue-550 flex h-full justify-between flex-col py-16 px-32">
                 <div className="flex justify-between">
                     <div>
                         <Image
                             className=""
-                            src="/images/logo-white-font.svg"
+                            src="/images/logo-white.svg"
                             width={175}
                             height={52}
                             layout="fixed"
@@ -44,7 +44,7 @@ export default function Footer() {
                     </div>
                 </div>
 
-                <div className="pt-8 flex justify-between border-t border-blue-medium">
+                <div className="pt-8 flex justify-between border-t border-blue-450">
                     <div className="flex">
                         <div className="mr-10">
                             <Image

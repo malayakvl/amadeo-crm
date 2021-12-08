@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
 @import "tailwindcss/base";
 @import "tailwindcss/components";
@@ -8,7 +8,7 @@
   .h-144 {
     height: 144px;
   }
-
+  
   .h-370 {
     height: 370px;
   }
@@ -18,85 +18,89 @@
   }
 
   .w-1000 {
-    width: 1000px;
+    width: 1000px
   }
 
   .text-green-notice {
-    color: #00c868;
+    color: #00C868;
     font-size: 0.56rem;
     @apply block font-bold uppercase mb-1;
-    .red-yellow-gradient {
-      background: linear-gradient(45deg, #ca4573 0%, #ee5342 49.48%, #efbb58 100%);
-    }
-    .red-yellow-gradient-text {
-      background: linear-gradient(45deg, #ca4573 0%, #ee5342 49.48%, #efbb58 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    .block-white-4 {
-      @apply flex-row w-full bg-white rounded-lg p-4;
-    }
-    .block-white-8 {
-      @apply flex-row w-full bg-white rounded-lg p-8;
-    }
   }
-
-  @layer components {
-    .icon {
-      @apply hidden xl:inline-flex p-2 h-10 w-10 bg-gray-200 rounded-full text-gray-700
-    cursor-pointer hover:bg-gray-300;
-    }
-
-    .inputIcon {
-      @apply flex items-center space-x-1 hover:bg-gray-100
-    flex-grow justify-center rounded-xl cursor-pointer;
-    }
-
-    .Google {
-      @apply bg-red-700 text-white w-full rounded-full
-    p-2 flex flex-row justify-center
-    gap-2 items-center rounded-sm
-    hover:bg-gray-800 duration-100 ease-in-out;
-    }
-
-    .Facebook {
-      @apply bg-blue-700 text-white w-full rounded-full
-    p-2 flex flex-row justify-center
-    gap-2 items-center rounded-sm
-    hover:bg-gray-800 duration-100 ease-in-out;
-    }
-
-    /*Form element NEEEED REWRITE!!!!!!*/
-    //.txt-input {
-    //  @apply w-full px-3 py-2 placeholder-gray-300
-    //  border border-gray-300 rounded-md
-    //  focus:outline-none focus:ring focus:ring-indigo-100 focus:border-indigo-300
-    //  dark:bg-gray-700 dark:text-white dark:placeholder-gray-500 dark:border-gray-600
-    //  dark:focus:ring-gray-900 dark:focus:border-gray-500
-    //}
-    //
-    //label {
-    //  @apply text-sm text-gray-600 dark:text-gray-400;
-    //}
-    //
-    //.error-el {
-    //  @apply flex items-center font-medium tracking-wide text-red-500 text-xs mt-1 ml-1
-    //}
-
-    //.tab-header {
-    //  @apply text-gray-600 py-4 px-6 block hover:text-blue-500 focus:outline-none cursor-pointer;
-    //}
-    //.tab-header.active {
-    //  @apply text-blue-500 border-b-2 font-medium border-blue-500
-    //}
+  .text-gray-notice {
+    color: #4F5B84;
+    @apply block text-xs font-bold mb-1;
+  }
+  .text-m-notice {
+    color:#90A4AE;
+    @apply block text-xs font-bold mb-1;
+  }
+  .red-yellow-gradient {
+    background: linear-gradient(45deg, #CA4573 0%, #EE5342 49.48%, #EFBB58 100%);
   }
 }
 
-@import "components/buttons";
+@layer components {
+  h1 {
+    @apply mb-3 text-3xl flex;
+  }
+
+  .icon {
+    @apply hidden xl:inline-flex p-2 h-10 w-10 bg-gray-200 rounded-full text-gray-700
+    cursor-pointer hover:bg-gray-300;
+  }
+
+  .inputIcon {
+    @apply flex items-center space-x-1 hover:bg-gray-100
+    flex-grow justify-center rounded-xl cursor-pointer
+  }
+
+  .Google {
+    @apply bg-red-700 text-white w-full rounded-full
+    p-2 flex flex-row justify-center
+    gap-2 items-center rounded-sm
+    hover:bg-gray-800 duration-100 ease-in-out;
+  }
+
+  .Facebook {
+    @apply bg-blue-700 text-white w-full rounded-full
+    p-2 flex flex-row justify-center
+    gap-2 items-center rounded-sm
+    hover:bg-gray-800 duration-100 ease-in-out;
+  }
+
+  /*Form element*/
+  .txt-input {
+    @apply w-full px-3 py-2 placeholder-gray-300
+    border border-gray-300 rounded-md
+    focus:outline-none focus:ring focus:ring-indigo-100 focus:border-indigo-300
+    dark:bg-gray-700 dark:text-white dark:placeholder-gray-500 dark:border-gray-600
+    dark:focus:ring-gray-900 dark:focus:border-gray-500
+  }
+
+  label {
+    @apply text-sm text-gray-600 dark:text-gray-400;
+  }
+
+  .error-el {
+    @apply flex items-center font-medium tracking-wide text-red-500 text-xs mt-1 ml-1
+  }
+
+  .tab-header {
+    @apply text-gray-600 py-4 px-6 block hover:text-blue-500 focus:outline-none cursor-pointer;
+  }
+  .tab-header.active {
+    @apply text-blue-500 border-b-2 font-medium border-blue-500
+  }
+  .basic-btn {
+    @apply font-bold text-sm rounded-lg py-3 px-4 text-center
+  }
+}
+
+@import "components/button";
 @import "components/alerts";
 @import "components/sidebar";
-@import "components/form";
-@import "components/sidebar-header";
+// @import "components/form";
+// @import "components/sidebar-header";
 @import "components/page-titles";
 @import "components/tables";
 @import "components/tabs";

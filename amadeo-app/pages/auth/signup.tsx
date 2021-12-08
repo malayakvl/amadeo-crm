@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import FullLayout from '../../components/layout/FullLayout';
 
 export default function Signup() {
@@ -18,35 +17,20 @@ export default function Signup() {
                     Lorem ipsum dolor sit amet,<br></br>
                     consectetur adipiscing elit.
                 </div>
-                <div>
-                    Already have an account? Sign in here!
-                </div>
+                <div>Already have an account? Sign in here!</div>
             </div>
             <div>
                 <div>
-                    How would you like to Sign up as? :
-                    <div>
-                        Buyer
-                    </div>
-                    <div>
-                        Merchant
-                    </div>
+                    How would you like to Sign up as? :<div>Buyer</div>
+                    <div>Merchant</div>
                 </div>
                 <div>
-                    <div>
-                        Continue with Facebook
-                    </div>
-                    <div>
-                        Continue with Twitter
-                    </div>
-                    <div>
-                        Continue with Google
-                    </div>
+                    <div>Continue with Facebook</div>
+                    <div>Continue with Twitter</div>
+                    <div>Continue with Google</div>
                     <div>or</div>
                     <div>Email</div>
-                    <div>
-                        I have read and acept the terms of use
-                    </div>
+                    <div>I have read and acept the terms of use</div>
                     <div>Sign up</div>
                 </div>
             </div>

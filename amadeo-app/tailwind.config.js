@@ -45,6 +45,8 @@ module.exports = {
         extend: {
             colors: {
                 blue: {
+                    550: '#141A3C',
+                    450: '#435B8C',
                     350: '#99ABCE'
                 },
                 gray: {
@@ -56,11 +58,6 @@ module.exports = {
                 },
                 yellow: {
                     450: '#EFBB58'
-                },
-                blue: {
-                    dark: '#141A3C',
-                    medium: '#435B8C',
-                    light: '#99ABCE'
                 },
                 green: {
                     250: '#00C868'
