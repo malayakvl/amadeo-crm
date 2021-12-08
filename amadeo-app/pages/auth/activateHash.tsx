@@ -1,5 +1,6 @@
 import { signIn } from 'next-auth/client';
 import { useEffect } from 'react';
+import FullLayout from '../../components/layout/FullLayout';
 
 export default function ActivateHash({ locale, hash }: { locale: string; hash: string }) {
     useEffect(() => {
@@ -20,6 +21,7 @@ export default function ActivateHash({ locale, hash }: { locale: string; hash: s
         </div>
     );
 }
+ActivateHash.Layout = FullLayout;
 
 export async function getServerSideProps(context: any) {
     const { req, locale } = context;

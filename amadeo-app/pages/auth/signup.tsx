@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import FullLayout from '../../components/layout/FullLayout';
 
 export default function Signup() {
     return (
@@ -22,3 +23,4 @@ export default function Signup() {
         </div>
     );
 }
+Signup.Layout = FullLayout;

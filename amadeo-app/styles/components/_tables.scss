@@ -1,0 +1,19 @@
+.float-table {
+
+
+  th {
+    @apply px-3 py-3 text-xs font-bold leading-4 tracking-wider text-left text-blue-350;
+
+    &:first-child {
+      @apply px-0;
+    }
+  }
+  td {
+    @apply px-3 py-1 text-xs font-bold text-left text-gray-350;
+
+    &:first-child {
+      @apply px-0;
+    }
+  }
+}
+

@@ -7,6 +7,7 @@ import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import { providers, getSession, signIn } from 'next-auth/client';
 import { useTranslations } from 'next-intl';
 import ProviderBtns from '../../components/auth/ProviderBtns';
+import FullLayout from '../../components/layout/FullLayout';
 
 interface Props {
     label: string | 'text';
@@ -164,6 +165,7 @@ function Buyer({ providers, locale }: { providers: any; locale: string }) {
         </div>
     );
 }
+Buyer.Layout = FullLayout;
 
 export default Buyer;
 

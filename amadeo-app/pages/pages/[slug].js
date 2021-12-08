@@ -2,6 +2,7 @@ import Head from 'next/head';
 import { getAllPages, getPageData } from '../../lib/pages';
 import fs from 'fs';
 import path from 'path';
+import FullLayout from '../../components/layout/FullLayout';
 
 const postsDirectory = path.join(process.cwd(), '/pages/pages/data');
 
@@ -25,6 +26,7 @@ export default function Page({ pageData }) {
         </>
     );
 }
+Page.Layout = FullLayout;
 
 export async function getStaticPaths() {
     const paths = await getAllPages();

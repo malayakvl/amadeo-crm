@@ -1,4 +1,5 @@
 import Head from 'next/head';
+import FullLayout from '../components/layout/FullLayout';
 
 export default function Home() {
     return (
@@ -10,6 +11,8 @@ export default function Home() {
         </div>
     );
 }
+Home.Layout = FullLayout;
+
 export async function getServerSideProps(context: any) {
     const { locale } = context;
 

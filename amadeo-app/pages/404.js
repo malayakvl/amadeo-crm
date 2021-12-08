@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import FullLayout from '../components/layout/FullLayout';
 
 export default function Custom404() {
     return (
@@ -23,6 +24,8 @@ export default function Custom404() {
         </div>
     );
 }
+
+Custom404.Layout = FullLayout;
 
 export const getStaticProps = ({ locale }) => {
     return {

@@ -63,5 +63,12 @@
   "Delete": "Delete",
   "Cancel": "Cancel",
   "system": "System messsage",
-  "message": "User message"
+  "message": "User message",
+  "No Company Name": "No Company Name",
+  "Profile": "Profile",
+  "My Plan": "My Plan",
+  "Notification": "Notification",
+  "Help": "Help",
+  "Logout": "Logout",
+  "See all 999 notifications": "See all 999 notifications"
 }

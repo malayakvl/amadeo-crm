@@ -20,12 +20,18 @@ module.exports = {
             sm: [
                 '14px',
                 {
-                    lineHeight: '21px',
+                    lineHeight: '23px',
                     letterSpacing: '0.004em'
                 }
             ],
             tiny: '.875rem',
-            base: '.875rem',
+            base: [
+                '16px',
+                {
+                    lineHeight: '21px',
+                    letterSpacing: '0.004em'
+                }
+            ],
             lg: '1.125rem',
             xl: '1.25rem',
             '2xl': '1.5rem',

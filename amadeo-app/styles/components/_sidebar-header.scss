@@ -4,6 +4,13 @@
   @apply ml-5 mr-5;
 }
 
+.counter {
+  @apply absolute top-1.5 right-0.5 inline-flex items-center justify-center
+    px-1.5 py-1.5 text-xs font-bold leading-none
+    red-yellow-gradient transform translate-x-1/2 -translate-y-1/2
+    rounded-full;
+}
+
 .profile-name {
   @apply text-xs font-bold text-gray-350 pl-3;
 
@@ -82,7 +89,7 @@
 }
 
 .notice-menu {
-  @apply absolute bg-white rounded-lg max-w-[245px] w-[245px] top-9 -left-5 p-4 text-xs;
+  @apply absolute bg-white rounded-lg max-w-[245px] w-[245px] top-9 -left-5 p-4 text-xs z-50;
 
   .notice-item {
     @apply w-full bg-white flex flex-shrink-0 relative;
@@ -106,18 +113,6 @@
           @apply block text-green-250 uppercase font-bold;
         }
       }
-    }
-  }
-
-  .view-all {
-    @apply red-yellow-gradient-text text-xs font-bold m-auto block text-center relative;
-
-    &:after {
-      content: "";
-      background-image: url("../../public/images/arrow-right.svg");
-      width: 25px;
-      height: 25px;
-      @apply absolute -top-1;
     }
   }
 }

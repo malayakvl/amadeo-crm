@@ -1,0 +1,23 @@
+.page-title {
+  @apply mt-10 mb-10 w-full;
+
+  h1 {
+    @apply inline-block text-3xl font-bold text-gray-350;
+
+    span {
+      @apply text-blue-350 font-medium;
+    }
+
+    em {
+      @apply border w-0.5 mr-2 border-blue-350;
+    }
+  }
+
+  .dashboard {
+    @apply inline-block text-3xl font-bold text-blue-350;
+
+    span {
+      @apply block text-gray-350 font-bold text-5xl -mt-4;
+    }
+  }
+}

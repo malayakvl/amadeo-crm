@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { validEmailSelector } from '../../redux/profile/selectors';
 import { useEffect } from 'react';
 import { alertService } from '../../services';
+import FullLayout from '../../components/layout/FullLayout';
 
 function Restore({ locale }: { locale: string }) {
     const t = useTranslations();
@@ -61,6 +62,7 @@ function Restore({ locale }: { locale: string }) {
         </div>
     );
 }
+Restore.Layout = FullLayout;
 
 export default Restore;
 
