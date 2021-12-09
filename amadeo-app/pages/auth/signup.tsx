@@ -81,7 +81,7 @@ export default function Signup() {
                                 </div>
                                 <div>Continue with Twitter</div>
                             </div>
-                            <div className="px-11 py-2 rounded-lg flex items-center font-bold text-gray-450 border">
+                            <div className="mb-2.5 px-11 py-2 rounded-lg flex items-center font-bold text-gray-450 border">
                                 <div className="mr-2.5 flex items-center justify-center">
                                     <Image
                                         width={24}
@@ -94,7 +94,12 @@ export default function Signup() {
                                 <div>Continue with Google</div>
                             </div>
 
-                            <div>or</div>
+                            <div className="">
+                                <div style={{ lineHeight: '0.1em' }} className="text-center border-b my-5">
+                                    <span className="bg-white px-6">or</span>
+                                </div>
+                            </div>
+
                             <div>Email</div>
                             <div>I have read and acept the terms of use</div>
                             <div>Sign up</div>
