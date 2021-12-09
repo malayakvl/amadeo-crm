@@ -40,7 +40,7 @@ module.exports = {
             '5xl': '3rem',
             '6xl': '4rem',
             '7xl': '5rem',
-            '8xl': '5rem'
+            '8xl': '5rem',
         },
         extend: {
             colors: {
@@ -59,6 +59,9 @@ module.exports = {
                     250: '#FAFAFA',
                     350: '#4F5B84',
                     450: '#90A4AE'
+                },
+                orange: {
+                    450: '#EE5342'
                 },
                 yellow: {
                     450: '#EFBB58'

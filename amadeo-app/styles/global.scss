@@ -8,19 +8,15 @@
   .h-144 {
     height: 144px;
   }
-  
   .h-370 {
     height: 370px;
   }
-
   .w-245 {
     width: 245px;
   }
-
   .w-1000 {
     width: 1000px
   }
-
   .text-green-notice {
     color: #00C868;
     font-size: 0.56rem;
@@ -47,6 +43,9 @@
   }
   .block-white-8 {
     @apply flex-row w-full bg-white rounded-lg p-8;
+  }
+  .line-height-105percent {
+    line-height: 105%
   }
 }
 
