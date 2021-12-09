@@ -74,18 +74,6 @@ export default function Signup() {
 
                                 <div className="text-sm">Continue with Facebook</div>
                             </div>
-                            {/* <div className="mb-2 px-11 py-2 rounded-lg flex items-center bg-social-twitter font-bold text-white">
-                                <div className="mr-2.5 flex items-center justify-center">
-                                    <Image
-                                        width={24}
-                                        height={24}
-                                        src='/images/social/twitter.svg'
-                                        layout="fixed"
-                                        alt=""
-                                    />
-                                </div>
-                                <div>Continue with Twitter</div>
-                            </div> */}
                             <div className="mb-2.5 px-11 py-2 rounded-lg flex items-center font-bold text-gray-450 border">
                                 <div className="mr-2.5 flex items-center justify-center">
                                     <Image
@@ -118,7 +106,7 @@ export default function Signup() {
 
                             <div className="text-sm mb-4">
                                 <input className="mr-2.5" type="checkbox"></input>
-                                <span>I have read and acept the terms of use</span>
+                                <span>I have read and acept the <span className="text-orange-450">terms of use</span></span>
                             </div>
                             <div className="gradient-btn">Sign up</div>
                         </div>
