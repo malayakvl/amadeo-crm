@@ -25,5 +25,17 @@
 }
 
 .facebook-btn-example {
-  @apply mb-2 px-11 rounded-lg flex items-center bg-social-facebook font-bold text-white;
+  @apply py-2 text-sm mb-2 pl-10 rounded-lg flex items-center bg-social-facebook font-bold text-white relative;
+
+  span {
+    @apply pl-10 inline-block;
+  }
+
+  &:before {
+    content: "";
+    background-image: url("../../public/images/social/facebook-solid.svg");
+    width: 25px;
+    height: 25px;
+    @apply absolute top-1.5;
+  }
 }

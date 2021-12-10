@@ -49,7 +49,7 @@ export default function Signup() {
                                     layout="fixed"
                                     alt=""
                                 />
-                                <div className="text-blue-350 text-sm ml-2.5">Buyer</div>
+                                <div className="text-blue-350 text-xs ml-2.5">Buyer</div>
                             </div>
                             <div className="flex">
                                 <Image
@@ -60,7 +60,7 @@ export default function Signup() {
                                     alt=""
                                 />
 
-                                <div className="text-gray-180 text-sm ml-2.5">Merchant</div>
+                                <div className="text-gray-180 text-xs ml-2.5">Merchant</div>
                             </div>
                         </div>
                     </div>
@@ -81,7 +81,9 @@ export default function Signup() {
                                 <div className="text-sm">Continue with Facebook</div>
                             </div>
 
-                            <a className="facebook-btn-example">Continue with Facebook</a>
+                            <a className="facebook-btn-example">
+                                <span>Continue with Facebook</span>
+                            </a>
 
                             <div className="mb-2.5 px-11 py-2 rounded-lg flex items-center font-bold text-gray-450 border">
                                 <div className="mr-2.5 flex items-center justify-center">
@@ -116,7 +118,7 @@ export default function Signup() {
                                 }}
                             />
 
-                            <div className="text-sm mb-4">
+                            <div className="text-xs font-medium mb-4">
                                 <input className="mr-2.5" type="checkbox" />
                                 <span>
                                     I have read and acept the{' '}
