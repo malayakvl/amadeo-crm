@@ -3,25 +3,12 @@ import * as Yup from 'yup';
 import { TogglePassword } from '../_form';
 import { Formik } from 'formik';
 import { getSession } from 'next-auth/client';
-import { crudStatusSelector } from '../../redux/profile/selectors';
-import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
-import { alertService } from '../../services';
-import { setCrudStatusAction, changePasswordAction } from '../../redux/profile';
+import { useDispatch } from 'react-redux';
+import { changePasswordAction } from '../../redux/profile';
 
-export default function Password({ session }: { session: any }) {
+export default function Password() {
     const t = useTranslations();
     const dispatch = useDispatch();
-    const crudStatus = useSelector(crudStatusSelector);
-
-    useEffect(() => {
-        if (crudStatus === 'yes') {
-            alertService.success(t('Data update successful'), { keepAfterRouteChange: true });
-        } else if (crudStatus && crudStatus !== 'yes') {
-            alertService.error(crudStatus, {});
-        }
-        dispatch(setCrudStatusAction(null));
-    }, [dispatch, crudStatus, t]);
 
     const SubmitSchema = Yup.object().shape({
         // old_password: Yup.string()
@@ -40,7 +27,7 @@ export default function Password({ session }: { session: any }) {
             initialValues={{}}
             validationSchema={SubmitSchema}
             onSubmit={(values) => {
-                dispatch(changePasswordAction(values, session.user.email));
+                dispatch(changePasswordAction(values));
             }}>
             {(props) => (
                 <form onSubmit={props.handleSubmit} className="mt-5">
@@ -85,8 +72,6 @@ export async function getServerSideProps(context: any) {
 
     return {
         props: {
-            session: session,
-            locale: locale,
             messages: {
                 ...require(`../../messages/${locale}.json`)
             }

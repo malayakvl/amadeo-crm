@@ -1,29 +1,53 @@
-import { Action, handleActions } from 'redux-actions';
-import { fetchCntNewAction, fetchNewListAction } from './actions';
+import { handleActions } from 'redux-actions';
+import { fetchNotificationsAction, fetchLatestAction } from './actions';
 
 const initialState: State.Notifications = {
     cntNew: 0,
     notificationsLatest: [],
     notifications: [],
-    notification: {} as Notifications.Notification
+    notification: {} as Notifications.Notification,
+    loading: false,
+    isFetched: false,
+    count: 0,
+    items: []
 };
 
 const ACTION_HANDLERS: any = {
-    [fetchCntNewAction]: {
-        next: (state: State.Notifications, action: Action<any>): State.Notifications => ({
+    [fetchLatestAction]: {
+        next: (
+            state: State.Notifications,
+            action: Type.ReduxAction<Pick<State.Notifications, 'cntNew' | 'notificationsLatest'>>
+        ): State.Notifications => ({
             ...state,
-            cntNew: action.payload
+            ...action.payload,
+            loading: false,
+            isFetched: true
+        }),
+        throw: (state: State.Notifications): State.Notifications => ({
+            ...state,
+            loading: false,
+            isFetched: false
         })
     },
-    [fetchNewListAction]: {
-        next: (state: State.Notifications, action: Action<any>): State.Notifications => ({
+    [fetchNotificationsAction]: {
+        next: (
+            state: State.Notifications,
+            action: Type.ReduxAction<Pick<State.Notifications, 'count' | 'items'>>
+        ): State.Notifications => ({
             ...state,
-            notificationsLatest: action.payload
+            ...action.payload,
+            loading: false,
+            isFetched: true
+        }),
+        throw: (state: State.Notifications): State.Notifications => ({
+            ...state,
+            loading: false,
+            isFetched: false
         })
     }
 };
 
-export { fetchCntNewAction, fetchNewListAction };
+export { fetchNotificationsAction, fetchLatestAction };
 
 // ------------------------------------
 // Reducer

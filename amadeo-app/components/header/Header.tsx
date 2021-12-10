@@ -4,9 +4,8 @@ import { signOut, useSession } from 'next-auth/client';
 import React, { Fragment, useEffect } from 'react';
 import { Menu, Transition } from '@headlessui/react';
 import LangSwitcher from '../lang/switcher';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { userSelector } from '../../redux/user/selectors';
-import { fetchCntNewAction, fetchNewListAction } from '../../redux/notifications';
 
 const userProfileImg =
     'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80';
@@ -24,13 +23,12 @@ function classNames(...classes: any) {
 const Header: React.FC = () => {
     const [session] = useSession();
     const user = useSelector(userSelector);
-    const dispatch = useDispatch();
 
     useEffect(
         function () {
             if (session?.user?.email) {
-                dispatch(fetchCntNewAction(user.email));
-                dispatch(fetchNewListAction(user.email));
+                // dispatch(fetchCntNewAction(user.email));
+                // dispatch(fetchNewListAction(user.email));
                 switch (user.role_id) {
                     case 2:
                         userNavigation.push({ name: 'Products', href: '/products' });

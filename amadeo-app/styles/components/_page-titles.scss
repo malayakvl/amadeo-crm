@@ -21,3 +21,8 @@
     }
   }
 }
+
+.page-subtitle {
+  @apply text-base font-medium text-gray-350 pr-2 w-full font-bold
+    border border-gray-180 border-t-0 border-r-0 border-l-0 pb-4 mb-4;
+}

@@ -82,5 +82,14 @@
   "Data create successful": "Data create successful",
   "Data delete successful": "Data delete successful",
   "Update your Profile picture:": "Update your Profile picture:",
-  "You can use .jpg or .png, photo file formats.": "You can use .jpg or .png, photo file formats."
+  "You can use jpg or png, photo file formats": "You can use .jpg or .png, photo file formats.",
+  "Notifications": "Notifications",
+  "Showing": "Showing",
+  "to": "to",
+  "entries": "entries",
+  "Address has been updated": "Address has been updated",
+  "Address has been created": "Address has been created",
+  "Address has been has been deleted": "Address has been has been deleted",
+  "Profile has been updated": "Profile has been updated",
+  "Password has been updated": "Password has been updated"
 }

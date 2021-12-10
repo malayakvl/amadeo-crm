@@ -2,22 +2,18 @@ import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import NoticeCounter from './NoticeCounter';
-import { fetchCntNewAction, fetchNewListAction } from '../../redux/notifications';
+import { fetchLatestAction } from '../../redux/notifications';
 import { useDispatch, useSelector } from 'react-redux';
-import { signOut, useSession } from 'next-auth/client';
+import { signOut } from 'next-auth/client';
 import { userSelector } from '../../redux/user/selectors';
 import { useTranslations } from 'next-intl';
-import getConfig from 'next/config';
-
-const { publicRuntimeConfig } = getConfig();
-const baseUrl = publicRuntimeConfig.apiUrl;
+import { baseApiUrl } from '../../constants';
 
 const userProfileImg =
     'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80';
 
 const SidebarHeader: React.FC = () => {
     const t = useTranslations();
-    const [session] = useSession();
     const user = useSelector(userSelector);
     const dispatch = useDispatch();
     const [showProfileMenu, setShowProfileMenu] = useState(false);
@@ -25,18 +21,11 @@ const SidebarHeader: React.FC = () => {
 
     useEffect(
         function () {
-            if (session?.user?.email) {
-                dispatch(fetchCntNewAction(user.email));
-                dispatch(fetchNewListAction(user.email));
-            }
-        },
-        [session]
-    );
-    useEffect(
-        function () {
-            console.log('USER', user);
             if (user.photo) {
-                setUserPhoto(baseUrl + user.photo);
+                setUserPhoto(baseApiUrl + user.photo);
+            }
+            if (user.email !== undefined) {
+                dispatch(fetchLatestAction());
             }
         },
         [user]
@@ -78,28 +67,40 @@ const SidebarHeader: React.FC = () => {
                         <ul>
                             <li>
                                 <Link href={`/account`}>
-                                    <a>
+                                    {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                                    <a
+                                        role="presentation"
+                                        onClick={() => setShowProfileMenu(!showProfileMenu)}>
                                         <i className="profile" />
                                         <span className="s-caption">{t('Profile')}</span>
                                     </a>
                                 </Link>
                             </li>
                             <li>
-                                <a>
+                                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                                <a
+                                    role="presentation"
+                                    onClick={() => setShowProfileMenu(!showProfileMenu)}>
                                     <i className="plan" />
                                     <span className="s-caption">{t('My Plan')}</span>
                                 </a>
                             </li>
                             <li>
                                 <Link href={`/notifications`}>
-                                    <a>
+                                    {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                                    <a
+                                        role="presentation"
+                                        onClick={() => setShowProfileMenu(!showProfileMenu)}>
                                         <i className="bell" />
                                         <span className="s-caption">{t('Notification')}</span>
                                     </a>
                                 </Link>
                             </li>
                             <li>
-                                <a>
+                                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                                <a
+                                    role="presentation"
+                                    onClick={() => setShowProfileMenu(!showProfileMenu)}>
                                     <i className="help" />
                                     <span className="s-caption">{t('Help')}</span>
                                 </a>
@@ -120,7 +121,7 @@ const SidebarHeader: React.FC = () => {
                     </div>
                 </div>
                 <span className="divider" />
-                <span className="mr-10 mt-1">
+                <span className="mt-1">
                     <a
                         href={`/api/auth/signout`}
                         onClick={(e) => {

@@ -3,6 +3,8 @@ declare namespace Addresses {
         addresses: Address[];
         address: Address;
         crudStatus: string | null;
+        loading: boolean;
+        isFetched: boolean;
     }
 
     interface Address {

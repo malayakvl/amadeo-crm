@@ -22,13 +22,18 @@ class Notification {
         }
     }
 
-    async getAll (page, perPage = 20, userId, isRead = false) {
+    async getAll (page, perPage = 20, userId, isRead = false, reqOffset = null) {
         const client = await pool.connect();
         try {
             const _total = await client.query(`SELECT * FROM common__tools._select_total_from_table_by_where('data', 'notifications', 'id', 'user_id=''${userId}'' AND is_read=${isRead}');`);
             const size = _total.rows[0].total;
             // const perPage = 20;
-            const offset = (Number(page) - 1) * Number(perPage);
+            let offset;
+            if (reqOffset) {
+                offset = reqOffset;
+            } else {
+                offset = (Number(page) - 1) * Number(perPage);
+            }
             const res = await client.query(`SELECT * FROM data.get_all_notifications(${perPage}, ${offset}, 'user_id=''${userId}'' AND is_read=${isRead}')`);
             const notifications = res.rows.length > 0 ? res.rows : [];
             const error = null;

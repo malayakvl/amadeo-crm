@@ -4,27 +4,48 @@ import {
     fetchAddressAction,
     setAddressAction,
     addAddressAction,
-    setCrudStatusAction,
     deleteAddressAction
 } from './actions';
 
 const initialState: State.Addresses = {
     addresses: [],
     address: {} as Addresses.Address,
-    crudStatus: null
+    crudStatus: null,
+    loading: false,
+    isFetched: false
 };
 
 const ACTION_HANDLERS: any = {
     [fetchAddressesAction]: {
-        next: (state: State.Addresses, action: Action<any>): State.Addresses => ({
+        next: (
+            state: State.Notifications,
+            action: Type.ReduxAction<Pick<State.Addresses, 'addresses'>>
+        ): State.Notifications => ({
             ...state,
-            addresses: action.payload
+            ...action.payload,
+            loading: false,
+            isFetched: true
+        }),
+        throw: (state: State.Notifications): State.Addresses => ({
+            ...state,
+            loading: false,
+            isFetched: true
         })
     },
     [fetchAddressAction]: {
-        next: (state: State.Addresses, action: Action<any>): State.Addresses => ({
+        next: (
+            state: State.Notifications,
+            action: Type.ReduxAction<Pick<State.Addresses, 'address'>>
+        ): State.Notifications => ({
             ...state,
-            address: action.payload
+            ...action.payload,
+            loading: false,
+            isFetched: true
+        }),
+        throw: (state: State.Notifications): State.Addresses => ({
+            ...state,
+            loading: false,
+            isFetched: true
         })
     },
     [setAddressAction]: (
@@ -33,25 +54,19 @@ const ACTION_HANDLERS: any = {
     ): State.Addresses => ({
         ...state,
         address: action.payload
-    }),
-    [addAddressAction]: {
-        next: (state: State.Addresses, action: Action<any>): State.Addresses => ({
-            ...state,
-            crudStatus: action.payload
-        })
-    },
-    [setCrudStatusAction]: {
-        next: (state: State.Addresses, action: Action<any>): State.Addresses => ({
-            ...state,
-            crudStatus: action.payload
-        })
-    },
-    [deleteAddressAction]: {
-        next: (state: State.Addresses, action: Action<any>): State.Addresses => ({
-            ...state,
-            crudStatus: action.payload
-        })
-    }
+    })
+    // [setCrudStatusAction]: {
+    //     next: (state: State.Addresses, action: Action<any>): State.Addresses => ({
+    //         ...state,
+    //         crudStatus: action.payload
+    //     })
+    // },
+    // [deleteAddressAction]: {
+    //     next: (state: State.Addresses, action: Action<any>): State.Addresses => ({
+    //         ...state,
+    //         crudStatus: action.payload
+    //     })
+    // }
 };
 
 export {
@@ -59,7 +74,6 @@ export {
     fetchAddressAction,
     setAddressAction,
     addAddressAction,
-    setCrudStatusAction,
     deleteAddressAction
 };
 

@@ -4,6 +4,10 @@ declare namespace Notifications {
         notificationsLatest: Notification[];
         notifications: Notification[];
         notification: Notification;
+        count: number;
+        items: Notification[];
+        loading: boolean;
+        isFetched: boolean;
     }
 
     interface Notification {
@@ -17,6 +21,7 @@ declare namespace Notifications {
         last_name: string | null;
         sender_first_name: string | null;
         sender_last_name: string | null;
+        sender_photo: string | null;
         created_at: any;
         updated_at: any;
     }

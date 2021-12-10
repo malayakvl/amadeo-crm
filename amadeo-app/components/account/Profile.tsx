@@ -1,44 +1,28 @@
 import * as Yup from 'yup';
-import getConfig from 'next/config';
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import { useEffect } from 'react';
-import { alertService } from '../../services';
 import { Formik } from 'formik';
 import { InputText } from '../_form';
 import React, { useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { profileSelector, crudStatusSelector } from '../../redux/profile/selectors';
-import { fetchProfileAction, updateProfileAction, setCrudStatusAction } from '../../redux/profile';
+import { profileSelector } from '../../redux/profile/selectors';
+import { fetchProfileAction, updateProfileAction } from '../../redux/profile';
 import { useSession } from 'next-auth/client';
-import { setUserAction } from '../../redux/user';
-
-const { publicRuntimeConfig } = getConfig();
-const baseUrl = publicRuntimeConfig.apiUrl;
+import { baseApiUrl } from '../../constants';
 
 function Profile() {
     const [session] = useSession();
     const t = useTranslations();
     const dispatch = useDispatch();
     const profileData = useSelector(profileSelector);
-    const crudStatus = useSelector(crudStatusSelector);
     const filePickerRef = useRef<HTMLInputElement>(null);
     const [imagePost, setImagePost] = useState<File>();
     const [isNewPhoto, setIsNewPhoto] = useState(false);
 
     useEffect(() => {
-        dispatch(fetchProfileAction(session?.user?.email));
+        dispatch(fetchProfileAction());
     }, [dispatch, session?.user?.email]);
-
-    useEffect(() => {
-        if (crudStatus === 'yes') {
-            alertService.success(t('Data update successful'), { keepAfterRouteChange: true });
-            dispatch(setUserAction(JSON.parse(window.localStorage.getItem('user') || '{}')));
-        } else if (crudStatus && crudStatus !== 'yes') {
-            alertService.error(crudStatus, {});
-        }
-        dispatch(setCrudStatusAction(null));
-    }, [dispatch, crudStatus, t]);
 
     const addImageToPost = (e: React.SyntheticEvent) => {
         e.preventDefault();
@@ -72,7 +56,7 @@ function Profile() {
                 if (imagePost) {
                     formData.append('photo', imagePost);
                 }
-                dispatch(updateProfileAction(formData, session?.user?.email));
+                dispatch(updateProfileAction(formData));
             }}>
             {(props) => (
                 <form onSubmit={props.handleSubmit} className="mt-5">
@@ -89,7 +73,7 @@ function Profile() {
                                 <img
                                     alt=""
                                     className="rounded-full w-[160px] h-[160px]"
-                                    src={baseUrl + profileData.photo}
+                                    src={baseApiUrl + profileData.photo}
                                 />
                             )}
                             <div className="absolute right-0 bottom-0 cursor-pointer">
@@ -112,7 +96,7 @@ function Profile() {
                         <div className="text-base text-gray-350 font-bold ml-10 w-[180px]">
                             {t('Update your Profile picture:')}
                             <span className="block text-sm text-gray-350 font-medium mt-6">
-                                {t('You can use .jpg or .png, photo file formats.')}
+                                {t('You can use jpg or png, photo file formats')}
                             </span>
                         </div>
                     </div>

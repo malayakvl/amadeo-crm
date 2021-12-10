@@ -6,9 +6,9 @@ import type { AppProps } from 'next/app';
 import { Provider } from 'next-auth/client';
 import { Provider as ReduxProvider } from 'react-redux';
 import store from '../app/store';
-import { Alert } from '../components/services/Alert';
 import MainLayout from '../components/layout/MainLayout';
 import SidebarLayout from '../components/layout/SidebarLayout';
+import { Toasts } from '../components/_common';
 
 type NextPageWithLayout = NextPage & {
     getLayout?: (page: ReactElement) => ReactNode;
@@ -65,7 +65,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
                     timeZone="Europe/Paris">
                     <MainLayout>
                         <Layout>
-                            <Alert />
+                            <Toasts />
                             <Component {...pageProps} />
                         </Layout>
                     </MainLayout>

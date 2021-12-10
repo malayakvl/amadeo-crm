@@ -1,26 +1,24 @@
 import React, { useState } from 'react';
 import useInterval from '@use-it/interval';
 import { useDispatch, useSelector } from 'react-redux';
-import { userSelector } from '../../redux/user/selectors';
-import { fetchCntNewAction, fetchNewListAction } from '../../redux/notifications';
+import { fetchLatestAction } from '../../redux/notifications';
 import { cntNewSelector, latestNoticeSelector } from '../../redux/notifications/selectors';
 import { CogIcon } from '@heroicons/react/solid';
 import { useTranslations } from 'next-intl';
 import moment from 'moment';
 import Image from 'next/image';
 import Link from 'next/link';
+import { baseApiUrl } from '../../constants';
 
 const NoticeCounter = ({ delay = 1000 }) => {
     const dispatch = useDispatch();
-    const user = useSelector(userSelector);
     const noticeCnt = useSelector(cntNewSelector);
     const latestNotice = useSelector(latestNoticeSelector);
     const [showLatest, setShowLatest] = useState(false);
     const t = useTranslations();
 
     useInterval(() => {
-        dispatch(fetchCntNewAction(user.email));
-        dispatch(fetchNewListAction(user.email));
+        dispatch(fetchLatestAction());
     }, delay);
 
     return (
@@ -43,15 +41,22 @@ const NoticeCounter = ({ delay = 1000 }) => {
                     {latestNotice.map((notice: Notifications.Notification) => (
                         <div key={notice.id} className="notice-item">
                             <div className="notice-photo">
-                                {notice.type === 'system' && (
+                                {(notice.type === 'system' || !notice.sender_photo) && (
                                     <CogIcon
                                         className="border rounded-full"
                                         width={24}
                                         height={24}
                                     />
                                 )}
-                                {notice.type !== 'system' && (
-                                    <Image src="/images/face.svg" width={24} height={24} />
+                                {notice.sender_photo && (
+                                    <Image
+                                        className="border rounded-full"
+                                        alt=""
+                                        width={24}
+                                        height={24}
+                                        src={baseApiUrl + notice.sender_photo}
+                                        layout="fixed"
+                                    />
                                 )}
                             </div>
                             <div className="notice-text">
@@ -61,7 +66,7 @@ const NoticeCounter = ({ delay = 1000 }) => {
                                         <span className="text-gray-350">Liis Ristal</span>
                                         <span className="text-gray-450">{notice.message}</span>
                                         <span className="text-gray-180">
-                                            {moment(notice.created_at).format('dd.mm.YYYY')}
+                                            {moment(notice.created_at).fromNow()}
                                         </span>
                                     </div>
                                 </div>
@@ -69,7 +74,11 @@ const NoticeCounter = ({ delay = 1000 }) => {
                         </div>
                     ))}
                     <Link href={'/notifications'}>
-                        <a className="view-all m-auto block text-center">
+                        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                        <a
+                            role="presentation"
+                            onClick={() => setShowLatest(!showLatest)}
+                            className="view-all m-auto block text-center">
                             {t('See all 999 notifications')}
                         </a>
                     </Link>

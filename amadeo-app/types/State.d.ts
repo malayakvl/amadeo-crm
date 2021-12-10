@@ -5,10 +5,12 @@ declare namespace State {
         profile: Profile;
         user: User;
         notifications: Notifications;
+        layouts: Layouts;
     }
 
     type Addresses = Addresses.Root;
     type Profile = Profile.Root;
     type User = User.Root;
     type Notifications = User.Notifications;
+    type Layouts = Layouts.Root;
 }

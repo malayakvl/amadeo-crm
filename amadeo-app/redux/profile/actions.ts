@@ -2,6 +2,8 @@ import { createAction } from 'redux-actions';
 import axios from 'axios';
 import getConfig from 'next/config';
 import { authHeader } from '../../lib/functions';
+import { setSuccessToastAction } from '../layouts';
+import { setUserAction } from '../user/';
 
 const { publicRuntimeConfig } = getConfig();
 const baseUrl = `${publicRuntimeConfig.apiUrl}/api`;
@@ -9,51 +11,53 @@ const baseAuthUrl = `${publicRuntimeConfig.apiUrl}/auth`;
 
 export const fetchProfileAction: any = createAction(
     'profile/FETCH_PROFILE',
-    async (email: string) => {
-        return axios
-            .get(`${baseUrl}/profile`, {
+    async () =>
+        async (dispatch: Type.Dispatch, getState: () => State.Root): Promise<{ profile: any }> => {
+            const state = getState();
+            const res = await axios.get(`${baseUrl}/profile`, {
                 headers: {
-                    ...authHeader(email)
+                    ...authHeader(state.user.user.email)
                 }
-            })
-            .then((res) => res.data.user);
-    }
+            });
+            return {
+                profile: res.data.user
+            };
+        }
 );
-
 export const updateProfileAction: any = createAction(
     'profile/UPDATE_PROFILE',
-    async (data: any, email: string) => {
-        return await axios
-            .post(`${baseUrl}/profile`, data, {
-                headers: {
-                    ...authHeader(email)
-                }
-            })
-            .then((res) => {
-                // then print response status
-                window.localStorage.removeItem('user');
-                window.localStorage.setItem('user', JSON.stringify(res.data.user));
-            })
-            .then(() => 'yes')
-            .catch((err) => err.message);
-    }
+    async (data: any) =>
+        (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
+            const state = getState();
+            return axios
+                .post(`${baseUrl}/profile`, data, {
+                    headers: {
+                        ...authHeader(state.user.user.email)
+                    }
+                })
+                .then(async (res) => {
+                    window.localStorage.removeItem('user');
+                    window.localStorage.setItem('user', JSON.stringify(res.data.user));
+                    dispatch(setUserAction(res.data.user));
+                    dispatch(setSuccessToastAction(`Profile has been updated`));
+                });
+        }
 );
-
 export const changePasswordAction: any = createAction(
     'profile/CHANGE_PASSWORD',
-    async (data: any, email: string) => {
-        const res = await fetch(`${baseUrl}/changePassword`, {
-            method: 'post',
-            body: JSON.stringify(data),
-            headers: { 'Content-Type': 'application/json', ...authHeader(email) }
-        });
-        const resp = await res.json();
-        if (res.ok && resp.status) {
-            return 'yes';
-        } else {
-            return resp.error.message;
+    async (data: any) =>
+        (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
+            const state = getState();
+            return axios
+                .post(`${baseUrl}/changePassword`, data, {
+                    headers: {
+                        ...authHeader(state.user.user.email)
+                    }
+                })
+                .then(async () => {
+                    dispatch(setSuccessToastAction(`Password has been updated`));
+                });
         }
-    }
 );
 
 export const restorePasswordAction: any = createAction(
@@ -73,5 +77,4 @@ export const restorePasswordAction: any = createAction(
     }
 );
 
-export const setCrudStatusAction: any = createAction('profile/SET_CRUD_STATUS');
 export const setValidEmailStatusAction: any = createAction('profile/SET_VALID_STATUS');

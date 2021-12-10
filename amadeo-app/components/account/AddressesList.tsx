@@ -14,22 +14,22 @@ function AddressesList({ email }: { email: string }) {
     const addressesData = useSelector(addressesSelector);
 
     useEffect(() => {
-        dispatch(fetchAddressesAction(email));
+        dispatch(fetchAddressesAction());
     }, [dispatch, email]);
 
     const editAddress = (addressId: number | null) => {
-        dispatch(fetchAddressAction(addressId, email));
+        dispatch(fetchAddressAction(addressId));
     };
     const deleteAddress = (addressId: number | null) => {
-        dispatch(deleteAddressAction(addressId, email));
+        dispatch(deleteAddressAction(addressId));
     };
 
     return (
         <>
-            {addressesData.length > 0 && (
+            {addressesData?.length > 0 && (
                 <div className="mt-8">
                     <div className="font-bold text-gray-350 text-base pb-4 mb-2 border border-t-0 border-l-0 border-r-0">
-                        My Addressess
+                        {t('My Addressess')}
                     </div>
                     <div className="inline-block min-w-full overflow-hidden align-middle">
                         <table className="min-w-full float-table">
