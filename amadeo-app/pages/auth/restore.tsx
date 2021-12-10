@@ -7,9 +7,9 @@ import { InputText } from '../../components/_form';
 import { useDispatch, useSelector } from 'react-redux';
 import { validEmailSelector } from '../../redux/profile/selectors';
 import { useEffect } from 'react';
-import { alertService } from '../../services';
 import FullLayout from '../../components/layout/FullLayout';
-import Image from 'next/image'
+import Image from 'next/image';
+import { setSuccessToastAction, setErrorToastAction } from '../../redux/layouts';
 
 function Restore({ locale }: { locale: string }) {
     const t = useTranslations();
@@ -18,9 +18,11 @@ function Restore({ locale }: { locale: string }) {
 
     useEffect(() => {
         if (validEmail === 'yes') {
-            alertService.success(t(`Check your email`), { keepAfterRouteChange: true });
+            dispatch(setSuccessToastAction(t(`Check your email`)));
+            // alertService.success(t(`Check your email`), { keepAfterRouteChange: true });
         } else if (validEmail && validEmail !== 'yes') {
-            alertService.error(t(`No registered email`), { keepAfterRouteChange: true });
+            dispatch(setErrorToastAction(t(`No registered email`)));
+            // alertService.error(t(`No registered email`), { keepAfterRouteChange: true });
         }
         dispatch(setValidEmailStatusAction(null));
     }, [dispatch, locale, validEmail, t]);
@@ -40,14 +42,15 @@ function Restore({ locale }: { locale: string }) {
                         className=""
                         width={64}
                         height={64}
-                        src='/images/keys.svg'
+                        src="/images/keys.svg"
                         layout="fixed"
                         alt=""
                     />
                 </div>
 
                 <div className="text-sm mb-10">
-                    No problem! just write your associated email and we will send you a recovery link.
+                    No problem! just write your associated email and we will send you a recovery
+                    link.
                 </div>
 
                 <Formik
@@ -59,25 +62,20 @@ function Restore({ locale }: { locale: string }) {
                     {(props) => (
                         <form onSubmit={props.handleSubmit}>
                             <InputText
+                                style={null}
                                 icon={'f-email'}
                                 label={null}
                                 name={'email'}
                                 placeholder={'Email'}
-                                props={{
-                                    values: { email: '' },
-                                    errors: { email: '' }
-                                }}
+                                props={props}
                             />
 
-                            <button
-                                type="submit"
-                                className="mt-6 gradient-btn w-full">
+                            <button type="submit" className="mt-6 gradient-btn w-full">
                                 Send me a Recovery Link
-                                </button>
+                            </button>
                         </form>
                     )}
                 </Formik>
-
             </div>
         </div>
     );
