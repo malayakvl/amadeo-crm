@@ -23,3 +23,7 @@
 .cancel {
   @apply bg-gray-180 font-bold text-sm text-white rounded-lg px-4 py-2.5
 }
+
+.facebook-btn-example {
+  @apply mb-2 px-11 rounded-lg flex items-center bg-social-facebook font-bold text-white;
+}

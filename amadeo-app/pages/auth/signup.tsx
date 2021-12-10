@@ -80,6 +80,9 @@ export default function Signup() {
 
                                 <div className="text-sm">Continue with Facebook</div>
                             </div>
+
+                            <a className="facebook-btn-example">Continue with Facebook</a>
+
                             <div className="mb-2.5 px-11 py-2 rounded-lg flex items-center font-bold text-gray-450 border">
                                 <div className="mr-2.5 flex items-center justify-center">
                                     <Image
