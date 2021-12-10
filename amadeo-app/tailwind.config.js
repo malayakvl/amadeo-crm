@@ -44,7 +44,13 @@ module.exports = {
         },
         extend: {
             colors: {
+                social: {
+                    facebook: '#3B5998',
+                    twitter: '#00ACEE'
+                },
                 blue: {
+                    550: '#141A3C',
+                    450: '#435B8C',
                     350: '#99ABCE'
                 },
                 gray: {
@@ -53,6 +59,12 @@ module.exports = {
                     250: '#FAFAFA',
                     350: '#4F5B84',
                     450: '#90A4AE'
+                },
+                orange: {
+                    450: '#EE5342'
+                },
+                yellow: {
+                    450: '#EFBB58'
                 },
                 green: {
                     250: '#00C868'

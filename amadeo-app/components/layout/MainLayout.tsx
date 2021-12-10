@@ -34,6 +34,7 @@ export default function MainLayout({ children }: { children: any }) {
         [dispatch, user]
     );
 
+    // return <div>{children}</div>;
     return (
         <div className="min-h-screen flex flex-col flex-auto flex-shrink-0 antialiased bg-gray-150 text-black dark:text-white">
             {children}

@@ -19,7 +19,15 @@
   .block-white-8 {
     @apply flex-row w-full bg-white rounded-lg p-8;
   }
-
+  .h-144 {
+    height: 144px;
+  }
+  .h-370 {
+    height: 370px;
+  }
+  .line-height-105percent {
+    line-height: 105%
+  }
 }
 
 @layer components {
@@ -46,6 +54,30 @@
     gap-2 items-center rounded-sm
     hover:bg-gray-800 duration-100 ease-in-out;
   }
+
+  /*Form element NEEEED REWRITE!!!!!!*/
+  //.txt-input {
+  //  @apply w-full px-3 py-2 placeholder-gray-300
+  //  border border-gray-300 rounded-md
+  //  focus:outline-none focus:ring focus:ring-indigo-100 focus:border-indigo-300
+  //  dark:bg-gray-700 dark:text-white dark:placeholder-gray-500 dark:border-gray-600
+  //  dark:focus:ring-gray-900 dark:focus:border-gray-500
+  //}
+  //
+  //label {
+  //  @apply text-sm text-gray-600 dark:text-gray-400;
+  //}
+  //
+  //.error-el {
+  //  @apply flex items-center font-medium tracking-wide text-red-500 text-xs mt-1 ml-1
+  //}
+
+  //.tab-header {
+  //  @apply text-gray-600 py-4 px-6 block hover:text-blue-500 focus:outline-none cursor-pointer;
+  //}
+  //.tab-header.active {
+  //  @apply text-blue-500 border-b-2 font-medium border-blue-500
+  //}
 }
 
 @import "components/buttons";
