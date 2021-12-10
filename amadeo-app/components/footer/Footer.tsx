@@ -6,15 +6,17 @@ export default function Footer() {
         <footer className="w-full h-370">
             <div className="tracking-wide text-sm text-blue-350 bg-blue-550 flex h-full justify-between flex-col py-16 px-32">
                 <div className="flex justify-between">
-                    <div>
-                        <Image
-                            className=""
-                            src="/images/logo-white.svg"
-                            width={175}
-                            height={52}
-                            layout="fixed"
-                            alt=""
-                        />
+                    <div className="cursor-pointer">
+                        <Link href={'/'}>
+                            <Image
+                                className=""
+                                src="/images/logo-white.svg"
+                                width={175}
+                                height={52}
+                                layout="fixed"
+                                alt=""
+                            />
+                        </Link>
                     </div>
                     <div className="flex">
                         <div className="mr-9">
