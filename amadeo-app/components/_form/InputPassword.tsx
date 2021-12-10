@@ -15,6 +15,7 @@ const InputPassword: React.FC<Props> = ({ style, icon, name, label, placeholder,
     return (
         <div className={`mb-4 ${style} relative`}>
             {label && <label htmlFor={name}>{t(label)}</label>}
+            {icon && <i className={`f-icon ${icon}`} />}
             <input
                 className={icon ? 'form-control-icon' : 'form-control'}
                 placeholder={placeholder ? t(placeholder) : ''}
