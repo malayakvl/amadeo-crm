@@ -98,12 +98,11 @@ function Account({
                                 address_line_2: ''
                             }}
                             countriesData={infoData.countries}
-                            email={session.user.email}
                             locale={locale}
                         />
                     </div>
                     <div className={`w-full ${activeTab !== 'password' ? 'hidden' : ''}`}>
-                        <Password session={session} />
+                        <Password />
                     </div>
                 </div>
             </div>

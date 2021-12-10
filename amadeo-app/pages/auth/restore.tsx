@@ -7,8 +7,9 @@ import { InputText } from '../../components/_form';
 import { useDispatch, useSelector } from 'react-redux';
 import { validEmailSelector } from '../../redux/profile/selectors';
 import { useEffect } from 'react';
-import { alertService } from '../../services';
+// import { alertService } from '../../services';
 import FullLayout from '../../components/layout/FullLayout';
+import { setErrorToastAction, setSuccessToastAction } from '../../redux/layouts';
 
 function Restore({ locale }: { locale: string }) {
     const t = useTranslations();
@@ -17,9 +18,11 @@ function Restore({ locale }: { locale: string }) {
 
     useEffect(() => {
         if (validEmail === 'yes') {
-            alertService.success(t(`Check your email`), { keepAfterRouteChange: true });
+            dispatch(setSuccessToastAction('Check your email'));
+            // alertService.success(t(`Check your email`), { keepAfterRouteChange: true });
         } else if (validEmail && validEmail !== 'yes') {
-            alertService.error(t(`No registered email`), { keepAfterRouteChange: true });
+            dispatch(setErrorToastAction('No registered email'));
+            // alertService.error(t(`No registered email`), { keepAfterRouteChange: true });
         }
         dispatch(setValidEmailStatusAction(null));
     }, [dispatch, locale, validEmail, t]);
@@ -45,7 +48,14 @@ function Restore({ locale }: { locale: string }) {
                         }}>
                         {(props) => (
                             <form onSubmit={props.handleSubmit} className="mt-5 mb-10">
-                                <InputText name={'email'} label={'Email Address'} props={props} />
+                                <InputText
+                                    placeholder={null}
+                                    style={null}
+                                    icon={null}
+                                    name={'email'}
+                                    label={'Email Address'}
+                                    props={props}
+                                />
 
                                 <button
                                     type="submit"
