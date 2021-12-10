@@ -7,8 +7,9 @@ import { InputText } from '../../components/_form';
 import { useDispatch, useSelector } from 'react-redux';
 import { validEmailSelector } from '../../redux/profile/selectors';
 import { useEffect } from 'react';
+import { alertService } from '../../services';
 import FullLayout from '../../components/layout/FullLayout';
-import { setErrorToastAction, setSuccessToastAction } from '../../redux/layouts';
+import Image from 'next/image'
 
 function Restore({ locale }: { locale: string }) {
     const t = useTranslations();
@@ -17,11 +18,9 @@ function Restore({ locale }: { locale: string }) {
 
     useEffect(() => {
         if (validEmail === 'yes') {
-            dispatch(setSuccessToastAction('Check your email'));
-            // alertService.success(t(`Check your email`), { keepAfterRouteChange: true });
+            alertService.success(t(`Check your email`), { keepAfterRouteChange: true });
         } else if (validEmail && validEmail !== 'yes') {
-            dispatch(setErrorToastAction('No registered email'));
-            // alertService.error(t(`No registered email`), { keepAfterRouteChange: true });
+            alertService.error(t(`No registered email`), { keepAfterRouteChange: true });
         }
         dispatch(setValidEmailStatusAction(null));
     }, [dispatch, locale, validEmail, t]);
@@ -31,42 +30,54 @@ function Restore({ locale }: { locale: string }) {
     });
 
     return (
-        <div className="flex justify-center min-h-screen">
-            <div className="container sm:mt-10 mt-10 my-auto max-w-md rounded-lg p-3 bg-white">
-                <div className="text-center my-6">
-                    <h1 className="text-3xl font-semibold text-gray-700">
-                        {t('Restore Password')}
-                    </h1>
+        <div className="flex justify-center">
+            <div className="rounded-lg border shadow-xl mt-10 bg-white w-96 p-10 pb-16">
+                <div className="flex">
+                    <div className="font-bold text-3xl line-height-105percent mb-2">
+                        Forgot your Password?
+                    </div>
+                    <Image
+                        className=""
+                        width={64}
+                        height={64}
+                        src='/images/keys.svg'
+                        layout="fixed"
+                        alt=""
+                    />
                 </div>
-                <div className="w-full">
-                    <Formik
-                        initialValues={{ email: '' }}
-                        validationSchema={SubmitSchema}
-                        onSubmit={(values) => {
-                            dispatch(restorePasswordAction(values));
-                        }}>
-                        {(props) => (
-                            <form onSubmit={props.handleSubmit} className="mt-5 mb-10">
-                                <InputText
-                                    placeholder={null}
-                                    style={null}
-                                    icon={null}
-                                    name={'email'}
-                                    label={'Email Address'}
-                                    props={props}
-                                />
 
-                                <button
-                                    type="submit"
-                                    className="px-4 py-2 text-white bg-indigo-500 rounded-md
-                                    hover:bg-indigo-600
-                                    focus:outline-none duration-100 ease-in-out">
-                                    {t('Send Email')}
-                                </button>
-                            </form>
-                        )}
-                    </Formik>
+                <div className="text-sm mb-10">
+                    No problem! just write your associated email and we will send you a recovery link.
                 </div>
+
+                <Formik
+                    initialValues={{ email: '' }}
+                    validationSchema={SubmitSchema}
+                    onSubmit={(values) => {
+                        dispatch(restorePasswordAction(values));
+                    }}>
+                    {(props) => (
+                        <form onSubmit={props.handleSubmit}>
+                            <InputText
+                                icon={'f-email'}
+                                label={null}
+                                name={'email'}
+                                placeholder={'Email'}
+                                props={{
+                                    values: { email: '' },
+                                    errors: { email: '' }
+                                }}
+                            />
+
+                            <button
+                                type="submit"
+                                className="mt-6 gradient-btn w-full">
+                                Send me a Recovery Link
+                                </button>
+                        </form>
+                    )}
+                </Formik>
+
             </div>
         </div>
     );
