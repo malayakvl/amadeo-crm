@@ -7,7 +7,6 @@ import { InputText } from '../../components/_form';
 import { useDispatch, useSelector } from 'react-redux';
 import { validEmailSelector } from '../../redux/profile/selectors';
 import { useEffect } from 'react';
-// import { alertService } from '../../services';
 import FullLayout from '../../components/layout/FullLayout';
 import { setErrorToastAction, setSuccessToastAction } from '../../redux/layouts';
 
