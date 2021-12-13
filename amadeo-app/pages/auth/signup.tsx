@@ -4,6 +4,7 @@ import ProviderBtns from '../../components/auth/ProviderBtns';
 import Image from 'next/image';
 import React from 'react';
 import { providers, getSession } from 'next-auth/client';
+import Link from 'next/link';
 
 export default function Signup({ providers, locale }: { providers: any; locale: string }) {
     return (
@@ -30,9 +31,11 @@ export default function Signup({ providers, locale }: { providers: any; locale: 
                         consectetur adipiscing elit.
                     </div>
 
-                    <div className="font-bold text-orange-450">
-                        Already have an account? Sign in here!
-                    </div>
+                    <Link href={'/auth/signin'}>
+                        <a className="font-bold text-orange-450">
+                            Already have an account? Sign in here!
+                        </a>
+                    </Link>
                 </div>
 
                 <div className="pl-12 border-l w-2/4">
