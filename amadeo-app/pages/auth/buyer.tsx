@@ -3,7 +3,6 @@ import { useForm } from 'react-hook-form';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import * as Yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import { providers, getSession, signIn } from 'next-auth/client';
 import { useTranslations } from 'next-intl';
 import ProviderBtns from '../../components/auth/ProviderBtns';
@@ -53,9 +52,8 @@ function Buyer({ providers, locale }: { providers: any; locale: string }) {
             t('Passwords must match')
         )
     });
-    const formOptions = { resolver: yupResolver(validationSchema) };
 
-    const { register, handleSubmit, formState } = useForm(formOptions);
+    const { register, handleSubmit, formState } = useForm();
     const { errors } = formState;
     const onSubmit = (user: any) => {
         setShowAlert(false);

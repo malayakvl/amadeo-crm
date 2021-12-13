@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,600&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,600&display=swap");
 //@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
 @import "tailwindcss/base";
@@ -7,10 +7,10 @@
 
 @layer utilities {
   .red-yellow-gradient {
-    background: linear-gradient(45deg, #CA4573 0%, #EE5342 49.48%, #EFBB58 100%);
+    background: linear-gradient(45deg, #ca4573 0%, #ee5342 49.48%, #efbb58 100%);
   }
   .red-yellow-gradient-text {
-    background: linear-gradient(45deg, #CA4573 0%, #EE5342 49.48%, #EFBB58 100%);
+    background: linear-gradient(45deg, #ca4573 0%, #ee5342 49.48%, #efbb58 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }
@@ -27,7 +27,7 @@
     height: 370px;
   }
   .line-height-105percent {
-    line-height: 105%
+    line-height: 105%;
   }
 }
 
@@ -39,24 +39,15 @@
 
   .inputIcon {
     @apply flex items-center space-x-1 hover:bg-gray-100
-    flex-grow justify-center rounded-xl cursor-pointer
+    flex-grow justify-center rounded-xl cursor-pointer;
   }
 
-  .Google {
-    @apply bg-red-700 text-white w-full rounded-full
-    p-2 flex flex-row justify-center
-    gap-2 items-center rounded-sm
-    hover:bg-gray-800 duration-100 ease-in-out;
+  .image-btn {
+    @apply w-full mb-2.5 px-11 py-2 rounded-lg flex items-center font-bold
   }
 
-  .Facebook {
-    @apply bg-blue-700 text-white w-full rounded-full
-    p-2 flex flex-row justify-center
-    gap-2 items-center rounded-sm
-    hover:bg-gray-800 duration-100 ease-in-out;
-  }
   .basic-btn {
-    @apply font-bold text-sm rounded-lg py-3 px-4 text-center
+    @apply font-bold text-sm rounded-lg py-3 px-4 text-center;
   }
 }
 

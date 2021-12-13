@@ -1,12 +1,14 @@
 import FullLayout from '../../components/layout/FullLayout';
 import { InputText } from '../../components/_form';
-
+import ProviderBtns from '../../components/auth/ProviderBtns';
 import Image from 'next/image';
+import React from 'react';
+import { providers, getSession } from 'next-auth/client';
 
-export default function Signup() {
+export default function Signup({ providers, locale }: { providers: any; locale: string }) {
     return (
         <div className="flex justify-center">
-            <div className="rounded-lg border shadow-xl mt-10 flex w-1000 bg-white px-20 py-14">
+            <div className="rounded-lg border shadow-xl mt-10 flex w-[1000px] bg-white px-20 py-14">
                 <div className="font-bold mt-8 pr-12 w-2/4">
                     <div className="text-5xl line-height-105percent mb-9">
                         Sing up
@@ -66,44 +68,13 @@ export default function Signup() {
                     </div>
                     <div className="flex">
                         <div className="w-16 leading-10 text-gray-200 font-bold text-5xl">2.</div>
-                        <div className="">
-                            <div className="mb-2 px-11 py-2 rounded-lg flex items-center bg-social-facebook font-bold text-white">
-                                <div className="mr-2.5 flex items-center justify-center">
-                                    <Image
-                                        width={24}
-                                        height={24}
-                                        src="/images/social/facebook-solid.svg"
-                                        layout="fixed"
-                                        alt=""
-                                    />
-                                </div>
+                        <div>
+                            <ProviderBtns Providers={providers} locale={locale} />
 
-                                <div className="text-sm">Continue with Facebook</div>
-                            </div>
-
-                            <a className="facebook-btn-example">
-                                <span>Continue with Facebook</span>
-                            </a>
-
-                            <div className="mb-2.5 px-11 py-2 rounded-lg flex items-center font-bold text-gray-450 border">
-                                <div className="mr-2.5 flex items-center justify-center">
-                                    <Image
-                                        width={24}
-                                        height={24}
-                                        src="/images/social/google.svg"
-                                        layout="fixed"
-                                        alt=""
-                                    />
-                                </div>
-                                <div className="text-sm">Continue with Google</div>
-                            </div>
-
-                            <div className="">
-                                <div
-                                    style={{ lineHeight: '0.1em' }}
-                                    className="text-center border-b my-5">
-                                    <span className="bg-white px-6">or</span>
-                                </div>
+                            <div
+                                style={{ lineHeight: '0.1em' }}
+                                className="text-center border-b my-5">
+                                <span className="bg-white px-6">or</span>
                             </div>
 
                             <InputText
@@ -133,4 +104,26 @@ export default function Signup() {
         </div>
     );
 }
+
 Signup.Layout = FullLayout;
+
+export async function getServerSideProps(context: any) {
+    const { req, locale } = context;
+    const session = await getSession({ req });
+
+    if (session) {
+        return {
+            redirect: { destination: '/' }
+        };
+    }
+
+    return {
+        props: {
+            providers: await providers(),
+            locale: locale,
+            messages: {
+                ...require(`../../messages/${locale}.json`)
+            }
+        }
+    };
+}

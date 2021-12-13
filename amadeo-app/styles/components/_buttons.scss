@@ -1,9 +1,9 @@
 .gradient-btn {
-  @apply basic-btn red-yellow-gradient font-bold text-sm text-white rounded-lg px-4 py-2.5
+  @apply basic-btn red-yellow-gradient font-bold text-sm text-white rounded-lg px-4 py-2.5;
 }
 
 .disabled-btn {
-  @apply basic-btn border border-gray-300 text-gray-300
+  @apply basic-btn border border-gray-300 text-gray-300;
 }
 
 .btn-big {
@@ -21,22 +21,5 @@
   }
 }
 .cancel {
-  @apply bg-gray-180 font-bold text-sm text-white rounded-lg px-4 py-2.5
-}
-
-.facebook-btn-example {
-  @apply py-2.5 text-sm mb-2 pl-10 rounded-lg flex items-center
-    bg-social-facebook font-bold text-white relative cursor-pointer;
-
-  span {
-    @apply pl-10 inline-block;
-  }
-
-  &:before {
-    content: "";
-    background-image: url("../../public/images/social/facebook-solid.svg");
-    width: 25px;
-    height: 25px;
-    @apply absolute top-1.5;
-  }
+  @apply bg-gray-180 font-bold text-sm text-white rounded-lg px-4 py-2.5;
 }

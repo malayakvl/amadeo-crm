@@ -1,28 +1,55 @@
 import { signIn } from 'next-auth/client';
+import Image from 'next/image';
 
 export default function ProviderBtns({ Providers, locale }: { Providers: any; locale: string }) {
     return (
-        <div className="flex flex-row gap-2">
+        <>
             {Object.values(Providers).map((provider: any) => {
-                if (provider.name != 'Credentials') {
+                const onClick = () =>
+                    signIn(provider.id, {
+                        callbackUrl: `${window.location.origin}${
+                            locale === 'fr' ? '' : `/${locale}`
+                        }/dashboard`
+                    });
+
+                if (provider.id === 'google') {
                     return (
                         <button
-                            key={provider.name}
-                            className={provider.name === 'Facebook' ? 'Facebook' : 'Google'}
-                            onClick={() =>
-                                signIn(provider.id, {
-                                    callbackUrl: `${window.location.origin}${
-                                        locale === 'fr' ? '' : `/${locale}`
-                                    }/dashboard`
-                                })
-                            }>
-                            {provider.name}
+                            key={provider.id}
+                            onClick={onClick}
+                            className="image-btn text-gray-450 border">
+                            <Image
+                                width={24}
+                                height={24}
+                                src="/images/social/google.svg"
+                                layout="fixed"
+                                alt=""
+                            />
+                            <div className="text-sm ml-2.5">Continue with Google</div>
                         </button>
                     );
-                } else {
-                    return;
                 }
+
+                if (provider.id === 'facebook') {
+                    return (
+                        <button
+                            key={provider.id}
+                            onClick={onClick}
+                            className="image-btn bg-social-facebook text-white">
+                            <Image
+                                width={24}
+                                height={24}
+                                src="/images/social/facebook-solid.svg"
+                                layout="fixed"
+                                alt=""
+                            />
+                            <div className="text-sm ml-2.5">Continue with Facebook</div>
+                        </button>
+                    );
+                }
+
+                return;
             })}
-        </div>
+        </>
     );
 }
