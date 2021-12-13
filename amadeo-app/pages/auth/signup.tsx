@@ -42,28 +42,17 @@ export default function Signup({ providers, locale }: { providers: any; locale: 
                             <div className="font-bold mb-2.5">
                                 How would you like to Sign up as? :
                             </div>
-                            <div className="flex mb-4">
-                                <Image
-                                    className="mr-2.5"
-                                    width={20}
-                                    height={20}
-                                    src="/images/option-applied.svg"
-                                    layout="fixed"
-                                    alt=""
-                                />
-                                <div className="text-blue-350 text-xs ml-2.5">Buyer</div>
-                            </div>
-                            <div className="flex">
-                                <Image
-                                    width={20}
-                                    height={20}
-                                    src="/images/option.svg"
-                                    layout="fixed"
-                                    alt=""
-                                />
 
-                                <div className="text-gray-180 text-xs ml-2.5">Merchant</div>
-                            </div>
+                            <label className="block mb-4 text-gray-180 text-xs">
+                                <input name="test" className="radio mr-2.5" type="radio" />
+                                <span>Buyer</span>
+                            </label>
+
+                            <label className="block text-gray-180 text-xs">
+                                <input name="test" className="radio mr-2.5" type="radio" />
+                                <span>Seller</span>
+                            </label>
+
                         </div>
                     </div>
                     <div className="flex">

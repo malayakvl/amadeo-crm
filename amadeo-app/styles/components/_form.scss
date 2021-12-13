@@ -2,7 +2,9 @@
   @apply bg-white w-full rounded-lg p-2.5 text-sm text-gray-350
     font-medium border-gray-180 border placeholder-gray-180;
 
-  &:active, &:focus, &:focus-visible {
+  &:active,
+  &:focus,
+  &:focus-visible {
     @apply bg-white w-full rounded-lg p-2.5 text-sm text-gray-350
       font-medium border-gray-180 border;
   }
@@ -11,7 +13,9 @@
   @apply bg-white w-full rounded-lg p-2.5 pl-9 text-sm text-gray-350
     font-medium border-gray-180 border placeholder-gray-180;
 
-  &:active, &:focus, &:focus-visible {
+  &:active,
+  &:focus,
+  &:focus-visible {
     @apply bg-white w-full rounded-lg p-2.5 pl-9 text-sm text-gray-350 font-medium border-gray-180 border;
   }
 }
@@ -24,6 +28,19 @@
   @apply absolute top-2.5 right-2;
 }
 
+.radio {
+  @apply text-white w-5 h-5 border-0;
+  background: url("../../public/images/option.svg");
+}
+
+.radio:checked {
+  background: url("../../public/images/option-applied.svg");
+}
+
+.radio:checked + span {
+  @apply text-blue-350;
+}
+
 .f-icon {
   background-repeat: no-repeat;
   background-position: center;
@@ -33,5 +50,5 @@
 }
 
 .error-el {
-  @apply flex items-center font-medium tracking-wide red-yellow-gradient-text text-xs mt-1 ml-1
+  @apply flex items-center font-medium tracking-wide red-yellow-gradient-text text-xs mt-1 ml-1;
 }
