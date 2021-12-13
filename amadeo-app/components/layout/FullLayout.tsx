@@ -6,7 +6,7 @@ export default function FullLayout({ children }: { children: any }) {
     return (
         <>
             <Header />
-            <div className="min-h-screen bg-gray-150 text-black dark:text-white">{children}</div>
+            <div className="min-h-[776px] bg-gray-150 text-black dark:text-white">{children}</div>
             <Footer />
         </>
     );
