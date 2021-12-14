@@ -8,14 +8,7 @@ export default function Footer() {
                 <div className="flex justify-between">
                     <div className="cursor-pointer">
                         <Link href={'/'}>
-                            <Image
-                                className=""
-                                src="/images/logo-white.svg"
-                                width={175}
-                                height={52}
-                                layout="fixed"
-                                alt=""
-                            />
+                            <a><Image src="/images/logo-white.svg" width={175} height={52} layout="fixed" /></a>
                         </Link>
                     </div>
                     <div className="flex">

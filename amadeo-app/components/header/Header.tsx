@@ -15,7 +15,7 @@ const Header: React.FC = () => {
             <nav className="bg-white flex items-center justify-between px-32 h-144">
                 <div className="relative -top-2 cursor-pointer">
                     <Link href={'/'}>
-                        <Image src="/images/logo.svg" width={175} height={52} alt="" />
+                        <a><Image src="/images/logo.svg" width={175} height={52} alt="" /></a>
                     </Link>
                 </div>
 
@@ -63,29 +63,29 @@ const Header: React.FC = () => {
                             </Link>
                         </>
                     ) : (
-                        <div className="hidden md:block">
-                            <div className="ml-4 flex items-center md:ml-6 md:mt-3">
-                                {/* Profile dropdown */}
-                                <Menu as="div" className="ml-5 relative -mt-2">
-                                    <div>
-                                        <Menu.Button
-                                            className="max-w-xs bg-gray-800 rounded-full flex
+                            <div className="hidden md:block">
+                                <div className="ml-4 flex items-center md:ml-6 md:mt-3">
+                                    {/* Profile dropdown */}
+                                    <Menu as="div" className="ml-5 relative -mt-2">
+                                        <div>
+                                            <Menu.Button
+                                                className="max-w-xs bg-gray-800 rounded-full flex
                                             items-center text-sm focus:outline-none focus:ring-2
                                             focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
-                                            <span className="sr-only">Open user menu</span>
-                                            <Image
-                                                src={userProfileImg}
-                                                width={35}
-                                                height={35}
-                                                className="rounded-full"
-                                                alt=""
-                                            />
-                                        </Menu.Button>
-                                    </div>
-                                </Menu>
+                                                <span className="sr-only">Open user menu</span>
+                                                <Image
+                                                    src={userProfileImg}
+                                                    width={35}
+                                                    height={35}
+                                                    className="rounded-full"
+                                                    alt=""
+                                                />
+                                            </Menu.Button>
+                                        </div>
+                                    </Menu>
+                                </div>
                             </div>
-                        </div>
-                    )}
+                        )}
                 </div>
             </nav>
         </header>
