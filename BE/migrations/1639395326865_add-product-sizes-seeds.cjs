@@ -3,7 +3,7 @@ exports.shorthands = undefined;
 exports.up = pgm => {
     pgm.sql(
         `
-        INSERT INTO data.product_sizes (id, name)
+        INSERT INTO data.product_sizes (id, name, code)
             VALUES
             (1, 'S', 'S'),
             (2, 'M', 'M'),

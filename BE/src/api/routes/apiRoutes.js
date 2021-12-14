@@ -4,6 +4,7 @@ import UserController from '../controllers/UserController.js';
 import PageController from '../controllers/PageController.js';
 import CountryController from '../controllers/CountryController.js';
 import NotificationController from '../controllers/NotificationController.js';
+import ProductController from '../controllers/ProductController.js';
 import userModel from '../models/User.js';
 
 const apiRoutes = express.Router();
@@ -51,6 +52,11 @@ apiRoutes.route('/address/fetch/:id').get(UserController.fetchAddress);
 apiRoutes.route('/fetch-notifications').get(NotificationController.fetchData);
 apiRoutes.route('/count-notice').get(NotificationController.fetchNew);
 apiRoutes.route('/new-notice').get(NotificationController.fetchLatest);
+
+apiRoutes.route('/product')
+    .post(ProductController.addProduct)
+    .get(ProductController.getProduct);
+apiRoutes.route('/products/fetch-colors-and-sizes').get(ProductController.fetchAdditional);
 
 apiRoutes.get('/*', defaultHandler);
 
