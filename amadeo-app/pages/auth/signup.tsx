@@ -82,7 +82,7 @@ export default function Signup({ providers, locale }: { providers: any; locale: 
                             />
 
                             <div className="text-xs font-medium mb-4">
-                                <input className="mr-2.5" type="checkbox" />
+                                <input className="text-green-250 w-5 h-5 border-2 rounded mr-2.5" type="checkbox" />
                                 <span>
                                     I have read and acept the{' '}
                                     <span className="text-orange-450">terms of use</span>
