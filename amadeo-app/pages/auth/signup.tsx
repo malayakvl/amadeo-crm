@@ -9,18 +9,21 @@ import { Field, Formik, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 
 export default function Signup({ providers, locale }: { providers: any; locale: string }) {
-    const t = useTranslations();
+    type FormData = { email: string, acceptTerms: boolean, type: "buyer" | "seller" }
 
+    const t = useTranslations();
     const validationSchema = Yup.object().shape({
         email: Yup.string().email(t('Must be a valid email')).required(t('Required field')),
         acceptTerms: Yup.bool().oneOf([true], 'Accept Terms is required'),
     });
-
-    const onSubmit = (values: { email: string, acceptTerms: boolean, type: string }) => {
-        signIn('credentials_registration', {
-            email: (values as any).email,
-            // callbackUrl: `${window.location.origin}${locale === 'fr' ? '' : `/${locale}`}/dashboard`
-        });
+    const onSubmit = (values: FormData) => {
+        signIn(
+            'credentials_registration',
+            {
+                ...values,
+                callbackUrl: `${window.location.origin}${locale === 'fr' ? '' : `/${locale}`}/dashboard`
+            }
+        );
     }
 
     return (
@@ -34,7 +37,7 @@ export default function Signup({ providers, locale }: { providers: any; locale: 
                     <form onSubmit={props.handleSubmit} className="rounded-lg border shadow-xl mt-10 flex w-[1000px] bg-white px-20 py-14">
                         <div className="font-bold mt-8 pr-12 w-2/4">
                             <div className="text-5xl line-height-105percent mb-9 w-48">
-                                Sing up 
+                                Sing up
                                 today!
                             </div>
 
