@@ -7,28 +7,9 @@ export default function ProviderBtns({ Providers, locale }: { Providers: any; lo
             {Object.values(Providers).map((provider: any) => {
                 const onClick = () =>
                     signIn(provider.id, {
-                        callbackUrl: `${window.location.origin}${
-                            locale === 'fr' ? '' : `/${locale}`
-                        }/dashboard`
+                        callbackUrl: `${window.location.origin}${locale === 'fr' ? '' : `/${locale}`
+                            }/dashboard`
                     });
-
-                if (provider.id === 'google') {
-                    return (
-                        <button
-                            key={provider.id}
-                            onClick={onClick}
-                            className="image-btn text-gray-450 border">
-                            <Image
-                                width={24}
-                                height={24}
-                                src="/images/social/google.svg"
-                                layout="fixed"
-                                alt=""
-                            />
-                            <div className="text-sm ml-2.5">Continue with Google</div>
-                        </button>
-                    );
-                }
 
                 if (provider.id === 'facebook') {
                     return (

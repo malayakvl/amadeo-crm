@@ -1,7 +1,6 @@
 import FullLayout from '../../components/layout/FullLayout';
 import { InputText } from '../../components/_form';
 import ProviderBtns from '../../components/auth/ProviderBtns';
-import Image from 'next/image';
 import React from 'react';
 import { providers, getSession } from 'next-auth/client';
 import Link from 'next/link';
