@@ -9,21 +9,12 @@ import { AddProduct } from '../../components/inventory';
 export default function Index({ session, locale }: { session: any; locale: string }) {
     if (!session) return <></>;
     const t = useTranslations();
-    const [subTitle, setSubTitle] = useState('');
     const user = useSelector(userSelector);
     const [activeTab, setActiveTab] = useState('products');
 
     const handleTabClick = (e: React.MouseEvent<HTMLElement>) => {
         const target = e.target as HTMLElement;
         setActiveTab(target.id);
-        switch (target.id) {
-            case 'products':
-                setSubTitle('');
-                break;
-            case 'add':
-                setSubTitle(t('Add'));
-                break;
-        }
     };
 
     return (
@@ -34,9 +25,7 @@ export default function Index({ session, locale }: { session: any; locale: strin
             </Head>
 
             <div className="page-title">
-                <h1>
-                    {t('Inventory')} <em /> <span>{subTitle}</span>
-                </h1>
+                <h1>{t('Inventory')}</h1>
             </div>
             <div className="block-white-8 mr-10">
                 <div className="block">

@@ -1,5 +1,5 @@
 import { handleActions } from 'redux-actions';
-import { fetchColorSizesAction } from './actions';
+import { fetchColorSizesAction, addUploadedFile, removeUploadedFile } from './actions';
 
 const initialState: State.Products = {
     colors: [],
@@ -7,7 +7,8 @@ const initialState: State.Products = {
     products: [],
     product: {} as Products.Product,
     loading: false,
-    isFetched: false
+    isFetched: false,
+    uploadedFiles: []
 };
 
 const ACTION_HANDLERS: any = {
@@ -26,10 +27,30 @@ const ACTION_HANDLERS: any = {
             loading: false,
             isFetched: true
         })
+    },
+    [addUploadedFile]: (
+        state: State.Products,
+        action: Type.ReduxAction<State.Products>
+    ): State.Products => {
+        return <Products.Root>{
+            ...state,
+            uploadedFiles: [...state.uploadedFiles, action.payload]
+        };
+    },
+    [removeUploadedFile]: (
+        state: State.Products,
+        action: Type.ReduxAction<State.Products>
+    ): State.Products => {
+        return <Products.Root>{
+            ...state,
+            uploadedFiles: state.uploadedFiles.filter(
+                (file) => file.lastModified !== (action.payload as any).lastModified
+            )
+        };
     }
 };
 
-export { fetchColorSizesAction };
+export { fetchColorSizesAction, addUploadedFile, removeUploadedFile };
 
 // ------------------------------------
 // Reducer

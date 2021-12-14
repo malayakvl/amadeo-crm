@@ -7,10 +7,14 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useDropzone } from 'react-dropzone';
 import { MultiSelect } from 'react-multi-select-component';
-import { fetchColorSizesAction } from '../../redux/products';
-import { productColorSelector, productSizesSelector } from '../../redux/products/selectors';
+import { fetchColorSizesAction, removeUploadedFile } from '../../redux/products';
+import {
+    productColorSelector,
+    productSizesSelector,
+    uploadedFilesSelector
+} from '../../redux/products/selectors';
 import { parseTranslation } from '../../lib/functions';
-import { updateProductAction } from '../../redux/products/actions';
+import { addUploadedFile, updateProductAction } from '../../redux/products/actions';
 
 function ProductForm({ productData, locale }: { productData: any; locale: string }) {
     const t = useTranslations();
@@ -19,18 +23,21 @@ function ProductForm({ productData, locale }: { productData: any; locale: string
     const sizes = useSelector(productSizesSelector);
     const [dropColors, setDropColors] = useState([]);
     const [dropSizes, setDropSizes] = useState([]);
+    const uploadedFiles = useSelector(uploadedFilesSelector);
 
     const [selectedColors, setSelectedColors] = useState([]);
     const [selectedSizes, setSelectedSizes] = useState([]);
 
     const { acceptedFiles, getRootProps, getInputProps } = useDropzone();
+    const removeFile = (file: File) => {
+        dispatch(removeUploadedFile(file));
+    };
 
-    const files = acceptedFiles.map((file: any) => (
-        <li key={file.path}>
-            <i className="file" />
-            {file.path} - <em>{file.size} bytes</em> <i className="close" />
-        </li>
-    ));
+    useEffect(() => {
+        acceptedFiles.forEach((file: File) => {
+            dispatch(addUploadedFile(file));
+        });
+    }, [acceptedFiles]);
 
     useEffect(() => {
         dispatch(fetchColorSizesAction());
@@ -72,8 +79,8 @@ function ProductForm({ productData, locale }: { productData: any; locale: string
                 });
                 formData.append('colors', JSON.stringify(selectedColors));
                 formData.append('sizes', JSON.stringify(selectedSizes));
-                if (files) {
-                    acceptedFiles.forEach((file: any) => {
+                if (uploadedFiles.length) {
+                    uploadedFiles.forEach((file: any) => {
                         formData.append('photos[]', file);
                     });
                 }
@@ -89,10 +96,32 @@ function ProductForm({ productData, locale }: { productData: any; locale: string
                                     <input {...getInputProps()} />
                                     <p>Drag and drop image file(s), or browse your computer.</p>
                                 </div>
-                                {files.length > 0 && (
+                                {uploadedFiles.length > 0 && (
                                     <aside>
                                         <h4>Uploaded Files</h4>
-                                        <ul>{files}</ul>
+                                        {/*<ul>{files}</ul>*/}
+                                        <ul>
+                                            {uploadedFiles.map((_file: File) => (
+                                                <li key={_file.lastModified}>
+                                                    <i className="file" />
+                                                    <img
+                                                        src={URL.createObjectURL(_file)}
+                                                        alt=""
+                                                        width="85"
+                                                        height="85"
+                                                    />
+                                                    <span>{_file.name}</span>{' '}
+                                                    <em>{_file.size} bytes</em>{' '}
+                                                    <i
+                                                        className="close"
+                                                        role="presentation"
+                                                        onClick={() => {
+                                                            removeFile(_file);
+                                                        }}
+                                                    />
+                                                </li>
+                                            ))}
+                                        </ul>
                                     </aside>
                                 )}
                             </section>

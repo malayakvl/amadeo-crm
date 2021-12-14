@@ -6,6 +6,7 @@ declare namespace Products {
         sizes: Size[];
         loading: boolean;
         isFetched: boolean;
+        uploadedFiles: File[];
     }
 
     interface Product {

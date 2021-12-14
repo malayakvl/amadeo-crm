@@ -134,27 +134,30 @@ input:checked + .toggle-bg {
       li {
         font-size: 10px;
         @apply border border-gray-180 border-dashed relative font-bold text-gray-350
-          pr-2.5 pl-6  py-1.5 rounded-lg mt-1.5 relative;
+          pr-2.5 pl-6  py-1.5 rounded-lg mt-1.5 relative inline-block ml-2;
 
         i.close {
           background-image: url("../../public/images/close.svg");
           background-repeat: no-repeat;
           width: 24px;
           height: 24px;
-          @apply absolute top-0.5 right-0.5;
+          @apply absolute top-0.5 right-0.5 cursor-pointer;
         }
         i.file {
-          background-image: url("../../public/images/drop-file.svg");
-          background-repeat: no-repeat;
+          //background-image: url("../../public/images/drop-file.svg");
+          //background-repeat: no-repeat;
           width: 24px;
           height: 24px;
           @apply absolute top-1.5 left-1.5;
         }
 
         em {
-          @apply font-normal text-gray-450 not-italic;
+          @apply font-normal text-gray-450 not-italic block;
         }
-
+        span {
+          text-overflow: ellipsis;
+          @apply max-w-[85px] overflow-hidden block whitespace-nowrap;
+        }
       }
     }
   }

@@ -44,3 +44,6 @@ export const updateProductAction: any = createAction(
                 });
         }
 );
+
+export const addUploadedFile: any = createAction('products/ADD_UPLOADED_FILE');
+export const removeUploadedFile: any = createAction('products/REMOVE_UPLOADED_FILE');

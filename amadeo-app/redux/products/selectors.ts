@@ -16,3 +16,7 @@ export const productSizesSelector = createSelector(
     rootSelector,
     (products: State.Products): Products.Size[] => products.sizes
 );
+export const uploadedFilesSelector = createSelector(
+    rootSelector,
+    (products: State.Products): File[] => products.uploadedFiles
+);
