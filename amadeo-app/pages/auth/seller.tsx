@@ -34,7 +34,7 @@ const InputText: React.FC<Props> = ({ label, type, name, register, errors }) => 
     );
 };
 
-function Customer({ providers, locale }: { providers: any; locale: string }) {
+function Seller({ providers, locale }: { providers: any; locale: string }) {
     const t = useTranslations();
     const router = useRouter();
     const [showAlert, setShowAlert] = useState(!!router.query.message);
@@ -227,9 +227,9 @@ function Customer({ providers, locale }: { providers: any; locale: string }) {
         </div>
     );
 }
-Customer.Layout = FullLayout;
+Seller.Layout = FullLayout;
 
-export default Customer;
+export default Seller;
 
 export async function getServerSideProps(context: any) {
     const { req, locale } = context;

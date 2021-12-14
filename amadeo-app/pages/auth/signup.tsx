@@ -1,97 +1,108 @@
 import FullLayout from '../../components/layout/FullLayout';
 import { InputText } from '../../components/_form';
+import { useTranslations } from 'next-intl';
 import ProviderBtns from '../../components/auth/ProviderBtns';
 import React from 'react';
-import { providers, getSession } from 'next-auth/client';
+import { providers, getSession, signIn } from 'next-auth/client';
 import Link from 'next/link';
+import { Field, Formik, ErrorMessage } from 'formik';
+import * as Yup from 'yup';
 
 export default function Signup({ providers, locale }: { providers: any; locale: string }) {
+    const t = useTranslations();
+
+    const validationSchema = Yup.object().shape({
+        email: Yup.string().email(t('Must be a valid email')).required(t('Required field')),
+        acceptTerms: Yup.bool().oneOf([true], 'Accept Terms is required'),
+    });
+
+    const onSubmit = (values: { email: string, acceptTerms: boolean, type: string }) => {
+        signIn('credentials_registration', {
+            email: (values as any).email,
+            // callbackUrl: `${window.location.origin}${locale === 'fr' ? '' : `/${locale}`}/dashboard`
+        });
+    }
+
     return (
         <div className="flex justify-center">
-            <div className="rounded-lg border shadow-xl mt-10 flex w-[1000px] bg-white px-20 py-14">
-                <div className="font-bold mt-8 pr-12 w-2/4">
-                    <div className="text-5xl line-height-105percent mb-9">
-                        Sing up
-                        <br />
-                        today!
-                    </div>
-
-                    <div className="mb-4 text-2xl line-height-105percent">
-                        Lorem ipsum dolor
-                        <br />
-                        sit amet, consectetur
-                        <br />
-                        adipiscing elit.
-                    </div>
-
-                    <div className="font-normal mb-10 text-blue-350">
-                        Lorem ipsum dolor sit amet,
-                        <br />
-                        consectetur adipiscing elit.
-                    </div>
-
-                    <Link href={'/auth/signin'}>
-                        <a className="font-bold text-orange-450">
-                            Already have an account? Sign in here!
-                        </a>
-                    </Link>
-                </div>
-
-                <div className="pl-12 border-l w-2/4">
-                    <div className="flex mb-14">
-                        <div className="w-16 leading-10 text-gray-200 font-bold text-5xl">1.</div>
-                        <div className="">
-                            <div className="font-bold mb-2.5">
-                                How would you like to Sign up as? :
+            <Formik
+                enableReinitialize
+                initialValues={{ email: '', acceptTerms: false, type: "buyer" }}
+                validationSchema={validationSchema}
+                onSubmit={onSubmit}>
+                {(props) => (
+                    <form onSubmit={props.handleSubmit} className="rounded-lg border shadow-xl mt-10 flex w-[1000px] bg-white px-20 py-14">
+                        <div className="font-bold mt-8 pr-12 w-2/4">
+                            <div className="text-5xl line-height-105percent mb-9 w-48">
+                                Sing up 
+                                today!
                             </div>
 
-                            <label className="block mb-4 text-gray-180 text-xs">
-                                <input name="test" className="radio mr-2.5" type="radio" />
-                                <span>Buyer</span>
-                            </label>
+                            <div className="mb-4 text-2xl line-height-105percent w-72">
+                                Lorem ipsum dolor
+                                sit amet, consectetur
+                                adipiscing elit.
+                            </div>
 
-                            <label className="block text-gray-180 text-xs">
-                                <input name="test" className="radio mr-2.5" type="radio" />
-                                <span>Seller</span>
-                            </label>
+                            <div className="font-normal mb-10 text-blue-350 w-60">
+                                Lorem ipsum dolor sit amet,
+                                consectetur adipiscing elit.
+                            </div>
 
+                            <Link href={'/auth/signin'}>
+                                <a className="font-bold text-orange-450">Already have an account? Sign in here!</a>
+                            </Link>
                         </div>
-                    </div>
-                    <div className="flex">
-                        <div className="w-16 leading-10 text-gray-200 font-bold text-5xl">2.</div>
-                        <div>
-                            <ProviderBtns Providers={providers} locale={locale} />
 
-                            <div
-                                style={{ lineHeight: '0.1em' }}
-                                className="text-center border-b my-5">
-                                <span className="bg-white px-6">or</span>
+                        <div className="pl-12 border-l w-2/4">
+                            <div className="flex mb-14">
+                                <div className="w-16 leading-10 text-gray-200 font-bold text-5xl">1.</div>
+                                <div>
+                                    <div className="font-bold mb-2.5">How would you like to Sign up as? :</div>
+                                    <label className="block mb-4 text-gray-180 text-xs">
+                                        <Field type="radio" className="radio mr-2.5" name="type" value="buyer" />
+                                        <span>Buyer</span>
+                                    </label>
+                                    <label className="block text-gray-180 text-xs">
+                                        <Field type="radio" className="radio mr-2.5" name="type" value="seller" />
+                                        <span>Seller</span>
+                                    </label>
+                                </div>
+                                <ErrorMessage name="type" component="div" className="error-el" />
                             </div>
+                            <div className="flex">
+                                <div className="w-16 leading-10 text-gray-200 font-bold text-5xl">2.</div>
+                                <div>
+                                    <ProviderBtns Providers={providers} locale={locale} />
 
-                            <InputText
-                                icon={'f-email'}
-                                style={null}
-                                label={null}
-                                name={'email'}
-                                placeholder={'Email'}
-                                props={{
-                                    values: { email: '' },
-                                    errors: { email: '' }
-                                }}
-                            />
+                                    <div
+                                        style={{ lineHeight: '0.1em' }}
+                                        className="text-center border-b my-5">
+                                        <span className="bg-white px-6">or</span>
+                                    </div>
 
-                            <div className="text-xs font-medium mb-4">
-                                <input className="text-green-250 w-5 h-5 border-2 rounded mr-2.5" type="checkbox" />
-                                <span>
-                                    I have read and acept the{' '}
-                                    <span className="text-orange-450">terms of use</span>
-                                </span>
+                                    <InputText
+                                        icon={'f-email'}
+                                        style={null}
+                                        label={null}
+                                        name={'email'}
+                                        placeholder={'Email'}
+                                        props={props}
+                                    />
+
+                                    <label className="block text-xs font-medium">
+                                        <Field name="acceptTerms" className="text-green-250 w-5 h-5 border-2 rounded mr-2.5" type="checkbox" />
+                                        <span>I have read and acept the <span className="text-orange-450">terms of use</span></span>
+                                    </label>
+                                    <ErrorMessage name="acceptTerms" component="div" className="error-el" />
+
+                                    <button type="submit" className="gradient-btn  mt-4">Sign up</button>
+                                </div>
                             </div>
-                            <div className="gradient-btn">Sign up</div>
                         </div>
-                    </div>
-                </div>
-            </div>
+                    </form>
+                )}
+            </Formik>
         </div>
     );
 }
