@@ -9,72 +9,91 @@ import { Field, Formik, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 
 export default function Signup({ providers, locale }: { providers: any; locale: string }) {
-    type FormData = { email: string, acceptTerms: boolean, type: "buyer" | "seller" }
+    type FormData = {
+        email: string;
+        acceptTerms: boolean;
+        type: 'buyer' | 'seller';
+    };
 
     const t = useTranslations();
     const validationSchema = Yup.object().shape({
         email: Yup.string().email(t('Must be a valid email')).required(t('Required field')),
-        acceptTerms: Yup.bool().oneOf([true], 'Accept Terms is required'),
+        acceptTerms: Yup.bool().oneOf([true], 'Accept Terms is required')
     });
     const onSubmit = (values: FormData) => {
-        signIn(
-            'credentials_registration',
-            {
-                ...values,
-                callbackUrl: `${window.location.origin}${locale === 'fr' ? '' : `/${locale}`}/dashboard`
-            }
-        );
-    }
+        signIn('credentials_registration', {
+            ...values,
+            callbackUrl: `${window.location.origin}${locale === 'fr' ? '' : `/${locale}`}/dashboard`
+        });
+    };
 
     return (
         <div className="flex justify-center">
             <Formik
                 enableReinitialize
-                initialValues={{ email: '', acceptTerms: false, type: "buyer" }}
+                initialValues={{ email: '', acceptTerms: false, type: 'buyer' }}
                 validationSchema={validationSchema}
                 onSubmit={onSubmit}>
                 {(props) => (
-                    <form onSubmit={props.handleSubmit} className="rounded-lg border shadow-xl mt-10 flex w-[1000px] bg-white px-20 py-14">
+                    <form
+                        onSubmit={props.handleSubmit}
+                        className="rounded-lg border shadow-xl mt-10 flex w-[1000px] bg-white px-20 py-14">
                         <div className="font-bold mt-8 pr-12 w-2/4">
                             <div className="text-5xl line-height-105percent mb-9 w-48">
-                                Sing up
-                                today!
+                                Sing up today!
                             </div>
 
                             <div className="mb-4 text-2xl line-height-105percent w-72">
-                                Lorem ipsum dolor
-                                sit amet, consectetur
-                                adipiscing elit.
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                             </div>
 
                             <div className="font-normal mb-10 text-blue-350 w-60">
-                                Lorem ipsum dolor sit amet,
-                                consectetur adipiscing elit.
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                             </div>
 
                             <Link href={'/auth/signin'}>
-                                <a className="font-bold text-orange-450">Already have an account? Sign in here!</a>
+                                <a className="font-bold text-orange-450">
+                                    Already have an account? Sign in here!
+                                </a>
                             </Link>
                         </div>
 
                         <div className="pl-12 border-l w-2/4">
                             <div className="flex mb-14">
-                                <div className="w-16 leading-10 text-gray-200 font-bold text-5xl">1.</div>
+                                <div className="w-16 leading-10 text-gray-200 font-bold text-5xl">
+                                    1.
+                                </div>
                                 <div>
-                                    <div className="font-bold mb-2.5">How would you like to Sign up as? :</div>
+                                    <div className="font-bold mb-2.5">
+                                        How would you like to Sign up as? :
+                                    </div>
                                     <label className="block mb-4 text-gray-180 text-xs">
-                                        <Field type="radio" className="radio mr-2.5" name="type" value="buyer" />
+                                        <Field
+                                            type="radio"
+                                            className="radio mr-2.5"
+                                            name="type"
+                                            value="buyer"
+                                        />
+
                                         <span>Buyer</span>
                                     </label>
                                     <label className="block text-gray-180 text-xs">
-                                        <Field type="radio" className="radio mr-2.5" name="type" value="seller" />
+                                        <Field
+                                            type="radio"
+                                            className="radio mr-2.5"
+                                            name="type"
+                                            value="seller"
+                                        />
+
                                         <span>Seller</span>
                                     </label>
                                 </div>
                                 <ErrorMessage name="type" component="div" className="error-el" />
                             </div>
                             <div className="flex">
-                                <div className="w-16 leading-10 text-gray-200 font-bold text-5xl">2.</div>
+                                <div className="w-16 leading-10 text-gray-200 font-bold text-5xl">
+                                    2.
+                                </div>
                                 <div>
                                     <ProviderBtns Providers={providers} locale={locale} />
 
@@ -94,12 +113,25 @@ export default function Signup({ providers, locale }: { providers: any; locale: 
                                     />
 
                                     <label className="block text-xs font-medium">
-                                        <Field name="acceptTerms" className="text-green-250 w-5 h-5 border-2 rounded mr-2.5" type="checkbox" />
-                                        <span>I have read and acept the <span className="text-orange-450">terms of use</span></span>
+                                        <Field
+                                            name="acceptTerms"
+                                            className="text-green-250 w-5 h-5 border-2 rounded mr-2.5"
+                                            type="checkbox"
+                                        />
+                                        <span>
+                                            I have read and acept the
+                                            <span className="text-orange-450">terms of use</span>
+                                        </span>
                                     </label>
-                                    <ErrorMessage name="acceptTerms" component="div" className="error-el" />
+                                    <ErrorMessage
+                                        name="acceptTerms"
+                                        component="div"
+                                        className="error-el"
+                                    />
 
-                                    <button type="submit" className="gradient-btn w-full mt-4">Sign up</button>
+                                    <button type="submit" className="gradient-btn w-full mt-4">
+                                        Sign up
+                                    </button>
                                 </div>
                             </div>
                         </div>
