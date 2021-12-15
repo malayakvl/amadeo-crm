@@ -7,8 +7,9 @@ export default function ProviderBtns({ Providers, locale }: { Providers: any; lo
             {Object.values(Providers).map((provider: any) => {
                 const onClick = () =>
                     signIn(provider.id, {
-                        callbackUrl: `${window.location.origin}${locale === 'fr' ? '' : `/${locale}`
-                            }/dashboard`
+                        callbackUrl: `${window.location.origin}${
+                            locale === 'fr' ? '' : `/${locale}`
+                        }/dashboard`
                     });
 
                 if (provider.id === 'facebook') {
