@@ -12,7 +12,7 @@ export default function Signup({ providers, locale }: { providers: any; locale: 
     type FormData = {
         email: string;
         acceptTerms: boolean;
-        type: 'buyer' | 'seller';
+        role_id: '1' | '2';
     };
 
     const t = useTranslations();
@@ -31,7 +31,7 @@ export default function Signup({ providers, locale }: { providers: any; locale: 
         <div className="flex justify-center">
             <Formik
                 enableReinitialize
-                initialValues={{ email: '', acceptTerms: false, type: 'buyer' }}
+                initialValues={{ email: '', acceptTerms: false, role_id: '1' }}
                 validationSchema={validationSchema}
                 onSubmit={onSubmit}>
                 {(props) => (
@@ -72,8 +72,8 @@ export default function Signup({ providers, locale }: { providers: any; locale: 
                                             id="buyer-radio"
                                             type="radio"
                                             className="radio mr-2.5"
-                                            name="type"
-                                            value="buyer"
+                                            name="role_id"
+                                            value="1"
                                         />
                                         <label htmlFor="buyer-radio">Buyer</label>
                                     </div>
@@ -82,8 +82,8 @@ export default function Signup({ providers, locale }: { providers: any; locale: 
                                             id="seller-radio"
                                             type="radio"
                                             className="radio mr-2.5"
-                                            name="type"
-                                            value="seller"
+                                            name="role_id"
+                                            value="2"
                                         />
                                         <label htmlFor="seller-radio">Seller</label>
                                     </div>
@@ -111,18 +111,17 @@ export default function Signup({ providers, locale }: { providers: any; locale: 
                                         props={props}
                                     />
 
-                                    <label
-                                        htmlFor="acceptTerms"
-                                        className="block text-xs font-medium">
-                                        I have read and acept the{' '}
-                                        <span className="text-orange-450">terms of use</span>
-                                    </label>
                                     <Field
                                         id="acceptTerms"
                                         name="acceptTerms"
                                         className="text-green-250 w-5 h-5 border-2 rounded mr-2.5"
                                         type="checkbox"
                                     />
+
+                                    <label htmlFor="acceptTerms" className="text-xs font-medium">
+                                        I have read and acept the{' '}
+                                        <span className="text-orange-450">terms of use</span>
+                                    </label>
 
                                     <ErrorMessage
                                         name="acceptTerms"

@@ -58,24 +58,12 @@ export default NextAuth({
         }),
         CredentialsProvider({
             id: 'credentials_registration',
-            async authorize(credentials) {
-                const _user = JSON.parse(credentials.user);
+            async authorize(credentials) {               
                 const res = await fetch(`${baseUrl}/register`, {
                     method: 'POST',
-                    body: credentials.user,
+                    body: JSON.stringify(credentials),
                     headers: { 'Content-Type': 'application/json' }
                 });
-                const user = await res.json();
-
-                if (res.ok && user) {
-                    return user.user;
-                }
-                if (_user.role_id === '1') {
-                    throw `/auth/buyer?message=${user.error}`;
-                } else {
-                    throw `/auth/customer?message=${user.error}`;
-                }
-                // Return null if user data could not be retrieved
             }
         })
     ],
