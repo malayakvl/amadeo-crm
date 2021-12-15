@@ -7,6 +7,9 @@ declare namespace Products {
         loading: boolean;
         isFetched: boolean;
         uploadedFiles: File[];
+        checkedIds: number[];
+        count: number;
+        items: ProductItem[];
     }
 
     interface Product {
@@ -33,5 +36,19 @@ declare namespace Products {
         id: number | null;
         name: string | null;
         translations: any | null;
+    }
+
+    interface ProductItem {
+        id: number;
+        name: string;
+        photos: any;
+        description: string;
+        price: number;
+        quantity: number;
+        publish: boolean;
+        first_name: string | null;
+        last_name: string | null;
+        created_at: any;
+        updated_at: any;
     }
 }

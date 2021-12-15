@@ -2,9 +2,11 @@ declare namespace Layouts {
     interface Root {
         pagination: {
             notifications: Pagination;
+            products: Pagination;
         };
         isSidebarOpen: boolean;
         toasts: Toast[];
+        checkedIds: CheckedIds[];
     }
 
     interface Pagination {
@@ -14,6 +16,10 @@ declare namespace Layouts {
         column: string;
         query: string;
         meta?: Meta;
+    }
+    interface CheckedIds {
+        id: number;
+        checked: boolean;
     }
 
     // interface Filters {

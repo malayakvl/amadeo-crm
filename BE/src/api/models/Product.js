@@ -78,6 +78,48 @@ class Product {
         }
     }
 
+    async getAll (page, perPage = 20, userId, isRead = false, reqOffset = null) {
+        const client = await pool.connect();
+        try {
+            const _total = await client.query(`SELECT * FROM common__tools._select_total_from_table_by_where('data', 'products', 'id', 'user_id=''${userId}'' ');`);
+            const size = _total.rows[0].total;
+            let offset;
+            if (reqOffset) {
+                offset = reqOffset;
+            } else {
+                offset = (Number(page) - 1) * Number(perPage);
+            }
+            const res = await client.query(`SELECT * FROM data.get_all_products(${perPage}, ${offset}, 'user_id=''${userId}'' ')`);
+            const products = res.rows.length > 0 ? res.rows : [];
+            const error = null;
+
+            return {
+                products,
+                size,
+                error
+            };
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error (Notifications getAll):',
+                    { message: e.message }
+                );
+            }
+            const products = null;
+            const error = {
+                code: 500,
+                message: 'Error get list of users'
+            };
+            return {
+                products,
+                error
+            };
+        } finally {
+            client.release();
+        }
+    }
+
     async addColor (productId, colorId) {
         const SQL = `INSERT INTO data.product2color (product_id, color_id) VALUES (${productId}, ${colorId})`;
         const client = await pool.connect();

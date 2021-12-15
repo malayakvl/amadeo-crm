@@ -77,6 +77,7 @@
   "Personal Information": "Personal Information",
   "Addressess": "Addressess",
   "Actions": "Actions",
+  "Action": "Action",
   "Save": "Save",
   "Data update successful": "Data update successful",
   "Data create successful": "Data create successful",
@@ -114,5 +115,8 @@
   "Size": "Size",
   "Quantity": "Quantity",
   "Publish": "Publish",
-  "Product has been created": "Product has been created"
+  "Product has been created": "Product has been created",
+  "Photo": "Photo",
+  "Options": "Options",
+  "Reference | Name | Description": "Reference | Name | Description"
 }

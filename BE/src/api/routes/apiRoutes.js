@@ -57,6 +57,7 @@ apiRoutes.route('/product')
     .post(ProductController.addProduct)
     .get(ProductController.getProduct);
 apiRoutes.route('/products/fetch-colors-and-sizes').get(ProductController.fetchAdditional);
+apiRoutes.route('/fetch-products').get(ProductController.fetchData);
 
 apiRoutes.get('/*', defaultHandler);
 

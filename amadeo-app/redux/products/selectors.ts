@@ -20,3 +20,11 @@ export const uploadedFilesSelector = createSelector(
     rootSelector,
     (products: State.Products): File[] => products.uploadedFiles
 );
+export const paginatedProductsSelector = createSelector(
+    rootSelector,
+    (products: State.Products): any => products.items
+);
+export const productsCountSelector = createSelector(
+    rootSelector,
+    (products: State.Products): number => products.count
+);

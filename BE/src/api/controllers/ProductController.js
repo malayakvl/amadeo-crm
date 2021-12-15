@@ -59,6 +59,21 @@ class ProductController {
         });
     }
 
+    async fetchData (req, res) {
+        const { limit, offset } = req.query;
+
+        if (!req.user) {
+            return res.status(402).json('Something wend wrong');
+        }
+
+        const data = await productModel.getAll(1, limit, req.user.id, false, offset);
+        if (!data.error) {
+            return res.status(200).json({ items: data.products, count: data.size });
+        } else {
+            return res.status(402).json({ error: 'Something wend wrong' });
+        }
+    }
+
     async getProduct (req, res) {
 
     }

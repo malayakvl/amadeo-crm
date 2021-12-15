@@ -4,7 +4,7 @@ exports.shorthands = undefined;
 
 exports.up = pgm => {
     pgm.sql(`CREATE TABLE data.products (
-            id integer GENERATED ALWAYS AS IDENTITY PRIMARY KEY UNIQUE,
+            id integer GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
             name character varying(255),
             price double precision,
             description text,
@@ -13,7 +13,8 @@ exports.up = pgm => {
             photos text[],
             publish boolean DEFAULT true,
             created_at timestamp without time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
-            updated_at timestamp without time zone NOT NULL DEFAULT CURRENT_TIMESTAMP
+            updated_at timestamp without time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            user_id integer REFERENCES data.users(id) ON DELETE CASCADE ON UPDATE RESTRICT
         );
         CREATE TABLE IF NOT EXISTS data.product2color (
             product_id integer REFERENCES data.products ON DELETE RESTRICT,
