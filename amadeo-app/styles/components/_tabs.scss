@@ -1,20 +1,23 @@
 .float-tabs {
-  @apply flex flex-col sm:flex-row border border-t-0 border-l-0 border-r-0;
+  @apply flex flex-col sm:flex-row;
 
   .tabs {
-    @apply text-sm font-bold text-blue-350 mr-4 pb-4;
-  }
-  .tabs.active {
-    //border-bottom:solid 3px;
-    @apply text-gray-350 font-bold relative;
+    @apply text-base font-medium text-blue-350 pr-2;
 
     &:after {
-      content: " ";
-      height: 3px;
-      @apply red-yellow-gradient w-full block absolute -bottom-0.5;
+      content: " | ";
+      @apply text-base font-normal text-blue-350;
     }
+    &:last-child {
+      &:after {
+        content: '';
+      }
+    }
+  }
+  .tabs.active {
+    @apply text-base text-gray-350 font-bold;
   }
 }
 .tabs-content {
-  @apply flex flex-col sm:flex-row;
+  @apply flex flex-col sm:flex-row border mt-4 border-b-0 border-l-0 border-r-0;
 }

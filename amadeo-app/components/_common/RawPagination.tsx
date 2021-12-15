@@ -1,5 +1,6 @@
 import React, { memo } from 'react';
 import ReactPaginate from 'react-paginate';
+// import { useLocale } from 'hooks';
 
 interface Props {
     forcePage: number;
