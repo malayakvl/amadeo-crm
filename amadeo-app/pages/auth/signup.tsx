@@ -99,7 +99,7 @@ export default function Signup({ providers, locale }: { providers: any; locale: 
                                     </label>
                                     <ErrorMessage name="acceptTerms" component="div" className="error-el" />
 
-                                    <button type="submit" className="gradient-btn  mt-4">Sign up</button>
+                                    <button type="submit" className="gradient-btn w-full mt-4">Sign up</button>
                                 </div>
                             </div>
                         </div>
