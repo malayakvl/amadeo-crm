@@ -67,28 +67,27 @@ export default function Signup({ providers, locale }: { providers: any; locale: 
                                     <div className="font-bold mb-2.5">
                                         How would you like to Sign up as? :
                                     </div>
-                                    <label className="block mb-4 text-gray-180 text-xs">
+                                    <div className="text-gray-180 text-xs mb-4">
                                         <Field
+                                            id="buyer-radio"
                                             type="radio"
                                             className="radio mr-2.5"
                                             name="type"
                                             value="buyer"
                                         />
-
-                                        <span>Buyer</span>
-                                    </label>
-                                    <label className="block text-gray-180 text-xs">
+                                        <label htmlFor="buyer-radio">Buyer</label>
+                                    </div>
+                                    <div className="text-gray-180 text-xs">
                                         <Field
+                                            id="seller-radio"
                                             type="radio"
                                             className="radio mr-2.5"
                                             name="type"
                                             value="seller"
                                         />
-
-                                        <span>Seller</span>
-                                    </label>
+                                        <label htmlFor="seller-radio">Seller</label>
+                                    </div>
                                 </div>
-                                <ErrorMessage name="type" component="div" className="error-el" />
                             </div>
                             <div className="flex">
                                 <div className="w-16 leading-10 text-gray-200 font-bold text-5xl">
@@ -112,17 +111,19 @@ export default function Signup({ providers, locale }: { providers: any; locale: 
                                         props={props}
                                     />
 
-                                    <label className="block text-xs font-medium">
-                                        <Field
-                                            name="acceptTerms"
-                                            className="text-green-250 w-5 h-5 border-2 rounded mr-2.5"
-                                            type="checkbox"
-                                        />
-                                        <span>
-                                            I have read and acept the
-                                            <span className="text-orange-450">terms of use</span>
-                                        </span>
+                                    <label
+                                        htmlFor="acceptTerms"
+                                        className="block text-xs font-medium">
+                                        I have read and acept the{' '}
+                                        <span className="text-orange-450">terms of use</span>
                                     </label>
+                                    <Field
+                                        id="acceptTerms"
+                                        name="acceptTerms"
+                                        className="text-green-250 w-5 h-5 border-2 rounded mr-2.5"
+                                        type="checkbox"
+                                    />
+
                                     <ErrorMessage
                                         name="acceptTerms"
                                         component="div"
