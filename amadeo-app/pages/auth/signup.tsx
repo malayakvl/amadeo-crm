@@ -40,7 +40,7 @@ export default function Signup({ providers, locale }: { providers: any; locale: 
     };
 
     return (
-        <div className="flex justify-center">
+        <div className="flex justify-center h-[580px]">
             <Formik
                 enableReinitialize
                 initialValues={{ email: '', acceptTerms: false, role_id: '1' }}
@@ -105,7 +105,7 @@ export default function Signup({ providers, locale }: { providers: any; locale: 
                                 <div className="w-16 leading-10 text-gray-200 font-bold text-5xl">
                                     2.
                                 </div>
-                                <div>
+                                <div className="flex flex-col">
                                     <ProviderBtns Providers={providers} locale={locale} />
 
                                     <div
@@ -123,17 +123,18 @@ export default function Signup({ providers, locale }: { providers: any; locale: 
                                         props={props}
                                     />
 
-                                    <Field
-                                        id="acceptTerms"
-                                        name="acceptTerms"
-                                        className="text-green-250 w-5 h-5 border-2 rounded mr-2.5"
-                                        type="checkbox"
-                                    />
-
-                                    <label htmlFor="acceptTerms" className="text-xs font-medium">
-                                        I have read and acept the{' '}
-                                        <span className="text-orange-450">terms of use</span>
-                                    </label>
+                                    <div>
+                                        <Field
+                                            id="acceptTerms"
+                                            name="acceptTerms"
+                                            className="text-green-250 w-5 h-5 border-2 rounded mr-2.5"
+                                            type="checkbox"
+                                        />
+                                        <label htmlFor="acceptTerms" className="text-xs font-medium">
+                                            I have read and acept the{' '}
+                                            <span className="text-orange-450">terms of use</span>
+                                        </label>
+                                    </div>
 
                                     <ErrorMessage
                                         name="acceptTerms"
