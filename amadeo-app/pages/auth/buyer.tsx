@@ -7,6 +7,10 @@ import { providers, getSession, signIn } from 'next-auth/client';
 import { useTranslations } from 'next-intl';
 import ProviderBtns from '../../components/auth/ProviderBtns';
 import FullLayout from '../../components/layout/FullLayout';
+import getConfig from 'next/config';
+
+const { publicRuntimeConfig } = getConfig();
+const baseUrl = `${publicRuntimeConfig.apiUrl}/auth`;
 
 interface Props {
     label: string | 'text';
@@ -62,6 +66,10 @@ function Buyer({ providers, locale }: { providers: any; locale: string }) {
             callbackUrl: `${window.location.origin}${locale === 'fr' ? '' : `/${locale}`}/dashboard`
         });
     };
+
+    return (
+        <div>Hello</div>
+    )
 
     return (
         <div className="flex justify-center min-h-screen">
@@ -168,10 +176,12 @@ Buyer.Layout = FullLayout;
 export default Buyer;
 
 export async function getServerSideProps(context: any) {
-    const { req, locale } = context;
-    const session = await getSession({ req });
+    const { hash } = context.query;
+    const res = await fetch(`${baseUrl}/is-invitation-active?hash=${hash}`);
+    const json = await res.json();
 
-    if (session) {
+
+    if (!json.active) {
         return {
             redirect: { destination: '/' }
         };
@@ -179,11 +189,6 @@ export async function getServerSideProps(context: any) {
 
     return {
         props: {
-            providers: await providers(),
-            locale: locale,
-            messages: {
-                ...require(`../../messages/${locale}.json`)
-            }
         }
     };
 }

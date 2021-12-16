@@ -9,6 +9,9 @@ import { Field, Formik, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import getConfig from 'next/config';
 
+const { publicRuntimeConfig } = getConfig();
+const baseUrl = `${publicRuntimeConfig.apiUrl}/auth`;
+
 export default function Signup({ providers, locale }: { providers: any; locale: string }) {
     type FormData = {
         email: string;
@@ -16,8 +19,6 @@ export default function Signup({ providers, locale }: { providers: any; locale: 
         role_id: '1' | '2';
     };
 
-    const { publicRuntimeConfig } = getConfig();
-    const baseUrl = `${publicRuntimeConfig.apiUrl}/auth`;
     const t = useTranslations();
     const validationSchema = Yup.object().shape({
         email: Yup.string().email(t('Must be a valid email')).required(t('Required field')),

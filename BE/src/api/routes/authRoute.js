@@ -14,6 +14,7 @@ authRoute.post('/register', authController.authRegister);
 authRoute.post('/invite', authController.authInvite);
 authRoute.post('/provider', authController.authProvider);
 authRoute.post('/restorePassword', authController.restorePassword);
+authRoute.get('/is-invitation-active', authController.isInvitationActive);
 authRoute.get('/activate-hash/:hash', authController.activateHash);
 
 export default authRoute;

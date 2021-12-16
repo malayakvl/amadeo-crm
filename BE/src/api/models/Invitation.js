@@ -49,7 +49,7 @@ class Invitation {
     async findByEmail(email) {
         const client = await pool.connect();
         try {
-            const res = await client.query(`SELECT * FROM data.invitations WHERE email = '${email.toLowerCase()}'`);
+            const res = await client.query(`SELECT * FROM data.invitations WHERE email = '${email.toLowerCase()}';`);
             if (res.rows.length) {
                 return res.rows[0];
                 
@@ -74,6 +74,35 @@ class Invitation {
         }
 
     }
+
+    async findByHash(hash) {
+        const client = await pool.connect();
+        try {
+            const res = await client.query(`SELECT * FROM data.invitations WHERE hash = '${hash}';`);
+            if (res.rows.length) {
+                return res.rows[0];
+                
+            } else {
+                return null;
+
+            }
+            
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error:',
+                    { message: e.message }
+                );
+            }
+
+            throw new Error(e);
+
+        } finally {
+            client.release();
+        }
+
+    } 
 
 }
 

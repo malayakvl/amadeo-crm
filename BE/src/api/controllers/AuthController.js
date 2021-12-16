@@ -94,7 +94,7 @@ class AuthController {
         }
 
         invitation = await invitationModel.create(data);
-        
+
         sendLink(basicLink + invitation.hash)
 
         return res.status(200).json({ status: 'success' });
@@ -134,6 +134,19 @@ class AuthController {
         } else {
             res.status(402).json({ user: null, error: 'No user or token expired' });
         }
+    }
+
+    async isInvitationActive(req, res) {
+        let hash = await invitationModel.findByHash(req.query.hash)
+
+        if (hash && hash.active) {
+            return res.status(200).json({
+                active: hash.active
+
+            })
+        }
+
+        return res.status(404).json({})
     }
 }
 
