@@ -19,19 +19,7 @@ export const isSidebarOpenSelector = createSelector(
     (layouts: State.Layouts): boolean => layouts.isSidebarOpen
 );
 
-export const checkedIdsSelector = createSelector(
-    rootSelector,
-    (layouts: State.Layouts): Layouts.CheckedIds[] => layouts.checkedIds
-);
-
 export const toastsSelector = createSelector(
     rootSelector,
     (layouts: State.Layouts): Layouts.Toast[] => layouts.toasts
 );
-
-export const rowIdChecked = (id: number) =>
-    createSelector(
-        rootSelector,
-        (layouts: State.Layouts): boolean =>
-            layouts.checkedIds.find((data: any) => data.id === id)?.checked || false
-    );

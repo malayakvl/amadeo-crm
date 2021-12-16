@@ -20,7 +20,7 @@ const ACTION_HANDLERS: any = {
         next: (
             state: State.Notifications,
             action: Type.ReduxAction<Pick<State.Addresses, 'addresses'>>
-        ): State.Addresses => ({
+        ): State.Notifications => ({
             ...state,
             ...action.payload,
             loading: false,
@@ -36,13 +36,13 @@ const ACTION_HANDLERS: any = {
         next: (
             state: State.Notifications,
             action: Type.ReduxAction<Pick<State.Addresses, 'address'>>
-        ): State.Addresses => ({
+        ): State.Notifications => ({
             ...state,
             ...action.payload,
             loading: false,
             isFetched: true
         }),
-        throw: (state: State.Addresses): State.Addresses => ({
+        throw: (state: State.Notifications): State.Addresses => ({
             ...state,
             loading: false,
             isFetched: true
@@ -55,6 +55,18 @@ const ACTION_HANDLERS: any = {
         ...state,
         address: action.payload
     })
+    // [setCrudStatusAction]: {
+    //     next: (state: State.Addresses, action: Action<any>): State.Addresses => ({
+    //         ...state,
+    //         crudStatus: action.payload
+    //     })
+    // },
+    // [deleteAddressAction]: {
+    //     next: (state: State.Addresses, action: Action<any>): State.Addresses => ({
+    //         ...state,
+    //         crudStatus: action.payload
+    //     })
+    // }
 };
 
 export {

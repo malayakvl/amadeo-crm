@@ -8,11 +8,4 @@ declare namespace Type {
     interface Hash<T> {
         [key: string]: T;
     }
-
-    interface DataTableHeader {
-        sortKey?: string;
-        titleKey: string;
-        className?: string;
-        subTitles?: DataTableHeader[];
-    }
 }
