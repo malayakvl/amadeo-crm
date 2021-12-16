@@ -3,10 +3,11 @@ import { InputText } from '../../components/_form';
 import { useTranslations } from 'next-intl';
 import ProviderBtns from '../../components/auth/ProviderBtns';
 import React from 'react';
-import { providers, getSession, signIn } from 'next-auth/client';
+import { providers, getSession } from 'next-auth/client';
 import Link from 'next/link';
 import { Field, Formik, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
+import getConfig from 'next/config';
 
 export default function Signup({ providers, locale }: { providers: any; locale: string }) {
     type FormData = {
@@ -15,15 +16,26 @@ export default function Signup({ providers, locale }: { providers: any; locale: 
         role_id: '1' | '2';
     };
 
+    const { publicRuntimeConfig } = getConfig();
+    const baseUrl = `${publicRuntimeConfig.apiUrl}/auth`;
     const t = useTranslations();
     const validationSchema = Yup.object().shape({
         email: Yup.string().email(t('Must be a valid email')).required(t('Required field')),
         acceptTerms: Yup.bool().oneOf([true], 'Accept Terms is required')
     });
-    const onSubmit = (values: FormData) => {
-        signIn('credentials_invite', {
-            ...values,
-            callbackUrl: `${window.location.origin}${locale === 'fr' ? '' : `/${locale}`}/dashboard`
+    const onSubmit = (values: FormData, actions: any) => {
+        fetch(`${baseUrl}/invite`, {
+            method: 'POST',
+            body: JSON.stringify(values),
+            headers: { 'Content-Type': 'application/json' }
+        }).then(r => {
+            if (!r.ok) {
+                alert('Error');
+
+            }
+
+            alert('Check your email box and follow found instructions there');
+            actions.resetForm()
         });
     };
 
