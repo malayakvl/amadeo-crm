@@ -3,7 +3,7 @@
 exports.shorthands = undefined;
 
 exports.up = pgm => {
-    pgm.sql(`CREATE TABLE data.products (
+    pgm.sql(`CREATE TABLE IF NOT EXISTS data.products (
             id integer GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
             name character varying(255),
             price double precision,

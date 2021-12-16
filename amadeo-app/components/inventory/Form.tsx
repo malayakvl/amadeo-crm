@@ -16,6 +16,73 @@ import {
 import { parseTranslation } from '../../lib/functions';
 import { addUploadedFile, updateProductAction } from '../../redux/products/actions';
 
+const RenderPropsTable: React.FC<any> = ({ colors, sizes, props }) => {
+    const _colors: any[] = [];
+    const _sizes: any[] = [];
+    colors.forEach((_color: any) => {
+        _colors.push(_color.label);
+    });
+    sizes.forEach((_size: any) => {
+        _sizes.push(_size.label);
+    });
+    const attributes = {
+        color: _colors.length > 0 ? _colors : ['none'],
+        size: _sizes.length > 0 ? _sizes : ['none']
+    };
+    let attrs = [];
+    for (const [attr, values] of Object.entries(attributes)) {
+        attrs.push(values.map((v: any) => ({ [attr]: v })));
+    }
+
+    attrs = attrs.reduce((a, b) => a.flatMap((d: any) => b.map((e: any) => ({ ...d, ...e }))));
+    return (
+        <>
+            {(_colors.length > 0 || _sizes.length > 0) && (
+                <table className="min-w-full float-table mt-3 mb-3">
+                    <thead>
+                        <tr>
+                            <th>Variant</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {attrs.map((attr: any, index) => (
+                            <tr key={index}>
+                                <td>
+                                    {attr.color !== 'none' ? attr.color : ''}{' '}
+                                    {attr.color !== 'none' && attr.size !== 'none' ? ' / ' : ''}
+                                    {attr.size !== 'none' ? attr.size : ''}
+                                </td>
+                                <td>
+                                    <InputText
+                                        icon={null}
+                                        label={null}
+                                        name={`configurePrice_${attr.color}_${attr.size}`}
+                                        placeholder={'Price'}
+                                        style={'w-[150px]'}
+                                        props={props}
+                                    />
+                                </td>
+                                <td>
+                                    <InputText
+                                        icon={null}
+                                        label={null}
+                                        name={`configureQty_${attr.color}_${attr.size}`}
+                                        placeholder={'Quantity'}
+                                        style={'w-[150px]'}
+                                        props={props}
+                                    />
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            )}
+        </>
+    );
+};
+
 function ProductForm({ productData, locale }: { productData: any; locale: string }) {
     const t = useTranslations();
     const dispatch = useDispatch();
@@ -23,6 +90,7 @@ function ProductForm({ productData, locale }: { productData: any; locale: string
     const sizes = useSelector(productSizesSelector);
     const [dropColors, setDropColors] = useState([]);
     const [dropSizes, setDropSizes] = useState([]);
+    const [productType, setProductType] = useState('simple');
     const uploadedFiles = useSelector(uploadedFilesSelector);
 
     const [selectedColors, setSelectedColors] = useState([]);
@@ -31,6 +99,44 @@ function ProductForm({ productData, locale }: { productData: any; locale: string
     const { acceptedFiles, getRootProps, getInputProps } = useDropzone();
     const removeFile = (file: File) => {
         dispatch(removeUploadedFile(file));
+    };
+
+    // const changeProductType = () => {
+    //     setProductType(productType === 'simple' ? 'configured' : 'simple');
+    // };
+    const prepareConfigValues = (values: any, selectedColors: any[], selectedSizes: any[]) => {
+        const configurations: { color_id: any; size_id: any; price: any; qty: any }[] = [];
+        if (selectedColors.length > 0 && selectedSizes.length > 0) {
+            selectedColors.forEach((color: any) => {
+                selectedSizes.forEach((size: any) => {
+                    configurations.push({
+                        color_id: color.value,
+                        size_id: size.value,
+                        price: values[`configurePrice_${color.label}_${size.label}`],
+                        qty: values[`configureQty_${color.label}_${size.label}`]
+                    });
+                });
+            });
+        } else if (selectedColors.length > 0 && selectedSizes.length === 0) {
+            selectedColors.forEach((color: any) => {
+                configurations.push({
+                    color_id: color.value,
+                    size_id: null,
+                    price: values[`configurePrice_${color.label}_none`],
+                    qty: values[`configureQty_${color.label}_none`]
+                });
+            });
+        } else if (selectedColors.length === 0 && selectedSizes.length > 0) {
+            selectedSizes.forEach((size: any) => {
+                configurations.push({
+                    color_id: null,
+                    size_id: size.value,
+                    price: values[`configurePrice_none_${size.label}`],
+                    qty: values[`configureQty_none_${size.label}`]
+                });
+            });
+        }
+        return configurations;
     };
 
     useEffect(() => {
@@ -63,8 +169,9 @@ function ProductForm({ productData, locale }: { productData: any; locale: string
     const SubmitSchema = Yup.object().shape({
         name: Yup.string().required(t('Required field')),
         description: Yup.string().required(t('Required field')),
-        price: Yup.number().required(t('Required field')),
-        quantity: Yup.number().required(t('Required field'))
+        price: productType === 'single' ? Yup.number().required(t('Required field')) : Yup.number(),
+        quantity:
+            productType === 'single' ? Yup.number().required(t('Required field')) : Yup.number()
     });
 
     return (
@@ -77,6 +184,10 @@ function ProductForm({ productData, locale }: { productData: any; locale: string
                 Object.keys(values).forEach((key: string) => {
                     formData.append(key, (values as any)[key]);
                 });
+                formData.append(
+                    'configurations',
+                    JSON.stringify(prepareConfigValues(values, selectedColors, selectedSizes))
+                );
                 formData.append('colors', JSON.stringify(selectedColors));
                 formData.append('sizes', JSON.stringify(selectedSizes));
                 if (uploadedFiles.length) {
@@ -139,22 +250,33 @@ function ProductForm({ productData, locale }: { productData: any; locale: string
 
                             <InputText
                                 icon={null}
-                                label={'Product Price'}
-                                name={'price'}
-                                placeholder={'Product Price'}
-                                style={null}
-                                props={props}
-                            />
-
-                            <InputText
-                                icon={null}
                                 label={'Product Description'}
                                 name={'description'}
                                 placeholder={'Product Description'}
                                 style={null}
                                 props={props}
                             />
+                            {productType === 'simple' && (
+                                <>
+                                    <InputText
+                                        icon={null}
+                                        label={'Product Price'}
+                                        name={'price'}
+                                        placeholder={'Product Price'}
+                                        style={null}
+                                        props={props}
+                                    />
 
+                                    <InputText
+                                        icon={null}
+                                        label={'Quantity'}
+                                        name={'quantity'}
+                                        placeholder={'Quantity'}
+                                        style={null}
+                                        props={props}
+                                    />
+                                </>
+                            )}
                             <InputText
                                 icon={null}
                                 label={'Product Keyword'}
@@ -164,40 +286,53 @@ function ProductForm({ productData, locale }: { productData: any; locale: string
                                 props={props}
                             />
 
-                            <div className="mb-4 relative">
-                                <label className="control-label">{t('Color')}</label>
-                                <MultiSelect
-                                    options={dropColors}
-                                    value={selectedColors}
-                                    onChange={setSelectedColors}
-                                    labelledBy="Select size"
-                                />
-                            </div>
-
-                            <div className="mb-4 relative">
-                                <label className="control-label">{t('Size')}</label>
-                                <MultiSelect
-                                    options={dropSizes}
-                                    value={selectedSizes}
-                                    onChange={setSelectedSizes}
-                                    labelledBy="Select size"
-                                />
-                            </div>
-
-                            <InputText
-                                icon={null}
-                                label={'Quantity'}
-                                name={'quantity'}
-                                placeholder={'Quantity'}
+                            <InputSwitcher
+                                label={'Configured'}
+                                name={'product_type'}
                                 style={null}
+                                onChange={() => {
+                                    setProductType(
+                                        productType === 'simple' ? 'configured' : 'simple'
+                                    );
+                                }}
                                 props={props}
                             />
+                            {productType !== 'simple' && (
+                                <>
+                                    <div className="mb-4 relative">
+                                        <label className="control-label">{t('Color')}</label>
+                                        <MultiSelect
+                                            options={dropColors}
+                                            value={selectedColors}
+                                            onChange={setSelectedColors}
+                                            labelledBy="Select size"
+                                        />
+                                    </div>
+
+                                    <div className="mb-4 relative">
+                                        <label className="control-label">{t('Size')}</label>
+                                        <MultiSelect
+                                            options={dropSizes}
+                                            value={selectedSizes}
+                                            onChange={setSelectedSizes}
+                                            labelledBy="Select size"
+                                        />
+                                    </div>
+
+                                    <RenderPropsTable
+                                        colors={selectedColors}
+                                        sizes={selectedSizes}
+                                        props={props}
+                                    />
+                                </>
+                            )}
 
                             <InputSwitcher
                                 label={'Publish'}
                                 name={'publish'}
                                 style={null}
                                 props={props}
+                                onChange={props.handleChange}
                             />
 
                             <button type="submit" className="gradient-btn">

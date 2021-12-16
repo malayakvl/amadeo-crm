@@ -6,9 +6,10 @@ interface Props {
     name: string;
     label: string | null;
     props: any;
+    onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const InputSwitcher: React.FC<Props> = ({ style, name, label, props }) => {
+const InputSwitcher: React.FC<Props> = ({ style, name, label, props, onChange }) => {
     const t = useTranslations();
 
     return (
@@ -18,7 +19,7 @@ const InputSwitcher: React.FC<Props> = ({ style, name, label, props }) => {
                     type="checkbox"
                     id={name}
                     className="sr-only"
-                    onChange={props.handleChange}
+                    onChange={onChange}
                     value={props.values[name]}
                     name={name}
                 />

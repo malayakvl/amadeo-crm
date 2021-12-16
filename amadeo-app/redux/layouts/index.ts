@@ -1,4 +1,3 @@
-// import moment from 'moment';
 import { handleActions } from 'redux-actions';
 import {
     setPaginationAction,

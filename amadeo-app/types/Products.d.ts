@@ -41,7 +41,7 @@ declare namespace Products {
     interface ProductItem {
         id: number;
         name: string;
-        photos: any;
+        previewphoto: any;
         description: string;
         price: number;
         quantity: number;

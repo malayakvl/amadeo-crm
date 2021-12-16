@@ -30,40 +30,52 @@ class Product {
     async create (dataProduct) {
         const client = await pool.connect();
         try {
-            const colors = dataProduct.colors;
-            const sizes = dataProduct.sizes;
+            // const colors = dataProduct.colors;
+            // const sizes = dataProduct.sizes;
             delete dataProduct.colors;
             delete dataProduct.sizes;
+            console.log(JSON.parse(dataProduct.configurations));
 
             const queryInsert = `
                 INSERT INTO data.products
                     (name, price, description, keywords, quantity, photos, publish )
                 VALUES (
-                    '${dataProduct.name}',
-                    ${dataProduct.price},
-                    '${dataProduct.description}',
-                    '${dataProduct.keyword}',
-                    ${dataProduct.quantity},
+                    $$${dataProduct.name}$$,
+                    ${dataProduct.price || null},
+                    $$${dataProduct.description}$$,
+                    '${dataProduct.keyword || null}',
+                    ${dataProduct.quantity || null},
                     '{${dataProduct.photos}}',
                     ${dataProduct.publish ? dataProduct.publish : true}
                 ) RETURNING id;`;
             const resProduct = await client.query(queryInsert);
-            const promisesQueries = [];
-            if (colors) {
-                JSON.parse(colors).forEach(color => {
-                    promisesQueries.push(this.addColor(resProduct.rows[0].id, color.value));
+
+            const configs = JSON.parse(dataProduct.configurations);
+            if (configs.length) {
+                const promisesQueries = [];
+                configs.forEach(configuration => {
+                    promisesQueries.push(this.addConfiguration(resProduct.rows[0].id, configuration));
                 });
-            }
-            if (sizes) {
-                JSON.parse(sizes).forEach(size => {
-                    promisesQueries.push(this.addSize(resProduct.rows[0].id, size.value));
-                });
-            }
-            if (promisesQueries.length > 0) {
                 await Promise.all(promisesQueries);
             }
 
             return { success: true };
+            // const promisesQueries = [];
+            // if (colors) {
+            //     JSON.parse(colors).forEach(color => {
+            //         promisesQueries.push(this.addColor(resProduct.rows[0].id, color.value));
+            //     });
+            // }
+            // if (sizes) {
+            //     JSON.parse(sizes).forEach(size => {
+            //         promisesQueries.push(this.addSize(resProduct.rows[0].id, size.value));
+            //     });
+            // }
+            // if (promisesQueries.length > 0) {
+            //     await Promise.all(promisesQueries);
+            // }
+            //
+            // return { success: true };
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
                 logger.log(
@@ -115,6 +127,26 @@ class Product {
                 products,
                 error
             };
+        } finally {
+            client.release();
+        }
+    }
+
+    async addConfiguration (productId, data) {
+        const SQL = `INSERT INTO data.product_configurations (product_id, configuration) VALUES (${productId}, '${JSON.stringify(data)}')`;
+        const client = await pool.connect();
+        try {
+            await client.query(SQL);
+            return true;
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error:',
+                    { message: e.message }
+                );
+            }
+            return null;
         } finally {
             client.release();
         }

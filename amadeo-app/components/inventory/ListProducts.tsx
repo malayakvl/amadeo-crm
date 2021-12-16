@@ -74,18 +74,18 @@ const ListProducts: React.FC = () => {
                                 />
                             </td>
                             <td>
-                                <img
-                                    src={`${baseApiUrl}/uploads/products/4/1639512136723-j1.jpeg`}
-                                    alt=""
-                                    width={85}
-                                />
+                                <img src={`${baseApiUrl}/${item.previewphoto}`} alt="" width={85} />
                             </td>
                             <td>
+                                <span className="text-gray-180">Ref.</span>{' '}
+                                <span className="text-blue-350">{item.id}</span> <br />
                                 {item.name}
                                 <br />
-                                {item.description}
+                                <span className="text-blue-350 mt-4 block font-normal text-[10px]">
+                                    {item.description}
+                                </span>
                             </td>
-                            <td>Ha</td>
+                            <td>coming soon</td>
                             <td className="text-right">
                                 <ButtonTableAction
                                     dataId={String(item.id)}
