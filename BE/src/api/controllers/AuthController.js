@@ -1,7 +1,9 @@
 import passport from '../middleware/passport.js';
 import userModel from '../models/User.js';
+import invitationModel from '../models/Invitation.js'
 import { getTokensAndSetCookies } from '../lib/token.js';
 import { sendMail } from '../lib/sendMail.js';
+import crypto from 'crypto';
 
 class AuthController {
     /**
@@ -10,7 +12,7 @@ class AuthController {
      * @param res
      * @param next
      */
-    authLogin (req, res, next) {
+    authLogin(req, res, next) {
         passport.authenticate('local', { session: false },
             (err, authUser, info) => {
                 if (err) {
@@ -37,7 +39,7 @@ class AuthController {
      * @param res
      * @returns {Promise<*>}
      */
-    async authProvider (req, res) {
+    async authProvider(req, res) {
         const { user, error } = await userModel.provider(req.body);
         if (error) {
             return res.status(error.code).json(error);
@@ -51,7 +53,7 @@ class AuthController {
      * @param res
      * @returns {Promise<*>}
      */
-    async authRegister (req, res) {
+    async authRegister(req, res) {
         const _user = await userModel.findUserByEmail(req.body.email);
         if (_user) {
             res.status(402).json({ user: null, error: 'Email present' });
@@ -74,7 +76,32 @@ class AuthController {
         }
     }
 
-    async restorePassword (req, res) {
+    async authInvite(req, res) {
+        const data = req.body;
+        const basicLink = `${process.env.APPLICATION_BASE_URL}/auth/invite-link?hash=`;
+        const sendLink = (link) => sendMail(
+            data.email,
+            'Amadeo CRM - Registration',
+            `Follow <a href='${link}'>link</a> for continue`
+        );
+
+        let invitation = await invitationModel.findByEmail(data.email);
+        if (invitation) {
+            sendLink(basicLink + invitation.hash)
+
+            return res.status(200).json({ status: 'success' });
+
+        }
+
+        invitation = await invitationModel.create(data);
+        
+        sendLink(basicLink + invitation.hash)
+
+        return res.status(200).json({ status: 'success' });
+    }
+
+
+    async restorePassword(req, res) {
         const _user = await userModel.findUserByEmail(req.body.email);
 
         if (_user) {
@@ -90,8 +117,7 @@ class AuthController {
                         <br><br>
                         Good luck!
                 `);
-                // remove activation code from response to user
-                console.log('RESTORE LINK', link);
+
                 res.status(200).json({ status: success });
             } else {
                 res.status(402).json({ status: false });
@@ -101,7 +127,7 @@ class AuthController {
         }
     }
 
-    async activateHash (req, res) {
+    async activateHash(req, res) {
         const user = await userModel.activateByHash(req.params.hash);
         if (user) {
             res.status(200).json({ user: user });

@@ -13,6 +13,7 @@ exports.up = pgm => {
             onDelete: 'cascade',
         },
         hash: { type: 'text' },
+        active: {type: 'boolean', noNull: true, default: true},
         created_at: {
             type: 'timestamp',
             notNull: true,

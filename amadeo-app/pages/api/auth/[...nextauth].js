@@ -65,6 +65,17 @@ export default NextAuth({
                     headers: { 'Content-Type': 'application/json' }
                 });
             }
+        }),
+        CredentialsProvider({
+            id: 'credentials_invite',
+            async authorize(credentials) {      
+                await fetch(`${baseUrl}/invite`, {
+                    method: 'POST',
+                    body: JSON.stringify(credentials),
+                    headers: { 'Content-Type': 'application/json' }
+                });
+
+            }
         })
     ],
     events: {

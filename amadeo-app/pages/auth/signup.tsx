@@ -21,7 +21,7 @@ export default function Signup({ providers, locale }: { providers: any; locale: 
         acceptTerms: Yup.bool().oneOf([true], 'Accept Terms is required')
     });
     const onSubmit = (values: FormData) => {
-        signIn('credentials_registration', {
+        signIn('credentials_invite', {
             ...values,
             callbackUrl: `${window.location.origin}${locale === 'fr' ? '' : `/${locale}`}/dashboard`
         });

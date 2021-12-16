@@ -11,6 +11,7 @@ authRoute.use(express.json({
 
 authRoute.post('/login', authController.authLogin);
 authRoute.post('/register', authController.authRegister);
+authRoute.post('/invite', authController.authInvite);
 authRoute.post('/provider', authController.authProvider);
 authRoute.post('/restorePassword', authController.restorePassword);
 authRoute.get('/activate-hash/:hash', authController.activateHash);
