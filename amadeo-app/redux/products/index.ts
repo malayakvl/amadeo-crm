@@ -1,23 +1,59 @@
-import { handleActions } from 'redux-actions';
+import { Action, handleActions } from 'redux-actions';
 import {
     fetchColorSizesAction,
     addUploadedFile,
     removeUploadedFile,
     fetchProductsAction,
-    bulkDeleteAction
+    fetchProductAction,
+    bulkDeleteAction,
+    setActiveTabAction,
+    setEmptyProductAction,
+    setSelectedColorsAction,
+    setSelectedSizesAction
 } from './actions';
 
-const initialState: State.Products = {
+const initialState: {
+    uploadedFiles: any[];
+    product: Products.Product;
+    sizes: any[];
+    checkedIds: any[];
+    isFetched: boolean;
+    count: number;
+    loading: boolean;
+    items: any[];
+    colors: any[];
+    products: any[];
+    activeTab: string;
+    selectedColors: any[];
+    selectedSizes: any[];
+} = {
     colors: [],
     sizes: [],
     products: [],
-    product: {} as Products.Product,
+    product: {
+        product: {
+            publish: false,
+            configured: false,
+            name: '',
+            description: '',
+            price: '',
+            quantity: '',
+            keywords: '',
+            photos: [],
+            selectedColors: [],
+            selectedSizes: []
+        },
+        configurations: []
+    } as unknown as Products.Product,
     loading: false,
     isFetched: false,
     uploadedFiles: [],
     checkedIds: [],
     count: 0,
-    items: []
+    items: [],
+    activeTab: 'products',
+    selectedColors: [],
+    selectedSizes: []
 };
 
 const ACTION_HANDLERS: any = {
@@ -35,6 +71,18 @@ const ACTION_HANDLERS: any = {
             ...state,
             loading: false,
             isFetched: true
+        })
+    },
+    [setSelectedColorsAction]: {
+        next: (state: State.Products, action: Action<any>): State.Products => ({
+            ...state,
+            selectedColors: action.payload
+        })
+    },
+    [setSelectedSizesAction]: {
+        next: (state: State.Products, action: Action<any>): State.Products => ({
+            ...state,
+            selectedSizes: action.payload
         })
     },
     [addUploadedFile]: (
@@ -73,17 +121,68 @@ const ACTION_HANDLERS: any = {
             isFetched: false
         })
     },
-    [bulkDeleteAction]: (
-        state: State.Products,
-        action: Type.ReduxAction<State.Products>
-    ): State.Products => {
+    [fetchProductAction]: {
+        next: (
+            state: State.Products,
+            action: Type.ReduxAction<Pick<State.Products, 'product'>>
+        ): State.Products => ({
+            ...state,
+            ...action.payload,
+            loading: false,
+            isFetched: true,
+            uploadedFiles: []
+        }),
+        throw: (state: State.Products): State.Products => ({
+            ...state,
+            loading: false,
+            isFetched: true,
+            uploadedFiles: []
+        })
+    },
+    [bulkDeleteAction]: (state: State.Products): State.Products => {
         return <Products.Root>{
             ...state
         };
+    },
+    [setActiveTabAction]: {
+        next: (state: State.Products, action: Action<string>): State.Products => ({
+            ...state,
+            activeTab: action.payload
+        })
+    },
+    [setEmptyProductAction]: (state: State.Products): State.Products => {
+        return <Products.Root>(<unknown>{
+            ...state,
+            product: {
+                product: {
+                    publish: false,
+                    configured: false,
+                    name: '',
+                    description: '',
+                    price: '',
+                    quantity: '',
+                    keywords: ''
+                },
+                configurations: []
+            },
+            isFetched: true,
+            selectedColors: [],
+            selectedSizes: [],
+            uploadedFiles: []
+        });
     }
 };
 
-export { fetchColorSizesAction, addUploadedFile, removeUploadedFile, bulkDeleteAction };
+export {
+    fetchColorSizesAction,
+    addUploadedFile,
+    removeUploadedFile,
+    bulkDeleteAction,
+    fetchProductsAction,
+    fetchProductAction,
+    setSelectedSizesAction,
+    setSelectedColorsAction
+};
 
 // ------------------------------------
 // Reducer

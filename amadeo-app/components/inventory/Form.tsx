@@ -11,10 +11,13 @@ import { fetchColorSizesAction, removeUploadedFile } from '../../redux/products'
 import {
     productColorSelector,
     productSizesSelector,
+    selectedColorsSelector,
+    selectedSizesSelector,
     uploadedFilesSelector
 } from '../../redux/products/selectors';
 import { parseTranslation } from '../../lib/functions';
 import { addUploadedFile, updateProductAction } from '../../redux/products/actions';
+import { baseApiUrl } from '../../constants';
 
 const RenderPropsTable: React.FC<any> = ({ colors, sizes, props }) => {
     const _colors: any[] = [];
@@ -83,27 +86,33 @@ const RenderPropsTable: React.FC<any> = ({ colors, sizes, props }) => {
     );
 };
 
-function ProductForm({ productData, locale }: { productData: any; locale: string }) {
+function ProductForm({
+    locale,
+    productData,
+    photos
+}: {
+    locale: string;
+    productData: Products.Product;
+    photos: string[];
+}) {
     const t = useTranslations();
     const dispatch = useDispatch();
     const colors = useSelector(productColorSelector);
     const sizes = useSelector(productSizesSelector);
     const [dropColors, setDropColors] = useState([]);
     const [dropSizes, setDropSizes] = useState([]);
-    const [productType, setProductType] = useState('simple');
     const uploadedFiles = useSelector(uploadedFilesSelector);
+    const productSelectedColor = useSelector(selectedColorsSelector);
+    const productSelectedSize = useSelector(selectedSizesSelector);
 
     const [selectedColors, setSelectedColors] = useState([]);
     const [selectedSizes, setSelectedSizes] = useState([]);
-
     const { acceptedFiles, getRootProps, getInputProps } = useDropzone();
+
     const removeFile = (file: File) => {
         dispatch(removeUploadedFile(file));
     };
 
-    // const changeProductType = () => {
-    //     setProductType(productType === 'simple' ? 'configured' : 'simple');
-    // };
     const prepareConfigValues = (values: any, selectedColors: any[], selectedSizes: any[]) => {
         const configurations: { color_id: any; size_id: any; price: any; qty: any }[] = [];
         if (selectedColors.length > 0 && selectedSizes.length > 0) {
@@ -140,6 +149,11 @@ function ProductForm({ productData, locale }: { productData: any; locale: string
     };
 
     useEffect(() => {
+        setSelectedSizes(productSelectedSize);
+        setSelectedColors(productSelectedColor);
+    }, [productSelectedColor, productSelectedSize]);
+
+    useEffect(() => {
         acceptedFiles.forEach((file: File) => {
             dispatch(addUploadedFile(file));
         });
@@ -167,17 +181,16 @@ function ProductForm({ productData, locale }: { productData: any; locale: string
     }, [colors, sizes]);
 
     const SubmitSchema = Yup.object().shape({
-        name: Yup.string().required(t('Required field')),
-        description: Yup.string().required(t('Required field')),
-        price: productType === 'single' ? Yup.number().required(t('Required field')) : Yup.number(),
-        quantity:
-            productType === 'single' ? Yup.number().required(t('Required field')) : Yup.number()
+        // name: Yup.string().required(t('Required field')),
+        // description: Yup.string().required(t('Required field')),
+        // price: !values.configured ? Yup.number().required(t('Required field')) : Yup.number(),
+        // quantity:
+        //     !values.configured ? Yup.number().required(t('Required field')) : Yup.number()
     });
-
     return (
         <Formik
             enableReinitialize
-            initialValues={productData}
+            initialValues={productData.product}
             validationSchema={SubmitSchema}
             onSubmit={(values) => {
                 const formData = new FormData();
@@ -207,19 +220,17 @@ function ProductForm({ productData, locale }: { productData: any; locale: string
                                     <input {...getInputProps()} />
                                     <p>Drag and drop image file(s), or browse your computer.</p>
                                 </div>
-                                {uploadedFiles.length > 0 && (
+                                {(uploadedFiles.length > 0 || photos.length > 0) && (
                                     <aside>
                                         <h4>Uploaded Files</h4>
                                         {/*<ul>{files}</ul>*/}
                                         <ul>
                                             {uploadedFiles.map((_file: File) => (
                                                 <li key={_file.lastModified}>
-                                                    <i className="file" />
                                                     <img
                                                         src={URL.createObjectURL(_file)}
                                                         alt=""
-                                                        width="85"
-                                                        height="85"
+                                                        className="object-cover h-[85px]"
                                                     />
                                                     <span>{_file.name}</span>{' '}
                                                     <em>{_file.size} bytes</em>{' '}
@@ -228,6 +239,23 @@ function ProductForm({ productData, locale }: { productData: any; locale: string
                                                         role="presentation"
                                                         onClick={() => {
                                                             removeFile(_file);
+                                                        }}
+                                                    />
+                                                </li>
+                                            ))}
+                                            {photos.map((_file: string, _index) => (
+                                                <li key={_index}>
+                                                    <img
+                                                        src={`${baseApiUrl}/${_file}`}
+                                                        alt=""
+                                                        className="object-cover h-[85px]"
+                                                    />
+                                                    <span>{_file}</span> <em>&nbsp;</em>{' '}
+                                                    <i
+                                                        className="close"
+                                                        role="presentation"
+                                                        onClick={() => {
+                                                            console.log(_file);
                                                         }}
                                                     />
                                                 </li>
@@ -256,7 +284,7 @@ function ProductForm({ productData, locale }: { productData: any; locale: string
                                 style={null}
                                 props={props}
                             />
-                            {productType === 'simple' && (
+                            {props.values.configured && (
                                 <>
                                     <InputText
                                         icon={null}
@@ -288,16 +316,12 @@ function ProductForm({ productData, locale }: { productData: any; locale: string
 
                             <InputSwitcher
                                 label={'Configured'}
-                                name={'product_type'}
+                                name={'configured'}
                                 style={null}
-                                onChange={() => {
-                                    setProductType(
-                                        productType === 'simple' ? 'configured' : 'simple'
-                                    );
-                                }}
                                 props={props}
+                                onChange={props.handleChange}
                             />
-                            {productType !== 'simple' && (
+                            {props.values.configured && (
                                 <>
                                     <div className="mb-4 relative">
                                         <label className="control-label">{t('Color')}</label>
@@ -336,7 +360,7 @@ function ProductForm({ productData, locale }: { productData: any; locale: string
                             />
 
                             <button type="submit" className="gradient-btn">
-                                {t('Add Product')}
+                                {props.values.id ? t('Update Product') : t('Add Product')}
                             </button>
                         </div>
                     </div>

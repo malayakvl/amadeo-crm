@@ -1,21 +1,19 @@
 import Head from 'next/head';
 import { getSession } from 'next-auth/client';
-import React, { useState } from 'react';
+import React from 'react';
 import { useTranslations } from 'next-intl';
 import { userSelector } from '../../redux/user/selectors';
-import { useSelector } from 'react-redux';
-import { AddProduct, ListProducts } from '../../components/inventory';
+import { useDispatch, useSelector } from 'react-redux';
+import { AddProduct, ListProducts, EditProduct } from '../../components/inventory';
+import { activeTabSelector } from '../../redux/products/selectors';
+import { setActiveTabAction } from '../../redux/products/actions';
 
 export default function Index({ session, locale }: { session: any; locale: string }) {
     if (!session) return <></>;
     const t = useTranslations();
     const user = useSelector(userSelector);
-    const [activeTab, setActiveTab] = useState('products');
-
-    const handleTabClick = (e: React.MouseEvent<HTMLElement>) => {
-        const target = e.target as HTMLElement;
-        setActiveTab(target.id);
-    };
+    const dispatch = useDispatch();
+    const activeTab = useSelector(activeTabSelector);
 
     return (
         <>
@@ -33,20 +31,26 @@ export default function Index({ session, locale }: { session: any; locale: strin
                         <nav className="float-tabs">
                             <button
                                 id="products"
-                                onClick={handleTabClick}
+                                onClick={() => {
+                                    dispatch(setActiveTabAction('products'));
+                                }}
                                 className={`tabs ${activeTab === 'products' ? 'active' : ''}`}>
                                 {t('Products')}
                             </button>
                             <button
                                 id="add"
-                                onClick={handleTabClick}
+                                onClick={() => {
+                                    dispatch(setActiveTabAction('add'));
+                                }}
                                 className={`tabs ${activeTab === 'add' ? 'active' : ''}`}>
                                 {t('Add Product')}
                             </button>
                             <button
                                 id="password"
-                                onClick={handleTabClick}
-                                className={`tabs ${activeTab === 'password' ? 'active' : ''}`}>
+                                onClick={() => {
+                                    dispatch(setActiveTabAction('sync'));
+                                }}
+                                className={`tabs ${activeTab === 'sync' ? 'active' : ''}`}>
                                 {t('Sync Products')}
                             </button>
                         </nav>
@@ -56,10 +60,14 @@ export default function Index({ session, locale }: { session: any; locale: strin
             <div className="block-white-8 mr-10 mt-10">
                 <div className="tabs-content">
                     <div className={`w-full ${activeTab !== 'products' ? 'hidden' : ''}`}>
-                        <ListProducts locale={locale} />
+                        <ListProducts />
                     </div>
-                    <div className={`w-full ${activeTab !== 'add' ? 'hidden' : ''}`}>
-                        <AddProduct locale={locale} productData={{}} />
+                    <div
+                        className={`w-full ${
+                            !['add', 'edit'].includes(activeTab) ? 'hidden' : ''
+                        }`}>
+                        {activeTab === 'add' && <AddProduct locale={locale} />}
+                        {activeTab === 'edit' && <EditProduct locale={locale} />}
                     </div>
                     <div className={`w-full ${activeTab !== 'password' ? 'hidden' : ''}`} />
                 </div>

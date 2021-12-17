@@ -44,6 +44,8 @@ export const updateProductAction: any = createAction(
                     dispatch(
                         setSuccessToastAction(`Product has been ${isNew ? 'updated' : 'created'}`)
                     );
+                    dispatch(fetchProductsAction());
+                    dispatch(setActiveTabAction('products'));
                 });
         }
 );
@@ -80,7 +82,29 @@ export const fetchProductsAction: any = createAction(
                 }));
         }
 );
+export const fetchProductAction: any = createAction(
+    'products/FETCH_PRODUCT',
+    async (id: number) =>
+        async (
+            dispatch: Type.Dispatch,
+            getState: () => State.Root
+        ): Promise<{ product: Products.Product }> => {
+            const state = getState();
+            const res = await axios.get(`${baseUrl}/fetch-product/${id}`, {
+                headers: {
+                    ...authHeader(state.user.user.email)
+                }
+            });
+            return {
+                product: res.data.product
+            };
+        }
+);
 
 export const addUploadedFile: any = createAction('products/ADD_UPLOADED_FILE');
 export const removeUploadedFile: any = createAction('products/REMOVE_UPLOADED_FILE');
 export const bulkDeleteAction: any = createAction('products/BULK_DELETE');
+export const setActiveTabAction: any = createAction('products/SET_ACTIVE_TAB');
+export const setEmptyProductAction: any = createAction('products/SET_EMPTY');
+export const setSelectedColorsAction: any = createAction('products/SET_COLORS');
+export const setSelectedSizesAction: any = createAction('products/SET_SIZES');

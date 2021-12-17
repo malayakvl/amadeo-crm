@@ -35,7 +35,6 @@ class ProductController {
             }
         });
         const upload = multer({ storage: storage }).any('photos');
-        console.log(req.body);
 
         upload(req, res, async function (err) {
             if (err instanceof multer.MulterError) {
@@ -53,7 +52,9 @@ class ProductController {
             dataProduct.photos = photos;
 
             if (!dataProduct.id) {
-                await productModel.create(dataProduct);
+                await productModel.create(dataProduct, req.user.id);
+            } else {
+                await productModel.update(dataProduct, req.user.id);
             }
             return res.status(200).json({ success: true });
         });
@@ -74,8 +75,16 @@ class ProductController {
         }
     }
 
-    async getProduct (req, res) {
-
+    async fetchProduct (req, res) {
+        if (!req.user) {
+            return res.status(402).json('Something wend wrong');
+        }
+        const data = await productModel.fetchProduct(req.params.id, req.user.id);
+        if (!data.error) {
+            return res.status(200).json({ product: data });
+        } else {
+            return res.status(402).json({ error: 'Something wend wrong' });
+        }
     }
 }
 
