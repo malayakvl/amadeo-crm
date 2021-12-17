@@ -3,7 +3,6 @@ import userModel from '../models/User.js';
 import invitationModel from '../models/Invitation.js'
 import { getTokensAndSetCookies } from '../lib/token.js';
 import { sendMail } from '../lib/sendMail.js';
-import crypto from 'crypto';
 
 class AuthController {
     /**
@@ -136,14 +135,14 @@ class AuthController {
         }
     }
 
-    async isInvitationActive(req, res) {
-        let hash = await invitationModel.findByHash(req.query.hash)
+    async getInvitation(req, res) {
+        let hash = await invitationModel.findByHash(req.params.hash)
+
+        console.log(hash)
 
         if (hash && hash.active) {
-            return res.status(200).json({
-                active: hash.active
+            return res.status(200).json(hash);
 
-            })
         }
 
         return res.status(404).json({})
