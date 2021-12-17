@@ -24,35 +24,35 @@ const TogglePassword: React.FC<Props> = ({ style, icon, name, label, placeholder
                     <>
                         {icon && <i className={`f-icon ${icon}`} />}
                         <input
+                            placeholder={placeholder ? t(placeholder) : ''}
                             className={icon ? 'form-control-icon' : 'form-control'}
                             type="password"
                             onChange={props.handleChange}
                             name={name}
                         />
                         <EyeIcon
-                            className="h-7 text-gray-180 absolute right-2 top-1.5"
+                            className="h-7 text-gray-180 absolute right-2 top-2"
                             onClick={() => {
                                 setShowPassword(!showPassword);
                             }}
                         />
                     </>
                 ) : (
-                    <>
-                        <input
-                            className={icon ? 'form-control-icon' : 'form-control'}
-                            type="text"
-                            placeholder={placeholder ? t(placeholder) : ''}
-                            onChange={props.handleChange}
-                            name={name}
-                        />
-                        <EyeOffIcon
-                            className="h-7 text-gray-180 absolute right-2 top-1.5"
-                            onClick={() => {
-                                setShowPassword(!showPassword);
-                            }}
-                        />
-                    </>
-                )}
+                        <>
+                            <input
+                                className={icon ? 'form-control-icon' : 'form-control'}
+                                type="text"
+                                onChange={props.handleChange}
+                                name={name}
+                            />
+                            <EyeOffIcon
+                                className="h-7 text-gray-180 absolute right-2 top-2"
+                                onClick={() => {
+                                    setShowPassword(!showPassword);
+                                }}
+                            />
+                        </>
+                    )}
             </div>
             {props.errors[name] && <div className="error-el">{props.errors[name]}</div>}
         </div>
