@@ -1,18 +1,13 @@
-import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
+import React from 'react';
 import * as Yup from 'yup';
-import { providers, getSession, signIn } from 'next-auth/client';
 import { useTranslations } from 'next-intl';
-import ProviderBtns from '../../components/auth/ProviderBtns';
 import FullLayout from '../../components/layout/FullLayout';
 import getConfig from 'next/config';
 import Image from 'next/image';
-import { InputText } from '../../components/_form';
 import { Formik } from 'formik';
 import { InputPassword } from '../../components/_form'
 import InputTextDisabled from '../../components/_form/InputTextDisabled';
+import { TogglePassword } from '../../components/_form/TogglePassword';
 
 const { publicRuntimeConfig } = getConfig();
 const baseUrl = `${publicRuntimeConfig.apiUrl}/auth`;
@@ -25,11 +20,8 @@ interface Props {
     errors: any;
 }
 
-function Buyer({ providers, locale }: { providers: any; locale: string }) {
+function Buyer() {
     const t = useTranslations();
-    const router = useRouter();
-    const [showAlert, setShowAlert] = useState(!!router.query.message);
-    const { message } = router.query;
 
     const validationSchema = Yup.object().shape({
         email: Yup.string()
@@ -45,8 +37,6 @@ function Buyer({ providers, locale }: { providers: any; locale: string }) {
         )
     });
 
-    const { register, handleSubmit, formState } = useForm();
-    const { errors } = formState;
     const onSubmit = (values: any) => {
         console.log(values)
     };
@@ -64,7 +54,7 @@ function Buyer({ providers, locale }: { providers: any; locale: string }) {
                     />
                 </div>
 
-                <InputTextDisabled icon="f-email" value="email@email.com"/>
+                <InputTextDisabled icon="f-email" value="email@email.com" />
 
                 <Formik
                     enableReinitialize
@@ -77,28 +67,26 @@ function Buyer({ providers, locale }: { providers: any; locale: string }) {
                                 Please create a Password
                             </div>
 
-                            <InputPassword
+                            <TogglePassword
                                 icon={'f-key'}
                                 style={null}
                                 label={null}
-                                name={'email'}
+                                name={'password'}
                                 placeholder={'Password'}
                                 props={props}
                             />
-
-                            <InputPassword
+                            <TogglePassword
                                 icon={'f-key'}
-                                style="mb-9"
+                                style={null}
                                 label={null}
-                                name={'email'}
-                                placeholder={'Confirm Password'}
+                                name={'confirm_parssword'}
+                                placeholder={'Confirm password'}
                                 props={props}
                             />
-
                             <div className="border-t pt-9">
                                 <button type="submit" className="uppercase pt-9 gradient-btn w-full">
                                     continue
-                            </button>
+                                </button>
                             </div>
 
                         </form>
