@@ -28,6 +28,14 @@
   @apply absolute top-2.5 right-2;
 }
 
+.input-eye {
+  background-image: url("../../public/images/eye.svg");
+  background-repeat: no-repeat;
+  width: 24px;
+  height: 24px;
+  @apply absolute top-2.5 right-2;
+}
+
 .radio {
   @apply text-white w-5 h-5 border-0;
   background: url("../../public/images/option.svg");

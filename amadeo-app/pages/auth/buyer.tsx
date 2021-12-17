@@ -11,6 +11,7 @@ import getConfig from 'next/config';
 import Image from 'next/image';
 import { InputText } from '../../components/_form';
 import { Formik } from 'formik';
+import { InputPassword } from '../../components/_form'
 
 const { publicRuntimeConfig } = getConfig();
 const baseUrl = `${publicRuntimeConfig.apiUrl}/auth`;
@@ -51,63 +52,68 @@ function Buyer({ providers, locale }: { providers: any; locale: string }) {
 
     return (
         <div className="flex justify-center">
-            <Formik
-                enableReinitialize
-                initialValues={{}}
-                validationSchema={validationSchema}
-                onSubmit={onSubmit}>
-                {(props) => (
-                    <form className="mt-10 rounded-lg border shadow-xl bg-white w-96 p-10 pb-10">
-                        <div className="flex mb-4">
-                            <div className="mr-2.5 font-bold text-3xl line-height-105percent w-60">Your email has been verified!</div>
-                            <Image
-                                src="/images/tick.svg"
-                                width="52"
-                                height="40"
-                                layout="fixed"
+            <div className="mt-10 rounded-lg border shadow-xl bg-white w-96 p-10 pb-10">
+                <div className="flex items-center mb-4">
+                    <div className="mr-2.5 font-bold text-3xl line-height-105percent w-60">Your email has been verified!</div>
+                    <Image
+                        src="/images/tick.svg"
+                        width="52"
+                        height="40"
+                        layout="fixed"
+                    />
+                </div>
+
+                <div className="flex mb-4 border p-3 bg-gray-100 rounded-lg">
+                    <Image
+                        src="/images/input-email.svg"
+                        width="24"
+                        height="24"
+                        layout="fixed"
+                    />
+
+                    <span className="ml-2.5 text-gray-180 font-bold text-sm">email@email.com</span>
+
+                </div>
+
+                <Formik
+                    enableReinitialize
+                    initialValues={{}}
+                    validationSchema={validationSchema}
+                    onSubmit={onSubmit}>
+                    {(props) => (
+                        <form>
+                            <div className="mt-8 mb-5 font-xs text-sm text-blue-350">
+                                Please create a Password
+                            </div>
+
+                            <InputPassword
+                                icon={'f-key'}
+                                style={null}
+                                label={null}
+                                name={'email'}
+                                placeholder={'Password'}
+                                props={props}
                             />
-                        </div>
 
-                        <InputText
-                            icon={'f-email'}
-                            style={null}
-                            label={null}
-                            name={'email'}
-                            placeholder={'Email'}
-                            props={props}
-                        />
+                            <InputPassword
+                                icon={'f-key'}
+                                style="mb-9"
+                                label={null}
+                                name={'email'}
+                                placeholder={'Confirm Password'}
+                                props={props}
+                            />
 
-                        <div className="mt-8 mb-5 font-xs text-sm text-blue-350">
-                            Please create a Password
-                        </div>
-
-                        <InputText
-                            icon={'f-key'}
-                            style={null}
-                            label={null}
-                            name={'email'}
-                            placeholder={'Email'}
-                            props={props}
-                        />
-
-                        <InputText
-                            icon={'f-key'}
-                            style="mb-9"
-                            label={null}
-                            name={'email'}
-                            placeholder={'Email'}
-                            props={props}
-                        />
-
-                        <div className="border-t pt-9">
-                            <button type="submit" className="uppercase pt-9 gradient-btn w-full">
-                                continue
+                            <div className="border-t pt-9">
+                                <button type="submit" className="uppercase pt-9 gradient-btn w-full">
+                                    continue
                             </button>
-                        </div>
+                            </div>
 
-                    </form>
-                )}
-            </Formik>
+                        </form>
+                    )}
+                </Formik>
+            </div>
         </div>
     )
 
