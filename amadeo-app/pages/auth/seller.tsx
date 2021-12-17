@@ -1,45 +1,16 @@
 import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
 import * as Yup from 'yup';
 import { providers, getSession, signIn } from 'next-auth/client';
 import { useTranslations } from 'next-intl';
-import ProviderBtns from '../../components/auth/ProviderBtns';
 import FullLayout from '../../components/layout/FullLayout';
 import Image from 'next/image';
 import InputTextDisabled from '../../components/_form/InputTextDisabled';
+import { Formik } from 'formik';
+import { InputText } from '../../components/_form/InputText';
+import { TogglePassword } from '../../components/_form';
 
-interface Props {
-    label: string | 'text';
-    type: string;
-    name: string;
-    register: any;
-    errors: any;
-}
-const InputText: React.FC<Props> = ({ label, type, name, register, errors }) => {
+function Seller() {
     const t = useTranslations();
-
-    return (
-        <div className="mb-4">
-            <label htmlFor="email">{t(label)}</label>
-            <input
-                {...register(name)}
-                type={type}
-                id={name}
-                placeholder={t(label)}
-                className="txt-input"
-            />
-            <div className="error-el">{errors[name]?.message}</div>
-        </div>
-    );
-};
-
-function Seller({ providers, locale }: { providers: any; locale: string }) {
-    const t = useTranslations();
-    const router = useRouter();
-    const [showAlert, setShowAlert] = useState(!!router.query.message);
-    const { message } = router.query;
 
     const validationSchema = Yup.object().shape({
         email: Yup.string()
@@ -59,22 +30,14 @@ function Seller({ providers, locale }: { providers: any; locale: string }) {
             t('Passwords must match')
         )
     });
-    const formOptions = { validationSchema };
 
-    const { register, handleSubmit, formState } = useForm();
-    const { errors } = formState;
-
-    const onSubmit = (user: any) => {
-        setShowAlert(false);
-        signIn('credentials_registration', {
-            user: JSON.stringify(user),
-            callbackUrl: `${window.location.origin}${locale === 'fr' ? '' : `/${locale}`}/dashboard`
-        });
+    const onSubmit = (values: any) => {
+        console.log(values)
     };
 
     return (
         <div className="flex justify-center">
-            <div className="px-24 py-14 mt-10 rounded-lg border shadow-xl flex justify-center w-[996px] bg-white">
+            <div className="px-24 py-14 my-10 rounded-lg border shadow-xl flex justify-center w-[996px] bg-white">
                 <div className="pt-5 pr-20 border-r">
                     <div className="flex mb-4 items-center">
                         <div className="mr-2.5 font-bold text-3xl line-height-105percent w-60">Your email has been verified!</div>
@@ -93,8 +56,94 @@ function Seller({ providers, locale }: { providers: any; locale: string }) {
                         Complete your profile
                     </div>
                 </div>
-                <div className="w-6/12">
-                    2
+                <div className="ml-8 w-full">
+                    <Formik
+                        enableReinitialize
+                        initialValues={{}}
+                        validationSchema={validationSchema}
+                        onSubmit={onSubmit}>
+                        {(props) => (
+                            <form>
+                                <InputText
+                                    icon={'f-fname'}
+                                    style={null}
+                                    label={null}
+                                    name={'name'}
+                                    placeholder={'Name'}
+                                    props={props}
+                                />
+                                <InputText
+                                    icon={'f-lname'}
+                                    style={null}
+                                    label={null}
+                                    name={'last_name'}
+                                    placeholder={'Family Name'}
+                                    props={props}
+                                />
+                                <InputText
+                                    icon={'f-company'}
+                                    style={null}
+                                    label={null}
+                                    name={'company'}
+                                    placeholder={'Company'}
+                                    props={props}
+                                />
+                                <InputText
+                                    icon={'f-company-id'}
+                                    style={'w-1/2'}
+                                    label={null}
+                                    name={'company_id'}
+                                    placeholder={'Company ID'}
+                                    props={props}
+                                />
+                                <InputText
+                                    icon={'f-vat'}
+                                    style={'w-1/2'}
+                                    label={null}
+                                    name={'vat'}
+                                    placeholder={'VAT'}
+                                    props={props}
+                                />
+                                <InputText
+                                    icon={'f-location'}
+                                    style={null}
+                                    label={null}
+                                    name={'address'}
+                                    placeholder={'Full Address'}
+                                    props={props}
+                                />
+                                <InputText
+                                    icon={'f-phone'}
+                                    style={null}
+                                    label={null}
+                                    name={'phone'}
+                                    placeholder={'Phone Number'}
+                                    props={props}
+                                />
+                                <TogglePassword
+                                    icon={'f-key'}
+                                    style={null}
+                                    label={null}
+                                    name={'password'}
+                                    placeholder={'Password'}
+                                    props={props}
+                                />
+                                <TogglePassword
+                                    icon={'f-key'}
+                                    style={'mb-9'}
+                                    label={null}
+                                    name={'confirm_parssword'}
+                                    placeholder={'Confirm password'}
+                                    props={props}
+                                />
+                                <div className="border-t pt-9">
+                                    <button type="submit" className="uppercase pt-9 gradient-btn w-full">
+                                        continue
+                                    </button>
+                                </div>
+                            </form>
+                        )}
+                    </Formik>
                 </div>
             </div>
         </div>
