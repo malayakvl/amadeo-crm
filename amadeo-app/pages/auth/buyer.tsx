@@ -8,6 +8,9 @@ import { useTranslations } from 'next-intl';
 import ProviderBtns from '../../components/auth/ProviderBtns';
 import FullLayout from '../../components/layout/FullLayout';
 import getConfig from 'next/config';
+import Image from 'next/image';
+import { InputText } from '../../components/_form';
+import { Formik } from 'formik';
 
 const { publicRuntimeConfig } = getConfig();
 const baseUrl = `${publicRuntimeConfig.apiUrl}/auth`;
@@ -19,23 +22,6 @@ interface Props {
     register: any;
     errors: any;
 }
-const InputText: React.FC<Props> = ({ label, type, name, register, errors }) => {
-    const t = useTranslations();
-
-    return (
-        <div className="mb-4">
-            <label htmlFor="email">{t(label)}</label>
-            <input
-                {...register(name)}
-                type={type}
-                id={name}
-                placeholder={t(label)}
-                className="txt-input"
-            />
-            <div className="error-el">{errors[name]?.message}</div>
-        </div>
-    );
-};
 
 function Buyer({ providers, locale }: { providers: any; locale: string }) {
     const t = useTranslations();
@@ -59,16 +45,70 @@ function Buyer({ providers, locale }: { providers: any; locale: string }) {
 
     const { register, handleSubmit, formState } = useForm();
     const { errors } = formState;
-    const onSubmit = (user: any) => {
-        setShowAlert(false);
-        signIn('credentials_registration', {
-            user: JSON.stringify(user),
-            callbackUrl: `${window.location.origin}${locale === 'fr' ? '' : `/${locale}`}/dashboard`
-        });
+    const onSubmit = (values: any) => {
+        console.log(values)
     };
 
     return (
-        <div>Hello</div>
+        <div className="flex justify-center">
+            <Formik
+                enableReinitialize
+                initialValues={{}}
+                validationSchema={validationSchema}
+                onSubmit={onSubmit}>
+                {(props) => (
+                    <form className="mt-10 rounded-lg border shadow-xl bg-white w-96 p-10 pb-10">
+                        <div className="flex mb-4">
+                            <div className="mr-2.5 font-bold text-3xl line-height-105percent w-60">Your email has been verified!</div>
+                            <Image
+                                src="/images/tick.svg"
+                                width="52"
+                                height="40"
+                                layout="fixed"
+                            />
+                        </div>
+
+                        <InputText
+                            icon={'f-email'}
+                            style={null}
+                            label={null}
+                            name={'email'}
+                            placeholder={'Email'}
+                            props={props}
+                        />
+
+                        <div className="mt-8 mb-5 font-xs text-sm text-blue-350">
+                            Please create a Password
+                        </div>
+
+                        <InputText
+                            icon={'f-key'}
+                            style={null}
+                            label={null}
+                            name={'email'}
+                            placeholder={'Email'}
+                            props={props}
+                        />
+
+                        <InputText
+                            icon={'f-key'}
+                            style="mb-9"
+                            label={null}
+                            name={'email'}
+                            placeholder={'Email'}
+                            props={props}
+                        />
+
+                        <div className="border-t pt-9">
+                            <button type="submit" className="uppercase pt-9 gradient-btn w-full">
+                                continue
+                            </button>
+                        </div>
+
+                    </form>
+                )}
+            </Formik>
+        </div>
     )
 
     return (
