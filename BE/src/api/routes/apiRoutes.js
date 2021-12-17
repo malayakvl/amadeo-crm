@@ -54,9 +54,9 @@ apiRoutes.route('/count-notice').get(NotificationController.fetchNew);
 apiRoutes.route('/new-notice').get(NotificationController.fetchLatest);
 
 apiRoutes.route('/product')
-    .post(ProductController.addProduct)
-    .get(ProductController.getProduct);
+    .post(ProductController.addProduct);
 apiRoutes.route('/products/fetch-colors-and-sizes').get(ProductController.fetchAdditional);
+apiRoutes.route('/fetch-product/:id').get(ProductController.fetchProduct);
 apiRoutes.route('/fetch-products').get(ProductController.fetchData);
 
 apiRoutes.get('/*', defaultHandler);

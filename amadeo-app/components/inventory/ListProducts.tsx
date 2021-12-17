@@ -5,7 +5,12 @@ import { PaginationType } from '../../constants';
 import { checkedIdsSelector } from '../../redux/layouts/selectors';
 import { checkIdsAction, initIdsAction } from '../../redux/layouts';
 import { paginatedProductsSelector, productsCountSelector } from '../../redux/products/selectors';
-import { fetchProductsAction, bulkDeleteAction } from '../../redux/products/actions';
+import {
+    fetchProductsAction,
+    bulkDeleteAction,
+    fetchProductAction,
+    setActiveTabAction
+} from '../../redux/products/actions';
 import { baseApiUrl } from '../../constants';
 
 const ListProducts: React.FC = () => {
@@ -51,6 +56,14 @@ const ListProducts: React.FC = () => {
         },
         [dispatch, sendRequest]
     );
+    const handleEditBtnClick = useCallback(
+        (event: React.SyntheticEvent): void => {
+            const id = Number(event.currentTarget.getAttribute('data-id'));
+            dispatch(setActiveTabAction('edit'));
+            dispatch(fetchProductAction(id));
+        },
+        [items, dispatch]
+    );
 
     return (
         <>
@@ -74,7 +87,11 @@ const ListProducts: React.FC = () => {
                                 />
                             </td>
                             <td>
-                                <img src={`${baseApiUrl}/${item.previewphoto}`} alt="" width={85} />
+                                <img
+                                    src={`${baseApiUrl}/${item.previewphoto}`}
+                                    alt=""
+                                    className="object-cover h-[85px]"
+                                />
                             </td>
                             <td>
                                 <span className="text-gray-180">Ref.</span>{' '}
@@ -91,6 +108,7 @@ const ListProducts: React.FC = () => {
                                     dataId={String(item.id)}
                                     localeKey="Edit"
                                     className={'edit'}
+                                    onClick={handleEditBtnClick}
                                 />
                                 <ButtonTableAction
                                     dataId={String(item.id)}

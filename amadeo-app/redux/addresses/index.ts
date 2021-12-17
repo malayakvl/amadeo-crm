@@ -18,7 +18,7 @@ const initialState: State.Addresses = {
 const ACTION_HANDLERS: any = {
     [fetchAddressesAction]: {
         next: (
-            state: State.Notifications,
+            state: State.Addresses,
             action: Type.ReduxAction<Pick<State.Addresses, 'addresses'>>
         ): State.Addresses => ({
             ...state,
@@ -26,7 +26,7 @@ const ACTION_HANDLERS: any = {
             loading: false,
             isFetched: true
         }),
-        throw: (state: State.Notifications): State.Addresses => ({
+        throw: (state: State.Addresses): State.Addresses => ({
             ...state,
             loading: false,
             isFetched: true
@@ -34,7 +34,7 @@ const ACTION_HANDLERS: any = {
     },
     [fetchAddressAction]: {
         next: (
-            state: State.Notifications,
+            state: State.Addresses,
             action: Type.ReduxAction<Pick<State.Addresses, 'address'>>
         ): State.Addresses => ({
             ...state,

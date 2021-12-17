@@ -28,3 +28,23 @@ export const productsCountSelector = createSelector(
     rootSelector,
     (products: State.Products): number => products.count
 );
+export const activeTabSelector = createSelector(
+    rootSelector,
+    (products: State.Products): string => products.activeTab
+);
+export const productItemSelector = createSelector(
+    rootSelector,
+    (products: State.Products): Products.Product => products.product
+);
+export const isFetchSelector = createSelector(
+    rootSelector,
+    (products: State.Products): boolean => products.isFetched
+);
+export const selectedColorsSelector = createSelector(
+    rootSelector,
+    (products: State.Products): any => products.selectedColors
+);
+export const selectedSizesSelector = createSelector(
+    rootSelector,
+    (products: State.Products): any => products.selectedSizes
+);
