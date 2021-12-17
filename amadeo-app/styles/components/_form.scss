@@ -9,6 +9,16 @@
       font-medium border-gray-180 border;
   }
 }
+
+.form-control-disabled {
+  @apply text-gray-450 bg-gray-100 font-bold border-gray-180 w-full rounded-lg text-sm p-2.5;
+}
+
+.form-control-icon-disabled {
+  @apply pl-9 text-gray-450 bg-gray-100 font-bold border-gray-180 w-full rounded-lg text-sm p-2.5;
+}
+
+
 .form-control-icon {
   @apply bg-white w-full rounded-lg p-2.5 pl-9 text-sm text-gray-350
     font-medium border-gray-180 border placeholder-gray-180;

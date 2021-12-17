@@ -3,11 +3,11 @@ import { useForm } from 'react-hook-form';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import * as Yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import { providers, getSession, signIn } from 'next-auth/client';
 import { useTranslations } from 'next-intl';
 import ProviderBtns from '../../components/auth/ProviderBtns';
 import FullLayout from '../../components/layout/FullLayout';
+import Image from 'next/image';
 
 interface Props {
     label: string | 'text';
@@ -58,9 +58,9 @@ function Seller({ providers, locale }: { providers: any; locale: string }) {
             t('Passwords must match')
         )
     });
-    const formOptions = { resolver: yupResolver(validationSchema) };
+    const formOptions = { validationSchema };
 
-    const { register, handleSubmit, formState } = useForm(formOptions);
+    const { register, handleSubmit, formState } = useForm();
     const { errors } = formState;
 
     const onSubmit = (user: any) => {
@@ -70,6 +70,42 @@ function Seller({ providers, locale }: { providers: any; locale: string }) {
             callbackUrl: `${window.location.origin}${locale === 'fr' ? '' : `/${locale}`}/dashboard`
         });
     };
+
+    return (
+        <div className="flex justify-center">
+            <div className="mt-10 rounded-lg border shadow-xl flex justify-center w-[996px] bg-white">
+                <div className="p-20">
+                    <div className="flex mb-4">
+                        <div className="mr-2.5 font-bold text-3xl line-height-105percent w-60">Your email has been verified!</div>
+                        <Image
+                            src="/images/tick.svg"
+                            width="52"
+                            height="40"
+                            layout="fixed"
+                        />
+                    </div>
+
+                    <div className="flex mb-4 border p-3 bg-gray-100 rounded-lg">
+                        <Image
+                            src="/images/input-email.svg"
+                            width="24"
+                            height="24"
+                            layout="fixed"
+                        />
+
+                        <span className="ml-2.5 text-gray-180 font-bold text-sm">email@email.com</span>
+
+                    </div>
+
+                </div>
+                <div className="w-6/12">
+                    2
+                </div>
+            </div>
+        </div>
+
+
+    );
 
     return (
         <div className="flex justify-center min-h-screen">

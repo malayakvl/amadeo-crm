@@ -12,6 +12,7 @@ import Image from 'next/image';
 import { InputText } from '../../components/_form';
 import { Formik } from 'formik';
 import { InputPassword } from '../../components/_form'
+import InputTextDisabled from '../../components/_form/InputTextDisabled';
 
 const { publicRuntimeConfig } = getConfig();
 const baseUrl = `${publicRuntimeConfig.apiUrl}/auth`;
@@ -63,17 +64,7 @@ function Buyer({ providers, locale }: { providers: any; locale: string }) {
                     />
                 </div>
 
-                <div className="flex mb-4 border p-3 bg-gray-100 rounded-lg">
-                    <Image
-                        src="/images/input-email.svg"
-                        width="24"
-                        height="24"
-                        layout="fixed"
-                    />
-
-                    <span className="ml-2.5 text-gray-180 font-bold text-sm">email@email.com</span>
-
-                </div>
+                <InputTextDisabled icon="f-email" value="email@email.com"/>
 
                 <Formik
                     enableReinitialize
