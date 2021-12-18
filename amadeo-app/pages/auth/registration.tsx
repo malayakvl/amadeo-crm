@@ -33,6 +33,14 @@ export default Registration;
 export async function getServerSideProps(context: any) {
     const { hash } = context.query;
     const res = await fetch(`${baseUrl}/invitation/${hash}`);
+
+    if (res.status !== 200) {
+        return {
+            redirect: { destination: '/' }
+        };
+
+    }
+
     const json = await res.json();
 
     if (!json.active) {

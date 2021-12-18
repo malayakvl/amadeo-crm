@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import InputTextDisabled from '../../components/_form/InputTextDisabled';
-import { Field, Formik } from 'formik';
+import { Formik } from 'formik';
 import { InputText } from '../../components/_form/InputText';
 import { TogglePassword } from '../../components/_form';
 import * as Yup from 'yup';
@@ -33,8 +33,8 @@ export default function SellerRegistration() {
             body: JSON.stringify(values),
             headers: { 'Content-Type': 'application/json' }
         }).then(r => {
-            console.log(r)
             
+
         });
     };
 
@@ -42,7 +42,7 @@ export default function SellerRegistration() {
         <Formik
             enableReinitialize
             validationSchema={validationSchema}
-            initialValues={{email: 'email@email.com'}}
+            initialValues={{ email: 'email@email.com' }}
             onSubmit={onSubmit}>
             {(props) => (
                 <form onSubmit={props.handleSubmit}>
@@ -58,7 +58,7 @@ export default function SellerRegistration() {
                                 />
                             </div>
 
-                            <InputTextDisabled name="email" icon="f-email" props={props}/>
+                            <InputTextDisabled name="email" icon="f-email" props={props} />
 
                             <div className="mb-3 mt-9 text-blue-350 text-sm">Almost there, please</div>
                             <div className="w-60 text-5xl line-height-105percent font-bold">
