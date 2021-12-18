@@ -17,9 +17,8 @@ const InputTextDisabled: React.FC<Props> = ({ name, icon, props }) => {
                 disabled
                 readOnly
             />
-            
         </div>
     );
-}
+};
 
 export default InputTextDisabled;

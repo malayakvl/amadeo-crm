@@ -24,7 +24,6 @@ const InputPassword: React.FC<Props> = ({ style, icon, name, label, placeholder,
                 value={props.values[name] || ''}
                 name={name}
             />
-            <i role="presentation" className="input-eye cursor-pointer" onClick={() => {}} />
             {props.errors[name] && <div className="error-el">{props.errors[name]}</div>}
         </div>
     );

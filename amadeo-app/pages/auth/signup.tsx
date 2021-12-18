@@ -29,14 +29,13 @@ export default function Signup({ providers, locale }: { providers: any; locale: 
             method: 'POST',
             body: JSON.stringify(values),
             headers: { 'Content-Type': 'application/json' }
-        }).then(r => {
+        }).then((r) => {
             if (!r.ok) {
                 alert('Error');
-
             }
 
             alert('Check your email box and follow found instructions there');
-            actions.resetForm()
+            actions.resetForm();
         });
     };
 
@@ -131,7 +130,9 @@ export default function Signup({ providers, locale }: { providers: any; locale: 
                                             className="text-green-250 w-5 h-5 border-2 rounded mr-2.5"
                                             type="checkbox"
                                         />
-                                        <label htmlFor="acceptTerms" className="text-xs font-medium">
+                                        <label
+                                            htmlFor="acceptTerms"
+                                            className="text-xs font-medium">
                                             I have read and acept the{' '}
                                             <span className="text-orange-450">terms of use</span>
                                         </label>

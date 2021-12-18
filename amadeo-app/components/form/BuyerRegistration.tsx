@@ -6,7 +6,7 @@ import { TogglePassword } from '../_form/TogglePassword';
 import InputTextDisabled from '../_form/InputTextDisabled';
 
 export default function BuyerRegistration({ email }: { email: string }) {
-    console.log(email)
+    console.log(email);
     const t = useTranslations();
 
     const validationSchema = Yup.object().shape({
@@ -24,21 +24,17 @@ export default function BuyerRegistration({ email }: { email: string }) {
     });
 
     const onSubmit = (values: any) => {
-        console.log(values)
+        console.log(values);
     };
 
     return (
         <div className="mt-10 rounded-lg border shadow-xl bg-white w-96 p-10 pb-10">
             <div className="flex items-center mb-4">
-                <div className="mr-2.5 font-bold text-3xl line-height-105percent w-60">Your email has been verified!</div>
-                <Image
-                    src="/images/tick.svg"
-                    width="52"
-                    height="40"
-                    layout="fixed"
-                />
+                <div className="mr-2.5 font-bold text-3xl line-height-105percent w-60">
+                    Your email has been verified!
+                </div>
+                <Image src="/images/tick.svg" width="52" height="40" layout="fixed" />
             </div>
-
 
             <Formik
                 enableReinitialize
@@ -51,7 +47,7 @@ export default function BuyerRegistration({ email }: { email: string }) {
 
                         <div className="mt-8 mb-5 font-xs text-sm text-blue-350">
                             Please create a Password
-                            </div>
+                        </div>
 
                         <TogglePassword
                             icon={'f-key'}
@@ -72,13 +68,11 @@ export default function BuyerRegistration({ email }: { email: string }) {
                         <div className="border-t pt-9">
                             <button type="submit" className="uppercase pt-9 gradient-btn w-full">
                                 continue
-                                </button>
+                            </button>
                         </div>
-
                     </form>
                 )}
             </Formik>
         </div>
     );
-
 }

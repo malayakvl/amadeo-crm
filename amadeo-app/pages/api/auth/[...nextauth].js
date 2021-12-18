@@ -55,17 +55,7 @@ export default NextAuth({
                 throw `/auth/signin?message=your token expired`;
                 // return null
             }
-        }),
-        CredentialsProvider({
-            id: 'credentials_registration',
-            async authorize(credentials) {               
-                const res = await fetch(`${baseUrl}/register`, {
-                    method: 'POST',
-                    body: JSON.stringify(credentials),
-                    headers: { 'Content-Type': 'application/json' }
-                });
-            }
-        }),
+        })
     ],
     events: {
         async signIn(message) {

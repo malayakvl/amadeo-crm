@@ -38,21 +38,21 @@ const TogglePassword: React.FC<Props> = ({ style, icon, name, label, placeholder
                         />
                     </>
                 ) : (
-                        <>
-                            <input
-                                className={icon ? 'form-control-icon' : 'form-control'}
-                                type="text"
-                                onChange={props.handleChange}
-                                name={name}
-                            />
-                            <EyeOffIcon
-                                className="h-7 text-gray-180 absolute right-2 top-2"
-                                onClick={() => {
-                                    setShowPassword(!showPassword);
-                                }}
-                            />
-                        </>
-                    )}
+                    <>
+                        <input
+                            className={icon ? 'form-control-icon' : 'form-control'}
+                            type="text"
+                            onChange={props.handleChange}
+                            name={name}
+                        />
+                        <EyeOffIcon
+                            className="h-7 text-gray-180 absolute right-2 top-2"
+                            onClick={() => {
+                                setShowPassword(!showPassword);
+                            }}
+                        />
+                    </>
+                )}
             </div>
             {props.errors[name] && <div className="error-el">{props.errors[name]}</div>}
         </div>
