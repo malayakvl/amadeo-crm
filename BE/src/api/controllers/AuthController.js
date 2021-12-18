@@ -94,11 +94,18 @@ class AuthController {
     async authInvite(req, res) {
         const data = req.body;
 
+        const user = await userModel.findUserByEmail(data.email);
+
+        if (user) {
+            return res.status(403).json({ message: 'Email present' });
+
+        }
+
         let invitation = await invitationModel.findByEmail(data.email);
 
         if (invitation) {
             await invitationModel.delete(invitation.id)
-            
+
         }
 
         invitation = await invitationModel.create(data);
@@ -115,7 +122,7 @@ class AuthController {
             Regards, Proshop Team
             `
         );
-        
+
         return res.status(200).json({ status: 'success' });
     }
 

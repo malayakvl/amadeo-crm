@@ -31,7 +31,9 @@ export default function Signup({ providers, locale }: { providers: any; locale: 
             headers: { 'Content-Type': 'application/json' }
         }).then((r) => {
             if (!r.ok) {
-                alert('Error');
+                r.json().then((json) => alert(json.message));
+                return;
+                
             }
 
             alert('Check your email box and follow found instructions there');
