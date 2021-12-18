@@ -7,16 +7,16 @@ import SellerRegistration from '../../components/form/SellerRegistration';
 const { publicRuntimeConfig } = getConfig();
 const baseUrl = `${publicRuntimeConfig.apiUrl}/auth`;
 
-function Registration(props: any) {
+function Registration(invitation: any) {
     let Form = <></>
 
-    if (props.role_id === 1) {
-        Form = <BuyerRegistration />
+    if (invitation.role_id === 1) {
+        Form = <BuyerRegistration email={invitation.email}/>
 
     }
 
-    if (props.role_id === 2) {
-        Form = <SellerRegistration />
+    if (invitation.role_id === 2) {
+        Form = <SellerRegistration email={invitation.email} />
 
     }
 
@@ -45,6 +45,7 @@ export async function getServerSideProps(context: any) {
 
     if (!json.active) {
         return {
+            invitation: json,
             redirect: { destination: '/' }
         };
     }

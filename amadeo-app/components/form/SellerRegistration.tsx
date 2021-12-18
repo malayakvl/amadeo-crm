@@ -10,7 +10,7 @@ import getConfig from 'next/config';
 const { publicRuntimeConfig } = getConfig();
 const baseUrl = `${publicRuntimeConfig.apiUrl}/auth`;
 
-export default function SellerRegistration() {
+export default function SellerRegistration({ email }: { email: any }) {
     const t = useTranslations();
 
     const validationSchema = Yup.object().shape({
@@ -33,7 +33,7 @@ export default function SellerRegistration() {
             body: JSON.stringify(values),
             headers: { 'Content-Type': 'application/json' }
         }).then(r => {
-            
+
 
         });
     };
@@ -42,7 +42,7 @@ export default function SellerRegistration() {
         <Formik
             enableReinitialize
             validationSchema={validationSchema}
-            initialValues={{ email: 'email@email.com' }}
+            initialValues={{ email }}
             onSubmit={onSubmit}>
             {(props) => (
                 <form onSubmit={props.handleSubmit}>

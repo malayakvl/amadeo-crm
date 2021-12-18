@@ -2,10 +2,11 @@ import { Formik } from 'formik';
 import Image from 'next/image';
 import * as Yup from 'yup';
 import { useTranslations } from 'next-intl';
-import {TogglePassword} from '../_form/TogglePassword';
+import { TogglePassword } from '../_form/TogglePassword';
 import InputTextDisabled from '../_form/InputTextDisabled';
 
-export default function SellerRegistration() {
+export default function BuyerRegistration({ email }: { email: string }) {
+    console.log(email)
     const t = useTranslations();
 
     const validationSchema = Yup.object().shape({
@@ -41,12 +42,12 @@ export default function SellerRegistration() {
 
             <Formik
                 enableReinitialize
-                initialValues={{}}
+                initialValues={{ email }}
                 validationSchema={validationSchema}
                 onSubmit={onSubmit}>
                 {(props) => (
                     <form>
-                        <InputTextDisabled name="email" icon="f-email" value="email@email.com" />
+                        <InputTextDisabled name="email" icon="f-email" props={props} />
 
                         <div className="mt-8 mb-5 font-xs text-sm text-blue-350">
                             Please create a Password
