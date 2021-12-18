@@ -1,11 +1,10 @@
-import Image from 'next/image';
-
 interface Props {
-    value: string;
+    props: any;
+    name: string;
     icon: string;
 }
 
-const InputTextDisabled: React.FC<Props> = ({ value, icon }) => {
+const InputTextDisabled: React.FC<Props> = ({ name, icon, props }) => {
     return (
         <div className={`relative`}>
             {icon && <i className={`f-icon ${icon}`} />}
@@ -13,8 +12,10 @@ const InputTextDisabled: React.FC<Props> = ({ value, icon }) => {
             <input
                 className={icon ? 'form-control-icon-disabled' : 'form-control-disabled'}
                 type="text"
-                value={value}
+                name={name}
+                value={props.values[name]}
                 disabled
+                readOnly
             />
             
         </div>

@@ -46,7 +46,7 @@ export default function SellerRegistration() {
                 onSubmit={onSubmit}>
                 {(props) => (
                     <form>
-                        <InputTextDisabled icon="f-email" value="email@email.com" />
+                        <InputTextDisabled name="email" icon="f-email" value="email@email.com" />
 
                         <div className="mt-8 mb-5 font-xs text-sm text-blue-350">
                             Please create a Password

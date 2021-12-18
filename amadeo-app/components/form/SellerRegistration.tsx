@@ -1,27 +1,26 @@
 import Image from 'next/image';
 import InputTextDisabled from '../../components/_form/InputTextDisabled';
-import { Formik } from 'formik';
+import { Field, Formik } from 'formik';
 import { InputText } from '../../components/_form/InputText';
 import { TogglePassword } from '../../components/_form';
 import * as Yup from 'yup';
 import { useTranslations } from 'next-intl';
+import getConfig from 'next/config';
+
+const { publicRuntimeConfig } = getConfig();
+const baseUrl = `${publicRuntimeConfig.apiUrl}/auth`;
 
 export default function SellerRegistration() {
     const t = useTranslations();
 
     const validationSchema = Yup.object().shape({
-        email: Yup.string()
-            .email(t('Must be a valid email'))
-            .required(t('You must enter your email')),
-        last_name: Yup.string().required(t('You must enter your family name')),
         first_name: Yup.string().required(t('You must enter your first name')),
-        identification_number: Yup.string().required(t('You must enter your tax-ID')),
+        last_name: Yup.string().required(t('You must enter your family name')),
         full_address: Yup.string().required(t('You must enter your address')),
         phone: Yup.string().required(t('You must enter your phone number')),
-        terms: Yup.boolean().oneOf([true], t('Confirm terms')),
         password: Yup.string()
             .required(t('Required field'))
-            .min(3, t('Password must be at least 6 characters')),
+            .min(6, t('Password must be at least 6 characters')),
         password_confirmation: Yup.string().oneOf(
             [Yup.ref('password'), null],
             t('Passwords must match')
@@ -29,42 +28,50 @@ export default function SellerRegistration() {
     });
 
     const onSubmit = (values: any) => {
-        console.log(values)
+        fetch(`${baseUrl}/register`, {
+            method: 'POST',
+            body: JSON.stringify(values),
+            headers: { 'Content-Type': 'application/json' }
+        }).then(r => {
+            console.log(r)
+            
+        });
     };
 
     return (
-        <div className="px-24 py-14 my-10 rounded-lg border shadow-xl flex justify-center w-[996px] bg-white">
-            <div className="pt-5 pr-20 border-r">
-                <div className="flex mb-4 items-center">
-                    <div className="mr-2.5 font-bold text-3xl line-height-105percent w-60">Your email has been verified!</div>
-                    <Image
-                        src="/images/tick.svg"
-                        width="52"
-                        height="40"
-                        layout="fixed"
-                    />
-                </div>
+        <Formik
+            enableReinitialize
+            validationSchema={validationSchema}
+            initialValues={{email: 'email@email.com'}}
+            onSubmit={onSubmit}>
+            {(props) => (
+                <form onSubmit={props.handleSubmit}>
+                    <div className="px-24 py-14 my-10 rounded-lg border shadow-xl flex justify-center w-[996px] bg-white">
+                        <div className="pt-5 pr-20 border-r">
+                            <div className="flex mb-4 items-center">
+                                <div className="mr-2.5 font-bold text-3xl line-height-105percent w-60">Your email has been verified!</div>
+                                <Image
+                                    src="/images/tick.svg"
+                                    width="52"
+                                    height="40"
+                                    layout="fixed"
+                                />
+                            </div>
 
-                <InputTextDisabled icon="f-email" value="email@email.com" />
+                            <InputTextDisabled name="email" icon="f-email" props={props}/>
 
-                <div className="mb-3 mt-9 text-blue-350 text-sm">Almost there, please</div>
-                <div className="w-60 text-5xl line-height-105percent font-bold">
-                    Complete your profile
-                    </div>
-            </div>
-            <div className="ml-8 w-full">
-                <Formik
-                    enableReinitialize
-                    initialValues={{}}
-                    validationSchema={validationSchema}
-                    onSubmit={onSubmit}>
-                    {(props) => (
-                        <form>
+                            <div className="mb-3 mt-9 text-blue-350 text-sm">Almost there, please</div>
+                            <div className="w-60 text-5xl line-height-105percent font-bold">
+                                Complete your profile
+                            </div>
+                        </div>
+                        <div className="ml-8 w-full">
+
                             <InputText
                                 icon={'f-fname'}
                                 style={null}
                                 label={null}
-                                name={'name'}
+                                name={'first_name'}
                                 placeholder={'Name'}
                                 props={props}
                             />
@@ -80,7 +87,7 @@ export default function SellerRegistration() {
                                 icon={'f-company'}
                                 style={null}
                                 label={null}
-                                name={'company'}
+                                name={'company_name'}
                                 placeholder={'Company'}
                                 props={props}
                             />
@@ -104,7 +111,7 @@ export default function SellerRegistration() {
                                 icon={'f-location'}
                                 style={null}
                                 label={null}
-                                name={'address'}
+                                name={'full_address'}
                                 placeholder={'Full Address'}
                                 props={props}
                             />
@@ -128,20 +135,20 @@ export default function SellerRegistration() {
                                 icon={'f-key'}
                                 style={'mb-9'}
                                 label={null}
-                                name={'confirm_parssword'}
+                                name={'password_confirmation'}
                                 placeholder={'Confirm password'}
                                 props={props}
                             />
                             <div className="border-t pt-9">
                                 <button type="submit" className="uppercase pt-9 gradient-btn w-full">
                                     continue
-                                    </button>
+                                </button>
                             </div>
-                        </form>
-                    )}
-                </Formik>
-            </div>
-        </div>
+                        </div>
+                    </div>
+                </form>
+            )}
+        </Formik>
     )
 
 }
