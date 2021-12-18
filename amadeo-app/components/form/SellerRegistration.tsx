@@ -33,7 +33,11 @@ export default function SellerRegistration({ email }: { email: any }) {
             body: JSON.stringify(values),
             headers: { 'Content-Type': 'application/json' }
         }).then(r => {
+            r.json().then((json) => {
+                console.log(json)
 
+            })
+            
 
         });
     };

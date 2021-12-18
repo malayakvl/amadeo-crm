@@ -53,26 +53,53 @@ class AuthController {
      * @returns {Promise<*>}
      */
     async authRegister(req, res) {
-        const _user = await userModel.findUserByEmail(req.body.email);
-        if (_user) {
-            res.status(402).json({ user: null, error: 'Email present' });
-        } else {
-            const { user, error } = await userModel.create(req.body);
-            if (error) {
-                return res.status(error.code).json(error);
-            }
-            // sendEmail('welcome', user);
-            req.login(user, { session: false },
-                (error) => {
-                    if (error) {
-                        res.send(error);
-                    }
-                    getTokensAndSetCookies(req, res, user.id, user.email);
+        let formData = req.body;
+        let email = formData.email
 
-                    res.status(200).json({ user: user });
-                }
-            );
+        let invitation = await invitationModel.findByEmail(email);
+
+        if (!invitation) {
+            return res.status(403).json({ message: "You don't have invitation" });
+
         }
+
+        if (!invitation.active) {
+            return res.status(403).json({ message: "Your invitation isn't active" });
+
+        }
+
+        const _user = await userModel.findUserByEmail(email);
+
+        if (_user) {
+            return res.status(403).json({ user: null, error: 'Email present' });
+
+        }
+
+        let createUserData = {...formData, role_id: invitation.role_id}
+
+
+        const { user, error } = await userModel.create(createUserData);
+
+        if (error) {
+            return res.status(error.code).json(error);
+
+        }
+
+        invitationModel.deactivate(invitation.id);
+        
+        return res.status(200).json({user})
+
+        // req.login(user, { session: false },
+        //     (error) => {
+        //         if (error) {
+        //             res.send(error);
+        //         }
+        //         getTokensAndSetCookies(req, res, user.id, user.email);
+
+        //         res.status(200).json({ user: user });
+        //     }
+        // );
+
     }
 
     async authInvite(req, res) {
