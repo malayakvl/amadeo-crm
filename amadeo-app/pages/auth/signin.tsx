@@ -6,8 +6,7 @@ import ProviderBtns from '../../components/auth/ProviderBtns';
 import { InputText, InputPassword } from '../../components/_form';
 import { signIn } from 'next-auth/client';
 import FullLayout from '../../components/layout/FullLayout';
-import { Formik } from 'formik';
-import Image from 'next/image';
+import { Formik, Field } from 'formik';
 
 function Signin({ locale, providers }: { locale: string, providers: any }) {
     const t = useTranslations();
@@ -32,9 +31,8 @@ function Signin({ locale, providers }: { locale: string, providers: any }) {
                         signIn('credentials_login', {
                             email: (values as any).email,
                             password: (values as any).password,
-                            callbackUrl: `${window.location.origin}${
-                                locale === 'fr' ? '' : `/${locale}`
-                            }/dashboard`
+                            callbackUrl: `${window.location.origin}${locale === 'fr' ? '' : `/${locale}`
+                                }/dashboard`
                         });
                         // dispatch(changePasswordAction(values));
                     }}>
@@ -59,7 +57,12 @@ function Signin({ locale, providers }: { locale: string, providers: any }) {
                             />
 
                             <div className="text-gray-450 flex items-center mb-5">
-                                <input type="checkbox" className="mr-2" />
+                                <Field
+                                    id="acceptTerms"
+                                    name="acceptTerms"
+                                    className="text-green-250 w-5 h-5 border-2 rounded mr-2.5"
+                                    type="checkbox"
+                                />
                                 <div className="text-xs">Remember me</div>
                                 <Link href={'/auth/restore'}>
                                     <a className="ml-auto text-xs text-orange-450">
