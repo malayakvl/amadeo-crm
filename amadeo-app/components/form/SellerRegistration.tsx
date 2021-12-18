@@ -6,6 +6,7 @@ import { TogglePassword } from '../../components/_form';
 import * as Yup from 'yup';
 import { useTranslations } from 'next-intl';
 import getConfig from 'next/config';
+import { signIn } from 'next-auth/client';
 
 const { publicRuntimeConfig } = getConfig();
 const baseUrl = `${publicRuntimeConfig.apiUrl}/auth`;
@@ -34,7 +35,11 @@ export default function SellerRegistration({ email }: { email: any }) {
             headers: { 'Content-Type': 'application/json' }
         }).then((r) => {
             r.json().then((json) => {
-                console.log(json);
+                signIn('credentials_login', {
+                    email: values.email,
+                    password: values.password,
+                    callbackUrl: `${window.location.origin}/dashboard`
+                });
             });
         });
     };
