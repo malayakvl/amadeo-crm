@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import { TogglePassword } from '../_form/TogglePassword';
 import InputTextDisabled from '../_form/InputTextDisabled';
 import getConfig from 'next/config';
+import { signIn } from 'next-auth/client';
 
 const { publicRuntimeConfig } = getConfig();
 const baseUrl = `${publicRuntimeConfig.apiUrl}/auth`;
@@ -13,10 +14,6 @@ export default function BuyerRegistration({ email }: { email: string }) {
     const t = useTranslations();
 
     const validationSchema = Yup.object().shape({
-        email: Yup.string()
-            .email(t('Must be a valid2 email'))
-            .required(t('You must enter your email')),
-        terms: Yup.boolean().oneOf([true], t('Confirm terms')),
         password: Yup.string()
             .required(t('Required field'))
             .min(3, t('Password must be at least 6 characters')),
@@ -32,8 +29,12 @@ export default function BuyerRegistration({ email }: { email: string }) {
             body: JSON.stringify(values),
             headers: { 'Content-Type': 'application/json' }
         }).then((r) => {
-            r.json().then((json) => {
-                console.log(json);
+            r.json().then(() => {
+                signIn('credentials_login', {
+                    email: values.email,
+                    password: values.password,
+                    callbackUrl: `${window.location.origin}/dashboard`
+                });
             });
         });
     };
@@ -72,7 +73,7 @@ export default function BuyerRegistration({ email }: { email: string }) {
                             icon={'f-key'}
                             style={null}
                             label={null}
-                            name={'confirm_parssword'}
+                            name={'password_confirmation'}
                             placeholder={'Confirm password'}
                             props={props}
                         />

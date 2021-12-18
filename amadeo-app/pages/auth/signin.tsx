@@ -34,7 +34,7 @@ function Signin({ locale, providers }: { locale: string, providers: any }) {
                             callbackUrl: `${window.location.origin}${locale === 'fr' ? '' : `/${locale}`
                                 }/dashboard`
                         });
-                        // dispatch(changePasswordAction(values));
+                        
                     }}>
                     {(props) => (
                         <form onSubmit={props.handleSubmit} className="mb-4">
