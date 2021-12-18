@@ -26,8 +26,7 @@ class Invitation {
                 ;
             `);
 
-            const invitation = res ? await this.findUserByEmail(email) : null;
-            return { invitation: invitation, error: null };
+            return await this.findByEmail(email);
 
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
@@ -103,6 +102,35 @@ class Invitation {
         }
 
     } 
+
+    async deactivate(id) {
+        const client = await pool.connect();
+        try {
+            const res = await client.query(`UPDATE data.invitations SET active = ${false} WHERE id = ${id}`);
+            if (res.rows.length) {
+                return res.rows[0];
+                
+            } else {
+                return null;
+
+            }
+            
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error:',
+                    { message: e.message }
+                );
+            }
+
+            throw new Error(e);
+
+        } finally {
+            client.release();
+        }
+
+    }
 
 }
 

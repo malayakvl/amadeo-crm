@@ -75,7 +75,7 @@ class AuthController {
 
         }
 
-        let createUserData = {...formData, role_id: invitation.role_id}
+        let createUserData = { ...formData, role_id: invitation.role_id }
 
 
         const { user, error } = await userModel.create(createUserData);
@@ -85,33 +85,33 @@ class AuthController {
 
         }
 
-        invitationModel.deactivate(invitation.id);
-        
-        return res.status(200).json({user})
+        invitationModel.deactivate(invitation.id)
 
-        // req.login(user, { session: false },
-        //     (error) => {
-        //         if (error) {
-        //             res.send(error);
-        //         }
-        //         getTokensAndSetCookies(req, res, user.id, user.email);
-
-        //         res.status(200).json({ user: user });
-        //     }
-        // );
+        return res.status(200).json({ user })
 
     }
 
     async authInvite(req, res) {
         const data = req.body;
-        const basicLink = `${process.env.APPLICATION_BASE_URL}/auth/invite-link?hash=`;
+        const basicLink = `${process.env.APPLICATION_BASE_URL}/auth/registration?hash=`;
         const sendLink = (link) => sendMail(
             data.email,
             'Amadeo CRM - Registration',
-            `Follow <a href='${link}'>link</a> for continue`
+            `
+            Welcome at Proshop, (name)!
+
+            Here’s the verification link - <a href='${link}'>${link}</a>
+            
+            Please, complete the registration via this link
+            
+            Regards,
+            
+            Proshop Team
+            `
         );
 
         let invitation = await invitationModel.findByEmail(data.email);
+
         if (invitation) {
             sendLink(basicLink + invitation.hash)
 
