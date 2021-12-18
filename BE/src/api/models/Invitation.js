@@ -132,6 +132,28 @@ class Invitation {
 
     }
 
+    async delete(id) {
+        const client = await pool.connect();
+        try {
+            await client.query(`DELETE FROM data.invitations WHERE id = ${id}`);
+            
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error:',
+                    { message: e.message }
+                );
+            }
+
+            throw new Error(e);
+
+        } finally {
+            client.release();
+        }
+
+    }
+
 }
 
 export default new Invitation()

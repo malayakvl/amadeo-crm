@@ -93,36 +93,29 @@ class AuthController {
 
     async authInvite(req, res) {
         const data = req.body;
-        const basicLink = `${process.env.APPLICATION_BASE_URL}/auth/registration?hash=`;
-        const sendLink = (link) => sendMail(
-            data.email,
-            'Amadeo CRM - Registration',
-            `
-            Welcome at Proshop, (name)!
-
-            Here’s the verification link - <a href='${link}'>${link}</a>
-            
-            Please, complete the registration via this link
-            
-            Regards,
-            
-            Proshop Team
-            `
-        );
 
         let invitation = await invitationModel.findByEmail(data.email);
 
         if (invitation) {
-            sendLink(basicLink + invitation.hash)
-
-            return res.status(200).json({ status: 'success' });
-
+            await invitationModel.delete(invitation.id)
+            
         }
 
         invitation = await invitationModel.create(data);
 
-        sendLink(basicLink + invitation.hash)
+        let link = `${process.env.APPLICATION_BASE_URL}/auth/registration?hash=${invitation.hash}`;
 
+        sendMail(
+            data.email,
+            'Amadeo CRM - Registration',
+            `
+            Welcome at Proshop, (${data.email})! \n
+            Here’s the verification link - <a href='${link}'>${link}</a> \n
+            Please, complete the registration via this link \n
+            Regards, Proshop Team
+            `
+        );
+        
         return res.status(200).json({ status: 'success' });
     }
 
