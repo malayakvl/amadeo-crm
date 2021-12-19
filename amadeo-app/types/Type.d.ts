@@ -4,6 +4,7 @@ declare namespace Type {
     type Moment = import('moment').Moment;
     type Dispatch = import('redux').Dispatch;
     type ReduxAction<T> = import('redux-actions').Action<T>;
+    type ButtonVariant = import('react-bootstrap/types').ButtonVariant;
 
     interface Hash<T> {
         [key: string]: T;

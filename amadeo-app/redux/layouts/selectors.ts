@@ -35,3 +35,8 @@ export const rowIdChecked = (id: number) =>
         (layouts: State.Layouts): boolean =>
             layouts.checkedIds.find((data: any) => data.id === id)?.checked || false
     );
+
+export const modalConfirmationMetaSelector = createSelector(
+    rootSelector,
+    (layouts: State.Layouts): Layouts.ModalConfirmationMeta | null => layouts.modalConfirmationMeta
+);

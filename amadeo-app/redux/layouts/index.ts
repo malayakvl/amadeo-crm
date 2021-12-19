@@ -10,7 +10,8 @@ import {
     checkIdsAction,
     initIdsAction,
     checkAllIdsAction,
-    uncheckAllIdsAction
+    uncheckAllIdsAction,
+    setModalConfirmationMetaAction
 } from './actions';
 
 const initPagination = { limit: 35, offset: 0, sort: 'DESC', column: 'created_at', query: '' };
@@ -22,7 +23,8 @@ const initialState: State.Layouts = {
     },
     isSidebarOpen: true,
     toasts: [],
-    checkedIds: []
+    checkedIds: [],
+    modalConfirmationMeta: null
 };
 
 // ------------------------------------
@@ -120,6 +122,15 @@ const ACTION_HANDLERS: any = {
     ): State.Layouts => ({
         ...state,
         toasts: state.toasts.filter((toast) => toast.id !== action.payload)
+    }),
+    [setModalConfirmationMetaAction]: (
+        state: State.Layouts,
+        action: Type.ReduxAction<Layouts.ModalConfirmationMeta>
+    ): State.Layouts => ({
+        ...state,
+        modalConfirmationMeta: action.payload && {
+            ...action.payload
+        }
     })
 };
 
@@ -134,7 +145,8 @@ export {
     setErrorToastAction,
     setSuccessToastAction,
     setInfoToastAction,
-    deleteToastAction
+    deleteToastAction,
+    setModalConfirmationMetaAction
 };
 
 // ------------------------------------

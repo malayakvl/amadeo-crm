@@ -123,5 +123,7 @@
   "Duplicate": "Duplicate",
   "Configured": "This product has options, like size or color",
   "Table is empty": "Table is empty",
-  "Update Product": "Update Product"
+  "Update Product": "Update Product",
+  "Do you want to delete": "Do you want to delete",
+  "Edit Product": "Edit Product"
 }
