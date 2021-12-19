@@ -20,3 +20,11 @@ export function authHeader(email: string) {
     ).toString('base64');
     return { Authorization: `Bearer ${token}` };
 }
+
+export const toggleModalConfirmation = () => {
+    // const body = document.querySelector('body');
+    const modal = document.querySelector('.modal-confirmation');
+    (modal as any).classList.toggle('opacity-0');
+    (modal as any).classList.toggle('pointer-events-none');
+    (modal as any).classList.toggle('modal-active');
+};

@@ -58,7 +58,7 @@ apiRoutes.route('/product')
 apiRoutes.route('/products/fetch-colors-and-sizes').get(ProductController.fetchAdditional);
 apiRoutes.route('/fetch-product/:id').get(ProductController.fetchProduct);
 apiRoutes.route('/fetch-products').get(ProductController.fetchData);
-
+apiRoutes.route('/products/delete/:id').delete(ProductController.deleteRow);
 apiRoutes.get('/*', defaultHandler);
 
 export default apiRoutes;

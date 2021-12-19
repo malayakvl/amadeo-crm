@@ -9,9 +9,11 @@ import {
     fetchProductsAction,
     bulkDeleteAction,
     fetchProductAction,
-    setActiveTabAction
+    setActiveTabAction,
+    deleteProductAction
 } from '../../redux/products/actions';
 import { baseApiUrl } from '../../constants';
+import { setModalConfirmationMetaAction } from '../../redux/layouts';
 
 const ListProducts: React.FC = () => {
     const dispatch = useDispatch();
@@ -47,12 +49,11 @@ const ListProducts: React.FC = () => {
     const handleDeleteBtnClick = useCallback(
         (event: React.SyntheticEvent): void => {
             const id = Number(event.currentTarget.getAttribute('data-id'));
-            console.log(id);
-            // dispatch(
-            //     setModalConfirmationMetaAction({
-            //         onConfirm: async () => dispatch(deleteFormAction(id)).then(sendRequest),
-            //     })
-            // );
+            dispatch(
+                setModalConfirmationMetaAction({
+                    onConfirm: async () => dispatch(deleteProductAction(id)).then(sendRequest)
+                })
+            );
         },
         [dispatch, sendRequest]
     );
@@ -107,19 +108,20 @@ const ListProducts: React.FC = () => {
                                 <ButtonTableAction
                                     dataId={String(item.id)}
                                     localeKey="Edit"
-                                    className={'edit'}
+                                    className={'btn-edit'}
                                     onClick={handleEditBtnClick}
                                 />
                                 <ButtonTableAction
                                     dataId={String(item.id)}
                                     onClick={handleDuplicateBtnClick}
                                     localeKey="Duplicate"
-                                    className={'copy'}
+                                    className={'btn-copy'}
                                 />
                                 <ButtonTableAction
                                     dataId={String(item.id)}
                                     onClick={handleDeleteBtnClick}
                                     localeKey="Delete"
+                                    className={'btn-delete'}
                                 />
                             </td>
                         </tr>

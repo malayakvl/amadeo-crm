@@ -7,6 +7,7 @@ declare namespace Layouts {
         isSidebarOpen: boolean;
         toasts: Toast[];
         checkedIds: CheckedIds[];
+        modalConfirmationMeta: ModalConfirmationMeta | null;
     }
 
     interface Pagination {

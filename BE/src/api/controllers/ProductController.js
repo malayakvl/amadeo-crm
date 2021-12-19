@@ -86,6 +86,10 @@ class ProductController {
             return res.status(402).json({ error: 'Something wend wrong' });
         }
     }
+
+    async deleteRow (req, res) {
+        return res.status(200).json({ success: true });
+    }
 }
 
 export default new ProductController();

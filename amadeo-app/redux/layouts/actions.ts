@@ -26,3 +26,7 @@ export const setSuccessToastAction: any = createAction('layouts/SET_SUCCESS_TOAS
 export const setInfoToastAction: any = createAction('layouts/SET_INFO_TOAST');
 
 export const deleteToastAction: any = createAction('layouts/DELETE_TOAST');
+
+export const setModalConfirmationMetaAction: any = createAction(
+    'layouts/SET_MODAL_DELETE_CONFIRMATION_META'
+);

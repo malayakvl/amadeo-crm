@@ -42,8 +42,10 @@ export default function Index({ session, locale }: { session: any; locale: strin
                                 onClick={() => {
                                     dispatch(setActiveTabAction('add'));
                                 }}
-                                className={`tabs ${activeTab === 'add' ? 'active' : ''}`}>
-                                {t('Add Product')}
+                                className={`tabs ${
+                                    ['add', 'edit'].includes(activeTab) ? 'active' : ''
+                                }`}>
+                                {t(`${activeTab === 'edit' ? 'Edit' : 'Add'} Product`)}
                             </button>
                             <button
                                 id="password"

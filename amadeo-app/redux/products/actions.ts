@@ -1,5 +1,5 @@
 import { createAction } from 'redux-actions';
-import { authHeader } from '../../lib/functions';
+import { authHeader, toggleModalConfirmation } from '../../lib/functions';
 import axios from 'axios';
 import getConfig from 'next/config';
 const { publicRuntimeConfig } = getConfig();
@@ -98,6 +98,25 @@ export const fetchProductAction: any = createAction(
             return {
                 product: res.data.product
             };
+        }
+);
+export const deleteProductAction: any = createAction(
+    'products/DELETE_PRODUCT',
+    async (id: number) =>
+        (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
+            const state = getState();
+            return axios
+                .delete(`${baseUrl}/products/delete/${id}`, {
+                    headers: {
+                        ...authHeader(state.user.user.email)
+                    }
+                })
+                .then(async () => {
+                    await dispatch(fetchProductsAction());
+                    dispatch(setSuccessToastAction('Product has been deleted'));
+                    dispatch(setActiveTabAction('products'));
+                    toggleModalConfirmation();
+                });
         }
 );
 

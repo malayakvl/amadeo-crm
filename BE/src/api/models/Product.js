@@ -142,6 +142,8 @@ class Product {
         try {
             const res = await client.query(`SELECT * FROM data.products WHERE user_id=${userId} AND id=${id}`);
             if (res.rows.length) {
+                res.rows[0].selectedColors = [];
+                res.rows[0].selectedSizes = [];
                 const resConfigs = await client.query(`SELECT * FROM data.product_configurations WHERE product_id=${id}`);
                 if (resConfigs.rows.length > 0) {
                     const colors = [];
