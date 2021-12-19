@@ -284,7 +284,7 @@ function ProductForm({
                                 style={null}
                                 props={props}
                             />
-                            {props.values.configured && (
+                            {!props.values.configured && (
                                 <>
                                     <InputText
                                         icon={null}
