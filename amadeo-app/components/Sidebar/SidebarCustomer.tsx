@@ -2,8 +2,11 @@ import React from 'react';
 import Link from 'next/link';
 import Brand from './Brand';
 import Pages from './Pages';
+import { useTranslations } from 'next-intl';
 
 const SidebarCustomer: React.FC = () => {
+    const t = useTranslations();
+
     return (
         <>
             <div className="sidebar">
@@ -14,7 +17,7 @@ const SidebarCustomer: React.FC = () => {
                             <Link href={'/dashboard'}>
                                 <a>
                                     <i className="dashboard" />
-                                    <span className="s-caption">Dashboard</span>
+                                    <span className="s-caption">{t('Dashboard')}</span>
                                 </a>
                             </Link>
                         </li>
@@ -22,15 +25,15 @@ const SidebarCustomer: React.FC = () => {
                             <Link href={'/'}>
                                 <a>
                                     <i className="selling" />
-                                    <span className="s-caption">Live Selling</span>
+                                    <span className="s-caption">{t('Live Selling')}</span>
                                 </a>
                             </Link>
                         </li>
                         <li>
-                            <Link href={'/'}>
+                            <Link href={'/inventory'}>
                                 <a>
                                     <i className="inventory" />
-                                    <span className="s-caption">Inventory</span>
+                                    <span className="s-caption">{t('Inventory')}</span>
                                 </a>
                             </Link>
                         </li>
@@ -41,7 +44,7 @@ const SidebarCustomer: React.FC = () => {
                             <Link href={'/'}>
                                 <a>
                                     <i className="order" />
-                                    <span className="s-caption">Order</span>
+                                    <span className="s-caption">{t('Order')}</span>
                                 </a>
                             </Link>
                         </li>
@@ -49,7 +52,7 @@ const SidebarCustomer: React.FC = () => {
                             <Link href={'/'}>
                                 <a>
                                     <i className="waiting-list" />
-                                    <span className="s-caption">Waiting List</span>
+                                    <span className="s-caption">{t('Waiting List')}</span>
                                     <em>9</em>
                                 </a>
                             </Link>
@@ -58,7 +61,7 @@ const SidebarCustomer: React.FC = () => {
                             <Link href={'/'}>
                                 <a>
                                     <i className="shipping" />
-                                    <span className="s-caption">Shipping</span>
+                                    <span className="s-caption">{t('Shipping')}</span>
                                     <em>10</em>
                                 </a>
                             </Link>
@@ -67,7 +70,7 @@ const SidebarCustomer: React.FC = () => {
                             <Link href={'/'}>
                                 <a>
                                     <i className="buyers" />
-                                    <span className="s-caption">Buyers</span>
+                                    <span className="s-caption">{t('Buyers')}</span>
                                 </a>
                             </Link>
                         </li>
@@ -75,7 +78,7 @@ const SidebarCustomer: React.FC = () => {
                             <Link href={'/'}>
                                 <a>
                                     <i className="payments" />
-                                    <span className="s-caption">Payments</span>
+                                    <span className="s-caption">{t('Payments')}</span>
                                 </a>
                             </Link>
                         </li>

@@ -3,7 +3,17 @@ import { createAction } from 'redux-actions';
 // ------------------------------------
 // Actions
 // ------------------------------------
+export const setCheckedAction: any = createAction('layouts/SET_CHECKED');
+
 export const setPaginationAction: any = createAction('layouts/SET_PAGINATION');
+
+export const initIdsAction: any = createAction('layouts/INIT_IDS');
+
+export const checkIdsAction: any = createAction('layouts/CHECK_IDS');
+
+export const checkAllIdsAction: any = createAction('layouts/CHECK_ALL_IDS');
+
+export const uncheckAllIdsAction: any = createAction('layouts/UNCHECK_ALL_IDS');
 
 export const toggleSidebarAction: any = createAction('layouts/TOGGLE_SIDEBAR');
 
