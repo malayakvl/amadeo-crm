@@ -27,30 +27,20 @@ const InputText: React.FC<Props> = ({ style, icon, name, label, placeholder, pro
 
     const [inputValue, setInputValue] = useState(props.values[name]);
     return (
-        <div className={`mb-4 ${style}`}>
-            {label && (
-                <label className="control-label" htmlFor={name}>
-                    {t(label)}
-                </label>
-            )}
-            <div className="relative">
-                {icon && <i className={`f-icon ${icon}`} />}
+        <div className={`mb-4 ${style} relative`}>
+            {label && <label htmlFor={name}>{t(label)}</label>}
+            {icon && <i className={`f-icon ${icon}`} />}
 
-                <input
-                    className={icon ? 'form-control-icon' : 'form-control'}
-                    placeholder={placeholder ? t(placeholder) : ''}
-                    type="text"
-                    onChange={props.handleChange}
-                    value={inputValue || ''}
-                    name={name}
-                />
-                <i
-                    role="presentation"
-                    className="input-close cursor-pointer"
-                    onClick={() => clear()}
-                />
-                {props.errors[name] && <div className="error-el">{props.errors[name]}</div>}
-            </div>
+            <input
+                className={icon ? 'form-control-icon' : 'form-control'}
+                placeholder={placeholder ? t(placeholder) : ''}
+                type="text"
+                onChange={props.handleChange}
+                value={inputValue || ''}
+                name={name}
+            />
+            <i role="presentation" className="input-close cursor-pointer" onClick={() => clear()} />
+            {props.errors[name] && <div className="error-el">{props.errors[name]}</div>}
         </div>
     );
 };

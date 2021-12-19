@@ -53,7 +53,7 @@ function Account({
 
             <div className="page-title">
                 <h1>
-                    {t('Profile')} <em /> <span>{subTitle}</span>
+                    Profile <em /> <span>{subTitle}</span>
                 </h1>
             </div>
             <div className="block-white-8 mr-10">
