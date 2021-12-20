@@ -1,5 +1,15 @@
 .float-table {
-
+  input[type="checkbox"] {
+    appearance: none;
+    margin: 0;
+    font: inherit;
+    color: #00C868;
+    width: 1.5em;
+    height: 1.5em;
+    border: 0.15em solid #00C868;
+    border-radius: 4px;
+    transform: translateY(-0.075em);
+  }
 
   th {
     @apply px-3 py-3 text-xs font-bold leading-4 tracking-wider text-left text-blue-350;
@@ -9,11 +19,27 @@
     }
   }
   td {
-    @apply px-3 py-1 text-xs font-bold text-left text-gray-350;
+    @apply px-3 py-1 text-xs font-bold text-left text-gray-350 align-top;
 
     &:first-child {
       @apply px-0;
     }
+  }
+
+  .button_table_action {
+    text-indent: -99999px;
+    white-space: nowrap;
+    background-repeat: no-repeat;
+    @apply mr-1 w-[24px] h-[24px] border-0 bg-transparent inline-block cursor-pointer rounded-lg;
+  }
+  .btn-edit {
+    background-image: url("../../public/images/btn-edit.svg");
+  }
+  .btn-copy {
+    background-image: url("../../public/images/btn-copy.svg");
+  }
+  .btn-delete {
+    background-image: url("../../public/images/btn-copy.svg");
   }
 }
 

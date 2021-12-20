@@ -1,4 +1,3 @@
-// import moment from 'moment';
 import { handleActions } from 'redux-actions';
 import {
     setPaginationAction,
@@ -7,18 +6,25 @@ import {
     setErrorToastAction,
     setSuccessToastAction,
     setInfoToastAction,
-    deleteToastAction
+    deleteToastAction,
+    checkIdsAction,
+    initIdsAction,
+    checkAllIdsAction,
+    uncheckAllIdsAction,
+    setModalConfirmationMetaAction
 } from './actions';
-// import { AssetCategories, DefaultPreWarningSettingValue, CableVoltages } from 'constants/index';
 
 const initPagination = { limit: 35, offset: 0, sort: 'DESC', column: 'created_at', query: '' };
 
 const initialState: State.Layouts = {
     pagination: {
-        notifications: { ...initPagination }
+        notifications: { ...initPagination },
+        products: { ...initPagination }
     },
     isSidebarOpen: true,
-    toasts: []
+    toasts: [],
+    checkedIds: [],
+    modalConfirmationMeta: null
 };
 
 // ------------------------------------
@@ -41,7 +47,42 @@ const ACTION_HANDLERS: any = {
             }
         }
     }),
-
+    [initIdsAction]: (
+        state: State.Layouts,
+        action: Type.ReduxAction<State.Layouts>
+    ): State.Layouts => {
+        return <Layouts.Root>(<unknown>{
+            ...state,
+            checkedIds: action.payload
+        });
+    },
+    [checkIdsAction]: (
+        state: State.Layouts,
+        action: Type.ReduxAction<State.Layouts>
+    ): State.Layouts => {
+        return <Layouts.Root>{
+            ...state,
+            checkedIds: state.checkedIds.map((data) =>
+                (data as any).id === action.payload ? { ...data, checked: !data.checked } : data
+            )
+        };
+    },
+    [checkAllIdsAction]: (state: State.Layouts): State.Layouts => {
+        return <Layouts.Root>{
+            ...state,
+            checkedIds: state.checkedIds.map((data) =>
+                (data as any).id ? { ...data, checked: true } : data
+            )
+        };
+    },
+    [uncheckAllIdsAction]: (state: State.Layouts): State.Layouts => {
+        return <Layouts.Root>{
+            ...state,
+            checkedIds: state.checkedIds.map((data) =>
+                (data as any).id ? { ...data, checked: false } : data
+            )
+        };
+    },
     [toggleSidebarAction]: (state: State.Layouts): State.Layouts => ({
         ...state,
         isSidebarOpen: !state.isSidebarOpen
@@ -81,17 +122,31 @@ const ACTION_HANDLERS: any = {
     ): State.Layouts => ({
         ...state,
         toasts: state.toasts.filter((toast) => toast.id !== action.payload)
+    }),
+    [setModalConfirmationMetaAction]: (
+        state: State.Layouts,
+        action: Type.ReduxAction<Layouts.ModalConfirmationMeta>
+    ): State.Layouts => ({
+        ...state,
+        modalConfirmationMeta: action.payload && {
+            ...action.payload
+        }
     })
 };
 
 export {
     setPaginationAction,
+    initIdsAction,
+    checkAllIdsAction,
+    uncheckAllIdsAction,
+    checkIdsAction,
     toggleSidebarAction,
     closeSidebarAction,
     setErrorToastAction,
     setSuccessToastAction,
     setInfoToastAction,
-    deleteToastAction
+    deleteToastAction,
+    setModalConfirmationMetaAction
 };
 
 // ------------------------------------

@@ -9,6 +9,7 @@ import store from '../app/store';
 import MainLayout from '../components/layout/MainLayout';
 import SidebarLayout from '../components/layout/SidebarLayout';
 import { Toasts } from '../components/_common';
+import { ConfirmationModal } from '../components/_common';
 
 type NextPageWithLayout = NextPage & {
     getLayout?: (page: ReactElement) => ReactNode;
@@ -69,6 +70,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
                             <Component {...pageProps} />
                         </Layout>
                     </MainLayout>
+                    <ConfirmationModal />
                 </NextIntlProvider>
             </Provider>
         </ReduxProvider>

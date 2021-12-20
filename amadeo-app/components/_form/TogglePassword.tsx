@@ -1,6 +1,6 @@
 import { useTranslations } from 'next-intl';
 import { EyeIcon, EyeOffIcon } from '@heroicons/react/solid';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 interface Props {
     style: string | null;
@@ -14,6 +14,14 @@ interface Props {
 const TogglePassword: React.FC<Props> = ({ style, icon, name, label, placeholder, props }) => {
     const t = useTranslations();
     const [showPassword, setShowPassword] = useState(false);
+    const [inputValue, setInputValue] = useState(props.values[name]);
+
+    useEffect(
+        function () {
+            setInputValue(props.values[name]);
+        },
+        [props.values[name]]
+    );
 
     return (
         <div className={`mb-4 ${style} relative`}>
@@ -29,6 +37,7 @@ const TogglePassword: React.FC<Props> = ({ style, icon, name, label, placeholder
                             type="password"
                             onChange={props.handleChange}
                             name={name}
+                            value={inputValue || ''}
                         />
                         <EyeIcon
                             className="h-7 text-gray-180 absolute right-2 top-2"
@@ -44,6 +53,7 @@ const TogglePassword: React.FC<Props> = ({ style, icon, name, label, placeholder
                             type="text"
                             onChange={props.handleChange}
                             name={name}
+                            value={inputValue || ''}
                         />
                         <EyeOffIcon
                             className="h-7 text-gray-180 absolute right-2 top-2"

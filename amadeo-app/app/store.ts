@@ -11,13 +11,15 @@ import profileReducer from '../redux/profile/index';
 import userReducer from '../redux/user/index';
 import notificationsReducer from '../redux/notifications/index';
 import layoutsReducer from '../redux/layouts/index';
+import productsReducer from '../redux/products/index';
 
 const reducers = combineReducers({
     addresses: addressReducer,
     profile: profileReducer,
     user: userReducer,
     notifications: notificationsReducer,
-    layouts: layoutsReducer
+    layouts: layoutsReducer,
+    products: productsReducer
 });
 
 const initStore = (initialState = {}) => {
