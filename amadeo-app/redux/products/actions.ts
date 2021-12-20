@@ -30,10 +30,10 @@ export const fetchColorSizesAction: any = createAction(
 );
 export const updateProductAction: any = createAction(
     'product/ADD_UPDATE_PRODUCT',
-    async (data: any) =>
+    async (data: any, id: number | null | undefined) =>
         (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
             const state = getState();
-            const isNew = data.id;
+            const isNew = id;
             return axios
                 .post(`${baseUrl}/product`, data, {
                     headers: {

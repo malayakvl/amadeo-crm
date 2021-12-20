@@ -181,8 +181,8 @@ function ProductForm({
     }, [colors, sizes]);
 
     const SubmitSchema = Yup.object().shape({
-        // name: Yup.string().required(t('Required field')),
-        // description: Yup.string().required(t('Required field')),
+        name: Yup.string().required(t('Required field')),
+        description: Yup.string().required(t('Required field'))
         // price: !values.configured ? Yup.number().required(t('Required field')) : Yup.number(),
         // quantity:
         //     !values.configured ? Yup.number().required(t('Required field')) : Yup.number()
@@ -208,7 +208,7 @@ function ProductForm({
                         formData.append('photos[]', file);
                     });
                 }
-                dispatch(updateProductAction(formData));
+                dispatch(updateProductAction(formData, values.id));
             }}>
             {(props) => (
                 <form onSubmit={props.handleSubmit} className="mt-5">
