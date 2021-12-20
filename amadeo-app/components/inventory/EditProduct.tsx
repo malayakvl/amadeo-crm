@@ -16,9 +16,11 @@ const EditProduct: React.FC<PropsProduct> = ({ locale }) => {
 
     useEffect(() => {
         if (Object.keys(productData.product).length > 0) {
+            console.log(Object.keys(productData.product).length);
+            // if (productData.product.id) {
             const _sizes: any = [];
             const _colors: any = [];
-            if (productData.product.selectedSizes.length > 0) {
+            if (productData.product.selectedSizes) {
                 productData.product.selectedSizes.forEach((size: any) => {
                     _sizes.push({
                         label: parseTranslation(size, 'name', locale),
@@ -27,7 +29,7 @@ const EditProduct: React.FC<PropsProduct> = ({ locale }) => {
                 });
                 dispatch(setSelectedSizesAction(_sizes));
             }
-            if (productData.product.selectedColors.length > 0) {
+            if (productData.product.selectedColors) {
                 productData.product.selectedColors.forEach((color: any) => {
                     _colors.push({
                         label: parseTranslation(color, 'name', locale),
