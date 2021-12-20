@@ -8,7 +8,7 @@ import { signIn } from 'next-auth/client';
 import FullLayout from '../../components/layout/FullLayout';
 import { Formik, Field } from 'formik';
 
-function Signin({ locale, providers }: { locale: string, providers: any }) {
+function Signin({ locale, providers }: { locale: string; providers: any }) {
     const t = useTranslations();
 
     const SubmitSchema = Yup.object().shape({
@@ -31,10 +31,10 @@ function Signin({ locale, providers }: { locale: string, providers: any }) {
                         signIn('credentials_login', {
                             email: (values as any).email,
                             password: (values as any).password,
-                            callbackUrl: `${window.location.origin}${locale === 'fr' ? '' : `/${locale}`
-                                }/dashboard`
+                            callbackUrl: `${window.location.origin}${
+                                locale === 'fr' ? '' : `/${locale}`
+                            }/dashboard`
                         });
-                        
                     }}>
                     {(props) => (
                         <form onSubmit={props.handleSubmit} className="mb-4">

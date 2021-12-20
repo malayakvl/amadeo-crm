@@ -33,7 +33,6 @@ export default function Signup({ providers, locale }: { providers: any; locale: 
             if (!r.ok) {
                 r.json().then((json) => alert(json.message));
                 return;
-                
             }
 
             alert('Check your email box and follow found instructions there');
