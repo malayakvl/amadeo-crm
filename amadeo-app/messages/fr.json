@@ -125,5 +125,8 @@
   "Table is empty": "Table is empty",
   "Update Product": "Update Product",
   "Do you want to delete": "Do you want to delete",
-  "Edit Product": "Edit Product"
+  "Edit Product": "Edit Product",
+  "Photo has been deleted": "Photo has been deleted",
+  "Products has been deleted": "Products has been deleted",
+  "Products has been copied": "Products has been copied"
 }

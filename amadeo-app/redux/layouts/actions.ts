@@ -7,6 +7,8 @@ export const setCheckedAction: any = createAction('layouts/SET_CHECKED');
 
 export const setPaginationAction: any = createAction('layouts/SET_PAGINATION');
 
+export const setCheckedIdsAction: any = createAction('layouts/SET_CHECKED_IDS');
+
 export const initIdsAction: any = createAction('layouts/INIT_IDS');
 
 export const checkIdsAction: any = createAction('layouts/CHECK_IDS');

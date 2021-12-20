@@ -16,7 +16,11 @@ import {
     uploadedFilesSelector
 } from '../../redux/products/selectors';
 import { parseTranslation } from '../../lib/functions';
-import { addUploadedFile, updateProductAction } from '../../redux/products/actions';
+import {
+    addUploadedFile,
+    removeProductFileAction,
+    updateProductAction
+} from '../../redux/products/actions';
 import { baseApiUrl } from '../../constants';
 
 const RenderPropsTable: React.FC<any> = ({ colors, sizes, props }) => {
@@ -104,6 +108,7 @@ function ProductForm({
     const uploadedFiles = useSelector(uploadedFilesSelector);
     const productSelectedColor = useSelector(selectedColorsSelector);
     const productSelectedSize = useSelector(selectedSizesSelector);
+    const [productPhotos, setProductPhotos] = useState(photos);
 
     const [selectedColors, setSelectedColors] = useState([]);
     const [selectedSizes, setSelectedSizes] = useState([]);
@@ -180,6 +185,17 @@ function ProductForm({
         }
     }, [colors, sizes]);
 
+    const removeProductFile = (file: string) => {
+        let _photos = productPhotos;
+        _photos = _photos.filter((_file: string) => _file !== file);
+        dispatch(removeProductFileAction(file, productData.product.id));
+        setProductPhotos(_photos);
+    };
+    useEffect(() => {
+        console.log('PHOTOS', photos);
+        setProductPhotos(photos);
+    }, [photos]);
+
     const SubmitSchema = Yup.object().shape({
         name: Yup.string().required(t('Required field')),
         description: Yup.string().required(t('Required field'))
@@ -243,7 +259,7 @@ function ProductForm({
                                                     />
                                                 </li>
                                             ))}
-                                            {photos.map((_file: string, _index) => (
+                                            {productPhotos.map((_file: string, _index) => (
                                                 <li key={_index}>
                                                     <img
                                                         src={`${baseApiUrl}/${_file}`}
@@ -255,7 +271,7 @@ function ProductForm({
                                                         className="close"
                                                         role="presentation"
                                                         onClick={() => {
-                                                            console.log(_file);
+                                                            removeProductFile(_file);
                                                         }}
                                                     />
                                                 </li>

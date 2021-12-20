@@ -49,8 +49,6 @@ const ConfirmationModal: React.FC = () => {
 
     return (
         <Modal
-            show={Boolean(inputMeta)}
-            onHide={handleCancelBtnClick}
             title={title}
             titleKey={titleKey}
             cancelButtonProps={{

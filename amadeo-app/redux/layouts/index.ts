@@ -24,6 +24,10 @@ const initialState: State.Layouts = {
     isSidebarOpen: true,
     toasts: [],
     checkedIds: [],
+    // checkedIds: {
+    //     products: [],
+    //     notifications: []
+    // },
     modalConfirmationMeta: null
 };
 

@@ -8,6 +8,7 @@ import { paginatedProductsSelector, productsCountSelector } from '../../redux/pr
 import {
     fetchProductsAction,
     bulkDeleteAction,
+    bulkCopyAction,
     fetchProductAction,
     setActiveTabAction,
     deleteProductAction
@@ -27,6 +28,10 @@ const ListProducts: React.FC = () => {
 
     const sendDeleteRequest = useCallback(() => {
         return dispatch(bulkDeleteAction());
+    }, [dispatch]);
+
+    const sendCopyRequest = useCallback(() => {
+        return dispatch(bulkCopyAction());
     }, [dispatch]);
 
     useEffect(() => {
@@ -73,7 +78,8 @@ const ListProducts: React.FC = () => {
                     paginationType={PaginationType.PRODUCTS}
                     totalAmount={count}
                     sendRequest={sendRequest}
-                    sendDeleteRequest={sendDeleteRequest}>
+                    sendDeleteRequest={sendDeleteRequest}
+                    sendCopyRequest={sendCopyRequest}>
                     {items?.map((item: any) => (
                         <tr key={item.id}>
                             <td>

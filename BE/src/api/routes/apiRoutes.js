@@ -58,7 +58,10 @@ apiRoutes.route('/product')
 apiRoutes.route('/products/fetch-colors-and-sizes').get(ProductController.fetchAdditional);
 apiRoutes.route('/fetch-product/:id').get(ProductController.fetchProduct);
 apiRoutes.route('/fetch-products').get(ProductController.fetchData);
-apiRoutes.route('/products/delete/:id').delete(ProductController.deleteRow);
+apiRoutes.route('/products/delete/:id').delete(ProductController.deleteRows);
+apiRoutes.route('/products/photo-delete/:id').post(ProductController.deletePhoto);
+apiRoutes.route('/products/bulk-delete').post(ProductController.bulkDelete);
+apiRoutes.route('/products/bulk-copy').post(ProductController.bulkCopy);
 apiRoutes.get('/*', defaultHandler);
 
 export default apiRoutes;

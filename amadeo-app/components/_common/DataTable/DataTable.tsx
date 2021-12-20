@@ -16,7 +16,8 @@ interface Props {
     children: React.ReactNode[];
     totalAmount: number;
     sendRequest: () => Promise<void>;
-    sendDeleteRequest: () => Promise<void>;
+    sendDeleteRequest: () => Promise<void> | null;
+    sendCopyRequest: () => Promise<void> | null;
 }
 
 const DataTable: React.FC<Props> = ({
@@ -24,7 +25,8 @@ const DataTable: React.FC<Props> = ({
     children,
     totalAmount,
     sendRequest,
-    sendDeleteRequest
+    sendDeleteRequest,
+    sendCopyRequest
 }) => {
     const { PRODUCTS } = PaginationType;
     const t = useTranslations();
@@ -84,6 +86,9 @@ const DataTable: React.FC<Props> = ({
             if (action === 'delete') {
                 sendDeleteRequest();
                 // sendDeleteRequest().finally(() => setLoading(false));
+            } else if (action === 'copy') {
+                console.log('!!!!!!!');
+                sendCopyRequest();
             }
             // return cancelDebouncedQuery;
         },

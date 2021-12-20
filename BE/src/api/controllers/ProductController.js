@@ -20,15 +20,18 @@ class ProductController {
 
     async addProduct (req, res) {
         if (!req.user) {
-            return res.status(402).json('Something wend wrong');
+            return res.status(402).json('Access deny');
         }
-        const dirUpload = `${process.env.DOWNLOAD_FOLDER}/products/${req.user.id}`;
-        if (!fs.existsSync(dirUpload)) {
-            fs.mkdirSync(dirUpload);
-        }
+        // const dirUpload = `${process.env.DOWNLOAD_FOLDER}/products/${req.user.id}`;
+        // const dirUpload = `${process.env.DOWNLOAD_FOLDER}/tmp`;
+        // if (!fs.existsSync(dirUpload)) {
+        //     fs.mkdirSync(dirUpload);
+        // }
         const storage = multer.diskStorage({
             destination: function (req, file, cb) {
-                cb(null, `public/uploads/products/${req.user.id}`);
+                // cb(null, `public/uploads/products/${req.user.id}`);
+                // cb(null, './public/uploads/tmp');
+                cb(null, `${process.env.DOWNLOAD_FOLDER}/tmp`);
             },
             filename: function (req, file, cb) {
                 cb(null, Date.now() + '-' + file.originalname);
@@ -46,7 +49,7 @@ class ProductController {
             const photos = [];
             if (req.files.length > 0) {
                 req.files.forEach(file => {
-                    photos.push(`uploads/products/${req.user.id}/${file.filename}`);
+                    photos.push(file.filename);
                 });
             }
             dataProduct.photos = photos;
@@ -64,7 +67,7 @@ class ProductController {
         const { limit, offset } = req.query;
 
         if (!req.user) {
-            return res.status(402).json('Something wend wrong');
+            return res.status(402).json('Access deny');
         }
 
         const data = await productModel.getAll(1, limit, req.user.id, false, offset);
@@ -77,17 +80,52 @@ class ProductController {
 
     async fetchProduct (req, res) {
         if (!req.user) {
-            return res.status(402).json('Something wend wrong');
+            return res.status(402).json('Access deny');
         }
         const data = await productModel.fetchProduct(req.params.id, req.user.id);
         if (!data.error) {
             return res.status(200).json({ product: data });
         } else {
-            return res.status(402).json({ error: 'Something wend wrong' });
+            return res.status(402).json({ error: 'Access deny' });
         }
     }
 
-    async deleteRow (req, res) {
+    async deleteRows (req, res) {
+        return res.status(200).json({ success: true });
+    }
+
+    async deletePhoto (req, res) {
+        if (!req.user) {
+            return res.status(402).json('Access deny');
+        }
+        await productModel.deletePhoto(req.params.id, req.user.id, req.body.data);
+        // delete photo
+        fs.unlink(`${process.env.DOWNLOAD_FOLDER}/${req.body.data.replace('/uploads', '')}`,function(err){
+            if(err) return console.log(err);
+        });
+        // fs.unlinkSync(`public/${req.body.data}`);
+        return res.status(200).json({ success: true });
+    }
+    
+    async bulkDelete (req, res) {
+        if (!req.user) {
+            return res.status(402).json('Access deny');
+        }
+        const ids = [];
+        JSON.parse(req.body.data).filter(id => id.checked).forEach(data => ids.push(data.id));
+        await productModel.bulkDelete(ids, req.user.id);
+        
+        return res.status(200).json({ success: true });
+    }
+    
+    async bulkCopy (req, res) {
+        if (!req.user) {
+            return res.status(402).json('Access deny');
+        }
+        const ids = [];
+        JSON.parse(req.body.data).filter(id => id.checked).forEach(data => ids.push(data.id));
+        await productModel.bulkCopy(ids, req.user.id);
+        
         return res.status(200).json({ success: true });
     }
 }
