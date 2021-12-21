@@ -25,7 +25,7 @@ export default function Signup({ providers, locale }: { providers: any; locale: 
 
     const t = useTranslations();
     const validationSchema = Yup.object().shape({
-        email: Yup.string().email(t('Must be a valid email')).required(t('Required field')).test('email-exists', 'Email Present', async (email) => {
+        email: Yup.string().email(t('Must be a valid email')).required(t('Required field')).test('email-exists', t("Email Present"), async (email) => {
             const res = await fetch(`${baseUrl}/user/email/${email}`, {
                 method: 'get',
                 
@@ -33,7 +33,7 @@ export default function Signup({ providers, locale }: { providers: any; locale: 
 
             return !res.ok;
         }),
-        acceptTerms: Yup.bool().oneOf([true], 'Accept Terms is required')
+        acceptTerms: Yup.bool().oneOf([true], t("Accept Terms is required"))
     });
     const onSubmit = (values: FormData, actions: any) => {
         fetch(`${baseUrl}/invite`, {
@@ -63,11 +63,11 @@ export default function Signup({ providers, locale }: { providers: any; locale: 
                         className="rounded-lg border shadow-xl mt-10 flex w-[1000px] bg-white px-20 py-14">
                         <div className="font-bold mt-8 pr-12 w-2/4">
                             <div className="text-5xl line-height-105percent mb-9 w-48">
-                                Sing up today!
+                                {t('Sing up today!')}
                             </div>
 
                             <div className="mb-4 text-2xl line-height-105percent w-72">
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                                {t("Lorem ipsum dolor sit amet, consectetur adipiscing elit.")}
                             </div>
 
                             <div className="font-normal mb-10 text-blue-350 w-60">
@@ -76,7 +76,7 @@ export default function Signup({ providers, locale }: { providers: any; locale: 
 
                             <Link href={'/auth/signin'}>
                                 <a className="font-bold text-orange-450">
-                                    Already have an account? Sign in here!
+                                    {t("Already have an account? Sign in here!")}
                                 </a>
                             </Link>
                         </div>
@@ -88,7 +88,7 @@ export default function Signup({ providers, locale }: { providers: any; locale: 
                                 </div>
                                 <div>
                                     <div className="font-bold mb-2.5">
-                                        How would you like to Sign up as? :
+                                        {t("How would you like to Sign up as? :")}
                                     </div>
                                     <div className="text-gray-180 text-xs mb-4">
                                         <Field
@@ -98,7 +98,7 @@ export default function Signup({ providers, locale }: { providers: any; locale: 
                                             name="role_id"
                                             value="1"
                                         />
-                                        <label htmlFor="buyer-radio">Buyer</label>
+                                        <label htmlFor="buyer-radio">{t("Buyer")}</label>
                                     </div>
                                     <div className="text-gray-180 text-xs">
                                         <Field
@@ -108,7 +108,7 @@ export default function Signup({ providers, locale }: { providers: any; locale: 
                                             name="role_id"
                                             value="2"
                                         />
-                                        <label htmlFor="seller-radio">Seller</label>
+                                        <label htmlFor="seller-radio">{t("Seller")}</label>
                                     </div>
                                 </div>
                             </div>
@@ -122,7 +122,7 @@ export default function Signup({ providers, locale }: { providers: any; locale: 
                                     <div
                                         style={{ lineHeight: '0.1em' }}
                                         className="text-center border-b my-5">
-                                        <span className="bg-white px-6">or</span>
+                                        <span className="bg-white px-6">{t("or")}</span>
                                     </div>
 
                                     <InputText
@@ -144,8 +144,8 @@ export default function Signup({ providers, locale }: { providers: any; locale: 
                                         <label
                                             htmlFor="acceptTerms"
                                             className="text-xs font-medium">
-                                            I have read and acept the{' '}
-                                            <span className="text-orange-450">terms of use</span>
+                                            {t("I have read and acept the")}{' '}
+                                            <span className="text-orange-450">{t("terms of use")}</span>
                                         </label>
                                     </div>
 
@@ -156,7 +156,7 @@ export default function Signup({ providers, locale }: { providers: any; locale: 
                                     />
 
                                     <button type="submit" className="gradient-btn w-full mt-4">
-                                        Sign up
+                                        {t("Sign up")}
                                     </button>
                                 </div>
                             </div>
