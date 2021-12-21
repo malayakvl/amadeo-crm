@@ -21,7 +21,14 @@ export default function Signup({ providers, locale }: { providers: any; locale: 
 
     const t = useTranslations();
     const validationSchema = Yup.object().shape({
-        email: Yup.string().email(t('Must be a valid email')).required(t('Required field')),
+        email: Yup.string().email(t('Must be a valid email')).required(t('Required field')).test('email-exists', 'Email Present', async (email) => {
+            const res = await fetch(`${baseUrl}/user/email/${email}`, {
+                method: 'get',
+                
+            });
+
+            return !res.ok;
+        }),
         acceptTerms: Yup.bool().oneOf([true], 'Accept Terms is required')
     });
     const onSubmit = (values: FormData, actions: any) => {

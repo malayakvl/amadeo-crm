@@ -1,5 +1,6 @@
 import * as express from 'express';
 import authController from '../controllers/AuthController.js';
+import UserController from '../controllers/UserController.js';
 
 const authRoute = express.Router();
 
@@ -16,5 +17,5 @@ authRoute.post('/provider', authController.authProvider);
 authRoute.post('/restorePassword', authController.restorePassword);
 authRoute.get('/invitation/:hash', authController.getInvitation);
 authRoute.get('/activate-hash/:hash', authController.activateHash);
-
+authRoute.get('/user/email/:email', UserController.getUserByEmail)
 export default authRoute;

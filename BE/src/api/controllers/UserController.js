@@ -64,6 +64,17 @@ class UserController {
         }
     }
 
+    async getUserByEmail(req, res) {
+        const user = await userModel.findUserByEmail(req.params.email);
+        
+        if (user) {
+            return res.status(200).json({user})
+
+        }
+
+        return res.status(404).json({})
+    }
+
     async fetchAddresses (req, res) {
         if (req.user) {
             const addresses = await userModel.findUserAddresses(req.user.id);
