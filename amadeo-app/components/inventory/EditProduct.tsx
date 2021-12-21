@@ -16,8 +16,6 @@ const EditProduct: React.FC<PropsProduct> = ({ locale }) => {
 
     useEffect(() => {
         if (Object.keys(productData.product).length > 0) {
-            console.log(Object.keys(productData.product).length);
-            // if (productData.product.id) {
             const _sizes: any = [];
             const _colors: any = [];
             if (productData.product.selectedSizes) {

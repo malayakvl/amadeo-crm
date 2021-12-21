@@ -119,10 +119,72 @@ export const deleteProductAction: any = createAction(
                 });
         }
 );
+export const removeProductFileAction: any = createAction(
+    'products/REMOVE_PRODUCT_FILE',
+    async (file: string, id: number) =>
+        async (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
+            const state = getState();
+            return axios
+                .post(
+                    `${baseUrl}/products/photo-delete/${id}`,
+                    { data: file },
+                    {
+                        headers: {
+                            ...authHeader(state.user.user.email)
+                        }
+                    }
+                )
+                .then(async () => {
+                    dispatch(setSuccessToastAction('Photo has been deleted'));
+                });
+        }
+);
+export const bulkDeleteAction: any = createAction(
+    'products/BULK_DELETE',
+    async () =>
+        async (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
+            const state = getState();
+            return axios
+                .post(
+                    `${baseUrl}/products/bulk-delete`,
+                    { data: JSON.stringify(state.layouts.checkedIds) },
+                    {
+                        headers: {
+                            ...authHeader(state.user.user.email)
+                        }
+                    }
+                )
+                .then(async () => {
+                    dispatch(setSuccessToastAction('Products has been deleted'));
+                    await dispatch(fetchProductsAction());
+                });
+        }
+);
+export const bulkCopyAction: any = createAction(
+    'products/BULK_COPY',
+    async (id: number) =>
+        async (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
+            const state = getState();
+            return axios
+                .post(
+                    `${baseUrl}/products/bulk-copy`,
+                    { data: JSON.stringify(state.layouts.checkedIds) },
+                    {
+                        headers: {
+                            ...authHeader(state.user.user.email)
+                        }
+                    }
+                )
+                .then(async () => {
+                    dispatch(setSuccessToastAction('Products has been copied'));
+                    await dispatch(fetchProductsAction());
+                });
+        }
+);
 
 export const addUploadedFile: any = createAction('products/ADD_UPLOADED_FILE');
 export const removeUploadedFile: any = createAction('products/REMOVE_UPLOADED_FILE');
-export const bulkDeleteAction: any = createAction('products/BULK_DELETE');
+// export const bulkDeleteAction: any = createAction('products/BULK_DELETE');
 export const setActiveTabAction: any = createAction('products/SET_ACTIVE_TAB');
 export const setEmptyProductAction: any = createAction('products/SET_EMPTY');
 export const setSelectedColorsAction: any = createAction('products/SET_COLORS');

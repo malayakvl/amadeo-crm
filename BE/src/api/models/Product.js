@@ -1,5 +1,22 @@
 import pool from './connect.js';
 import { logger } from '../../common/logger.js';
+import fs from 'fs';
+import path from 'path';
+
+const copyRecursiveSync = function(src, dest) {
+    var exists = fs.existsSync(src);
+    var stats = exists && fs.statSync(src);
+    var isDirectory = exists && stats.isDirectory();
+    if (isDirectory) {
+        fs.mkdirSync(dest);
+        fs.readdirSync(src).forEach(function(childItemName) {
+            copyRecursiveSync(path.join(src, childItemName),
+                path.join(dest, childItemName));
+        });
+    } else {
+        fs.copyFileSync(src, dest);
+    }
+};
 
 class Product {
     async getAdditional () {
@@ -32,9 +49,29 @@ class Product {
         try {
             const _resProd = await client.query(`SELECT * FROM data.products WHERE id=${dataProduct.id} AND user_id=${userId}`);
             let photos = [];
+            const copyPhotos = [];
             if (_resProd.rows.length) {
                 if (_resProd.rows[0].photos) photos = _resProd.rows[0].photos;
-                const productPhotos = photos.concat(dataProduct.photos);
+                const sourceDir = `${process.env.DOWNLOAD_FOLDER}/tmp`;
+                const dirUpload = `${process.env.DOWNLOAD_FOLDER}/products/${dataProduct.id}`;
+                const dirDBUpload = `${process.env.DB_DOWNLOAD_FOLDER}/products/${dataProduct.id}`;
+                if (!fs.existsSync(dirUpload)) {
+                    fs.mkdirSync(dirUpload);
+                }
+                // copies files to product dir
+                if (dataProduct.photos.length > 0) {
+                    
+                    const promisesPhotos = [];
+                    dataProduct.photos.forEach(photo => {
+                        promisesPhotos.push(this.copyFiles(sourceDir, dirUpload, photo));
+                    });
+                    await Promise.all(promisesPhotos);
+                    
+                    dataProduct.photos.forEach(photo => {
+                        copyPhotos.push(`${dirDBUpload}/${photo}`);
+                    })
+                }
+                const productPhotos = photos.concat(copyPhotos);
 
                 const queryUpdate = `
                     UPDATE data.products
@@ -58,6 +95,9 @@ class Product {
                     });
                     await Promise.all(promisesQueries);
                 }
+    
+                
+    
                 return { success: true };
             } else {
                 return { success: false };
@@ -96,6 +136,33 @@ class Product {
                     ${userId}
                 ) RETURNING id;`;
             const resProduct = await client.query(queryInsert);
+            
+            const sourceDir = `${process.env.DOWNLOAD_FOLDER}/tmp`;
+            const dirUpload = `${process.env.DOWNLOAD_FOLDER}/products/${resProduct.rows[0].id}`;
+            const dirDBUpload = `${process.env.DB_DOWNLOAD_FOLDER}/products/${resProduct.rows[0].id}`;
+            if (!fs.existsSync(dirUpload)) {
+                fs.mkdirSync(dirUpload);
+            }
+            // copies files to product dir
+            if (dataProduct.photos.length > 0) {
+                const copyPhotos = [];
+                const promisesPhotos = [];
+                dataProduct.photos.forEach(photo => {
+                    promisesPhotos.push(this.copyFiles(sourceDir, dirUpload, photo));
+                });
+                await Promise.all(promisesPhotos);
+                dataProduct.photos.forEach(photo => {
+                    copyPhotos.push(`${dirDBUpload}/${photo}`);
+                })
+                if (copyPhotos.length > 0) {
+                    const queryUpdate = `
+                        UPDATE data.products
+                        SET
+                            photos = '{${copyPhotos}}'
+                         WHERE id=${resProduct.rows[0].id};`;
+                    await client.query(queryUpdate);
+                }
+            }
 
             const configs = JSON.parse(dataProduct.configurations);
             if (configs.length) {
@@ -107,22 +174,6 @@ class Product {
             }
 
             return { success: true };
-            // const promisesQueries = [];
-            // if (colors) {
-            //     JSON.parse(colors).forEach(color => {
-            //         promisesQueries.push(this.addColor(resProduct.rows[0].id, color.value));
-            //     });
-            // }
-            // if (sizes) {
-            //     JSON.parse(sizes).forEach(size => {
-            //         promisesQueries.push(this.addSize(resProduct.rows[0].id, size.value));
-            //     });
-            // }
-            // if (promisesQueries.length > 0) {
-            //     await Promise.all(promisesQueries);
-            // }
-            //
-            // return { success: true };
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
                 logger.log(
@@ -135,6 +186,17 @@ class Product {
         } finally {
             client.release();
         }
+    }
+    
+    async copyFiles(sourceDir, dirUpload, photo) {
+        fs.copyFile(`${sourceDir}/${photo}`, `${dirUpload}/${photo}`, (err) => {
+            if (err) {
+                throw err;
+            }
+            fs.unlink(`${sourceDir}/${photo}`,function(err){
+                if(err) return console.log(err);
+            });
+        });
     }
 
     async fetchProduct (id, userId) {
@@ -305,6 +367,162 @@ class Product {
             client.release();
         }
     }
+    
+    
+    async bulkDelete (productIds, userId) {
+        const client = await pool.connect();
+        try {
+            const SQL = `SELECT * FROM data.products WHERE id IN (${productIds.join(',')}) AND user_id=${userId}`;
+            const res = await client.query(SQL);
+            if (res.rows.length > 0) {
+                res.rows.forEach(product => {
+                    const photos = product.photos;
+                    if (photos.length > 0) {
+                        photos.forEach(photo => {
+                            // fs.unlink(`public/${photo}`,function(err){
+                            //     if(err) return console.log(err);
+                            // });
+                            fs.unlink(`${process.env.DOWNLOAD_FOLDER}/${photo.replace('/uploads', '')}`,function(err){
+                                if(err) return console.log(err);
+                            });
+                        })
+                    }
+                });
+                await client.query(`DELETE FROM data.products WHERE id IN (${productIds.join(',')}) AND user_id=${userId}`);
+                return true;
+            }
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error:',
+                    { message: e.message }
+                );
+            }
+            return null;
+        } finally {
+            client.release();
+        }
+    }
+    
+    
+    async bulkCopy (productIds, userId) {
+        const client = await pool.connect();
+        const SQL = `SELECT * FROM data.products WHERE id IN (${productIds.join(',')}) AND user_id=${userId}`;
+        try {
+            const res = await client.query(SQL);
+            if (res.rows.length > 0) {
+                const promisesQueries = [];
+                res.rows.forEach(product => {
+                    promisesQueries.push(this.copyProduct(product));
+                });
+                if (promisesQueries.length) {
+                    await Promise.all(promisesQueries);
+                }
+                return true;
+            }
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error:',
+                    { message: e.message }
+                );
+            }
+            return null;
+        } finally {
+            client.release();
+        }
+    }
+    
+    
+    // async copyRecursiveSync (src, dest) {
+    //     console.log('AAAAAAAAA');
+    //     var exists = fs.existsSync(src);
+    //     var stats = exists && fs.statSync(src);
+    //     var isDirectory = exists && stats.isDirectory();
+    //     if (isDirectory) {
+    //         // fs.mkdirSync(dest);
+    //         console.log('!!!!', src);
+    //         fs.readdirSync(src).forEach(function(childItemName) {
+    //             console.log(childItemName);
+    //             this.copyRecursiveSync(path.join(src, childItemName),
+    //                 path.join(dest, childItemName));
+    //         });
+    //     } else {
+    //         fs.copyFileSync(src, dest);
+    //     }
+    // };
+    
+    
+    async copyProduct (product) {
+        const client = await pool.connect();
+        try {
+            const SQL = `INSERT INTO data.products(
+                       name, price, description, keywords, quantity, photos, publish, user_id
+                    )
+                    SELECT name, price, description, keywords, quantity, photos, publish, user_id
+                    FROM data.products WHERE id=${product.id} AND user_id=${product.user_id} RETURNING id;`;
+            const resNew = await client.query(SQL);
+            if (product.photos.length > 0) {
+                copyRecursiveSync(`./public/uploads/products/${product.id}`, `./public/uploads/products/${resNew.rows[0].id}`);
+                const newPhotos = [];
+                product.photos.forEach(photo => {
+                    newPhotos.push(photo.replace(`products/${product.id}/`, `products/${resNew.rows[0].id}/`));
+                });
+                const queryUpdate = `
+                    UPDATE data.products
+                    SET
+                        photos = '{${newPhotos}}'
+                     WHERE id=${resNew.rows[0].id} ;`;
+                await client.query(queryUpdate);
+            }
+            
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error:',
+                    { message: e.message }
+                );
+            }
+            return null;
+        } finally {
+            client.release();
+        }
+    }
+    
+    
+
+    async deletePhoto (productId, userId, photo) {
+        const SQL = `SELECT photos FROM data.products WHERE user_id=${userId} AND id=${productId}`;
+        const client = await pool.connect();
+        try {
+            const res = await client.query(SQL);
+            const productPhotos = res.rows[0].photos;
+            // {uploads/products/4/1639512136725-j3.jpeg,uploads/products/4/1639512136725-j2.jpeg}
+            const queryUpdate = `
+                    UPDATE data.products
+                    SET
+                        photos = '{${productPhotos.filter(file => file !== photo)}}'
+                     WHERE id=${productId} ;`;
+            await client.query(queryUpdate);
+            return true;
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error:',
+                    { message: e.message }
+                );
+            }
+            return null;
+        } finally {
+            client.release();
+        }
+    }
+    
+    
 }
 
 export default new Product();
