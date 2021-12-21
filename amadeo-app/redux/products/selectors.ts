@@ -8,6 +8,19 @@ const rootSelector = createSelector(
     (products: State.Products): State.Products => products
 );
 
+export const productAdditionalSelector = createSelector(
+    rootSelector,
+    (products: State.Products): any => products.additional
+);
+
+export const productStyleSelector = createSelector(
+    rootSelector,
+    (products: State.Products): Products.Style[] => products.styles
+);
+export const productMaterialsSelector = createSelector(
+    rootSelector,
+    (products: State.Products): Products.Material[] => products.materials
+);
 export const productColorSelector = createSelector(
     rootSelector,
     (products: State.Products): Products.Color[] => products.colors
@@ -40,11 +53,15 @@ export const isFetchSelector = createSelector(
     rootSelector,
     (products: State.Products): boolean => products.isFetched
 );
+export const selectedAdditionalsSelector = createSelector(
+    rootSelector,
+    (products: State.Products): any => products.selectedAdditionals
+);
 export const selectedColorsSelector = createSelector(
     rootSelector,
-    (products: State.Products): any => products.selectedColors
+    (products: State.Products): any => products.selectedAdditionals.colors
 );
 export const selectedSizesSelector = createSelector(
     rootSelector,
-    (products: State.Products): any => products.selectedSizes
+    (products: State.Products): any => products.selectedAdditionals.sizes
 );

@@ -13,7 +13,8 @@ export const fetchUserAction: any = createAction('profile/FETCH_USER', async (em
                 ...authHeader(email)
             }
         })
-        .then((res) => res.data.user);
+        .then((res) => res.data.user)
+        .catch((e) => console.log(e.message));
 });
 
 export const setUserAction: any = createAction('user/SET_USER');

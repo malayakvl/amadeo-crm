@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { getSession } from 'next-auth/client';
 import { useTranslations } from 'next-intl';
 import { getProfile } from '../../lib/profile';
@@ -16,15 +16,16 @@ interface ProfileProps {
 function Account({
     session,
     infoData,
-    locale
+    locale,
+    reqActiveTab
 }: {
     session: any;
     infoData: ProfileProps;
     locale: string;
+    reqActiveTab: string | null;
 }) {
     const t = useTranslations();
-
-    const [activeTab, setActiveTab] = useState('profile');
+    const [activeTab, setActiveTab] = useState(reqActiveTab ? reqActiveTab : 'profile');
     const [subTitle, setSubTitle] = useState(t('Personal Information'));
     const [profileData] = useState(infoData.user);
 
@@ -58,48 +59,52 @@ function Account({
             </div>
             <div className="block-white-8 mr-10">
                 <div className="block">
-                    {profileData.role_id === 2 && (
-                        <nav className="float-tabs">
-                            <button
-                                id="profile"
-                                onClick={handleTabClick}
-                                className={`tabs ${activeTab === 'profile' ? 'active' : ''}`}>
-                                {t('Personal Information')}
-                            </button>
+                    <nav className="float-tabs">
+                        <button
+                            id="profile"
+                            onClick={handleTabClick}
+                            className={`tabs ${activeTab === 'profile' ? 'active' : ''}`}>
+                            {t('Personal Information')}
+                        </button>
+                        {profileData.role_id === 2 && (
                             <button
                                 id="addressess"
                                 onClick={handleTabClick}
                                 className={`tabs ${activeTab === 'addressess' ? 'active' : ''}`}>
                                 {t('Addressess')}
                             </button>
-                            <button
-                                id="password"
-                                onClick={handleTabClick}
-                                className={`tabs ${activeTab === 'password' ? 'active' : ''}`}>
-                                {t('Password')}
-                            </button>
-                        </nav>
-                    )}
+                        )}
+                        <button
+                            id="password"
+                            onClick={handleTabClick}
+                            className={`tabs ${activeTab === 'password' ? 'active' : ''}`}>
+                            {t('Password')}
+                        </button>
+                    </nav>
                 </div>
                 <div className="tabs-content">
                     <div className={`w-full ${activeTab !== 'profile' ? 'hidden' : ''}`}>
-                        <Profile />
+                        {infoData.user.email && <Profile />}
                     </div>
                     <div className={`w-full ${activeTab !== 'addressess' ? 'hidden' : ''}`}>
-                        <AddressesList email={session.user.email || ''} />
-                        <Address
-                            userAddress={{
-                                country_id: '',
-                                state: '',
-                                post_code: '',
-                                address_type: '',
-                                city: '',
-                                address_line_1: '',
-                                address_line_2: ''
-                            }}
-                            countriesData={infoData.countries}
-                            locale={locale}
-                        />
+                        {profileData.role_id === 2 && (
+                            <Fragment>
+                                <AddressesList email={session.user.email || ''} />
+                                <Address
+                                    userAddress={{
+                                        country_id: '',
+                                        state: '',
+                                        post_code: '',
+                                        address_type: '',
+                                        city: '',
+                                        address_line_1: '',
+                                        address_line_2: ''
+                                    }}
+                                    countriesData={infoData.countries}
+                                    locale={locale}
+                                />
+                            </Fragment>
+                        )}
                     </div>
                     <div className={`w-full ${activeTab !== 'password' ? 'hidden' : ''}`}>
                         <Password />
@@ -115,6 +120,7 @@ export default Account;
 export async function getServerSideProps(context: any) {
     const { req, locale } = context;
     const session = await getSession({ req });
+    const activeTab = req.__NEXT_INIT_QUERY.activeTab;
 
     let infoData: ProfileProps;
     if (!session) {
@@ -131,6 +137,7 @@ export async function getServerSideProps(context: any) {
             session: session,
             locale: locale,
             infoData: infoData,
+            reqActiveTab: activeTab,
             messages: {
                 ...require(`../../messages/${locale}.json`)
             }

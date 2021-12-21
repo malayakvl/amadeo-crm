@@ -9,23 +9,20 @@ import { paginationSelectorFactory } from '../layouts/selectors';
 import { PaginationType } from '../../constants';
 import queryString from 'query-string';
 
-export const fetchColorSizesAction: any = createAction(
-    'products/FETCH_COLORS_SIZES',
+export const fetchAdditionalAction: any = createAction(
+    'products/FETCH_ADDITIONAL',
     async () =>
         async (
             dispatch: Type.Dispatch,
             getState: () => State.Root
-        ): Promise<{ colors: any; sizes: any }> => {
+        ): Promise<{ additional: any }> => {
             const state = getState();
-            const res = await axios.get(`${baseUrl}/products/fetch-colors-and-sizes`, {
+            const res = await axios.get(`${baseUrl}/products/fetch-additional`, {
                 headers: {
                     ...authHeader(state.user.user.email)
                 }
             });
-            return {
-                colors: res.data.colors,
-                sizes: res.data.sizes
-            };
+            return res.data;
         }
 );
 export const updateProductAction: any = createAction(
@@ -162,7 +159,7 @@ export const bulkDeleteAction: any = createAction(
 );
 export const bulkCopyAction: any = createAction(
     'products/BULK_COPY',
-    async (id: number) =>
+    async () =>
         async (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
             const state = getState();
             return axios
@@ -189,3 +186,6 @@ export const setActiveTabAction: any = createAction('products/SET_ACTIVE_TAB');
 export const setEmptyProductAction: any = createAction('products/SET_EMPTY');
 export const setSelectedColorsAction: any = createAction('products/SET_COLORS');
 export const setSelectedSizesAction: any = createAction('products/SET_SIZES');
+export const setSelectedAdditionalAction: any = createAction(
+    'products/SET_PRODUCT_SELECTED_ADDITIONAL'
+);

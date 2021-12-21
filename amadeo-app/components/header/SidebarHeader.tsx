@@ -57,7 +57,7 @@ const SidebarHeader: React.FC = () => {
                         />
 
                         <span className="profile-name inline-block">
-                            {user.first_name} {user.last_name}
+                            {user.first_name || user.last_name ? user.first_name : user.email}
                             <em>{user.company_name || t('No Company Name')}</em>
                         </span>
                     </div>

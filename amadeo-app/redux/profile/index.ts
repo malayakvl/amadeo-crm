@@ -16,13 +16,13 @@ const initialState: State.Profile = {
 const ACTION_HANDLERS: any = {
     [fetchProfileAction]: {
         next: (
-            state: State.Notifications,
+            state: State.Profile,
             action: Type.ReduxAction<Pick<State.Profile, 'profile'>>
-        ): State.Notifications => ({
+        ): State.Profile => ({
             ...state,
             ...action.payload
         }),
-        throw: (state: State.Notifications): State.Notifications => ({
+        throw: (state: State.Profile): State.Profile => ({
             ...state
         })
     },

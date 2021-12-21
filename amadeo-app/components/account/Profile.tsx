@@ -8,21 +8,23 @@ import React, { useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { profileSelector } from '../../redux/profile/selectors';
 import { fetchProfileAction, updateProfileAction } from '../../redux/profile';
-import { useSession } from 'next-auth/client';
 import { baseApiUrl } from '../../constants';
+import { userSelector } from '../../redux/user/selectors';
 
 function Profile() {
-    const [session] = useSession();
     const t = useTranslations();
     const dispatch = useDispatch();
     const profileData = useSelector(profileSelector);
+    const user = useSelector(userSelector);
     const filePickerRef = useRef<HTMLInputElement>(null);
     const [imagePost, setImagePost] = useState<File>();
     const [isNewPhoto, setIsNewPhoto] = useState(false);
 
     useEffect(() => {
-        dispatch(fetchProfileAction());
-    }, [dispatch, session?.user?.email]);
+        if (user.email) {
+            dispatch(fetchProfileAction());
+        }
+    }, [user?.email]);
 
     const addImageToPost = (e: React.SyntheticEvent) => {
         e.preventDefault();

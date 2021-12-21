@@ -1,12 +1,12 @@
 import Head from 'next/head';
 import { getSession } from 'next-auth/client';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { userSelector } from '../../redux/user/selectors';
 import { useDispatch, useSelector } from 'react-redux';
 import { AddProduct, ListProducts, EditProduct } from '../../components/inventory';
 import { activeTabSelector } from '../../redux/products/selectors';
-import { setActiveTabAction } from '../../redux/products/actions';
+import { fetchAdditionalAction, setActiveTabAction } from '../../redux/products/actions';
 
 export default function Index({ session, locale }: { session: any; locale: string }) {
     if (!session) return <></>;
@@ -14,6 +14,10 @@ export default function Index({ session, locale }: { session: any; locale: strin
     const user = useSelector(userSelector);
     const dispatch = useDispatch();
     const activeTab = useSelector(activeTabSelector);
+
+    useEffect(() => {
+        dispatch(fetchAdditionalAction());
+    }, []);
 
     return (
         <>

@@ -379,7 +379,7 @@ class User {
      */
     async activateByHash (hash) {
         const client = await pool.connect();
-        const query = `SELECT * FROM common.find_user_by_hash('${hash}', false);`;
+        const query = `SELECT * FROM data.find_user_by_hash('${hash}', false);`;
         try {
             const res = await client.query(query);
             return res.rows.length > 0 ? res.rows[0] : null;
