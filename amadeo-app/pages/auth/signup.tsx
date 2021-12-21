@@ -8,6 +8,8 @@ import Link from 'next/link';
 import { Field, Formik, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import getConfig from 'next/config';
+import { setSuccessToastAction, setErrorToastAction } from '../../redux/layouts';
+import { useDispatch } from 'react-redux';
 
 const { publicRuntimeConfig } = getConfig();
 const baseUrl = `${publicRuntimeConfig.apiUrl}/auth`;
@@ -18,6 +20,8 @@ export default function Signup({ providers, locale }: { providers: any; locale: 
         acceptTerms: boolean;
         role_id: '1' | '2';
     };
+
+    const dispatch = useDispatch();
 
     const t = useTranslations();
     const validationSchema = Yup.object().shape({
@@ -38,11 +42,10 @@ export default function Signup({ providers, locale }: { providers: any; locale: 
             headers: { 'Content-Type': 'application/json' }
         }).then((r) => {
             if (!r.ok) {
-                r.json().then((json) => alert(json.message));
+                dispatch(setErrorToastAction(t(`Something went wrong`)));
                 return;
             }
-
-            alert('Check your email box and follow found instructions there');
+            dispatch(setSuccessToastAction(t('Check your email box and follow found instructions there')));
             actions.resetForm();
         });
     };
