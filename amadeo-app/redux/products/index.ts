@@ -10,7 +10,8 @@ import {
     setEmptyProductAction,
     setSelectedColorsAction,
     setSelectedSizesAction,
-    setSelectedAdditionalAction
+    setSelectedAdditionalAction,
+    findTagAction
 } from './actions';
 
 const initialState: {
@@ -28,12 +29,9 @@ const initialState: {
     count: number;
     loading: boolean;
     items: any[];
-    sizes: any[];
-    colors: any[];
-    styles: any[];
-    materials: any[];
     products: any[];
     activeTab: string;
+    tagSuggestions: any[];
 } = {
     additional: {
         colors: [],
@@ -47,10 +45,6 @@ const initialState: {
         styles: [],
         materials: []
     },
-    colors: [],
-    sizes: [],
-    styles: [],
-    materials: [],
     products: [],
     product: {
         product: {
@@ -63,7 +57,9 @@ const initialState: {
             keywords: '',
             photos: [],
             selectedColors: [],
-            selectedSizes: []
+            selectedSizes: [],
+            selectedStyles: [],
+            selectedMaterials: []
         },
         configurations: []
     } as unknown as Products.Product,
@@ -73,6 +69,7 @@ const initialState: {
     checkedIds: [],
     count: 0,
     items: [],
+    tagSuggestions: [],
     activeTab: 'products'
 };
 
@@ -109,6 +106,12 @@ const ACTION_HANDLERS: any = {
         next: (state: State.Products, action: Action<any>): State.Products => ({
             ...state,
             selectedSizes: action.payload
+        })
+    },
+    [findTagAction]: {
+        next: (state: State.Products, action: Action<any>): State.Products => ({
+            ...state,
+            tagSuggestions: action.payload
         })
     },
     [addUploadedFile]: (
@@ -210,7 +213,8 @@ export {
     fetchProductAction,
     setSelectedSizesAction,
     setSelectedColorsAction,
-    setSelectedAdditionalAction
+    setSelectedAdditionalAction,
+    findTagAction
 };
 
 // ------------------------------------

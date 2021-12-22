@@ -2,7 +2,7 @@ import { ProductForm } from './index';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { productItemSelector } from '../../redux/products/selectors';
-import { prepareAdditionalDropdown } from '../../lib/functions';
+import { prepareAdditionalColorDropdown, prepareAdditionalDropdown } from '../../lib/functions';
 import { setSelectedAdditionalAction } from '../../redux/products';
 
 interface PropsProduct {
@@ -20,30 +20,18 @@ const EditProduct: React.FC<PropsProduct> = ({ locale }) => {
                 productData.product.selectedSizes,
                 locale
             );
-            const _colors: any = prepareAdditionalDropdown(
+            const _colors: any = prepareAdditionalColorDropdown(
                 productData.product.selectedColors,
                 locale
             );
-            const _styles: any = [];
-            const _materials: any = [];
-            // if (productData.product.selectedSizes) {
-            //     productData.product.selectedSizes.forEach((size: any) => {
-            //         _sizes.push({
-            //             label: parseTranslation(size, 'name', locale),
-            //             value: size.id
-            //         });
-            //     });
-            //     dispatch(setSelectedSizesAction(_sizes));
-            // }
-            // if (productData.product.selectedColors) {
-            //     productData.product.selectedColors.forEach((color: any) => {
-            //         _colors.push({
-            //             label: parseTranslation(color, 'name', locale),
-            //             value: color.id
-            //         });
-            //     });
-            //     dispatch(setSelectedColorsAction(_colors));
-            // }
+            const _styles: any = prepareAdditionalDropdown(
+                productData.product.selectedStyles,
+                locale
+            );
+            const _materials: any = prepareAdditionalDropdown(
+                productData.product.selectedMaterials,
+                locale
+            );
             dispatch(
                 setSelectedAdditionalAction({
                     colors: _colors,

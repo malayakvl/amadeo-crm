@@ -87,7 +87,6 @@ const DataTable: React.FC<Props> = ({
                 sendDeleteRequest();
                 // sendDeleteRequest().finally(() => setLoading(false));
             } else if (action === 'copy') {
-                console.log('!!!!!!!');
                 sendCopyRequest();
             }
             // return cancelDebouncedQuery;

@@ -3,38 +3,117 @@ import { useTranslations } from 'next-intl';
 import { useEffect } from 'react';
 import { Formik } from 'formik';
 import { InputSwitcher, InputText } from '../_form';
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useDropzone } from 'react-dropzone';
-import { MultiSelect } from 'react-multi-select-component';
+import ReactTags from 'react-tag-autocomplete';
+import Select, { StylesConfig } from 'react-select';
+import chroma from 'chroma-js';
 import { removeUploadedFile } from '../../redux/products';
 import {
     productAdditionalSelector,
     selectedAdditionalsSelector,
+    tagSuggestionsSelector,
     uploadedFilesSelector
 } from '../../redux/products/selectors';
-import { prepareAdditionalDropdown } from '../../lib/functions';
+import { prepareAdditionalDropdown, prepareAdditionalColorDropdown } from '../../lib/functions';
 import {
     addUploadedFile,
+    findTagAction,
     removeProductFileAction,
     updateProductAction
 } from '../../redux/products/actions';
 import { baseApiUrl } from '../../constants';
 import dynamic from 'next/dynamic';
 import 'suneditor/dist/css/suneditor.min.css';
-import Select from 'react-select';
 
 const SunEditor = dynamic(() => import('suneditor-react'), {
     ssr: false
 });
 
-const RenderPropsTable: React.FC<any> = ({ colors, sizes, props }) => {
+export interface ColourOption {
+    readonly value: string;
+    readonly label: string;
+    readonly color: string;
+    readonly isFixed?: boolean;
+    readonly isDisabled?: boolean;
+}
+
+const colourStyles: StylesConfig<ColourOption, true> = {
+    control: (styles) => ({ ...styles, backgroundColor: 'white' }),
+    option: (styles, { data, isDisabled, isFocused, isSelected }) => {
+        const color = chroma(data.color);
+        return {
+            ...styles,
+            backgroundColor: isDisabled
+                ? undefined
+                : isSelected
+                ? data.color
+                : isFocused
+                ? color.alpha(0.1).css()
+                : undefined,
+            color: isDisabled
+                ? '#ccc'
+                : isSelected
+                ? chroma.contrast(color, 'white') > 2
+                    ? 'white'
+                    : 'black'
+                : data.color,
+            cursor: isDisabled ? 'not-allowed' : 'default',
+
+            ':active': {
+                ...styles[':active'],
+                backgroundColor: !isDisabled
+                    ? isSelected
+                        ? data.color
+                        : color.alpha(0.3).css()
+                    : undefined
+            }
+        };
+    },
+    multiValue: (styles, { data }) => {
+        const color = chroma(data.color);
+        return {
+            ...styles,
+            backgroundColor: color.alpha(0.1).css()
+        };
+    },
+    multiValueLabel: (styles, { data }) => ({
+        ...styles,
+        color: data.color
+    }),
+    multiValueRemove: (styles, { data }) => ({
+        ...styles,
+        color: data.color,
+        ':hover': {
+            backgroundColor: data.color,
+            color: 'white'
+        }
+    })
+};
+
+const RenderPropsTable: React.FC<any> = ({ colors, sizes, props, additional }) => {
+    const t = useTranslations();
+    console.log(additional.colors);
+
     const _colors: any[] = [];
     const _sizes: any[] = [];
-    colors.forEach((_color: any) => {
+    let tmpColors = [];
+    if (colors.length === undefined) {
+        tmpColors.push(colors);
+    } else {
+        tmpColors = colors;
+    }
+    tmpColors.forEach((_color: any) => {
         _colors.push(_color.label);
     });
-    sizes.forEach((_size: any) => {
+    let tmpSizes = [];
+    if (sizes.length === undefined) {
+        tmpSizes.push(sizes);
+    } else {
+        tmpSizes = sizes;
+    }
+    tmpSizes.forEach((_size: any) => {
         _sizes.push(_size.label);
     });
     const attributes = {
@@ -51,39 +130,72 @@ const RenderPropsTable: React.FC<any> = ({ colors, sizes, props }) => {
         <>
             {(_colors.length > 0 || _sizes.length > 0) && (
                 <table className="min-w-full float-table mt-3 mb-3">
-                    <thead>
-                        <tr>
-                            <th>Variant</th>
-                            <th>Price</th>
-                            <th>Quantity</th>
-                        </tr>
-                    </thead>
+                    {/*<thead>*/}
+                    {/*    <tr>*/}
+                    {/*        <th>*/}
+                    {/*            <button className="action-dublicate action">*/}
+                    {/*                <span>Dublicate</span>*/}
+                    {/*            </button>*/}
+                    {/*        </th>*/}
+                    {/*        <th className="whitespace-nowrap uppercase" />*/}
+                    {/*        <th className="whitespace-nowrap uppercase">Price</th>*/}
+                    {/*        <th className="whitespace-nowrap uppercase">Quantity</th>*/}
+                    {/*        <th className="whitespace-nowrap uppercase">SKU</th>*/}
+                    {/*    </tr>*/}
+                    {/*</thead>*/}
                     <tbody>
                         {attrs.map((attr: any, index) => (
                             <tr key={index}>
-                                <td>
-                                    {attr.color !== 'none' ? attr.color : ''}{' '}
-                                    {attr.color !== 'none' && attr.size !== 'none' ? ' / ' : ''}
+                                <td style={{ verticalAlign: 'middle' }}>
+                                    <input type="checkbox" />
+                                </td>
+                                <td
+                                    className="whitespace-nowrap"
+                                    style={{ verticalAlign: 'middle' }}>
                                     {attr.size !== 'none' ? attr.size : ''}
+                                    {attr.color !== 'none' && attr.size !== 'none' ? ' / ' : ''}
+                                    <span
+                                        style={{
+                                            color: attr.color
+                                                ? additional.colors.find(
+                                                      (color: any) => color.name === attr.color
+                                                  ).code
+                                                : ''
+                                        }}>
+                                        {attr.color !== 'none' ? attr.color : ''}
+                                    </span>{' '}
                                 </td>
                                 <td>
                                     <InputText
                                         icon={null}
-                                        label={null}
+                                        label={t('Price')}
                                         name={`configurePrice_${attr.color}_${attr.size}`}
                                         placeholder={'Price'}
-                                        style={'w-[150px]'}
+                                        style={'w-[100px]'}
                                         props={props}
+                                        tips={null}
                                     />
                                 </td>
                                 <td>
                                     <InputText
                                         icon={null}
-                                        label={null}
+                                        label={t('Quantity')}
                                         name={`configureQty_${attr.color}_${attr.size}`}
                                         placeholder={'Quantity'}
-                                        style={'w-[150px]'}
+                                        style={'w-[100px]'}
                                         props={props}
+                                        tips={null}
+                                    />
+                                </td>
+                                <td>
+                                    <InputText
+                                        icon={null}
+                                        label={t('SKU')}
+                                        name={`configureSKU_${attr.color}_${attr.size}`}
+                                        placeholder={'SKU'}
+                                        style={'w-[170px]'}
+                                        props={props}
+                                        tips={null}
                                     />
                                 </td>
                             </tr>
@@ -106,8 +218,12 @@ function ProductForm({
 }) {
     const t = useTranslations();
     const dispatch = useDispatch();
+    // const reactTags = useRef<ReactTags>();
+    const reactTags = React.createRef<ReactTags>();
+
     const additionalProps = useSelector(productAdditionalSelector);
     const additionalSelectedProps = useSelector(selectedAdditionalsSelector);
+    const searchTagSuggestions = useSelector(tagSuggestionsSelector);
 
     const uploadedFiles = useSelector(uploadedFilesSelector);
     const [productPhotos, setProductPhotos] = useState(photos);
@@ -115,9 +231,34 @@ function ProductForm({
 
     const [selectedColors, setSelectedColors] = useState([]);
     const [selectedSizes, setSelectedSizes] = useState([]);
-    const [selectedStyles, setSelectedStyles] = useState(null);
     const [selectedMaterials, setSelectedMaterials] = useState(null);
     const { acceptedFiles, getRootProps, getInputProps } = useDropzone();
+
+    const [tags, setTags] = useState<any[]>([]);
+    const [suggestions, setSuggestions] = useState([]);
+    // const [isBusy, setIsBusy] = useState(false);
+
+    const onDelete = useCallback(
+        (tagIndex: number) => {
+            setTags(tags.filter((_, i) => i !== tagIndex));
+        },
+        [tags]
+    );
+
+    const onAddition = useCallback(
+        (newTag) => {
+            setTags([...tags, newTag]);
+        },
+        [tags]
+    );
+
+    const onInput = (query: string) => {
+        dispatch(findTagAction(query));
+    };
+    useEffect(() => {
+        setSuggestions(searchTagSuggestions);
+        // setIsBusy(false);
+    }, [searchTagSuggestions]);
 
     const removeFile = (file: File) => {
         dispatch(removeUploadedFile(file));
@@ -161,7 +302,6 @@ function ProductForm({
     useEffect(() => {
         setSelectedSizes(additionalSelectedProps.sizes);
         setSelectedColors(additionalSelectedProps.colors);
-        setSelectedStyles(additionalSelectedProps.styles);
         setSelectedMaterials(additionalSelectedProps.materials);
     }, [additionalSelectedProps]);
 
@@ -184,11 +324,14 @@ function ProductForm({
     const handleChangeEditor = (content: any) => {
         setEditorContent(content);
     };
-    const handleChangeStyles = (selectedOption: any) => {
-        setSelectedStyles(selectedOption);
-    };
     const handleChangeMaterials = (selectedOption: any) => {
         setSelectedMaterials(selectedOption);
+    };
+    const handleChangeColor = (selectedOption: any) => {
+        setSelectedColors(selectedOption);
+    };
+    const handleChangeSize = (selectedOption: any) => {
+        setSelectedSizes(selectedOption);
     };
 
     const SubmitSchema = Yup.object().shape({
@@ -204,7 +347,6 @@ function ProductForm({
             initialValues={productData.product}
             validationSchema={SubmitSchema}
             onSubmit={(values) => {
-                console.log(values);
                 const formData = new FormData();
                 Object.keys(values).forEach((key: string) => {
                     formData.append(key, (values as any)[key]);
@@ -277,7 +419,7 @@ function ProductForm({
                             </section>
                         </div>
                         <div className="flex-col ml-4">
-                            <h2 className="form-subtitle">Product details</h2>
+                            <h2 className="form-subtitle">{t('Product details')}</h2>
                             <InputText
                                 icon={null}
                                 label={'Product Name'}
@@ -285,6 +427,7 @@ function ProductForm({
                                 placeholder={'Product Name'}
                                 style={null}
                                 props={props}
+                                tips={t('0/140 Characters')}
                             />
 
                             <div className="mb-4">
@@ -302,26 +445,16 @@ function ProductForm({
                                 />
                             </div>
 
-                            <div className="mb-4 relative">
-                                <label className="control-label">{t('Style')}</label>
-                                <Select
-                                    options={prepareAdditionalDropdown(
-                                        additionalProps.styles,
-                                        locale
-                                    )}
-                                    value={selectedStyles}
-                                    onChange={handleChangeStyles}
-                                />
-                            </div>
-                            <div className="mb-4 relative">
-                                <label className="control-label">{t('Material')}</label>
-                                <Select
-                                    options={prepareAdditionalDropdown(
-                                        additionalProps.materials,
-                                        locale
-                                    )}
-                                    value={selectedMaterials}
-                                    onChange={handleChangeMaterials}
+                            <div className="mb-4">
+                                <label className="control-label">{t('Hashtag')}</label>
+                                <ReactTags
+                                    ref={reactTags}
+                                    tags={tags}
+                                    allowNew={true}
+                                    suggestions={suggestions}
+                                    onDelete={onDelete}
+                                    onAddition={onAddition}
+                                    onInput={onInput}
                                 />
                             </div>
 
@@ -329,11 +462,22 @@ function ProductForm({
                                 <>
                                     <InputText
                                         icon={null}
+                                        label={'SKU'}
+                                        name={'sku'}
+                                        placeholder={'SKU'}
+                                        style={null}
+                                        props={props}
+                                        tips={t('0/140 Characters')}
+                                    />
+
+                                    <InputText
+                                        icon={null}
                                         label={'Product Price'}
                                         name={'price'}
                                         placeholder={'Product Price'}
                                         style={null}
                                         props={props}
+                                        tips={null}
                                     />
 
                                     <InputText
@@ -343,17 +487,62 @@ function ProductForm({
                                         placeholder={'Quantity'}
                                         style={null}
                                         props={props}
+                                        tips={null}
                                     />
                                 </>
                             )}
-                            <InputText
-                                icon={null}
-                                label={'Product Keyword'}
-                                name={'keyword'}
-                                placeholder={'Product Keyword'}
-                                style={null}
-                                props={props}
-                            />
+
+                            <div className="mb-4">
+                                <label className="control-label">{t('Material')}</label>
+                                <div className="relative">
+                                    <em className="input-tips">{t('Select one')}</em>
+                                    <Select
+                                        className={'form-control-dropdown'}
+                                        classNamePrefix={'inventory'}
+                                        options={prepareAdditionalDropdown(
+                                            additionalProps.materials,
+                                            locale
+                                        )}
+                                        value={selectedMaterials}
+                                        onChange={handleChangeMaterials}
+                                    />
+                                </div>
+                            </div>
+                            <div className="mb-4">
+                                <label className="control-label">{t('Color')}</label>
+                                <div className="relative">
+                                    <em className="input-tips">{t('Select one')}</em>
+                                    <Select
+                                        isMulti={props.values.configured}
+                                        className={'form-control-dropdown'}
+                                        classNamePrefix={'inventory-color'}
+                                        options={prepareAdditionalColorDropdown(
+                                            additionalProps.colors,
+                                            locale
+                                        )}
+                                        value={selectedColors}
+                                        styles={colourStyles}
+                                        onChange={handleChangeColor}
+                                    />
+                                </div>
+                            </div>
+                            <div className="mb-4">
+                                <label className="control-label">{t('Size')}</label>
+                                <div className="relative">
+                                    <em className="input-tips">{t('Select one')}</em>
+                                    <Select
+                                        isMulti={props.values.configured}
+                                        className={'form-control-dropdown'}
+                                        classNamePrefix={'inventory'}
+                                        options={prepareAdditionalDropdown(
+                                            additionalProps.sizes,
+                                            locale
+                                        )}
+                                        value={selectedSizes}
+                                        onChange={handleChangeSize}
+                                    />
+                                </div>
+                            </div>
 
                             <InputSwitcher
                                 label={'Configured'}
@@ -364,36 +553,11 @@ function ProductForm({
                             />
                             {props.values.configured && (
                                 <>
-                                    <div className="mb-4 relative">
-                                        <label className="control-label">{t('Color')}</label>
-                                        <MultiSelect
-                                            options={prepareAdditionalDropdown(
-                                                additionalProps.colors,
-                                                locale
-                                            )}
-                                            value={selectedColors}
-                                            onChange={setSelectedColors}
-                                            labelledBy="Select size"
-                                        />
-                                    </div>
-
-                                    <div className="mb-4 relative">
-                                        <label className="control-label">{t('Size')}</label>
-                                        <MultiSelect
-                                            options={prepareAdditionalDropdown(
-                                                additionalProps.sizes,
-                                                locale
-                                            )}
-                                            value={selectedSizes}
-                                            onChange={setSelectedSizes}
-                                            labelledBy="Select size"
-                                        />
-                                    </div>
-
                                     <RenderPropsTable
                                         colors={selectedColors}
                                         sizes={selectedSizes}
                                         props={props}
+                                        additional={additionalProps}
                                     />
                                 </>
                             )}

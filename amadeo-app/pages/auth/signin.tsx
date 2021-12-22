@@ -45,6 +45,7 @@ function Signin({ locale, providers }: { locale: string; providers: any }) {
                                 name={'email'}
                                 placeholder={'Email'}
                                 props={props}
+                                tips={null}
                             />
 
                             <InputPassword

@@ -8,9 +8,10 @@ interface Props {
     label: string | null;
     placeholder: string | null;
     props: any;
+    tips: string | null;
 }
 
-const InputText: React.FC<Props> = ({ style, icon, name, label, placeholder, props }) => {
+const InputText: React.FC<Props> = ({ style, icon, name, label, placeholder, tips, props }) => {
     const t = useTranslations();
 
     useEffect(
@@ -35,6 +36,7 @@ const InputText: React.FC<Props> = ({ style, icon, name, label, placeholder, pro
             )}
             <div className="relative">
                 {icon && <i className={`f-icon ${icon}`} />}
+                {tips && <em className="input-tips">{tips}</em>}
 
                 <input
                     className={icon ? 'form-control-icon' : 'form-control'}

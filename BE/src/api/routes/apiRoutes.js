@@ -62,6 +62,8 @@ apiRoutes.route('/products/delete/:id').delete(ProductController.deleteRows);
 apiRoutes.route('/products/photo-delete/:id').post(ProductController.deletePhoto);
 apiRoutes.route('/products/bulk-delete').post(ProductController.bulkDelete);
 apiRoutes.route('/products/bulk-copy').post(ProductController.bulkCopy);
+
+apiRoutes.route('/tags/find').get(PageController.fetchTags);
 apiRoutes.get('/*', defaultHandler);
 
 export default apiRoutes;

@@ -29,6 +29,21 @@ class PageController {
         if (testData) res.status(200).json({ data: testData });
         if (error) res.status(error.code).json({ error: 'Show error message' });
     }
+    
+    async fetchTags (req, res) {
+        return res.status(200).json({ result: [
+            { id: 3, name: 'Bananas' },
+            { id: 4, name: 'Mangos' },
+            { id: 5, name: 'Lemons' },
+            { id: 6, name: 'Apricots' }
+        ]});
+        // return [
+        //     { id: 3, name: 'Bananas' },
+        //     { id: 4, name: 'Mangos' },
+        //     { id: 5, name: 'Lemons' },
+        //     { id: 6, name: 'Apricots', disabled: true }
+        // ];
+    }
 
     async uploadFile (req, res) {
         const storage = multer.diskStorage({

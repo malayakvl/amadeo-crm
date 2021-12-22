@@ -1,8 +1,8 @@
 import Image from 'next/image';
 import InputTextDisabled from '../../components/_form/InputTextDisabled';
 import { Formik } from 'formik';
-import { InputText } from '../../components/_form/InputText';
-import { TogglePassword } from '../../components/_form';
+import { InputText } from '../_form';
+import { TogglePassword } from '../_form';
 import * as Yup from 'yup';
 import { useTranslations } from 'next-intl';
 import getConfig from 'next/config';
@@ -83,6 +83,7 @@ export default function SellerRegistration({ email }: { email: any }) {
                                 name={'first_name'}
                                 placeholder={'Name'}
                                 props={props}
+                                tips={null}
                             />
                             <InputText
                                 icon={'f-lname'}
@@ -91,6 +92,7 @@ export default function SellerRegistration({ email }: { email: any }) {
                                 name={'last_name'}
                                 placeholder={'Family Name'}
                                 props={props}
+                                tips={null}
                             />
                             <InputText
                                 icon={'f-company'}
@@ -99,6 +101,7 @@ export default function SellerRegistration({ email }: { email: any }) {
                                 name={'company_name'}
                                 placeholder={'Company'}
                                 props={props}
+                                tips={null}
                             />
                             <InputText
                                 icon={'f-company-id'}
@@ -107,6 +110,7 @@ export default function SellerRegistration({ email }: { email: any }) {
                                 name={'company_id'}
                                 placeholder={'Company ID'}
                                 props={props}
+                                tips={null}
                             />
                             <InputText
                                 icon={'f-vat'}
@@ -115,6 +119,7 @@ export default function SellerRegistration({ email }: { email: any }) {
                                 name={'vat'}
                                 placeholder={'VAT'}
                                 props={props}
+                                tips={null}
                             />
                             <InputText
                                 icon={'f-location'}
@@ -123,6 +128,7 @@ export default function SellerRegistration({ email }: { email: any }) {
                                 name={'full_address'}
                                 placeholder={'Full Address'}
                                 props={props}
+                                tips={null}
                             />
                             <InputText
                                 icon={'f-phone'}
@@ -131,6 +137,7 @@ export default function SellerRegistration({ email }: { email: any }) {
                                 name={'phone'}
                                 placeholder={'Phone Number'}
                                 props={props}
+                                tips={null}
                             />
                             <TogglePassword
                                 icon={'f-key'}
