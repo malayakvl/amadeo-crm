@@ -1,16 +1,17 @@
 import Validator from './Validator.js';
 import FileManager from './FileManager.js';
+import pg from 'pg';
+import 'dotenv/config';
 
 export default class Seed {
     config = {
-        user: 'postgres',
-        database: 'amadeo_crm',
-        password: 'password',
-        host: '127.0.0.1',
-        port: 5432,
+        user: process.env.DATABASE_MAIN_USER,
+        database: process.env.DATABASE_MAIN_BASE,
+        password: process.env.DATABASE_MAIN_PASS,
+        host: process.env.DATABASE_MAIN_HOST,
+        port: process.env.DATABASE_MAIN_PORT,
         max: '20',
         idleTimeoutMillis: '30000'
-        
     }
 
     /**
@@ -79,13 +80,15 @@ export default class Seed {
 
         console.log(seed[operation])
 
-        // let query = seed[operation]
+        let query = seed[operation]
 
-        // const pool = new pg.Pool(this.config);
+        const pool = new pg.Pool(this.config);
 
-        // const client = await pool.connect();
+        const client = await pool.connect();
 
-        // await client.query(query);
+        await client.query(query);
+
+        process.exit()
 
     }
 
