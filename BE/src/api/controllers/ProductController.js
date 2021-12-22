@@ -14,8 +14,7 @@ class ProductController {
         if (!additional) {
             return res.status(402).json('Something wend wrong');
         }
-        // const addresses = await userModel.findUserAddresses(user.id);
-        return res.status(200).json({ colors: additional.colors, sizes: additional.sizes });
+        return res.status(200).json({ additional: additional.additional });
     }
 
     async addProduct (req, res) {

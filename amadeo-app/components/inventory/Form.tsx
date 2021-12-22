@@ -7,21 +7,26 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useDropzone } from 'react-dropzone';
 import { MultiSelect } from 'react-multi-select-component';
-import { fetchColorSizesAction, removeUploadedFile } from '../../redux/products';
+import { removeUploadedFile } from '../../redux/products';
 import {
-    productColorSelector,
-    productSizesSelector,
-    selectedColorsSelector,
-    selectedSizesSelector,
+    productAdditionalSelector,
+    selectedAdditionalsSelector,
     uploadedFilesSelector
 } from '../../redux/products/selectors';
-import { parseTranslation } from '../../lib/functions';
+import { prepareAdditionalDropdown } from '../../lib/functions';
 import {
     addUploadedFile,
     removeProductFileAction,
     updateProductAction
 } from '../../redux/products/actions';
 import { baseApiUrl } from '../../constants';
+import dynamic from 'next/dynamic';
+import 'suneditor/dist/css/suneditor.min.css';
+import Select from 'react-select';
+
+const SunEditor = dynamic(() => import('suneditor-react'), {
+    ssr: false
+});
 
 const RenderPropsTable: React.FC<any> = ({ colors, sizes, props }) => {
     const _colors: any[] = [];
@@ -101,17 +106,17 @@ function ProductForm({
 }) {
     const t = useTranslations();
     const dispatch = useDispatch();
-    const colors = useSelector(productColorSelector);
-    const sizes = useSelector(productSizesSelector);
-    const [dropColors, setDropColors] = useState([]);
-    const [dropSizes, setDropSizes] = useState([]);
+    const additionalProps = useSelector(productAdditionalSelector);
+    const additionalSelectedProps = useSelector(selectedAdditionalsSelector);
+
     const uploadedFiles = useSelector(uploadedFilesSelector);
-    const productSelectedColor = useSelector(selectedColorsSelector);
-    const productSelectedSize = useSelector(selectedSizesSelector);
     const [productPhotos, setProductPhotos] = useState(photos);
+    const [editorContent, setEditorContent] = useState(productData.product.description);
 
     const [selectedColors, setSelectedColors] = useState([]);
     const [selectedSizes, setSelectedSizes] = useState([]);
+    const [selectedStyles, setSelectedStyles] = useState(null);
+    const [selectedMaterials, setSelectedMaterials] = useState(null);
     const { acceptedFiles, getRootProps, getInputProps } = useDropzone();
 
     const removeFile = (file: File) => {
@@ -154,36 +159,17 @@ function ProductForm({
     };
 
     useEffect(() => {
-        setSelectedSizes(productSelectedSize);
-        setSelectedColors(productSelectedColor);
-    }, [productSelectedColor, productSelectedSize]);
+        setSelectedSizes(additionalSelectedProps.sizes);
+        setSelectedColors(additionalSelectedProps.colors);
+        setSelectedStyles(additionalSelectedProps.styles);
+        setSelectedMaterials(additionalSelectedProps.materials);
+    }, [additionalSelectedProps]);
 
     useEffect(() => {
         acceptedFiles.forEach((file: File) => {
             dispatch(addUploadedFile(file));
         });
     }, [acceptedFiles]);
-
-    useEffect(() => {
-        dispatch(fetchColorSizesAction());
-    }, []);
-
-    useEffect(() => {
-        if (colors.length > 0) {
-            const _colors: any = [];
-            colors.forEach((color) => {
-                _colors.push({ label: parseTranslation(color, 'name', locale), value: color.id });
-            });
-            setDropColors(_colors);
-        }
-        if (sizes.length > 0) {
-            const _sizes: any = [];
-            sizes.forEach((size) => {
-                _sizes.push({ label: parseTranslation(size, 'name', locale), value: size.id });
-            });
-            setDropSizes(_sizes);
-        }
-    }, [colors, sizes]);
 
     const removeProductFile = (file: string) => {
         let _photos = productPhotos;
@@ -192,9 +178,18 @@ function ProductForm({
         setProductPhotos(_photos);
     };
     useEffect(() => {
-        console.log('PHOTOS', photos);
         setProductPhotos(photos);
     }, [photos]);
+
+    const handleChangeEditor = (content: any) => {
+        setEditorContent(content);
+    };
+    const handleChangeStyles = (selectedOption: any) => {
+        setSelectedStyles(selectedOption);
+    };
+    const handleChangeMaterials = (selectedOption: any) => {
+        setSelectedMaterials(selectedOption);
+    };
 
     const SubmitSchema = Yup.object().shape({
         name: Yup.string().required(t('Required field')),
@@ -209,6 +204,7 @@ function ProductForm({
             initialValues={productData.product}
             validationSchema={SubmitSchema}
             onSubmit={(values) => {
+                console.log(values);
                 const formData = new FormData();
                 Object.keys(values).forEach((key: string) => {
                     formData.append(key, (values as any)[key]);
@@ -239,7 +235,6 @@ function ProductForm({
                                 {(uploadedFiles.length > 0 || photos.length > 0) && (
                                     <aside>
                                         <h4>Uploaded Files</h4>
-                                        {/*<ul>{files}</ul>*/}
                                         <ul>
                                             {uploadedFiles.map((_file: File) => (
                                                 <li key={_file.lastModified}>
@@ -292,14 +287,44 @@ function ProductForm({
                                 props={props}
                             />
 
-                            <InputText
-                                icon={null}
-                                label={'Product Description'}
-                                name={'description'}
-                                placeholder={'Product Description'}
-                                style={null}
-                                props={props}
-                            />
+                            <div className="mb-4">
+                                <label className="control-label" htmlFor={'description'}>
+                                    {t('Product Description')}
+                                </label>
+                                <SunEditor
+                                    name={'description'}
+                                    setDefaultStyle="font-family: Montserrat; font-size: 14px;"
+                                    placeholder={t('Product Description')}
+                                    defaultValue={props.values.description}
+                                    setContents={props.values.description}
+                                    setOptions={{ height: '250' }}
+                                    onChange={handleChangeEditor}
+                                />
+                            </div>
+
+                            <div className="mb-4 relative">
+                                <label className="control-label">{t('Style')}</label>
+                                <Select
+                                    options={prepareAdditionalDropdown(
+                                        additionalProps.styles,
+                                        locale
+                                    )}
+                                    value={selectedStyles}
+                                    onChange={handleChangeStyles}
+                                />
+                            </div>
+                            <div className="mb-4 relative">
+                                <label className="control-label">{t('Material')}</label>
+                                <Select
+                                    options={prepareAdditionalDropdown(
+                                        additionalProps.materials,
+                                        locale
+                                    )}
+                                    value={selectedMaterials}
+                                    onChange={handleChangeMaterials}
+                                />
+                            </div>
+
                             {!props.values.configured && (
                                 <>
                                     <InputText
@@ -342,7 +367,10 @@ function ProductForm({
                                     <div className="mb-4 relative">
                                         <label className="control-label">{t('Color')}</label>
                                         <MultiSelect
-                                            options={dropColors}
+                                            options={prepareAdditionalDropdown(
+                                                additionalProps.colors,
+                                                locale
+                                            )}
                                             value={selectedColors}
                                             onChange={setSelectedColors}
                                             labelledBy="Select size"
@@ -352,7 +380,10 @@ function ProductForm({
                                     <div className="mb-4 relative">
                                         <label className="control-label">{t('Size')}</label>
                                         <MultiSelect
-                                            options={dropSizes}
+                                            options={prepareAdditionalDropdown(
+                                                additionalProps.sizes,
+                                                locale
+                                            )}
                                             value={selectedSizes}
                                             onChange={setSelectedSizes}
                                             labelledBy="Select size"

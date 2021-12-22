@@ -11,13 +11,14 @@ export default function MainLayout({ children }: { children: any }) {
 
     useEffect(
         function () {
-            if (session?.user && !window.localStorage.getItem('user')) {
+            if (session?.user?.email && !window.localStorage.getItem('user')) {
+                console.log();
                 dispatch(fetchUserAction(session.user.email));
             } else {
                 dispatch(setUserAction(JSON.parse(window.localStorage.getItem('user') || '{}')));
             }
         },
-        [dispatch, session?.user]
+        [dispatch, session?.user?.email]
     );
 
     useEffect(

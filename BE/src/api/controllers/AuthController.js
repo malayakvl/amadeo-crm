@@ -143,7 +143,7 @@ class AuthController {
                         <br><br>
                         Good luck!
                 `);
-
+                console.log('Restore link', link);
                 res.status(200).json({ status: success });
             } else {
                 res.status(402).json({ status: false });

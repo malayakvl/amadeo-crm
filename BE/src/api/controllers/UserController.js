@@ -6,7 +6,7 @@ class UserController {
     async getProfile (req, res) {
         const user = req.user;
         if (!user) {
-            return res.status(402).json('Something wend wrong');
+            return res.status(401).json({user: null, addresses: {}});
         }
         delete user.salt;
         delete user.password;

@@ -1,6 +1,6 @@
 import { Action, handleActions } from 'redux-actions';
 import {
-    fetchColorSizesAction,
+    fetchAdditionalAction,
     addUploadedFile,
     removeUploadedFile,
     fetchProductsAction,
@@ -9,26 +9,48 @@ import {
     setActiveTabAction,
     setEmptyProductAction,
     setSelectedColorsAction,
-    setSelectedSizesAction
+    setSelectedSizesAction,
+    setSelectedAdditionalAction
 } from './actions';
 
 const initialState: {
     uploadedFiles: any[];
     product: Products.Product;
-    sizes: any[];
     checkedIds: any[];
+    additional: {
+        sizes: any[];
+        colors: any[];
+        styles: any[];
+        materials: any[];
+    };
+    selectedAdditionals: Products.Additionals;
     isFetched: boolean;
     count: number;
     loading: boolean;
     items: any[];
+    sizes: any[];
     colors: any[];
+    styles: any[];
+    materials: any[];
     products: any[];
     activeTab: string;
-    selectedColors: any[];
-    selectedSizes: any[];
 } = {
+    additional: {
+        colors: [],
+        sizes: [],
+        styles: [],
+        materials: []
+    },
+    selectedAdditionals: {
+        colors: [],
+        sizes: [],
+        styles: [],
+        materials: []
+    },
     colors: [],
     sizes: [],
+    styles: [],
+    materials: [],
     products: [],
     product: {
         product: {
@@ -51,16 +73,14 @@ const initialState: {
     checkedIds: [],
     count: 0,
     items: [],
-    activeTab: 'products',
-    selectedColors: [],
-    selectedSizes: []
+    activeTab: 'products'
 };
 
 const ACTION_HANDLERS: any = {
-    [fetchColorSizesAction]: {
+    [fetchAdditionalAction]: {
         next: (
             state: State.Products,
-            action: Type.ReduxAction<Pick<State.Products, 'colors' | 'sizes'>>
+            action: Type.ReduxAction<Pick<State.Products, 'additional'>>
         ): State.Products => ({
             ...state,
             ...action.payload,
@@ -73,10 +93,16 @@ const ACTION_HANDLERS: any = {
             isFetched: true
         })
     },
+    [setSelectedAdditionalAction]: {
+        next: (state: State.Products, action: Action<any>): State.Products => ({
+            ...state,
+            selectedAdditionals: action.payload
+        })
+    },
     [setSelectedColorsAction]: {
         next: (state: State.Products, action: Action<any>): State.Products => ({
             ...state,
-            selectedColors: action.payload
+            products: action.payload
         })
     },
     [setSelectedSizesAction]: {
@@ -161,7 +187,9 @@ const ACTION_HANDLERS: any = {
                     description: '',
                     price: '',
                     quantity: '',
-                    keywords: ''
+                    keywords: '',
+                    selectedColors: [],
+                    selectedSizes: []
                 },
                 configurations: []
             },
@@ -174,14 +202,15 @@ const ACTION_HANDLERS: any = {
 };
 
 export {
-    fetchColorSizesAction,
+    fetchAdditionalAction,
     addUploadedFile,
     removeUploadedFile,
     bulkDeleteAction,
     fetchProductsAction,
     fetchProductAction,
     setSelectedSizesAction,
-    setSelectedColorsAction
+    setSelectedColorsAction,
+    setSelectedAdditionalAction
 };
 
 // ------------------------------------

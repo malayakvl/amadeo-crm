@@ -24,11 +24,18 @@ class Product {
         try {
             const queryColors = 'SELECT table_translation FROM common__tools._get_translation(\'data\', \'product_colors\', \'id\', \'name\');';
             const querySizes = 'SELECT table_translation FROM common__tools._get_translation(\'data\', \'product_sizes\', \'id\', \'name\');';
+            const queryStyles = 'SELECT table_translation FROM common__tools._get_translation(\'data\', \'product_styles\', \'id\', \'name\');';
+            const queryMaterials = 'SELECT table_translation FROM common__tools._get_translation(\'data\', \'product_materials\', \'id\', \'name\');';
             const resColors = await client.query(queryColors);
             const resSizes = await client.query(querySizes);
-            return {
-                colors: resColors.rows.length ? resColors.rows[0].table_translation : null,
-                sizes: resSizes.rows.length ? resSizes.rows[0].table_translation : null
+            const resStyles = await client.query(queryStyles);
+            const resMaterials = await client.query(queryMaterials);
+            return { additional: {
+                    colors: resColors.rows.length ? resColors.rows[0].table_translation : null,
+                    sizes: resSizes.rows.length ? resSizes.rows[0].table_translation : null,
+                    styles: resStyles.rows.length ? resStyles.rows[0].table_translation : null,
+                    materials: resMaterials.rows.length ? resMaterials.rows[0].table_translation : null
+                }
             };
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
@@ -95,8 +102,6 @@ class Product {
                     });
                     await Promise.all(promisesQueries);
                 }
-    
-                
     
                 return { success: true };
             } else {
@@ -222,7 +227,7 @@ class Product {
                     if (colors.length > 0) {
                         const queryColors = `SELECT table_translation FROM common__tools._get_translation('data', 'product_colors', 'id', 'name', ' id IN (${colors.join(',')})');`;
                         const resColor = await client.query(queryColors);
-                        selectedColorsData = resColor.rows;
+                        selectedColorsData = resColor.rows[0].table_translation;
                     }
                     let selectedSizesData = [];
                     if (sizes.length > 0) {

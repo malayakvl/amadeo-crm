@@ -55,7 +55,7 @@ apiRoutes.route('/new-notice').get(NotificationController.fetchLatest);
 
 apiRoutes.route('/product')
     .post(ProductController.addProduct);
-apiRoutes.route('/products/fetch-colors-and-sizes').get(ProductController.fetchAdditional);
+apiRoutes.route('/products/fetch-additional').get(ProductController.fetchAdditional);
 apiRoutes.route('/fetch-product/:id').get(ProductController.fetchProduct);
 apiRoutes.route('/fetch-products').get(ProductController.fetchData);
 apiRoutes.route('/products/delete/:id').delete(ProductController.deleteRows);
