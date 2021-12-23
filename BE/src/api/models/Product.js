@@ -1,4 +1,5 @@
 import pool from './connect.js';
+import tagModel from "./Tag.js";
 import { logger } from '../../common/logger.js';
 import fs from 'fs';
 import path from 'path';
@@ -50,6 +51,34 @@ class Product {
             client.release();
         }
     }
+    
+    
+    
+    async prepareTags(tags) {
+        const productTags = [];
+        try {
+            const promisesTags = [];
+            if (tags) {
+                JSON.parse(tags).forEach(tag => {
+                    if (!tag.id) {
+                        promisesTags.push(tagModel.createTag(tag.name));
+                    } else {
+                        productTags.push(tag.id);
+                    }
+                });
+                const newTagsIds = await Promise.all(promisesTags);
+                return productTags.concat(newTagsIds);
+            } else return [];
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model Tags error:',
+                    { message: e.message }
+                );
+            }
+        }
+    }
 
     async update (dataProduct, userId) {
         const client = await pool.connect();
@@ -67,38 +96,40 @@ class Product {
                 }
                 // copies files to product dir
                 if (dataProduct.photos.length > 0) {
-                    
                     const promisesPhotos = [];
                     dataProduct.photos.forEach(photo => {
                         promisesPhotos.push(this.copyFiles(sourceDir, dirUpload, photo));
                     });
                     await Promise.all(promisesPhotos);
-                    
                     dataProduct.photos.forEach(photo => {
                         copyPhotos.push(`${dirDBUpload}/${photo}`);
                     })
                 }
                 const productPhotos = photos.concat(copyPhotos);
-
+                
+                // prepare tags
+                const tags = await this.prepareTags(dataProduct.tags);
+                const productTags = _resProd.rows[0].tags ? _resProd.rows[0].tags.concat(tags) : tags;
+                
                 const queryUpdate = `
                     UPDATE data.products
                     SET
                         name = $$${dataProduct.name}$$,
-                        price = ${dataProduct.price || null},
+                        tags = '{${productTags}}',
                         description = $$${dataProduct.description}$$,
-                        keywords = $$${dataProduct.keyword || null}$$,
-                        quantity = ${dataProduct.quantity || null},
                         photos = '{${productPhotos}}',
+                        configured = ${dataProduct.configured ? dataProduct.configured : true}
                         publish = ${dataProduct.publish ? dataProduct.publish : true}
                      WHERE id=${_resProd.rows[0].id};`;
-
                 await client.query(queryUpdate);
+                
+                // update configuration
                 await client.query(`DELETE FROM data.product_configurations WHERE product_id=${_resProd.rows[0].id}`);
                 const configs = JSON.parse(dataProduct.configurations);
-                if (configs.length) {
+                if (configs.config) {
                     const promisesQueries = [];
-                    configs.forEach(configuration => {
-                        promisesQueries.push(this.addConfiguration(_resProd.rows[0].id, configuration));
+                    configs.config.forEach((configuration, index) => {
+                        promisesQueries.push(this.addConfiguration(_resProd.rows[0].id, configuration, configs.configData[[index]]));
                     });
                     await Promise.all(promisesQueries);
                 }
@@ -124,20 +155,20 @@ class Product {
     async create (dataProduct, userId) {
         const client = await pool.connect();
         try {
-            // const colors = dataProduct.colors;
-            // const sizes = dataProduct.sizes;
-
+            // prepare tags
+            const tags = await this.prepareTags(dataProduct.tags);
+    
+    
             const queryInsert = `
                 INSERT INTO data.products
-                    (name, price, description, keywords, quantity, photos, publish, user_id )
+                    (name, description, tags, photos, publish, user_id )
                 VALUES (
                     $$${dataProduct.name}$$,
-                    ${dataProduct.price || null},
                     $$${dataProduct.description}$$,
-                    $$${dataProduct.keyword || null}$$,
-                    ${dataProduct.quantity || null},
+                    '{${tags}}',
                     '{${dataProduct.photos}}',
                     ${dataProduct.publish ? dataProduct.publish : true},
+                    ${dataProduct.configured ? dataProduct.configured : false},
                     ${userId}
                 ) RETURNING id;`;
             const resProduct = await client.query(queryInsert);
@@ -168,12 +199,13 @@ class Product {
                     await client.query(queryUpdate);
                 }
             }
-
+    
+            // update configuration
             const configs = JSON.parse(dataProduct.configurations);
-            if (configs.length) {
+            if (configs.config) {
                 const promisesQueries = [];
-                configs.forEach(configuration => {
-                    promisesQueries.push(this.addConfiguration(resProduct.rows[0].id, configuration));
+                configs.config.forEach((configuration, index) => {
+                    promisesQueries.push(this.addConfiguration(resProduct.rows[0].id, configuration, configs.configData[[index]]));
                 });
                 await Promise.all(promisesQueries);
             }
@@ -211,7 +243,10 @@ class Product {
             if (res.rows.length) {
                 res.rows[0].selectedColors = [];
                 res.rows[0].selectedSizes = [];
+                res.rows[0].selectedMaterials = [];
                 const resConfigs = await client.query(`SELECT * FROM data.product_configurations WHERE product_id=${id}`);
+                
+                // build configured options
                 if (resConfigs.rows.length > 0) {
                     const colors = [];
                     const sizes = [];
@@ -235,12 +270,22 @@ class Product {
                         const resSize = await client.query(querySizes);
                         selectedSizesData = resSize.rows[0].table_translation;
                     }
+                    let selectedMaterialsData = [];
+                    if (res.rows[0].material_id) {
+                        const queryMaterials = `SELECT table_translation FROM common__tools._get_translation('data', 'product_materials', 'id', 'name', ' id=${res.rows[0].material_id}');`;
+                        const resMaterial = await client.query(queryMaterials);
+                        selectedMaterialsData = resMaterial.rows[0].table_translation;
+                    }
+                    if (!res.rows[0].configured) {
+                        res.rows[0].sku = resConfigs.rows[0].sku;
+                        res.rows[0].price = resConfigs.rows[0].price;
+                        res.rows[0].quantity = resConfigs.rows[0].quantity;
+                    }
                     res.rows[0].selectedColors = selectedColorsData;
                     res.rows[0].selectedSizes = selectedSizesData;
-                    res.rows[0].selectedStyles = [];
-                    res.rows[0].selectedMaterials = [];
+                    res.rows[0].selectedMaterials = selectedMaterialsData;
                 }
-                res.rows[0].configured = resConfigs.rows.length > 0;
+                // res.rows[0].configured = resConfigs.rows.length > 0;
                 return { product: res.rows[0], configurations: resConfigs.rows };
             } else {
                 return { success: false, error: { code: 404, message: 'Product Not found' } };
@@ -278,6 +323,7 @@ class Product {
             } else {
                 offset = (Number(page) - 1) * Number(perPage);
             }
+            // const res = await client.query(`SELECT * FROM data.get_all_products(${perPage}, ${offset}, 'user_id=''${userId}'' ')`);
             const res = await client.query(`SELECT * FROM data.get_all_products(${perPage}, ${offset}, 'user_id=''${userId}'' ')`);
             const products = res.rows.length > 0 ? res.rows : [];
             const error = null;
@@ -309,13 +355,14 @@ class Product {
         }
     }
 
-    async addConfiguration (productId, data) {
-        const SQL = `INSERT INTO data.product_configurations (product_id, price, quantity, configuration)
+    async addConfiguration (productId, config, configData) {
+        const SQL = `INSERT INTO data.product_configurations (product_id, price, quantity, sku, configuration)
                         VALUES (
                             ${productId},
-                            ${data.price},
-                            ${data.qty},
-                            '${JSON.stringify(data)}'
+                            ${configData.price},
+                            ${configData.qty},
+                            '${configData.sku}',
+                            '${JSON.stringify(config)}'
                         )`;
         const client = await pool.connect();
         try {
@@ -325,7 +372,7 @@ class Product {
             if (process.env.NODE_ENV === 'development') {
                 logger.log(
                     'error',
-                    'Model error:',
+                    'Model error Product Configuration:',
                     { message: e.message }
                 );
             }

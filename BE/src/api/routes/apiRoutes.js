@@ -5,6 +5,7 @@ import PageController from '../controllers/PageController.js';
 import CountryController from '../controllers/CountryController.js';
 import NotificationController from '../controllers/NotificationController.js';
 import ProductController from '../controllers/ProductController.js';
+import TagController from '../controllers/TagController.js';
 import userModel from '../models/User.js';
 
 const apiRoutes = express.Router();
@@ -63,7 +64,8 @@ apiRoutes.route('/products/photo-delete/:id').post(ProductController.deletePhoto
 apiRoutes.route('/products/bulk-delete').post(ProductController.bulkDelete);
 apiRoutes.route('/products/bulk-copy').post(ProductController.bulkCopy);
 
-apiRoutes.route('/tags/find').get(PageController.fetchTags);
+apiRoutes.route('/tags/find').get(TagController.fetchTags);
+
 apiRoutes.get('/*', defaultHandler);
 
 export default apiRoutes;

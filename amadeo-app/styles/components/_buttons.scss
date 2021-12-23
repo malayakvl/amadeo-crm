@@ -25,7 +25,7 @@
 }
 
 .action {
-  @apply border rounded-lg border-gray-180 p-2.5 font-bold uppercase relative;
+  @apply border rounded-lg border-gray-180 p-2.5 font-bold uppercase relative text-[10px];
 
   span {
     @apply relative;
@@ -38,14 +38,14 @@
     &:before {
       content: " ";
       display: inline-block;
-      background: url("../../public/images/icon-dublicate.svg");
+      background: url("../../public/images/icon-replace-inventory-values.svg");
       background-repeat: no-repeat;
       background-position: left center;
       position: absolute;
       width: 14px;
       height: 14px;
       left:0;
-      top: 1px
+      top: -1px
     }
   }
 }
