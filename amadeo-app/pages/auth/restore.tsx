@@ -68,6 +68,7 @@ function Restore({ locale }: { locale: string }) {
                                 name={'email'}
                                 placeholder={'Email'}
                                 props={props}
+                                tips={null}
                             />
 
                             <button type="submit" className="mt-6 gradient-btn w-full">

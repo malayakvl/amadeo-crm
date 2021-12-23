@@ -22,7 +22,7 @@ class Product {
     async getAdditional () {
         const client = await pool.connect();
         try {
-            const queryColors = 'SELECT table_translation FROM common__tools._get_translation(\'data\', \'product_colors\', \'id\', \'name\');';
+            const queryColors = 'SELECT table_translation FROM common__tools._get_translation(\'data\', \'product_colors\', \'id\', \'name, code\');';
             const querySizes = 'SELECT table_translation FROM common__tools._get_translation(\'data\', \'product_sizes\', \'id\', \'name\');';
             const queryStyles = 'SELECT table_translation FROM common__tools._get_translation(\'data\', \'product_styles\', \'id\', \'name\');';
             const queryMaterials = 'SELECT table_translation FROM common__tools._get_translation(\'data\', \'product_materials\', \'id\', \'name\');';
@@ -225,7 +225,7 @@ class Product {
                     });
                     let selectedColorsData = [];
                     if (colors.length > 0) {
-                        const queryColors = `SELECT table_translation FROM common__tools._get_translation('data', 'product_colors', 'id', 'name', ' id IN (${colors.join(',')})');`;
+                        const queryColors = `SELECT table_translation FROM common__tools._get_translation('data', 'product_colors', 'id', 'name, code', ' id IN (${colors.join(',')})');`;
                         const resColor = await client.query(queryColors);
                         selectedColorsData = resColor.rows[0].table_translation;
                     }
@@ -237,6 +237,8 @@ class Product {
                     }
                     res.rows[0].selectedColors = selectedColorsData;
                     res.rows[0].selectedSizes = selectedSizesData;
+                    res.rows[0].selectedStyles = [];
+                    res.rows[0].selectedMaterials = [];
                 }
                 res.rows[0].configured = resConfigs.rows.length > 0;
                 return { product: res.rows[0], configurations: resConfigs.rows };
@@ -439,25 +441,6 @@ class Product {
             client.release();
         }
     }
-    
-    
-    // async copyRecursiveSync (src, dest) {
-    //     console.log('AAAAAAAAA');
-    //     var exists = fs.existsSync(src);
-    //     var stats = exists && fs.statSync(src);
-    //     var isDirectory = exists && stats.isDirectory();
-    //     if (isDirectory) {
-    //         // fs.mkdirSync(dest);
-    //         console.log('!!!!', src);
-    //         fs.readdirSync(src).forEach(function(childItemName) {
-    //             console.log(childItemName);
-    //             this.copyRecursiveSync(path.join(src, childItemName),
-    //                 path.join(dest, childItemName));
-    //         });
-    //     } else {
-    //         fs.copyFileSync(src, dest);
-    //     }
-    // };
     
     
     async copyProduct (product) {

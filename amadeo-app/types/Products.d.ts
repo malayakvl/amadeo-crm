@@ -9,10 +9,6 @@ declare namespace Products {
         };
         objectsAdditional: Products.Additionals;
         product: Product;
-        colors: Color[];
-        sizes: Size[];
-        styles: Style[];
-        materials: Material[];
         loading: boolean;
         isFetched: boolean;
         uploadedFiles: File[];
@@ -24,10 +20,11 @@ declare namespace Products {
         selectedColors: any[];
         selectedSizes: any[];
         selectedAdditionals: Products.Additionals;
+        tagSuggestions: any[];
     }
 
     interface Additionals {
-        colors: Additional[];
+        colors: AdditionalColor[];
         sizes: Additional[];
         styles: Additional[];
         materials: Additional[];
@@ -36,6 +33,11 @@ declare namespace Products {
     interface Additional {
         label: string;
         value: number;
+    }
+    interface AdditionalColor {
+        label: string;
+        value: number;
+        color: string;
     }
 
     interface Product {

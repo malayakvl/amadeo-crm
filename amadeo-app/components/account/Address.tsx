@@ -65,6 +65,7 @@ function Address({
                         placeholder={'State'}
                         style={'lg:w-1/4'}
                         props={props}
+                        tips={null}
                     />
 
                     <InputText
@@ -74,6 +75,7 @@ function Address({
                         placeholder={'Post Code'}
                         style={'lg:w-1/4'}
                         props={props}
+                        tips={null}
                     />
 
                     <InputSelect
@@ -91,6 +93,7 @@ function Address({
                         placeholder={'City'}
                         style={'lg:w-1/4'}
                         props={props}
+                        tips={null}
                     />
 
                     <InputText
@@ -100,6 +103,7 @@ function Address({
                         placeholder={'Address Line 1'}
                         style={'lg:w-1/4'}
                         props={props}
+                        tips={null}
                     />
 
                     <InputText
@@ -109,6 +113,7 @@ function Address({
                         placeholder={'Address Line 2'}
                         style={'lg:w-1/4'}
                         props={props}
+                        tips={null}
                     />
                     <div className="mt-10 mb-7 block border border-gray-180 border-b-0" />
                     <button type="submit" className="gradient-btn">

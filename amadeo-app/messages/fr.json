@@ -110,7 +110,7 @@
   "Product images": "Product images",
   "Product details": "Product details",
   "Product Price": "Product Price",
-  "Product Keyword": "Reference / Keyword",
+  "Hashtag": "Hashtag",
   "Color": "Color",
   "Size": "Size",
   "Quantity": "Quantity",
@@ -131,5 +131,8 @@
   "Products has been copied": "Products has been copied",
   "Product has been updated": "Product has been updated",
   "Style": "Style",
-  "Material": "Material"
+  "Material": "Material",
+  "Select one": "Select one",
+  "0/140 Characters": "0/140 Characters",
+  "SKU": "SKU"
 }

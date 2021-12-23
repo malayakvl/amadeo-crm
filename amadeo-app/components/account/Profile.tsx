@@ -109,6 +109,7 @@ function Profile() {
                         placeholder={'Email Address'}
                         style={'lg:w-1/4'}
                         props={props}
+                        tips={null}
                     />
 
                     <InputText
@@ -118,6 +119,7 @@ function Profile() {
                         placeholder={'Name'}
                         style={'lg:w-1/4'}
                         props={props}
+                        tips={null}
                     />
 
                     <InputText
@@ -127,6 +129,7 @@ function Profile() {
                         placeholder={'Sername'}
                         style={'lg:w-1/4'}
                         props={props}
+                        tips={null}
                     />
 
                     <InputText
@@ -136,15 +139,8 @@ function Profile() {
                         placeholder={'Company Name'}
                         style={'lg:w-1/4'}
                         props={props}
+                        tips={null}
                     />
-
-                    {/*<InputText*/}
-                    {/*    icon={'f-company-id'}*/}
-                    {/*    label={null}*/}
-                    {/*    name={'full_address'}*/}
-                    {/*    placeholder={'Full Address'}*/}
-                    {/*    props={props}*/}
-                    {/*/>*/}
 
                     <InputText
                         icon={'f-company-id'}
@@ -153,6 +149,7 @@ function Profile() {
                         placeholder={'Company ID'}
                         style={'lg:w-1/6'}
                         props={props}
+                        tips={null}
                     />
 
                     <InputText
@@ -162,6 +159,7 @@ function Profile() {
                         placeholder={'VAT (If applicable)'}
                         style={'lg:w-1/6'}
                         props={props}
+                        tips={null}
                     />
 
                     <InputText
@@ -171,6 +169,7 @@ function Profile() {
                         placeholder={'Phone number'}
                         style={'lg:w-1/4'}
                         props={props}
+                        tips={null}
                     />
 
                     <div className="mt-10 mb-7 block border border-gray-180 border-b-0" />

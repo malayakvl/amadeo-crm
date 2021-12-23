@@ -13,22 +13,22 @@ export const productAdditionalSelector = createSelector(
     (products: State.Products): any => products.additional
 );
 
-export const productStyleSelector = createSelector(
-    rootSelector,
-    (products: State.Products): Products.Style[] => products.styles
-);
-export const productMaterialsSelector = createSelector(
-    rootSelector,
-    (products: State.Products): Products.Material[] => products.materials
-);
-export const productColorSelector = createSelector(
-    rootSelector,
-    (products: State.Products): Products.Color[] => products.colors
-);
-export const productSizesSelector = createSelector(
-    rootSelector,
-    (products: State.Products): Products.Size[] => products.sizes
-);
+// export const productStyleSelector = createSelector(
+//     rootSelector,
+//     (products: State.Products): Products.Style[] => products.styles
+// );
+// export const productMaterialsSelector = createSelector(
+//     rootSelector,
+//     (products: State.Products): Products.Material[] => products.materials
+// );
+// export const productColorSelector = createSelector(
+//     rootSelector,
+//     (products: State.Products): Products.Color[] => products.colors
+// );
+// export const productSizesSelector = createSelector(
+//     rootSelector,
+//     (products: State.Products): Products.Size[] => products.sizes
+// );
 export const uploadedFilesSelector = createSelector(
     rootSelector,
     (products: State.Products): File[] => products.uploadedFiles
@@ -64,4 +64,8 @@ export const selectedColorsSelector = createSelector(
 export const selectedSizesSelector = createSelector(
     rootSelector,
     (products: State.Products): any => products.selectedAdditionals.sizes
+);
+export const tagSuggestionsSelector = createSelector(
+    rootSelector,
+    (products: State.Products): any => products.tagSuggestions
 );

@@ -23,3 +23,29 @@
 .cancel {
   @apply bg-gray-180 font-bold text-sm text-white rounded-lg px-4 py-2.5;
 }
+
+.action {
+  @apply border rounded-lg border-gray-180 p-2.5 font-bold uppercase relative;
+
+  span {
+    @apply relative;
+  }
+}
+.action-dublicate {
+  span {
+    @apply pl-5;
+
+    &:before {
+      content: " ";
+      display: inline-block;
+      background: url("../../public/images/icon-dublicate.svg");
+      background-repeat: no-repeat;
+      background-position: left center;
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      left:0;
+      top: 1px
+    }
+  }
+}

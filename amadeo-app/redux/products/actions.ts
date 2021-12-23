@@ -97,6 +97,20 @@ export const fetchProductAction: any = createAction(
             };
         }
 );
+export const findTagAction: any = createAction(
+    'products/FIND_TAG',
+    async (query: string) =>
+        (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
+            const state = getState();
+            return axios
+                .get(`${baseUrl}/tags/find?query=${query}`, {
+                    headers: {
+                        ...authHeader(state.user.user.email)
+                    }
+                })
+                .then((res: any) => res.data.result);
+        }
+);
 export const deleteProductAction: any = createAction(
     'products/DELETE_PRODUCT',
     async (id: number) =>
