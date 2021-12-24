@@ -11,7 +11,8 @@ import {
     setSelectedColorsAction,
     setSelectedSizesAction,
     setSelectedAdditionalAction,
-    findTagAction
+    findTagAction,
+    setIdentAction
 } from './actions';
 
 const initialState: {
@@ -23,6 +24,7 @@ const initialState: {
         colors: any[];
         styles: any[];
         materials: any[];
+        tags: any[];
     };
     selectedAdditionals: Products.Additionals;
     isFetched: boolean;
@@ -38,13 +40,15 @@ const initialState: {
         colors: [],
         sizes: [],
         styles: [],
-        materials: []
+        materials: [],
+        tags: []
     },
     selectedAdditionals: {
         colors: [],
         sizes: [],
         styles: [],
-        materials: []
+        materials: [],
+        tags: []
     },
     products: [],
     product: {
@@ -182,6 +186,12 @@ const ACTION_HANDLERS: any = {
             activeTab: action.payload
         })
     },
+    [setIdentAction]: {
+        next: (state: State.Products, action: Action<boolean>): State.Products => ({
+            ...state,
+            setupIdent: action.payload
+        })
+    },
     [setEmptyProductAction]: (state: State.Products): State.Products => {
         return <Products.Root>(<unknown>{
             ...state,
@@ -222,7 +232,8 @@ export {
     setSelectedSizesAction,
     setSelectedColorsAction,
     setSelectedAdditionalAction,
-    findTagAction
+    findTagAction,
+    setIdentAction
 };
 
 // ------------------------------------

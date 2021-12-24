@@ -24,6 +24,17 @@ export function prepareAdditionalDropdown(dataArr: any, locale: string) {
     return _data;
 }
 
+export function prepareTagsDropdown(dataArr: any, locale: string) {
+    const _data: any = [];
+    if (dataArr) {
+        dataArr.forEach((data: any) => {
+            _data.push({ name: parseTranslation(data, 'name', locale), id: data.id });
+        });
+    }
+
+    return _data;
+}
+
 export function authHeader(email: string) {
     const token = Buffer.from(
         `${email}:c0P1JUlc-aKiH4qun-Cvapfn60-F7cG9NUM-knCw0x9e-6PWxPEjf-7mtEJZzC-q0mxxn0D`,

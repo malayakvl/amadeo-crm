@@ -29,6 +29,10 @@ export const productAdditionalSelector = createSelector(
 //     rootSelector,
 //     (products: State.Products): Products.Size[] => products.sizes
 // );
+export const getIdentSelector = createSelector(
+    rootSelector,
+    (products: State.Products): boolean => products.setupIdent
+);
 export const uploadedFilesSelector = createSelector(
     rootSelector,
     (products: State.Products): File[] => products.uploadedFiles

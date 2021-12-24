@@ -1,5 +1,6 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { Fragment, useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import ShowMoreText from 'react-show-more-text';
 import { DataTable, ButtonTableAction } from '../../components/_common';
 import { PaginationType } from '../../constants';
 import { checkedIdsSelector } from '../../redux/layouts/selectors';
@@ -11,7 +12,8 @@ import {
     bulkCopyAction,
     fetchProductAction,
     setActiveTabAction,
-    deleteProductAction
+    deleteProductAction,
+    copyProductAction
 } from '../../redux/products/actions';
 import { baseApiUrl } from '../../constants';
 import { setModalConfirmationMetaAction } from '../../redux/layouts';
@@ -45,8 +47,7 @@ const ListProducts: React.FC = () => {
     const handleDuplicateBtnClick = useCallback(
         (event: React.SyntheticEvent): void => {
             const id = Number(event.currentTarget.getAttribute('data-id'));
-            console.log(id);
-            // dispatch(setFormsModalIdAction(id));
+            dispatch(copyProductAction(id));
         },
         [dispatch]
     );
@@ -70,6 +71,42 @@ const ListProducts: React.FC = () => {
         },
         [items, dispatch]
     );
+
+    const renderConfiguration = (configuration: any) => {
+        return (
+            <table className="w-full">
+                <tbody>
+                    {configuration.map((config: any) => (
+                        <tr key={config.color_id}>
+                            <td>
+                                <div
+                                    className="rounded-full w-3 h-3 inline-block mt-1"
+                                    style={{ backgroundColor: `${config.color_code}` }}
+                                />
+                            </td>
+                            <td>
+                                <Fragment>
+                                    {config.configuration.map((_config: any) => (
+                                        <div key={_config.size_name} className="block">
+                                            <span className="ml-5 w-[30px] inline-block">
+                                                {_config.size_name}
+                                            </span>
+                                            <span className="ml-5 w-[50px] inline-block">
+                                                &euro;{_config.price}
+                                            </span>
+                                            <span className="ml-5 w-[50px] inline-block">
+                                                {_config.quantity}
+                                            </span>
+                                        </div>
+                                    ))}
+                                </Fragment>
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        );
+    };
 
     return (
         <>
@@ -106,10 +143,21 @@ const ListProducts: React.FC = () => {
                                 {item.name}
                                 <br />
                                 <span className="text-blue-350 mt-4 block font-normal text-[10px]">
-                                    {item.description}
+                                    <ShowMoreText
+                                        /* Default options */
+                                        lines={2}
+                                        more="Show more"
+                                        less="Show less"
+                                        className="content-css"
+                                        anchorClass="my-anchor-css-class"
+                                        width={0}
+                                        expanded={false}
+                                        truncatedEndingComponent={'... '}>
+                                        {item.description}
+                                    </ShowMoreText>
                                 </span>
                             </td>
-                            <td>coming soon</td>
+                            <td className="w-[300px]">{renderConfiguration(item.configuration)}</td>
                             <td className="text-right whitespace-nowrap">
                                 <ButtonTableAction
                                     dataId={String(item.id)}

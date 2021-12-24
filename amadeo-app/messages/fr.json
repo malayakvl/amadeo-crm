@@ -138,5 +138,7 @@
   "Must be less characters": "Must be less {charNumber} characters",
   "Uploaded Files": "Uploaded Files",
   "Drag_and_drop_files": "Drag and drop image file(s), or browse your computer.",
-  "Select color or size": "Select color or size"
+  "Select color or size": "Select color or size",
+  "Product has been deleted": "Product has been deleted",
+  "Product has been copied": "Product has been copied"
 }
