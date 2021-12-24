@@ -218,10 +218,10 @@ class User {
      * @param addressId integer
      * @returns {Promise<{addresses: null, error: {code: number, message: string}}|any|null>}
      */
-    async findUserAddress (userId, addressId) {
+    async findUserAddress (userId) {
         const client = await pool.connect();
         try {
-            const query = `SELECT * FROM data.addresses WHERE id='${addressId}' ORDER BY id DESC;`;
+            const query = `SELECT * FROM data.addresses WHERE user_id='${userId}' ORDER BY id DESC;`;
             const res = await client.query(query);
             return res.rows ? res.rows[0] : null;
         } catch (e) {

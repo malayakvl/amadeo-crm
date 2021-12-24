@@ -34,7 +34,7 @@ class Notification {
             } else {
                 offset = (Number(page) - 1) * Number(perPage);
             }
-            const res = await client.query(`SELECT * FROM data.get_all_notifications(${perPage}, ${offset}, 'user_id=''${userId}'' AND is_read=${isRead}')`);
+            const res = await client.query(`SELECT * FROM data.get_notifications(${perPage}, ${offset}, 'user_id=''${userId}'' AND is_read=${isRead}')`);
             const notifications = res.rows.length > 0 ? res.rows : [];
             const error = null;
 

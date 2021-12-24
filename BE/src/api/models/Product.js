@@ -294,7 +294,7 @@ class Product {
             if (process.env.NODE_ENV === 'development') {
                 logger.log(
                     'error',
-                    'Model error (Notifications getAll):',
+                    'Model error (Product fetch one product):',
                     { message: e.message }
                 );
             }
@@ -315,16 +315,20 @@ class Product {
     async getAll (page, perPage = 20, userId, isRead = false, reqOffset = null) {
         const client = await pool.connect();
         try {
-            const _total = await client.query(`SELECT * FROM common__tools._select_total_from_table_by_where('data', 'products', 'id', 'user_id=''${userId}'' ');`);
-            const size = _total.rows[0].total;
+            const userIds = [];
+            userIds.push(userId);
+            // const _total = await client.query(`SELECT * FROM common__tools._select_total_from_table_by_where('data', 'products', 'id', 'user_id=''${userId}'' ');`);
+            const _total = await client.query(`SELECT count FROM data.get_products_count('{"user_id": [${userIds.join(',')}]}');`);
+            const size = _total.rows[0].count;
             let offset;
             if (reqOffset) {
                 offset = reqOffset;
             } else {
                 offset = (Number(page) - 1) * Number(perPage);
             }
+            const productQuery = `SELECT * FROM data.get_products(${perPage}, ${offset}, '{"user_id": [${userIds.join(',')}]}');`;
             // const res = await client.query(`SELECT * FROM data.get_all_products(${perPage}, ${offset}, 'user_id=''${userId}'' ')`);
-            const res = await client.query(`SELECT * FROM data.get_all_products(${perPage}, ${offset}, 'user_id=''${userId}'' ')`);
+            const res = await client.query(productQuery);
             const products = res.rows.length > 0 ? res.rows : [];
             const error = null;
 

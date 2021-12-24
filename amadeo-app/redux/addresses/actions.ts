@@ -27,10 +27,10 @@ export const fetchAddressesAction: any = createAction(
 
 export const fetchAddressAction: any = createAction(
     'addresses/FETCH_ADDRESS',
-    async (id: number) =>
+    async () =>
         async (dispatch: Type.Dispatch, getState: () => State.Root): Promise<{ address: any }> => {
             const state = getState();
-            const res = await axios.get(`${baseUrl}/address/fetch/${id}`, {
+            const res = await axios.get(`${baseUrl}/address/fetch`, {
                 headers: {
                     ...authHeader(state.user.user.email)
                 }
@@ -54,18 +54,18 @@ export const addAddressAction: any = createAction(
                     }
                 })
                 .then(async () => {
-                    await dispatch(fetchAddressesAction());
-                    dispatch(
-                        setAddressAction({
-                            country_id: '',
-                            state: '',
-                            post_code: '',
-                            address_type: '',
-                            city: '',
-                            address_line_1: '',
-                            address_line_2: ''
-                        })
-                    );
+                    // await dispatch(fetchAddressesAction());
+                    // dispatch(
+                    //     setAddressAction({
+                    //         country_id: '',
+                    //         state: '',
+                    //         post_code: '',
+                    //         address_type: '',
+                    //         city: '',
+                    //         address_line_1: '',
+                    //         address_line_2: ''
+                    //     })
+                    // );
                     dispatch(
                         setSuccessToastAction(`Address has been ${isNew ? 'updated' : 'created'}`)
                     );

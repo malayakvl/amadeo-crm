@@ -73,11 +73,16 @@ class UserController {
     }
 
     async fetchAddress (req, res) {
-        const address = await userModel.findUserAddress('', req.params.id);
-        if (address) {
-            return res.status(200).json({ address: address });
+        if (req.user) {
+            const address = await userModel.findUserAddress(req.user.id);
+            if (address) {
+                return res.status(200).json({ address: address });
+            }
+        } else {
+            return res.status(401).json('Something wend wrong');
         }
-        return res.status(402).json('Something wend wrong');
+        
+        
     }
 
     async deleteAddress (req, res) {

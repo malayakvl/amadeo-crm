@@ -49,7 +49,7 @@ apiRoutes.route('/address')
     .get(UserController.fetchAddresses)
     .post(UserController.addAddress);
 apiRoutes.route('/address/:id').delete(UserController.deleteAddress);
-apiRoutes.route('/address/fetch/:id').get(UserController.fetchAddress);
+apiRoutes.route('/address/fetch').get(UserController.fetchAddress);
 apiRoutes.route('/fetch-notifications').get(NotificationController.fetchData);
 apiRoutes.route('/count-notice').get(NotificationController.fetchNew);
 apiRoutes.route('/new-notice').get(NotificationController.fetchLatest);
