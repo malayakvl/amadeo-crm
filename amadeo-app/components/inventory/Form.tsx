@@ -271,7 +271,7 @@ function ProductForm({
                                     />
                                 </div>
 
-                                <div className="mb-4">
+                                <div className="mb-4 hidden">
                                     <label className="control-label">{t('Hashtag')}</label>
                                     <div className="relative">
                                         <em className="input-tips">{t('Select one')}</em>
