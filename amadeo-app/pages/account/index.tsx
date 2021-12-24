@@ -4,7 +4,7 @@ import { useTranslations } from 'next-intl';
 import { getProfile } from '../../lib/profile';
 import Head from 'next/head';
 import { useState } from 'react';
-import { Address, Profile, AddressesList, Password } from '../../components/account';
+import { Address, Profile, Password } from '../../components/account';
 import { getCountries } from '../../lib/staff';
 
 interface ProfileProps {
@@ -14,12 +14,10 @@ interface ProfileProps {
 }
 
 function Account({
-    session,
     infoData,
     locale,
     reqActiveTab
 }: {
-    session: any;
     infoData: ProfileProps;
     locale: string;
     reqActiveTab: string | null;
@@ -89,7 +87,7 @@ function Account({
                     <div className={`w-full ${activeTab !== 'addressess' ? 'hidden' : ''}`}>
                         {profileData.role_id === 2 && (
                             <Fragment>
-                                <AddressesList email={session.user.email || ''} />
+                                {/*<AddressesList email={session.user.email || ''} />*/}
                                 <Address
                                     userAddress={{
                                         country_id: '',

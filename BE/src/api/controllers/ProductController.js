@@ -21,11 +21,6 @@ class ProductController {
         if (!req.user) {
             return res.status(401).json('Access deny');
         }
-        // const dirUpload = `${process.env.DOWNLOAD_FOLDER}/products/${req.user.id}`;
-        // const dirUpload = `${process.env.DOWNLOAD_FOLDER}/tmp`;
-        // if (!fs.existsSync(dirUpload)) {
-        //     fs.mkdirSync(dirUpload);
-        // }
         const storage = multer.diskStorage({
             destination: function (req, file, cb) {
                 // cb(null, `public/uploads/products/${req.user.id}`);

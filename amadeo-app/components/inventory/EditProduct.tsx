@@ -2,7 +2,8 @@ import { ProductForm } from './index';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { productItemSelector } from '../../redux/products/selectors';
-import { prepareAdditionalColorDropdown, prepareAdditionalDropdown } from '../../lib/functions';
+import { prepareAdditionalDropdown } from '../../lib/functions';
+import { prepareAdditionalColorDropdown } from '../../lib/inventoryServices';
 import { setSelectedAdditionalAction } from '../../redux/products';
 
 interface PropsProduct {
