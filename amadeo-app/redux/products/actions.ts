@@ -41,8 +41,8 @@ export const updateProductAction: any = createAction(
                     dispatch(
                         setSuccessToastAction(`Product has been ${isNew ? 'updated' : 'created'}`)
                     );
-                    // dispatch(fetchProductsAction());
-                    // dispatch(setActiveTabAction('products'));
+                    dispatch(fetchProductsAction());
+                    dispatch(setActiveTabAction('products'));
                 });
         }
 );
@@ -130,6 +130,23 @@ export const deleteProductAction: any = createAction(
                 });
         }
 );
+export const copyProductAction: any = createAction(
+    'products/COPY_PRODUCT',
+    async (id: number) =>
+        (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
+            const state = getState();
+            return axios
+                .get(`${baseUrl}/products/copy/${id}`, {
+                    headers: {
+                        ...authHeader(state.user.user.email)
+                    }
+                })
+                .then(async () => {
+                    await dispatch(fetchProductsAction());
+                    dispatch(setSuccessToastAction('Product has been copied'));
+                });
+        }
+);
 export const removeProductFileAction: any = createAction(
     'products/REMOVE_PRODUCT_FILE',
     async (file: string, id: number) =>
@@ -146,6 +163,7 @@ export const removeProductFileAction: any = createAction(
                     }
                 )
                 .then(async () => {
+                    await dispatch(fetchProductsAction());
                     dispatch(setSuccessToastAction('Photo has been deleted'));
                 });
         }
@@ -195,7 +213,6 @@ export const bulkCopyAction: any = createAction(
 
 export const addUploadedFile: any = createAction('products/ADD_UPLOADED_FILE');
 export const removeUploadedFile: any = createAction('products/REMOVE_UPLOADED_FILE');
-// export const bulkDeleteAction: any = createAction('products/BULK_DELETE');
 export const setActiveTabAction: any = createAction('products/SET_ACTIVE_TAB');
 export const setEmptyProductAction: any = createAction('products/SET_EMPTY');
 export const setSelectedColorsAction: any = createAction('products/SET_COLORS');
@@ -203,3 +220,4 @@ export const setSelectedSizesAction: any = createAction('products/SET_SIZES');
 export const setSelectedAdditionalAction: any = createAction(
     'products/SET_PRODUCT_SELECTED_ADDITIONAL'
 );
+export const setIdentAction: any = createAction('layouts/SET_IDENT_VARIANT');

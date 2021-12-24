@@ -29,6 +29,12 @@ declare namespace Products {
         sizes: Additional[];
         styles: Additional[];
         materials: Additional[];
+        tags: Tag[];
+    }
+
+    interface Tag {
+        name: string;
+        id: number;
     }
 
     interface Additional {
@@ -81,8 +87,7 @@ declare namespace Products {
         name: string;
         previewphoto: string;
         description: string;
-        price: number;
-        quantity: number;
+        configuration: any;
         publish: boolean;
         first_name: string | null;
         last_name: string | null;

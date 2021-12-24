@@ -5,7 +5,7 @@ exports.shorthands = undefined;
 exports.up = pgm => {
     pgm.sql(`CREATE TABLE IF NOT EXISTS data.hashtags (
             id integer GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-            hashtag character varying(255)
+            name character varying(255)
         );
         `);
 };

@@ -2,7 +2,7 @@ import { ProductForm } from './index';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { productItemSelector } from '../../redux/products/selectors';
-import { prepareAdditionalDropdown } from '../../lib/functions';
+import { prepareAdditionalDropdown, prepareTagsDropdown } from '../../lib/functions';
 import { prepareAdditionalColorDropdown } from '../../lib/inventoryServices';
 import { setSelectedAdditionalAction } from '../../redux/products';
 
@@ -29,11 +29,14 @@ const EditProduct: React.FC<PropsProduct> = ({ locale }) => {
                 productData.product.selectedMaterials,
                 locale
             );
+            const _tags: any = prepareTagsDropdown(productData.product.selectedTags, locale);
+            console.log(_tags);
             dispatch(
                 setSelectedAdditionalAction({
                     colors: _colors,
                     sizes: _sizes,
-                    materials: _materials
+                    materials: _materials,
+                    tags: _tags
                 })
             );
 
@@ -50,8 +53,9 @@ const EditProduct: React.FC<PropsProduct> = ({ locale }) => {
                     } else if (conf.color_id && !conf.size_id) {
                         index = `${_colors.find((v: any) => v.value === conf.color).label}_none`;
                     }
-                    productData.product[`configurePrice_${index}`] = conf.price;
-                    productData.product[`configureQty_${index}`] = conf.price;
+                    productData.product[`configurePrice_${index}`] = configuration.price;
+                    productData.product[`configureQty_${index}`] = configuration.quantity;
+                    productData.product[`configureSKU_${index}`] = configuration.sku || '';
                 });
             }
             setDataFetched(true);

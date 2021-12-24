@@ -84,7 +84,20 @@ class ProductController {
         }
     }
 
-    async deleteRows (req, res) {
+    async deleteRow (req, res) {
+        const ids = [];
+        ids.push(req.params.id);
+    
+        await productModel.bulkDelete(ids, req.user.id);
+        
+        return res.status(200).json({ success: true });
+    }
+    
+    async copyRow (req, res) {
+        const ids = [];
+        ids.push(req.params.id);
+        await productModel.copyProduct(ids, req.user.id);
+        
         return res.status(200).json({ success: true });
     }
 
@@ -118,7 +131,7 @@ class ProductController {
         }
         const ids = [];
         JSON.parse(req.body.data).filter(id => id.checked).forEach(data => ids.push(data.id));
-        await productModel.bulkCopy(ids, req.user.id);
+        await productModel.copyProducts(ids, req.user.id);
         
         return res.status(200).json({ success: true });
     }

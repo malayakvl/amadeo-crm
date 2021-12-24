@@ -118,7 +118,8 @@ class Product {
                         tags = '{${productTags}}',
                         description = $$${dataProduct.description}$$,
                         photos = '{${productPhotos}}',
-                        configured = ${dataProduct.configured ? dataProduct.configured : true}
+                        material_id = ${dataProduct.material_id},
+                        configured = ${dataProduct.configured ? dataProduct.configured : true},
                         publish = ${dataProduct.publish ? dataProduct.publish : true}
                      WHERE id=${_resProd.rows[0].id};`;
                 await client.query(queryUpdate);
@@ -158,10 +159,9 @@ class Product {
             // prepare tags
             const tags = await this.prepareTags(dataProduct.tags);
     
-    
             const queryInsert = `
                 INSERT INTO data.products
-                    (name, description, tags, photos, publish, user_id )
+                    (name, description, tags, photos, publish, configured, material_id, user_id )
                 VALUES (
                     $$${dataProduct.name}$$,
                     $$${dataProduct.description}$$,
@@ -169,6 +169,7 @@ class Product {
                     '{${dataProduct.photos}}',
                     ${dataProduct.publish ? dataProduct.publish : true},
                     ${dataProduct.configured ? dataProduct.configured : false},
+                    ${dataProduct.material_id},
                     ${userId}
                 ) RETURNING id;`;
             const resProduct = await client.query(queryInsert);
@@ -281,9 +282,16 @@ class Product {
                         res.rows[0].price = resConfigs.rows[0].price;
                         res.rows[0].quantity = resConfigs.rows[0].quantity;
                     }
+                    let selectedTagsData = [];
+                    if (res.rows[0].tags) {
+                        const queryTags = `SELECT table_translation FROM common__tools._get_translation('data', 'hashtags', 'id', 'name', ' id IN (${res.rows[0].tags.join(',')})');`;
+                        const resTags = await client.query(queryTags);
+                        selectedTagsData = resTags.rows[0].table_translation;
+                    }
                     res.rows[0].selectedColors = selectedColorsData;
                     res.rows[0].selectedSizes = selectedSizesData;
                     res.rows[0].selectedMaterials = selectedMaterialsData;
+                    res.rows[0].selectedTags = selectedTagsData;
                 }
                 // res.rows[0].configured = resConfigs.rows.length > 0;
                 return { product: res.rows[0], configurations: resConfigs.rows };
@@ -365,7 +373,7 @@ class Product {
                             ${productId},
                             ${configData.price},
                             ${configData.qty},
-                            '${configData.sku}',
+                            '${configData.sku || '' }',
                             '${JSON.stringify(config)}'
                         )`;
         const client = await pool.connect();
@@ -386,46 +394,6 @@ class Product {
         }
     }
 
-    async addColor (productId, colorId) {
-        const SQL = `INSERT INTO data.product2color (product_id, color_id) VALUES (${productId}, ${colorId})`;
-        const client = await pool.connect();
-        try {
-            await client.query(SQL);
-            return true;
-        } catch (e) {
-            if (process.env.NODE_ENV === 'development') {
-                logger.log(
-                    'error',
-                    'Model error:',
-                    { message: e.message }
-                );
-            }
-            return null;
-        } finally {
-            client.release();
-        }
-    }
-
-    async addSize (productId, sizeId) {
-        const SQL = `INSERT INTO data.product2size (product_id, size_id) VALUES (${productId}, ${sizeId})`;
-        const client = await pool.connect();
-        try {
-            await client.query(SQL);
-            return true;
-        } catch (e) {
-            if (process.env.NODE_ENV === 'development') {
-                logger.log(
-                    'error',
-                    'Model error:',
-                    { message: e.message }
-                );
-            }
-            return null;
-        } finally {
-            client.release();
-        }
-    }
-    
     
     async bulkDelete (productIds, userId) {
         const client = await pool.connect();
@@ -437,9 +405,6 @@ class Product {
                     const photos = product.photos;
                     if (photos.length > 0) {
                         photos.forEach(photo => {
-                            // fs.unlink(`public/${photo}`,function(err){
-                            //     if(err) return console.log(err);
-                            // });
                             fs.unlink(`${process.env.DOWNLOAD_FOLDER}/${photo.replace('/uploads', '')}`,function(err){
                                 if(err) return console.log(err);
                             });
@@ -461,6 +426,101 @@ class Product {
         } finally {
             client.release();
         }
+    }
+    
+    async copyProducts(ids) {
+        if (ids.length > 0) {
+            try {
+                console.log('IDS', ids);
+                const promisesQueries = [];
+                ids.forEach(id => {
+                    const _ids = [];
+                    _ids.push(id);
+                    promisesQueries.push(this.copyProduct(_ids));
+                });
+                if (promisesQueries.length) {
+                    await Promise.all(promisesQueries);
+                }
+            } catch (e) {
+                if (process.env.NODE_ENV === 'development') {
+                    logger.log(
+                        'error',
+                        'Model copyProducts error:',
+                        { message: e.message }
+                    );
+                }
+            }
+            
+        } else {
+            return true;
+        }
+    }
+    
+    async copyProduct(ids) {
+        const client = await pool.connect();
+        const SQL = `SELECT * FROM data.copy_products('[${ids.join(',')}]');`;
+        console.log(SQL);
+        try {
+            const res = await client.query(SQL);
+            const newIds = res.rows[0].id_json_arr;
+            if (newIds.length > 0) {
+                const promisesQueries = [];
+                newIds.forEach(id => {
+                    promisesQueries.push(this.copyPhotos(id));
+                });
+                if (promisesQueries.length) {
+                    await Promise.all(promisesQueries);
+                }
+            }
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model copyProducts error:',
+                    { message: e.message }
+                );
+            }
+            return null;
+        } finally {
+            client.release();
+        }
+    }
+    
+    
+    async copyPhotos(productId) {
+        const client = await pool.connect();
+        const SQL = `SELECT photos FROM data.products WHERE id= ${productId};`;
+        try {
+            const res = await client.query(SQL);
+            const product = res.rows[0];
+            if (product.photos.length > 0) {
+                // get copyed product id from photos
+                const _photo = product.photos[0].split('/');
+                copyRecursiveSync(`./public/uploads/products/${_photo[3]}`, `./public/uploads/products/${productId}`);
+                const newPhotos = [];
+                product.photos.forEach(photo => {
+                    newPhotos.push(photo.replace(`products/${_photo[3]}/`, `products/${productId}/`));
+                });
+                const queryUpdate = `
+                    UPDATE data.products
+                    SET
+                        photos = '{${newPhotos}}'
+                     WHERE id=${productId} ;`;
+                await client.query(queryUpdate);
+            }
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model copyPhotos error:',
+                    { message: e.message }
+                );
+            }
+            return null;
+        } finally {
+            client.release();
+        }
+        
     }
     
     
@@ -494,42 +554,80 @@ class Product {
     }
     
     
-    async copyProduct (product) {
-        const client = await pool.connect();
-        try {
-            const SQL = `INSERT INTO data.products(
-                       name, price, description, keywords, quantity, photos, publish, user_id
-                    )
-                    SELECT name, price, description, keywords, quantity, photos, publish, user_id
-                    FROM data.products WHERE id=${product.id} AND user_id=${product.user_id} RETURNING id;`;
-            const resNew = await client.query(SQL);
-            if (product.photos.length > 0) {
-                copyRecursiveSync(`./public/uploads/products/${product.id}`, `./public/uploads/products/${resNew.rows[0].id}`);
-                const newPhotos = [];
-                product.photos.forEach(photo => {
-                    newPhotos.push(photo.replace(`products/${product.id}/`, `products/${resNew.rows[0].id}/`));
-                });
-                const queryUpdate = `
-                    UPDATE data.products
-                    SET
-                        photos = '{${newPhotos}}'
-                     WHERE id=${resNew.rows[0].id} ;`;
-                await client.query(queryUpdate);
-            }
-            
-        } catch (e) {
-            if (process.env.NODE_ENV === 'development') {
-                logger.log(
-                    'error',
-                    'Model error:',
-                    { message: e.message }
-                );
-            }
-            return null;
-        } finally {
-            client.release();
-        }
-    }
+    // async copyProductOld (product) {
+    //     const client = await pool.connect();
+    //     try {
+    //         const SQL = `INSERT INTO data.products(
+    //                    name, description, tags, material_id, configured, photos, publish, user_id
+    //                 )
+    //                 SELECT name, description, tags, material_id, configured, photos, publish, user_id
+    //                 FROM data.products WHERE id=${product.id} AND user_id=${product.user_id} RETURNING id;`;
+    //         const resNew = await client.query(SQL);
+    //         if (product.photos.length > 0) {
+    //             copyRecursiveSync(`./public/uploads/products/${product.id}`, `./public/uploads/products/${resNew.rows[0].id}`);
+    //             const newPhotos = [];
+    //             product.photos.forEach(photo => {
+    //                 newPhotos.push(photo.replace(`products/${product.id}/`, `products/${resNew.rows[0].id}/`));
+    //             });
+    //             const queryUpdate = `
+    //                 UPDATE data.products
+    //                 SET
+    //                     photos = '{${newPhotos}}'
+    //                  WHERE id=${resNew.rows[0].id} ;`;
+    //             await client.query(queryUpdate);
+    //         }
+    //
+    //         // copy configuration
+    //         const resConfigs = await client.query(`SELECT id FROM data.product_configurations WHERE product_id=${id}`);
+    //
+    //         // build configured options
+    //         if (resConfigs.rows.length > 0) {
+    //             const promisesConfigQueries = [];
+    //             resConfigs.rows.forEach(conf => {
+    //                 promisesConfigQueries.push(this.copyConfiguration(conf.id, resNew.rows[0].id));
+    //             });
+    //             if (promisesConfigQueries.length) {
+    //                 await Promise.all(promisesConfigQueries);
+    //             }
+    //         }
+    //     } catch (e) {
+    //         if (process.env.NODE_ENV === 'development') {
+    //             logger.log(
+    //                 'error',
+    //                 'Model error:',
+    //                 { message: e.message }
+    //             );
+    //         }
+    //         return null;
+    //     } finally {
+    //         client.release();
+    //     }
+    // }
+    
+    
+    // async copyConfiguration (configId, productId) {
+    //     const client = await pool.connect();
+    //     try {
+    //         const SQL = `INSERT INTO data.product_configurations(
+    //                    product_id, configuration, price, quantity, sku
+    //                 )
+    //                 SELECT name, description, tags, material_id, configured, photos, publish, user_id
+    //                 FROM data.products WHERE id=${product.id} AND user_id=${product.user_id} RETURNING id;`;
+    //         const resNew = await client.query(SQL);
+    //         return resNew.rows.id;
+    //     } catch (e) {
+    //         if (process.env.NODE_ENV === 'development') {
+    //             logger.log(
+    //                 'error',
+    //                 'Model error:',
+    //                 { message: e.message }
+    //             );
+    //         }
+    //         return null;
+    //     } finally {
+    //         client.release();
+    //     }
+    // }
     
     
 

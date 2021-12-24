@@ -1,17 +1,19 @@
 import React, { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { InputText } from '../_form';
+import { useDispatch } from 'react-redux';
+import { setIdentAction } from '../../redux/products';
 
 const RenderVariant: React.FC<any> = ({ colors, sizes, props, additional }) => {
     const t = useTranslations();
     const [checkedVariant, setCheckedVariant] = useState('');
+    const dispatch = useDispatch();
 
     const setupIdent = (variants: any[]) => {
-        console.log(checkedVariant);
+        dispatch(setIdentAction(true));
         if (checkedVariant) {
             const price = props.values[`configurePrice_${checkedVariant}`];
             const qty = props.values[`configureQty_${checkedVariant}`];
-            console.log(price);
             variants.forEach((attr: any) => {
                 if (checkedVariant != `${attr.color}_${attr.size}`) {
                     props.values[`configurePrice_${attr.color}_${attr.size}`] = price;
@@ -58,7 +60,6 @@ const RenderVariant: React.FC<any> = ({ colors, sizes, props, additional }) => {
                         <tr>
                             <th colSpan={5}>
                                 <button
-                                    type="button"
                                     className="action-dublicate action cursor-pointer"
                                     onClick={() => setupIdent(attrs)}>
                                     <span>Replace all values with selected</span>

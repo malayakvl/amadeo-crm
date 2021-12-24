@@ -12,12 +12,13 @@ import dynamic from 'next/dynamic';
 import { prepareAdditionalDropdown } from '../../lib/functions';
 import { prepareConfigValues, prepareAdditionalColorDropdown } from '../../lib/inventoryServices';
 import {
+    getIdentSelector,
     productAdditionalSelector,
     selectedAdditionalsSelector,
     tagSuggestionsSelector,
     uploadedFilesSelector
 } from '../../redux/products/selectors';
-import { findTagAction, updateProductAction } from '../../redux/products/actions';
+import { findTagAction, setIdentAction, updateProductAction } from '../../redux/products/actions';
 import 'suneditor/dist/css/suneditor.min.css';
 import { InventoryPhotos, RenderVariant } from './index';
 
@@ -103,6 +104,7 @@ function ProductForm({
     const additionalSelectedProps = useSelector(selectedAdditionalsSelector);
     const searchTagSuggestions = useSelector(tagSuggestionsSelector);
     const uploadedFiles = useSelector(uploadedFilesSelector);
+    const isIdent = useSelector(getIdentSelector);
 
     const [editorContent, setEditorContent] = useState(productData.product.description);
     const [selectedColors, setSelectedColors] = useState([]);
@@ -141,6 +143,7 @@ function ProductForm({
         setSelectedSizes(additionalSelectedProps.sizes);
         setSelectedColors(additionalSelectedProps.colors);
         setSelectedMaterials(additionalSelectedProps.materials);
+        setTags(additionalSelectedProps.tags);
     }, [additionalSelectedProps]);
 
     const handleChangeEditor = (content: any) => {
@@ -193,34 +196,36 @@ function ProductForm({
             initialValues={productData.product}
             validationSchema={SubmitSchema}
             onSubmit={(values) => {
-                const formData = new FormData();
-                Object.keys(values).forEach((key: string) => {
-                    if (!['material_id', 'tags'].includes(key)) {
-                        formData.append(key, (values as any)[key]);
-                    }
-                });
-                formData.append('description', editorContent);
-                formData.append('tags', JSON.stringify(tags));
-                formData.append(
-                    'configurations',
-                    JSON.stringify(prepareConfigValues(values, selectedColors, selectedSizes))
-                );
-                formData.append('description', editorContent);
-                formData.append('materials', JSON.stringify(selectedMaterials));
-                formData.append('colors', JSON.stringify(selectedColors));
-                formData.append('sizes', JSON.stringify(selectedSizes));
-                formData.append(
-                    'material_id',
-                    (selectedMaterials as any)?.length
-                        ? (selectedMaterials[0] as any).value
-                        : (selectedMaterials as any).value || null
-                );
-                if (uploadedFiles.length) {
-                    uploadedFiles.forEach((file: any) => {
-                        formData.append('photos[]', file);
+                dispatch(setIdentAction(false));
+                if (!isIdent) {
+                    const formData = new FormData();
+                    Object.keys(values).forEach((key: string) => {
+                        if (!['material_id', 'tags', 'description'].includes(key)) {
+                            formData.append(key, (values as any)[key]);
+                        }
                     });
+                    formData.append('description', editorContent);
+                    formData.append('tags', JSON.stringify(tags));
+                    formData.append(
+                        'configurations',
+                        JSON.stringify(prepareConfigValues(values, selectedColors, selectedSizes))
+                    );
+                    formData.append('materials', JSON.stringify(selectedMaterials));
+                    formData.append('colors', JSON.stringify(selectedColors));
+                    formData.append('sizes', JSON.stringify(selectedSizes));
+                    formData.append(
+                        'material_id',
+                        (selectedMaterials as any)?.length
+                            ? (selectedMaterials[0] as any).value
+                            : (selectedMaterials as any).value || null
+                    );
+                    if (uploadedFiles.length) {
+                        uploadedFiles.forEach((file: any) => {
+                            formData.append('photos[]', file);
+                        });
+                    }
+                    dispatch(updateProductAction(formData, values.id));
                 }
-                dispatch(updateProductAction(formData, values.id));
             }}>
             {(props) => {
                 const { handleChange } = props;

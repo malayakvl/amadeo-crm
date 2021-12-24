@@ -59,7 +59,8 @@ apiRoutes.route('/product')
 apiRoutes.route('/products/fetch-additional').get(ProductController.fetchAdditional);
 apiRoutes.route('/fetch-product/:id').get(ProductController.fetchProduct);
 apiRoutes.route('/fetch-products').get(ProductController.fetchData);
-apiRoutes.route('/products/delete/:id').delete(ProductController.deleteRows);
+apiRoutes.route('/products/copy/:id').get(ProductController.copyRow);
+apiRoutes.route('/products/delete/:id').delete(ProductController.deleteRow);
 apiRoutes.route('/products/photo-delete/:id').post(ProductController.deletePhoto);
 apiRoutes.route('/products/bulk-delete').post(ProductController.bulkDelete);
 apiRoutes.route('/products/bulk-copy').post(ProductController.bulkCopy);
