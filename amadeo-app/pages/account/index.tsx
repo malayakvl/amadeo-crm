@@ -137,7 +137,7 @@ export async function getServerSideProps(context: any) {
             session: session,
             locale: locale,
             infoData: infoData,
-            reqActiveTab: activeTab,
+            reqActiveTab: activeTab || null,
             messages: {
                 ...require(`../../messages/${locale}.json`)
             }

@@ -41,8 +41,8 @@ export const updateProductAction: any = createAction(
                     dispatch(
                         setSuccessToastAction(`Product has been ${isNew ? 'updated' : 'created'}`)
                     );
-                    dispatch(fetchProductsAction());
-                    dispatch(setActiveTabAction('products'));
+                    // dispatch(fetchProductsAction());
+                    // dispatch(setActiveTabAction('products'));
                 });
         }
 );
@@ -103,7 +103,7 @@ export const findTagAction: any = createAction(
         (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
             const state = getState();
             return axios
-                .get(`${baseUrl}/tags/find?query=${query}`, {
+                .get(`${baseUrl}/tags/find?tag=${query}`, {
                     headers: {
                         ...authHeader(state.user.user.email)
                     }

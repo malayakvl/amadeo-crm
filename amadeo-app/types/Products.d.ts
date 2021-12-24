@@ -21,6 +21,7 @@ declare namespace Products {
         selectedSizes: any[];
         selectedAdditionals: Products.Additionals;
         tagSuggestions: any[];
+        setupIdent: boolean;
     }
 
     interface Additionals {

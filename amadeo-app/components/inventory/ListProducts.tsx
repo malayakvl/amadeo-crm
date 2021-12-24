@@ -110,7 +110,7 @@ const ListProducts: React.FC = () => {
                                 </span>
                             </td>
                             <td>coming soon</td>
-                            <td className="text-right">
+                            <td className="text-right whitespace-nowrap">
                                 <ButtonTableAction
                                     dataId={String(item.id)}
                                     localeKey="Edit"

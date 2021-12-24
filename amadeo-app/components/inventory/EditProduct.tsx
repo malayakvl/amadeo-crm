@@ -24,10 +24,6 @@ const EditProduct: React.FC<PropsProduct> = ({ locale }) => {
                 productData.product.selectedColors,
                 locale
             );
-            const _styles: any = prepareAdditionalDropdown(
-                productData.product.selectedStyles,
-                locale
-            );
             const _materials: any = prepareAdditionalDropdown(
                 productData.product.selectedMaterials,
                 locale
@@ -36,12 +32,11 @@ const EditProduct: React.FC<PropsProduct> = ({ locale }) => {
                 setSelectedAdditionalAction({
                     colors: _colors,
                     sizes: _sizes,
-                    styles: _styles,
                     materials: _materials
                 })
             );
 
-            if (productData.configurations.length > 0) {
+            if (productData.product.configured) {
                 productData.configurations.forEach((configuration: any) => {
                     const conf = configuration.configuration;
                     let index;

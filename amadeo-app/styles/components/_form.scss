@@ -6,7 +6,7 @@
   &:focus,
   &:focus-visible {
     @apply bg-white w-full rounded-lg p-2.5 text-sm text-gray-350
-      font-medium border-gray-180 border;
+      font-medium border-gray-180 border text-xs;
   }
 }
 
@@ -24,13 +24,14 @@
 }
 
 .form-control-dropdown {
+  /*  inventory-select */
   .inventory__input {
-    min-width: 0 !important;
+    //min-width: 0 !important;
     @apply text-sm;
   }
   .inventory__menu {
     font-size: 12px !important;
-    font-weight: bold !important;
+    @apply text-xs font-bold;
   }
   .inventory__placeholder {
     @apply text-xs text-gray-350 font-medium;
@@ -40,8 +41,7 @@
     @apply rounded-lg;
   }
   .inventory__multi-value__label {
-    font-size: 10px;
-    @apply text-gray-350 font-bold uppercase;
+    @apply text-gray-350 font-bold uppercase text-[10px];
   }
   .inventory__multi-value__remove svg {
     fill: #CFD8DC !important;
@@ -52,9 +52,9 @@
   .inventory__indicator svg {
     fill: #CFD8DC !important;
   }
-  .inventory__clear-indicator {
-    @apply hidden;
-  }
+  //.inventory__clear-indicator {
+  //  @apply hidden;
+  //}
   .inventory__menu {
     @apply text-sm text-gray-350;
   }
@@ -66,33 +66,25 @@
   }
   /* inventory color */
   .inventory-color__input {
-    min-width: 0 !important;
+    //min-width: 0 !important;
     @apply text-sm;
   }
   .inventory-color__placeholder {
     @apply text-xs text-gray-350 font-medium;
   }
   .inventory-color__multi-value {
-    //background: #F8F8F8;
     @apply rounded-lg;
   }
   .inventory-color__multi-value__label {
-    font-size: 10px;
-    @apply font-bold uppercase relative;
+    @apply font-bold uppercase relative text-[10px];
   }
   .inventory-color__menu {
     font-size: 12px !important;
-    font-weight: bold;
+    @apply text-xs font-bold;
   }
-  //.inventory__multi-value__remove svg {
-  //  fill: #CFD8DC !important;
-  //}
   .inventory-color__single-value {
     @apply text-xs text-gray-350 font-medium;
   }
-  //.inventory-color__indicator svg {
-  //  fill: #CFD8DC !important;
-  //}
   .inventory-color__clear-indicator {
     @apply hidden;
   }
@@ -105,9 +97,6 @@
   .inventory-color__control {
     @apply border-gray-180 border rounded-lg min-h-[40px];
   }
-
-
-
 }
 
 .form-control-icon {
@@ -181,48 +170,7 @@ input:checked + .toggle-bg {
 }
 
 
-//*************************
-// Multiselect Styles
-//*************************
-.rmsc .dropdown-container {
-  border: 1px solid #CFD8DC !important;
-  border-radius: 8px !important;
-}
-.multi-select {
-  .dropdown-container {
-    @apply bg-white p-0.5 w-full rounded-lg text-sm text-gray-350
-    font-medium border-gray-180 border;
-  }
 
-  input[type="checkbox"] {
-    appearance: none;
-    margin: 0;
-    font: inherit;
-    color: #99ABCE;
-    width: 1.15em;
-    height: 1.15em;
-    border: 0.15em solid #99ABCE;
-    border-radius: 4px;
-    transform: translateY(-0.075em);
-  }
-
-  .item-renderer {
-    position: relative;
-    span {
-      position: absolute;
-      @apply text-gray-350 text-sm;
-      display: block;
-      left: 24px;
-      top: -4px;
-    }
-  }
-
-  .dropdown-heading-value {
-    .gray {
-      @apply text-gray-180;
-    }
-  }
-}
 
 //*************************
 // Dropzone Styles

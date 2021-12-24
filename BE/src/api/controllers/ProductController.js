@@ -12,14 +12,14 @@ class ProductController {
     async fetchAdditional (req, res) {
         const additional = await productModel.getAdditional();
         if (!additional) {
-            return res.status(402).json('Something wend wrong');
+            return res.status(401).json('Something wend wrong');
         }
         return res.status(200).json({ additional: additional.additional });
     }
 
     async addProduct (req, res) {
         if (!req.user) {
-            return res.status(402).json('Access deny');
+            return res.status(401).json('Access deny');
         }
         // const dirUpload = `${process.env.DOWNLOAD_FOLDER}/products/${req.user.id}`;
         // const dirUpload = `${process.env.DOWNLOAD_FOLDER}/tmp`;
@@ -66,26 +66,26 @@ class ProductController {
         const { limit, offset } = req.query;
 
         if (!req.user) {
-            return res.status(402).json('Access deny');
+            return res.status(401).json('Access deny');
         }
 
         const data = await productModel.getAll(1, limit, req.user.id, false, offset);
         if (!data.error) {
             return res.status(200).json({ items: data.products, count: data.size });
         } else {
-            return res.status(402).json({ error: 'Something wend wrong' });
+            return res.status(401).json({ error: 'Something wend wrong' });
         }
     }
 
     async fetchProduct (req, res) {
         if (!req.user) {
-            return res.status(402).json('Access deny');
+            return res.status(401).json('Access deny');
         }
         const data = await productModel.fetchProduct(req.params.id, req.user.id);
         if (!data.error) {
             return res.status(200).json({ product: data });
         } else {
-            return res.status(402).json({ error: 'Access deny' });
+            return res.status(401).json({ error: 'Access deny' });
         }
     }
 
@@ -95,7 +95,7 @@ class ProductController {
 
     async deletePhoto (req, res) {
         if (!req.user) {
-            return res.status(402).json('Access deny');
+            return res.status(401).json('Access deny');
         }
         await productModel.deletePhoto(req.params.id, req.user.id, req.body.data);
         // delete photo
@@ -108,7 +108,7 @@ class ProductController {
     
     async bulkDelete (req, res) {
         if (!req.user) {
-            return res.status(402).json('Access deny');
+            return res.status(401).json('Access deny');
         }
         const ids = [];
         JSON.parse(req.body.data).filter(id => id.checked).forEach(data => ids.push(data.id));
@@ -119,7 +119,7 @@ class ProductController {
     
     async bulkCopy (req, res) {
         if (!req.user) {
-            return res.status(402).json('Access deny');
+            return res.status(401).json('Access deny');
         }
         const ids = [];
         JSON.parse(req.body.data).filter(id => id.checked).forEach(data => ids.push(data.id));

@@ -32,6 +32,7 @@ const initialState: {
     products: any[];
     activeTab: string;
     tagSuggestions: any[];
+    setupIdent: boolean;
 } = {
     additional: {
         colors: [],
@@ -55,6 +56,7 @@ const initialState: {
             price: '',
             quantity: '',
             keywords: '',
+            sku: '',
             photos: [],
             selectedColors: [],
             selectedSizes: [],
@@ -70,7 +72,8 @@ const initialState: {
     count: 0,
     items: [],
     tagSuggestions: [],
-    activeTab: 'products'
+    activeTab: 'products',
+    setupIdent: false
 };
 
 const ACTION_HANDLERS: any = {
@@ -191,14 +194,19 @@ const ACTION_HANDLERS: any = {
                     price: '',
                     quantity: '',
                     keywords: '',
+                    sku: '',
                     selectedColors: [],
                     selectedSizes: []
                 },
                 configurations: []
             },
             isFetched: true,
-            selectedColors: [],
-            selectedSizes: [],
+            selectedAdditionals: {
+                colors: [],
+                sizes: [],
+                styles: [],
+                materials: []
+            },
             uploadedFiles: []
         });
     }
