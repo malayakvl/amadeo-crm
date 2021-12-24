@@ -108,14 +108,15 @@ class Product {
                 const productPhotos = photos.concat(copyPhotos);
                 
                 // prepare tags
-                const tags = await this.prepareTags(dataProduct.tags);
-                const productTags = _resProd.rows[0].tags ? _resProd.rows[0].tags.concat(tags) : tags;
+                const tags = [];
+                // const tags = await this.prepareTags(dataProduct.tags);
+                // const productTags = _resProd.rows[0].tags ? _resProd.rows[0].tags.concat(tags) : tags;
                 
                 const queryUpdate = `
                     UPDATE data.products
                     SET
                         name = $$${dataProduct.name}$$,
-                        tags = '{${productTags}}',
+                        tags = '{${tags}}',
                         description = $$${dataProduct.description}$$,
                         photos = '{${productPhotos}}',
                         material_id = ${dataProduct.material_id},
@@ -157,7 +158,8 @@ class Product {
         const client = await pool.connect();
         try {
             // prepare tags
-            const tags = await this.prepareTags(dataProduct.tags);
+            // const tags = await this.prepareTags(dataProduct.tags);
+            const tags = [];
     
             const queryInsert = `
                 INSERT INTO data.products
