@@ -122,6 +122,7 @@ export default function Signup({ providers, locale }: { providers: any; locale: 
                                         name={'email'}
                                         placeholder={'Email'}
                                         props={props}
+                                        tips={null}
                                     />
 
                                     <div>

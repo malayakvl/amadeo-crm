@@ -283,7 +283,7 @@ class Product {
                         res.rows[0].quantity = resConfigs.rows[0].quantity;
                     }
                     let selectedTagsData = [];
-                    if (res.rows[0].tags) {
+                    if (res.rows[0].tags.length > 0) {
                         const queryTags = `SELECT table_translation FROM common__tools._get_translation('data', 'hashtags', 'id', 'name', ' id IN (${res.rows[0].tags.join(',')})');`;
                         const resTags = await client.query(queryTags);
                         selectedTagsData = resTags.rows[0].table_translation;
