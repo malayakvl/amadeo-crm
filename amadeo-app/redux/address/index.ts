@@ -1,37 +1,25 @@
 import { Action, handleActions } from 'redux-actions';
 import {
-    fetchAddressesAction,
     fetchAddressAction,
     setAddressAction,
     addAddressAction,
-    deleteAddressAction
 } from './actions';
 
-const initialState: State.Addresses = {
-    addresses: [],
-    address: {} as Addresses.Address,
-    crudStatus: null,
-    loading: false,
-    isFetched: false
+const initialState: Addresses.Address = {
+    id: null,
+    user_id: null,
+    country_id: null,
+    state: null,
+    post_code: null,
+    address_type: null,
+    city: null,
+    address_line_1: null,
+    address_line_2: null,
+    created_at: null,
+    updated_at: null,
 };
 
 const ACTION_HANDLERS: any = {
-    [fetchAddressesAction]: {
-        next: (
-            state: State.Addresses,
-            action: Type.ReduxAction<Pick<State.Addresses, 'addresses'>>
-        ): State.Addresses => ({
-            ...state,
-            ...action.payload,
-            loading: false,
-            isFetched: true
-        }),
-        throw: (state: State.Addresses): State.Addresses => ({
-            ...state,
-            loading: false,
-            isFetched: true
-        })
-    },
     [fetchAddressAction]: {
         next: (
             state: State.Addresses,
@@ -58,11 +46,9 @@ const ACTION_HANDLERS: any = {
 };
 
 export {
-    fetchAddressesAction,
     fetchAddressAction,
     setAddressAction,
     addAddressAction,
-    deleteAddressAction
 };
 
 // ------------------------------------

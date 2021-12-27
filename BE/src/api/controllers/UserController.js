@@ -78,6 +78,8 @@ class UserController {
             if (address) {
                 return res.status(200).json({ address: address });
             }
+
+            return res.status(200).json({ address: {} });
         } else {
             return res.status(401).json('Something wend wrong');
         }
