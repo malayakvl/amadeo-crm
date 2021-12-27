@@ -11,7 +11,7 @@ export const fetchAddressAction: any = createAction(
     async () =>
         async (dispatch: Type.Dispatch, getState: () => State.Root): Promise<{ address: any }> => {
             const state = getState();
-            const res = await axios.get(`${baseUrl}/address/fetch`, {
+            const res = await axios.get(`${baseUrl}/address`, {
                 headers: {
                     ...authHeader(state.user.user.email)
                 }

@@ -190,31 +190,6 @@ class User {
     /**
      *
      * @param userId integer
-     * @returns {Promise<{addresses: null, error: {code: number, message: string}}|any[]|null>}
-     */
-    async findUserAddresses(userId) {
-        const client = await pool.connect();
-        try {
-            const query = `SELECT * FROM data.addresses WHERE user_id='${userId}';`;
-            const res = await client.query(query);
-            return res.rows ? res.rows : null;
-        } catch (e) {
-            if (process.env.NODE_ENV === 'development') {
-                logger.log(
-                    'error',
-                    'Model error:',
-                    { message: e.message }
-                );
-            }
-            return { addresses: null, error: { code: 404, message: 'Addresses Not found' } };
-        } finally {
-            client.release();
-        }
-    }
-
-    /**
-     *
-     * @param userId integer
      * @param addressId integer
      * @returns {Promise<{addresses: null, error: {code: number, message: string}}|any|null>}
      */
@@ -279,26 +254,6 @@ class User {
                 );
             }
             return { user: null, error: { code: 404, message: 'Addresses Not found' } };
-        } finally {
-            client.release();
-        }
-    }
-
-    async deleteAddress(addressId) {
-        const client = await pool.connect();
-        try {
-            const query = `DELETE FROM data.addresses WHERE id='${addressId}'`;
-            await client.query(query);
-            return { success: true };
-        } catch (e) {
-            if (process.env.NODE_ENV === 'development') {
-                logger.log(
-                    'error',
-                    'Model error:',
-                    { message: e.message }
-                );
-            }
-            return { success: false, error: { code: 404, message: 'Addresses Not found' } };
         } finally {
             client.release();
         }

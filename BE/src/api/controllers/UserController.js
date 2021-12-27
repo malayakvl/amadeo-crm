@@ -64,14 +64,6 @@ class UserController {
         }
     }
 
-    async fetchAddresses (req, res) {
-        if (req.user) {
-            const addresses = await userModel.findUserAddresses(req.user.id);
-            return res.status(200).json({ addresses: addresses });
-        }
-        return res.status(402).json('Something wend wrong');
-    }
-
     async fetchAddress (req, res) {
         if (req.user) {
             const address = await userModel.findUserAddress(req.user.id);
@@ -85,14 +77,6 @@ class UserController {
         }
         
         
-    }
-
-    async deleteAddress (req, res) {
-        const status = await userModel.deleteAddress(req.params.id);
-        if (status) {
-            return res.status(200).json({ status: status });
-        }
-        return res.status(402).json('Something wend wrong');
     }
 
     async changePassword (req, res) {
