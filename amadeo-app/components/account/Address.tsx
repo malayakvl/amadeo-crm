@@ -5,8 +5,9 @@ import { useTranslations } from 'next-intl';
 import { addressSelector } from '../../redux/address/selectors';
 import { InputText, InputSelect, InputSelectLocalize } from '../_form';
 import { addAddressAction, fetchAddressAction, setAddressAction } from '../../redux/address';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { userSelector } from '../../redux/user/selectors';
+import { getCountries } from '../../lib/staff';
 
 interface CountryProps {
     id: number;
@@ -28,8 +29,14 @@ function Address({
     useEffect(() => {
         if (user.email) {
             dispatch(fetchAddressAction());
+            getCountries().then(countries => setCountries(countries))
+
         }
+
+
     }, [user?.email]);
+
+    const [countriesData, setCountries] = useState([]);
 
     const SubmitSchema = Yup.object().shape({
         // country_id: Yup.string().required(t('Required field')),
