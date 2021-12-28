@@ -6,16 +6,10 @@ import { useState, useEffect } from 'react';
 import { Address, Profile, Password } from '../../components/account';
 import { useDispatch, useSelector } from 'react-redux';
 import { profileSelector } from '../../redux/profile/selectors';
-import { fetchProfileAction } from '../../redux/profile'
+import { fetchProfileAction } from '../../redux/profile';
 import { userSelector } from '../../redux/user/selectors';
 
-function Account({
-    locale,
-    reqActiveTab
-}: {
-    locale: string;
-    reqActiveTab: string | null;
-}) {
+function Account({ locale, reqActiveTab }: { locale: string; reqActiveTab: string | null }) {
     const t = useTranslations();
     const [activeTab, setActiveTab] = useState(reqActiveTab ? reqActiveTab : 'profile');
     const [subTitle, setSubTitle] = useState(t('Personal Information'));
@@ -92,9 +86,7 @@ function Account({
                     <div className={`w-full ${activeTab !== 'addressess' ? 'hidden' : ''}`}>
                         {profileData.role_id === 2 && (
                             <Fragment>
-                                <Address
-                                    locale={locale}
-                                />
+                                <Address locale={locale} />
                             </Fragment>
                         )}
                     </div>

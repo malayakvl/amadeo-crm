@@ -16,8 +16,8 @@ export const fetchAddressAction: any = createAction(
                     ...authHeader(state.user.user.email)
                 }
             });
-            
-            return res.data.address
+
+            return res.data.address;
         }
 );
 

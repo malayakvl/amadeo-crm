@@ -1,9 +1,5 @@
 import { Action, handleActions } from 'redux-actions';
-import {
-    fetchAddressAction,
-    setAddressAction,
-    addAddressAction,
-} from './actions';
+import { fetchAddressAction, setAddressAction, addAddressAction } from './actions';
 
 const initialState: Address.Root = {
     id: null,
@@ -16,36 +12,26 @@ const initialState: Address.Root = {
     address_line_1: '',
     address_line_2: '',
     created_at: null,
-    updated_at: null,
+    updated_at: null
 };
 
 const ACTION_HANDLERS: any = {
     [fetchAddressAction]: {
-        next: (
-            state: State.Address,
-            action: Type.ReduxAction<State.Address>
-        ): State.Address => ({
+        next: (state: State.Address, action: Type.ReduxAction<State.Address>): State.Address => ({
             ...state,
             ...action.payload
         }),
         throw: (state: State.Address): State.Address => ({
-            ...state,
+            ...state
         })
     },
-    [setAddressAction]: (
-        state: State.Address,
-        action: Action<State.Address>
-    ): State.Address => ({
+    [setAddressAction]: (state: State.Address, action: Action<State.Address>): State.Address => ({
         ...state,
         ...action.payload
     })
 };
 
-export {
-    fetchAddressAction,
-    setAddressAction,
-    addAddressAction,
-};
+export { fetchAddressAction, setAddressAction, addAddressAction };
 
 // ------------------------------------
 // Reducer

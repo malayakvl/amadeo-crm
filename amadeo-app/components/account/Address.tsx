@@ -4,23 +4,12 @@ import * as Yup from 'yup';
 import { useTranslations } from 'next-intl';
 import { addressSelector } from '../../redux/address/selectors';
 import { InputText, InputSelect, InputSelectLocalize } from '../_form';
-import { addAddressAction, fetchAddressAction, setAddressAction } from '../../redux/address';
+import { addAddressAction, fetchAddressAction } from '../../redux/address';
 import { useEffect, useState } from 'react';
 import { userSelector } from '../../redux/user/selectors';
 import { getCountries } from '../../lib/staff';
 
-interface CountryProps {
-    id: number;
-    code: string;
-    name: string;
-    translations: any;
-}
-
-function Address({
-    locale
-}: {
-    locale: string;
-}) {
+function Address({ locale }: { locale: string }) {
     const t = useTranslations();
     const addressData = useSelector(addressSelector);
     const user = useSelector(userSelector);
@@ -29,11 +18,8 @@ function Address({
     useEffect(() => {
         if (user.email) {
             dispatch(fetchAddressAction());
-            getCountries().then(countries => setCountries(countries))
-
+            getCountries().then((countries) => setCountries(countries));
         }
-
-
     }, [user?.email]);
 
     const [countriesData, setCountries] = useState([]);
@@ -57,7 +43,7 @@ function Address({
             initialValues={addressData}
             validationSchema={SubmitSchema}
             onSubmit={(values) => {
-                console.log('test')
+                console.log('test');
                 dispatch(addAddressAction(values));
             }}>
             {(props) => (
@@ -133,9 +119,7 @@ function Address({
                     <button type="submit" className="gradient-btn">
                         {t('Save')}
                     </button>
-                    <button
-                        type="button"
-                        className="ml-3 cancel">
+                    <button type="button" className="ml-3 cancel">
                         {t('Cancel')}
                     </button>
                 </form>
