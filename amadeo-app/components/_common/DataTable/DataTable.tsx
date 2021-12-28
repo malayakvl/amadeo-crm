@@ -38,7 +38,7 @@ const DataTable: React.FC<Props> = ({
     const hideSearch = false;
     const headers = TableHeaders[paginationType];
     const dispatch = useDispatch();
-    const { limit, sort, column, offset, query }: Layouts.Pagination = useSelector(
+    const { limit, sort, column, offset, query, filters }: Layouts.Pagination = useSelector(
         paginationSelectorFactory(paginationType)
     );
     const [loading, setLoading] = useState(true);
@@ -48,7 +48,7 @@ const DataTable: React.FC<Props> = ({
     useEffect(() => {
         sendRequest().finally(() => setLoading(false));
         // return cancelDebouncedQuery;
-    }, [limit, offset, sort, column, query]);
+    }, [limit, offset, sort, column, query, filters]);
 
     const setPage = useCallback(
         (currentPage) => {
@@ -209,14 +209,12 @@ const DataTable: React.FC<Props> = ({
             {!loading && (
                 <div className="flex justify-between w-full">
                     <div>
-                        {totalAmount / limit > 1 && (
-                            <select value={limit} onChange={setLimit} className="form-control">
-                                <option value={10}>10</option>
-                                <option value={25}>25</option>
-                                <option value={50}>50</option>
-                                <option value={100}>100</option>
-                            </select>
-                        )}
+                        <select value={limit} onChange={setLimit} className="form-control">
+                            <option value={10}>10</option>
+                            <option value={25}>25</option>
+                            <option value={50}>50</option>
+                            <option value={100}>100</option>
+                        </select>
                     </div>
                     {totalAmount / limit > 1 && (
                         <RawPagination

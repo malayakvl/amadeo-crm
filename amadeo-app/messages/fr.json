@@ -111,8 +111,8 @@
   "Product details": "Product details",
   "Product Price": "Product Price",
   "Hashtag": "Hashtag",
-  "Color": "Color",
-  "Size": "Size",
+  "Color": "Couleur",
+  "Size": "Taille",
   "Quantity": "Quantity",
   "Price": "Price",
   "Publish": "Publish",
@@ -140,5 +140,13 @@
   "Drag_and_drop_files": "Drag and drop image file(s), or browse your computer.",
   "Select color or size": "Select color or size",
   "Product has been deleted": "Product has been deleted",
-  "Product has been copied": "Product has been copied"
+  "Product has been copied": "Product has been copied",
+  "Filters": "Filters",
+  "Apply": "Apply",
+  "Reset": "Reset",
+  "Show more": "Show more",
+  "Show less": "Show less",
+  "price_between": "Price between {min}, {max} {currency}",
+  "qty_between": "Quantity between {min}, {max}",
+  "search_by": "Search By: {searchStr}"
 }

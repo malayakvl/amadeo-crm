@@ -55,9 +55,10 @@ export const fetchProductsAction: any = createAction(
             getState: () => State.Root
         ): Promise<{ count: any; items: any }> => {
             const state = getState();
-            const { limit, offset, sort, column, query } = paginationSelectorFactory(
+            const { limit, offset, sort, column, query, filters } = paginationSelectorFactory(
                 PaginationType.PRODUCTS
             )(state);
+            const queryFilter = JSON.stringify(filters);
             return axios
                 .get(
                     `${baseUrl}/fetch-products?${queryString.stringify({
@@ -65,7 +66,8 @@ export const fetchProductsAction: any = createAction(
                         offset,
                         sort,
                         column,
-                        query
+                        query,
+                        queryFilter
                     })}`,
                     {
                         headers: {

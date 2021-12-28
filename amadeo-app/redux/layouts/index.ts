@@ -14,12 +14,15 @@ import {
     setModalConfirmationMetaAction
 } from './actions';
 
-const initPagination = { limit: 35, offset: 0, sort: 'DESC', column: 'created_at', query: '' };
+const initPagination = { limit: 25, offset: 0, sort: 'DESC', column: 'created_at', query: '' };
 
 const initialState: State.Layouts = {
     pagination: {
         notifications: { ...initPagination },
-        products: { ...initPagination }
+        products: {
+            ...initPagination,
+            filters: { product_name: '', color_id: [], size_id: [], price: [], quantity: [] }
+        }
     },
     isSidebarOpen: true,
     toasts: [],
