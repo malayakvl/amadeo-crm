@@ -1,5 +1,6 @@
 import Head from 'next/head';
 import FullLayout from '../components/layout/FullLayout';
+import { getSession } from 'next-auth/client';
 
 export default function Home() {
     return (
@@ -14,14 +15,16 @@ export default function Home() {
 Home.Layout = FullLayout;
 
 export async function getServerSideProps(context: any) {
-    const { locale } = context;
+    const { req, locale } = context;
+    const session = await getSession({ req });
 
-    return {
-        props: {
-            locale,
-            messages: {
-                ...require(`../messages/${locale}.json`)
-            }
-        }
-    };
+    if (!session) {
+        return {
+            redirect: { destination: `/${locale === 'fr' ? '' : `${locale}/`}auth/signin` }
+        };
+    } else {
+        return {
+            redirect: { destination: `/${locale === 'fr' ? '' : `${locale}/`}dashboard` }
+        };
+    }
 }
