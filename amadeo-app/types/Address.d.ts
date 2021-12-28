@@ -1,13 +1,5 @@
-declare namespace Addresses {
+declare namespace Address {
     interface Root {
-        addresses: Address[];
-        address: Address;
-        crudStatus: string | null;
-        loading: boolean;
-        isFetched: boolean;
-    }
-
-    interface Address {
         id: number | null;
         user_id: number | null;
         country_id: number | null;

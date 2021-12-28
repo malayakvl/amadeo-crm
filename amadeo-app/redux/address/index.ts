@@ -5,16 +5,16 @@ import {
     addAddressAction,
 } from './actions';
 
-const initialState: Addresses.Address = {
+const initialState: Address.Root = {
     id: null,
     user_id: null,
-    country_id: null,
-    state: null,
-    post_code: null,
-    address_type: null,
-    city: null,
-    address_line_1: null,
-    address_line_2: null,
+    country_id: 1,
+    state: '',
+    post_code: '',
+    address_type: '',
+    city: '',
+    address_line_1: '',
+    address_line_2: '',
     created_at: null,
     updated_at: null,
 };
@@ -22,26 +22,22 @@ const initialState: Addresses.Address = {
 const ACTION_HANDLERS: any = {
     [fetchAddressAction]: {
         next: (
-            state: State.Addresses,
-            action: Type.ReduxAction<Pick<State.Addresses, 'address'>>
-        ): State.Addresses => ({
+            state: State.Address,
+            action: Type.ReduxAction<State.Address>
+        ): State.Address => ({
             ...state,
-            ...action.payload,
-            loading: false,
-            isFetched: true
+            ...action.payload
         }),
-        throw: (state: State.Addresses): State.Addresses => ({
+        throw: (state: State.Address): State.Address => ({
             ...state,
-            loading: false,
-            isFetched: true
         })
     },
     [setAddressAction]: (
-        state: State.Addresses,
-        action: Action<Addresses.Address>
-    ): State.Addresses => ({
+        state: State.Address,
+        action: Action<State.Address>
+    ): State.Address => ({
         ...state,
-        address: action.payload
+        ...action.payload
     })
 };
 
