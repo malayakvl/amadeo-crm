@@ -41,6 +41,7 @@ export const updateProductAction: any = createAction(
                     dispatch(
                         setSuccessToastAction(`Product has been ${isNew ? 'updated' : 'created'}`)
                     );
+                    dispatch(fetchAdditionalAction());
                     dispatch(fetchProductsAction());
                     dispatch(setActiveTabAction('products'));
                 });
