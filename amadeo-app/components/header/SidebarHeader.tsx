@@ -8,6 +8,7 @@ import { signOut } from 'next-auth/client';
 import { userSelector } from '../../redux/user/selectors';
 import { useTranslations } from 'next-intl';
 import { baseApiUrl } from '../../constants';
+import LangSwitcher from '../lang/Switcher';
 
 const userProfileImg =
     'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80';
@@ -43,6 +44,8 @@ const SidebarHeader: React.FC = () => {
             </div>
             <div className="w-full sm:w-1/2 md:w-2/5 lg:w-2/5 xl:w-1/5 flex items-center justify-end">
                 <NoticeCounter delay={120000} />
+
+                <LangSwitcher />
 
                 <span className="divider" />
                 <div className="relative">
