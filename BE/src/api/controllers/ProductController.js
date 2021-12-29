@@ -58,13 +58,13 @@ class ProductController {
     }
 
     async fetchData (req, res) {
-        const { limit, offset } = req.query;
+        const { limit, offset, queryFilter } = req.query;
 
         if (!req.user) {
             return res.status(401).json('Access deny');
         }
 
-        const data = await productModel.getAll(1, limit, req.user.id, false, offset);
+        const data = await productModel.getAll(1, limit, req.user.id, false, offset, queryFilter);
         if (!data.error) {
             return res.status(200).json({ items: data.products, count: data.size });
         } else {

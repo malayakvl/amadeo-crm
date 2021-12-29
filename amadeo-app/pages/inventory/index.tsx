@@ -4,7 +4,12 @@ import React, { useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { userSelector } from '../../redux/user/selectors';
 import { useDispatch, useSelector } from 'react-redux';
-import { AddProduct, ListProducts, EditProduct } from '../../components/inventory';
+import {
+    AddProduct,
+    ListProducts,
+    EditProduct,
+    InventoryFilters
+} from '../../components/inventory';
 import { activeTabSelector } from '../../redux/products/selectors';
 import { fetchAdditionalAction, setActiveTabAction } from '../../redux/products/actions';
 
@@ -61,12 +66,13 @@ export default function Index({ session, locale }: { session: any; locale: strin
                             </button>
                         </nav>
                     )}
+                    {activeTab === 'products' && <InventoryFilters locale={locale} />}
                 </div>
             </div>
             <div className="block-white-8 mr-10 mt-10">
                 <div className="tabs-content">
                     <div className={`w-full ${activeTab !== 'products' ? 'hidden' : ''}`}>
-                        <ListProducts />
+                        <ListProducts locale={locale} />
                     </div>
                     <div
                         className={`w-full ${

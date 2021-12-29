@@ -30,7 +30,6 @@ const EditProduct: React.FC<PropsProduct> = ({ locale }) => {
                 locale
             );
             const _tags: any = prepareTagsDropdown(productData.product.selectedTags, locale);
-            console.log(_tags);
             dispatch(
                 setSelectedAdditionalAction({
                     colors: _colors,

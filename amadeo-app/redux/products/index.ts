@@ -144,7 +144,7 @@ const ACTION_HANDLERS: any = {
     [fetchProductsAction]: {
         next: (
             state: State.Products,
-            action: Type.ReduxAction<Pick<State.Notifications, 'count' | 'items'>>
+            action: Type.ReduxAction<Pick<State.Products, 'count' | 'items'>>
         ): State.Products => ({
             ...state,
             ...action.payload,
@@ -215,7 +215,8 @@ const ACTION_HANDLERS: any = {
                 colors: [],
                 sizes: [],
                 styles: [],
-                materials: []
+                materials: [],
+                tags: []
             },
             uploadedFiles: []
         });
