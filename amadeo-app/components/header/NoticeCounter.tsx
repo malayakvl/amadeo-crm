@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import useInterval from '@use-it/interval';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchLatestAction } from '../../redux/notifications';
@@ -13,6 +13,7 @@ import { baseApiUrl } from '../../constants';
 const NoticeCounter = ({ delay = 1000 }) => {
     const dispatch = useDispatch();
     const noticeCnt = useSelector(cntNewSelector);
+    const node = useRef<HTMLDivElement>(null);
     const latestNotice = useSelector(latestNoticeSelector);
     const [showLatest, setShowLatest] = useState(false);
     const t = useTranslations();
@@ -20,6 +21,21 @@ const NoticeCounter = ({ delay = 1000 }) => {
     useInterval(() => {
         dispatch(fetchLatestAction());
     }, delay);
+
+    useEffect(() => {
+        document.addEventListener('mousedown', handleClick);
+
+        return () => {
+            document.removeEventListener('mousedown', handleClick);
+        };
+    }, []);
+
+    const handleClick = (e: any) => {
+        if (node?.current?.contains(e.target)) {
+            return;
+        }
+        setShowLatest(false);
+    };
 
     return (
         <div className="relative">
@@ -36,7 +52,7 @@ const NoticeCounter = ({ delay = 1000 }) => {
             </div>
             {noticeCnt > 0 && <span className="counter" />}
             {showLatest && noticeCnt > 0 && (
-                <div className="notice-menu">
+                <div className="notice-menu" ref={node}>
                     <div className="corner" />
                     {latestNotice.map((notice: Notifications.Notification) => (
                         <div key={notice.id} className="notice-item">

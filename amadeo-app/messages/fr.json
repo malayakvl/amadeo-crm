@@ -148,5 +148,11 @@
   "Show less": "Show less",
   "price_between": "Price between {min}, {max} {currency}",
   "qty_between": "Quantity between {min}, {max}",
-  "search_by": "Search By: {searchStr}"
+  "search_by": "Search By: {searchStr}",
+  "No Action": "No Action",
+  "Select Action": "Select Action",
+  "copy": "Copy",
+  "delete": "Delete",
+  "Select at least one item": "Select at least one item",
+  "Item Per Page": "Item Per Page"
 }

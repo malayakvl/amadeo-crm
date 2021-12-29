@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import NoticeCounter from './NoticeCounter';
@@ -19,6 +19,7 @@ const SidebarHeader: React.FC = () => {
     const dispatch = useDispatch();
     const [showProfileMenu, setShowProfileMenu] = useState(false);
     const [userPhoto, setUserPhoto] = useState(userProfileImg);
+    const node = useRef<HTMLDivElement>(null);
 
     useEffect(
         function () {
@@ -31,6 +32,21 @@ const SidebarHeader: React.FC = () => {
         },
         [user]
     );
+
+    useEffect(() => {
+        document.addEventListener('mousedown', handleClick);
+
+        return () => {
+            document.removeEventListener('mousedown', handleClick);
+        };
+    }, []);
+
+    const handleClick = (e: any) => {
+        if (node?.current?.contains(e.target)) {
+            return;
+        }
+        setShowProfileMenu(false);
+    };
 
     return (
         <div className="flex">
@@ -49,14 +65,16 @@ const SidebarHeader: React.FC = () => {
 
                 <span className="divider" />
                 <div className="relative">
-                    <div className="inline-block mt-1">
+                    <div
+                        className="inline-block mt-1 cursor-pointer"
+                        role="presentation"
+                        onClick={() => setShowProfileMenu(!showProfileMenu)}>
                         <Image
                             src={userPhoto}
                             width={24}
                             height={24}
                             className="rounded-full cursor-pointer"
                             alt=""
-                            onClick={() => setShowProfileMenu(!showProfileMenu)}
                         />
 
                         <span className="profile-name inline-block">
@@ -65,63 +83,65 @@ const SidebarHeader: React.FC = () => {
                         </span>
                     </div>
                     {/* Profile dropdown */}
-                    <div className={`profile-menu ${!showProfileMenu ? 'hidden' : ''}`}>
-                        <div className="corner" />
-                        <ul>
-                            <li>
-                                <Link href={`/account`}>
+                    {showProfileMenu && (
+                        <div className="profile-menu" ref={node}>
+                            <div className="corner" />
+                            <ul>
+                                <li>
+                                    <Link href={`/account`}>
+                                        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                                        <a
+                                            role="presentation"
+                                            onClick={() => setShowProfileMenu(!showProfileMenu)}>
+                                            <i className="profile" />
+                                            <span className="s-caption">{t('Profile')}</span>
+                                        </a>
+                                    </Link>
+                                </li>
+                                <li>
                                     {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                                     <a
                                         role="presentation"
                                         onClick={() => setShowProfileMenu(!showProfileMenu)}>
-                                        <i className="profile" />
-                                        <span className="s-caption">{t('Profile')}</span>
+                                        <i className="plan" />
+                                        <span className="s-caption">{t('My Plan')}</span>
                                     </a>
-                                </Link>
-                            </li>
-                            <li>
-                                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                                <a
-                                    role="presentation"
-                                    onClick={() => setShowProfileMenu(!showProfileMenu)}>
-                                    <i className="plan" />
-                                    <span className="s-caption">{t('My Plan')}</span>
-                                </a>
-                            </li>
-                            <li>
-                                <Link href={`/notifications`}>
+                                </li>
+                                <li>
+                                    <Link href={`/notifications`}>
+                                        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                                        <a
+                                            role="presentation"
+                                            onClick={() => setShowProfileMenu(!showProfileMenu)}>
+                                            <i className="bell" />
+                                            <span className="s-caption">{t('Notification')}</span>
+                                        </a>
+                                    </Link>
+                                </li>
+                                <li>
                                     {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                                     <a
                                         role="presentation"
                                         onClick={() => setShowProfileMenu(!showProfileMenu)}>
-                                        <i className="bell" />
-                                        <span className="s-caption">{t('Notification')}</span>
+                                        <i className="help" />
+                                        <span className="s-caption">{t('Help')}</span>
                                     </a>
-                                </Link>
-                            </li>
-                            <li>
-                                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                                <a
-                                    role="presentation"
-                                    onClick={() => setShowProfileMenu(!showProfileMenu)}>
-                                    <i className="help" />
-                                    <span className="s-caption">{t('Help')}</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a
-                                    href={`/api/auth/signout`}
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        window.localStorage.removeItem('user');
-                                        signOut();
-                                    }}>
-                                    <i className="exit" />
-                                    <span className="s-caption">{t('Logout')}</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
+                                </li>
+                                <li>
+                                    <a
+                                        href={`/api/auth/signout`}
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            window.localStorage.removeItem('user');
+                                            signOut();
+                                        }}>
+                                        <i className="exit" />
+                                        <span className="s-caption">{t('Logout')}</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    )}
                 </div>
                 <span className="divider" />
                 <span className="mt-1">

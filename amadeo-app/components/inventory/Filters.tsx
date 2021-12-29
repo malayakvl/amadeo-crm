@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useTranslations } from 'next-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { Range } from 'rc-slider';
@@ -17,6 +17,8 @@ const InventoryFilters: React.FC<any> = (locale: string) => {
     const { filters }: Layouts.Pagination = useSelector(
         paginationSelectorFactory(PaginationType.PRODUCTS)
     );
+    const colorNode = useRef<HTMLDivElement>(null);
+    const sizeNode = useRef<HTMLDivElement>(null);
 
     const [dataFetched, setDataFetched] = useState(false);
     const [filterAdditionals, setFilterAdditionals] = useState({});
@@ -49,6 +51,25 @@ const InventoryFilters: React.FC<any> = (locale: string) => {
         setQtyRange(filters.quantity[0] > 0 || filters.quantity[1] > 0 ? filters.quantity : [0, 0]);
         setSearchName(filters.product_name);
     }, [filters]);
+
+    useEffect(() => {
+        document.addEventListener('mousedown', handleClick);
+
+        return () => {
+            document.removeEventListener('mousedown', handleClick);
+        };
+    }, []);
+
+    const handleClick = (e: any) => {
+        if (colorNode?.current?.contains(e.target)) {
+            return;
+        }
+        if (sizeNode?.current?.contains(e.target)) {
+            return;
+        }
+        setShowColorFilter(false);
+        setShowSizeFilter(false);
+    };
 
     const handleColorFilter = (e: any) => {
         if (e.target.checked) {
@@ -145,7 +166,12 @@ const InventoryFilters: React.FC<any> = (locale: string) => {
                                     </div>
                                 </div>
                                 {showColorFilter && (
-                                    <div className="dropdown-menu min-w-[200px]">
+                                    <div className="dropdown-menu min-w-[200px]" ref={colorNode}>
+                                        <span
+                                            className="filter-close"
+                                            role="presentation"
+                                            onClick={() => setShowColorFilter(false)}
+                                        />
                                         <ul className="py-1">
                                             {(filterAdditionals as any).colors.map((color: any) => (
                                                 <li className="notice-item" key={color.value}>
@@ -187,7 +213,12 @@ const InventoryFilters: React.FC<any> = (locale: string) => {
                                     </div>
                                 </div>
                                 {showSizeFilter && (
-                                    <div className="dropdown-menu min-w-[200px]">
+                                    <div className="dropdown-menu min-w-[200px]" ref={sizeNode}>
+                                        <span
+                                            className="filter-close"
+                                            role="presentation"
+                                            onClick={() => setShowSizeFilter(false)}
+                                        />
                                         <ul className="py-1">
                                             {(filterAdditionals as any).sizes.map((size: any) => (
                                                 <li className="notice-item" key={size.value}>
