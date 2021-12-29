@@ -25,6 +25,8 @@ const initialState: {
         styles: any[];
         materials: any[];
         tags: any[];
+        priceRange: any;
+        qtyRange: any;
     };
     selectedAdditionals: Products.Additionals;
     isFetched: boolean;
@@ -41,7 +43,9 @@ const initialState: {
         sizes: [],
         styles: [],
         materials: [],
-        tags: []
+        tags: [],
+        priceRange: {},
+        qtyRange: {}
     },
     selectedAdditionals: {
         colors: [],

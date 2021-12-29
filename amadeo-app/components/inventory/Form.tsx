@@ -270,6 +270,14 @@ function ProductForm({
                                     />
                                 </div>
 
+                                <InputSwitcher
+                                    label={'Configured'}
+                                    name={'configured'}
+                                    style={null}
+                                    props={props}
+                                    onChange={onChangeConfigured}
+                                />
+
                                 <div className="mb-4">
                                     <label className="control-label">{t('Hashtag')}</label>
                                     <div className="relative">
@@ -386,13 +394,6 @@ function ProductForm({
                                     </div>
                                 </div>
 
-                                <InputSwitcher
-                                    label={'Configured'}
-                                    name={'configured'}
-                                    style={null}
-                                    props={props}
-                                    onChange={onChangeConfigured}
-                                />
                                 {props.values.configured && (
                                     <>
                                         <RenderVariant

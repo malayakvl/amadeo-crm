@@ -27,15 +27,21 @@ class Product {
             const querySizes = 'SELECT table_translation FROM common__tools._get_translation(\'data\', \'product_sizes\', \'id\', \'name\');';
             const queryStyles = 'SELECT table_translation FROM common__tools._get_translation(\'data\', \'product_styles\', \'id\', \'name\');';
             const queryMaterials = 'SELECT table_translation FROM common__tools._get_translation(\'data\', \'product_materials\', \'id\', \'name\');';
+            const queryPrices = 'SELECT * FROM data.get_products_price_range();';
+            const queryQty = 'SELECT * FROM data.get_products_quantity_range();';
             const resColors = await client.query(queryColors);
             const resSizes = await client.query(querySizes);
             const resStyles = await client.query(queryStyles);
             const resMaterials = await client.query(queryMaterials);
+            const resPrices = await client.query(queryPrices);
+            const resQty = await client.query(queryQty);
             return { additional: {
                     colors: resColors.rows.length ? resColors.rows[0].table_translation : null,
                     sizes: resSizes.rows.length ? resSizes.rows[0].table_translation : null,
                     styles: resStyles.rows.length ? resStyles.rows[0].table_translation : null,
-                    materials: resMaterials.rows.length ? resMaterials.rows[0].table_translation : null
+                    materials: resMaterials.rows.length ? resMaterials.rows[0].table_translation : null,
+                    priceRange: resPrices.rows.length ? resPrices.rows[0].get_products_price_range : null,
+                    qtyRange: resQty.rows.length ? resQty.rows[0].get_products_quantity_range : null
                 }
             };
         } catch (e) {
@@ -108,21 +114,22 @@ class Product {
                 const productPhotos = photos.concat(copyPhotos);
                 
                 // prepare tags
-                const tags = [];
-                // const tags = await this.prepareTags(dataProduct.tags);
-                // const productTags = _resProd.rows[0].tags ? _resProd.rows[0].tags.concat(tags) : tags;
+                // const tags = [];
+                const tags = await this.prepareTags(dataProduct.tags);
+                const productTags = _resProd.rows[0].tags ? _resProd.rows[0].tags.concat(tags) : tags;
                 
                 const queryUpdate = `
                     UPDATE data.products
                     SET
                         name = $$${dataProduct.name}$$,
-                        tags = '{${tags}}',
                         description = $$${dataProduct.description}$$,
                         photos = '{${productPhotos}}',
+                        tags = '{${productTags}}',
                         material_id = ${dataProduct.material_id},
                         configured = ${dataProduct.configured ? dataProduct.configured : true},
                         publish = ${dataProduct.publish ? dataProduct.publish : true}
                      WHERE id=${_resProd.rows[0].id};`;
+                console.log(queryUpdate);
                 await client.query(queryUpdate);
                 
                 // update configuration
@@ -158,8 +165,8 @@ class Product {
         const client = await pool.connect();
         try {
             // prepare tags
-            // const tags = await this.prepareTags(dataProduct.tags);
-            const tags = [];
+            const tags = await this.prepareTags(dataProduct.tags);
+            // const tags = [];
     
             const queryInsert = `
                 INSERT INTO data.products
@@ -337,7 +344,7 @@ class Product {
             } else {
                 offset = (Number(page) - 1) * Number(perPage);
             }
-            const productQuery = `SELECT * FROM data.get_products(${perPage}, ${offset}, '${JSON.stringify(_filters)}');`;
+            const productQuery = `SELECT * FROM data.get_products(${perPage}, ${offset}, '${JSON.stringify(_filters)}', 'products.created_at DESC');`;
             // const res = await client.query(`SELECT * FROM data.get_all_products(${perPage}, ${offset}, 'user_id=''${userId}'' ')`);
             const res = await client.query(productQuery);
             const products = res.rows.length > 0 ? res.rows : [];

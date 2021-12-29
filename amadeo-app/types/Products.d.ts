@@ -6,8 +6,10 @@ declare namespace Products {
             sizes: Size[];
             styles: Style[];
             materials: Material[];
+            priceRange: Range;
+            qtyRange: Range;
         };
-        objectsAdditional: Products.Additionals;
+        // objectsAdditional: Products.Additionals;
         product: Product;
         loading: boolean;
         isFetched: boolean;
@@ -30,6 +32,11 @@ declare namespace Products {
         styles: Additional[];
         materials: Additional[];
         tags: Tag[];
+    }
+
+    interface Range {
+        min: number;
+        main: number;
     }
 
     interface Tag {

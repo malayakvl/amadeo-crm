@@ -33,6 +33,8 @@ const InventoryFilters: React.FC<any> = (locale: string) => {
     );
 
     useEffect(() => {
+        setPriceRange([additionalProps.priceRange.min, additionalProps.priceRange.min]);
+        setQtyRange([additionalProps.qtyRange.min, additionalProps.qtyRange.min]);
         setFilterAdditionals({
             colors: prepareAdditionalDropdown(additionalProps.colors, locale),
             sizes: prepareAdditionalDropdown(additionalProps.sizes, locale)
@@ -214,14 +216,18 @@ const InventoryFilters: React.FC<any> = (locale: string) => {
                                     <span className="filter-label" style={{ marginLeft: '-4px' }}>
                                         {t('Price')}
                                         <em className="float-right">
-                                            {priceRange[0]} - {priceRange[1]}&euro;
+                                            {priceRange[0]} -{' '}
+                                            {priceRange[0] === priceRange[1]
+                                                ? additionalProps.priceRange.max
+                                                : priceRange[1]}
+                                            &euro;
                                         </em>
                                     </span>
                                     <Range
                                         allowCross={false}
                                         step={50}
-                                        min={0}
-                                        max={1000}
+                                        min={additionalProps.priceRange.min}
+                                        max={additionalProps.priceRange.max}
                                         onChange={onSliderPriceChange}
                                         value={priceRange}
                                     />
@@ -232,14 +238,17 @@ const InventoryFilters: React.FC<any> = (locale: string) => {
                                     <span className="filter-label" style={{ marginLeft: '-4px' }}>
                                         {t('Quantity')}
                                         <em className="float-right">
-                                            {qtyRange[0]} - {qtyRange[1]}
+                                            {qtyRange[0]} -{' '}
+                                            {qtyRange[1] === qtyRange[0]
+                                                ? additionalProps.qtyRange.max
+                                                : qtyRange[1]}
                                         </em>
                                     </span>
                                     <Range
                                         allowCross={false}
                                         step={10}
-                                        min={0}
-                                        max={1000}
+                                        min={additionalProps.qtyRange.min}
+                                        max={additionalProps.qtyRange.max}
                                         onChange={onSliderQtyChange}
                                         value={qtyRange}
                                     />
