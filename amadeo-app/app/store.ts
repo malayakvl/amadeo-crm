@@ -6,7 +6,7 @@ import reduxThunkFsa from 'redux-thunk-fsa';
 import { createStore, applyMiddleware, combineReducers } from 'redux';
 import logger from 'redux-logger';
 
-import addressReducer from '../redux/addresses/index';
+import addressReducer from '../redux/address';
 import profileReducer from '../redux/profile/index';
 import userReducer from '../redux/user/index';
 import notificationsReducer from '../redux/notifications/index';
@@ -14,7 +14,7 @@ import layoutsReducer from '../redux/layouts/index';
 import productsReducer from '../redux/products/index';
 
 const reducers = combineReducers({
-    addresses: addressReducer,
+    address: addressReducer,
     profile: profileReducer,
     user: userReducer,
     notifications: notificationsReducer,

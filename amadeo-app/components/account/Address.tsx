@@ -2,27 +2,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { useTranslations } from 'next-intl';
-import { addressSelector } from '../../redux/addresses/selectors';
+import { addressSelector } from '../../redux/address/selectors';
 import { InputText, InputSelect, InputSelectLocalize } from '../_form';
-import { addAddressAction, fetchAddressAction, setAddressAction } from '../../redux/addresses';
-import { useEffect } from 'react';
+import { addAddressAction, fetchAddressAction } from '../../redux/address';
+import { useEffect, useState } from 'react';
 import { userSelector } from '../../redux/user/selectors';
+import { getCountries } from '../../lib/staff';
 
-interface CountryProps {
-    id: number;
-    code: string;
-    name: string;
-    translations: any;
-}
-
-function Address({
-    countriesData,
-    locale
-}: {
-    userAddress: any;
-    countriesData: CountryProps[];
-    locale: string;
-}) {
+function Address({ locale }: { locale: string }) {
     const t = useTranslations();
     const addressData = useSelector(addressSelector);
     const user = useSelector(userSelector);
@@ -31,11 +18,14 @@ function Address({
     useEffect(() => {
         if (user.email) {
             dispatch(fetchAddressAction());
+            getCountries().then((countries) => setCountries(countries));
         }
     }, [user?.email]);
 
+    const [countriesData, setCountries] = useState([]);
+
     const SubmitSchema = Yup.object().shape({
-        country_id: Yup.string().required(t('Required field')),
+        // country_id: Yup.string().required(t('Required field')),
         post_code: Yup.string().required(t('Required field')),
         address_type: Yup.string().required(t('Required field')),
         city: Yup.string().required(t('Required field')),
@@ -53,6 +43,7 @@ function Address({
             initialValues={addressData}
             validationSchema={SubmitSchema}
             onSubmit={(values) => {
+                console.log('test');
                 dispatch(addAddressAction(values));
             }}>
             {(props) => (
@@ -128,22 +119,7 @@ function Address({
                     <button type="submit" className="gradient-btn">
                         {t('Save')}
                     </button>
-                    <button
-                        type="button"
-                        className="ml-3 cancel"
-                        onClick={() => {
-                            dispatch(
-                                setAddressAction({
-                                    country_id: '',
-                                    state: '',
-                                    post_code: '',
-                                    address_type: '',
-                                    city: '',
-                                    address_line_1: '',
-                                    address_line_2: ''
-                                })
-                            );
-                        }}>
+                    <button type="button" className="ml-3 cancel">
                         {t('Cancel')}
                     </button>
                 </form>

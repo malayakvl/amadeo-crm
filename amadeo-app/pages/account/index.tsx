@@ -1,31 +1,30 @@
 import React, { Fragment } from 'react';
 import { getSession } from 'next-auth/client';
 import { useTranslations } from 'next-intl';
-import { getProfile } from '../../lib/profile';
 import Head from 'next/head';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Address, Profile, Password } from '../../components/account';
-import { getCountries } from '../../lib/staff';
+import { useDispatch, useSelector } from 'react-redux';
+import { profileSelector } from '../../redux/profile/selectors';
+import { fetchProfileAction } from '../../redux/profile';
+import { userSelector } from '../../redux/user/selectors';
 
-interface ProfileProps {
-    user: any;
-    addresses: any;
-    countries: any;
-}
-
-function Account({
-    infoData,
-    locale,
-    reqActiveTab
-}: {
-    infoData: ProfileProps;
-    locale: string;
-    reqActiveTab: string | null;
-}) {
+function Account({ locale, reqActiveTab }: { locale: string; reqActiveTab: string | null }) {
     const t = useTranslations();
     const [activeTab, setActiveTab] = useState(reqActiveTab ? reqActiveTab : 'profile');
     const [subTitle, setSubTitle] = useState(t('Personal Information'));
-    const [profileData] = useState(infoData.user);
+
+    const dispatch = useDispatch();
+
+    const profileData = useSelector(profileSelector);
+
+    const user = useSelector(userSelector);
+
+    useEffect(() => {
+        if (user.email) {
+            dispatch(fetchProfileAction());
+        }
+    }, [user?.email]);
 
     const handleTabClick = (e: React.MouseEvent<HTMLElement>) => {
         const target = e.target as HTMLElement;
@@ -82,25 +81,12 @@ function Account({
                 </div>
                 <div className="tabs-content">
                     <div className={`w-full ${activeTab !== 'profile' ? 'hidden' : ''}`}>
-                        {infoData.user.email && <Profile />}
+                        {profileData.email && <Profile />}
                     </div>
                     <div className={`w-full ${activeTab !== 'addressess' ? 'hidden' : ''}`}>
                         {profileData.role_id === 2 && (
                             <Fragment>
-                                {/*<AddressesList email={session.user.email || ''} />*/}
-                                <Address
-                                    userAddress={{
-                                        country_id: '',
-                                        state: '',
-                                        post_code: '',
-                                        address_type: '',
-                                        city: '',
-                                        address_line_1: '',
-                                        address_line_2: ''
-                                    }}
-                                    countriesData={infoData.countries}
-                                    locale={locale}
-                                />
+                                <Address locale={locale} />
                             </Fragment>
                         )}
                     </div>
@@ -120,21 +106,16 @@ export async function getServerSideProps(context: any) {
     const session = await getSession({ req });
     const activeTab = req.__NEXT_INIT_QUERY.activeTab;
 
-    let infoData: ProfileProps;
     if (!session) {
         return {
             redirect: { destination: `/${locale === 'fr' ? '' : `${locale}/`}auth/signin` }
         };
-    } else {
-        infoData = await getProfile(session.user?.email);
-        infoData.countries = await getCountries();
     }
 
     return {
         props: {
             session: session,
             locale: locale,
-            infoData: infoData,
             reqActiveTab: activeTab || null,
             messages: {
                 ...require(`../../messages/${locale}.json`)

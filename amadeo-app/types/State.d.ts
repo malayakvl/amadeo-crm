@@ -1,7 +1,7 @@
 declare namespace State {
     interface Root {
         router: Type.RouterRootState;
-        addresses: Addresses;
+        address: Address.Root;
         profile: Profile;
         user: User;
         notifications: Notifications;
@@ -9,7 +9,7 @@ declare namespace State {
         products: Products;
     }
 
-    type Addresses = Addresses.Root;
+    type Address = Address.Root;
     type Profile = Profile.Root;
     type User = User.Root;
     type Notifications = User.Notifications;
