@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev": "nodemon index.js",
+    "dev": "nodemon --inspect=9230 index.js",
     "ui": "npx browser-sync start --config bs-config.cjs",
     "migrate": "node-pg-migrate",
     "seed": "node seed",

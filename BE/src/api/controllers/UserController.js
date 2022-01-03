@@ -1,4 +1,5 @@
 import userModel from '../models/User.js';
+import countryModel from '../models/Country.js'
 import multer from 'multer';
 import fs from 'fs';
 
@@ -67,8 +68,15 @@ class UserController {
     async fetchAddress (req, res) {
         if (req.user) {
             const address = await userModel.findUserAddress(req.user.id);
+            const country = await countryModel.findById(address.country_id)
+
+            let response = {
+                ...address,
+                country
+            }
+
             if (address) {
-                return res.status(200).json({ address: address });
+                return res.status(200).json({ address: response });
             }
 
             return res.status(200).json({ address: {} });

@@ -3,26 +3,59 @@ import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { useTranslations } from 'next-intl';
 import { addressSelector } from '../../redux/address/selectors';
-import { InputText, InputSelect, InputSelectLocalize } from '../_form';
-import { addAddressAction, fetchAddressAction } from '../../redux/address';
+import { InputText } from '../_form';
+import { addAddressAction, fetchAddressAction } from '../../redux/address'
+import { prepareCountriesDropdown } from '../../lib/functions';
 import { useEffect, useState } from 'react';
 import { userSelector } from '../../redux/user/selectors';
 import { getCountries } from '../../lib/staff';
+import Select from 'react-select';
 
 function Address({ locale }: { locale: string }) {
     const t = useTranslations();
-    const addressData = useSelector(addressSelector);
-    const user = useSelector(userSelector);
+    const address = useSelector(addressSelector);
     const dispatch = useDispatch();
 
     useEffect(() => {
-        if (user.email) {
-            dispatch(fetchAddressAction());
-            getCountries().then((countries) => setCountries(countries));
-        }
-    }, [user?.email]);
+        getCountries().then((countries) => {
+            const preparedCountriesDropdown = prepareCountriesDropdown(countries, locale);
 
-    const [countriesData, setCountries] = useState([]);
+            preparedCountriesDropdown.forEach((item: any) => {
+                if (item.value === address.country_id) {
+                    setSelectedCountry(item);
+                }
+            });
+
+            setCountries(preparedCountriesDropdown);
+        });
+
+        addressTypeData.forEach((item: any) => {
+            if (item.value === address.address_type) {
+                setSelectedAddressType(item);
+            }
+        });
+
+
+    }, [address])
+
+    useEffect(() => {
+        dispatch(fetchAddressAction());
+
+    }, []);
+
+    const [countries, setCountries] = useState([]);
+    const [selectedCountry, setSelectedCountry] = useState({ label: 'Afghanistan', value: 1 });
+    const [selectedAddressType, setSelectedAddressType] = useState({ value: 'home address', label: t('home address') })
+
+    function onChangeCountry(value: any) {
+        setSelectedCountry(value);
+
+    }
+
+    function onChangeAddressType(value: any) {
+        setSelectedAddressType(value);
+
+    }
 
     const SubmitSchema = Yup.object().shape({
         // country_id: Yup.string().required(t('Required field')),
@@ -33,30 +66,33 @@ function Address({ locale }: { locale: string }) {
     });
 
     const addressTypeData = [
-        { id: 'home address', name: t('home address') },
-        { id: 'email adderss', name: t('email adderss') }
+        { value: 'home address', label: t('home address') },
+        { value: 'email adderss', label: t('email adderss') }
     ];
 
     return (
         <Formik
             enableReinitialize
-            initialValues={addressData}
+            initialValues={address}
             validationSchema={SubmitSchema}
             onSubmit={(values) => {
-                console.log('test');
+                values.country_id = selectedCountry.value
+                values.address_type = selectedAddressType.value
                 dispatch(addAddressAction(values));
             }}>
             {(props) => (
                 <form onSubmit={props.handleSubmit} className="mt-5">
-                    <InputSelectLocalize
-                        locale={locale}
-                        name={'country_id'}
-                        fieldName={'nicename'}
-                        label={null}
-                        options={countriesData}
-                        style={'lg:w-1/4'}
-                        props={props}
-                    />
+                    <div className="mb-4 lg:w-1/4">
+                        <Select
+                            className={'form-control-dropdown'}
+                            classNamePrefix={'inventory'}
+                            onChange={onChangeCountry}
+                            placeholder={t('Country')}
+                            name="country_id"
+                            value={selectedCountry}
+                            options={countries}
+                        />
+                    </div>
 
                     <InputText
                         name={'state'}
@@ -78,13 +114,17 @@ function Address({ locale }: { locale: string }) {
                         tips={null}
                     />
 
-                    <InputSelect
-                        name={'address_type'}
-                        label={null}
-                        options={addressTypeData}
-                        style={'lg:w-1/4'}
-                        props={props}
-                    />
+                    <div className="mb-4 lg:w-1/4">
+                        <Select
+                            className={'form-control-dropdown'}
+                            classNamePrefix={'inventory'}
+                            placeholder={t('Country')}
+                            name="country_id"
+                            options={addressTypeData}
+                            onChange={onChangeAddressType}
+                            value={selectedAddressType}
+                        />
+                    </div>
 
                     <InputText
                         label={null}
@@ -118,9 +158,6 @@ function Address({ locale }: { locale: string }) {
                     <div className="mt-10 mb-7 block border border-gray-180 border-b-0" />
                     <button type="submit" className="gradient-btn">
                         {t('Save')}
-                    </button>
-                    <button type="button" className="ml-3 cancel">
-                        {t('Cancel')}
                     </button>
                 </form>
             )}
