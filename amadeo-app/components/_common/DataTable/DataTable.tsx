@@ -1,15 +1,16 @@
 import React, { useCallback, useEffect, useState, useMemo } from 'react';
 import classNames from 'classnames';
 import { useSelector, useDispatch } from 'react-redux';
+import { useTranslations } from 'next-intl';
 import {
     checkAllIdsAction,
+    setErrorToastAction,
     setPaginationAction,
     uncheckAllIdsAction
 } from '../../../redux/layouts';
-import { paginationSelectorFactory } from '../../../redux/layouts/selectors';
-import { RawPagination, EmptyTable } from '../../_common/index';
+import { checkedIdsSelector, paginationSelectorFactory } from '../../../redux/layouts/selectors';
+import { RawPagination, EmptyTable, Dropdown } from '../../_common/index';
 import { TableHeaders, PaginationType } from '../../../constants';
-import { useTranslations } from 'next-intl';
 
 interface Props {
     paginationType: Type.PaginationType;
@@ -30,6 +31,7 @@ const DataTable: React.FC<Props> = ({
 }) => {
     const { PRODUCTS } = PaginationType;
     const t = useTranslations();
+    const checkedIds = useSelector(checkedIdsSelector);
     const showFilters = [PRODUCTS].includes(paginationType);
     // const hideEntries: boolean = [CATEGORIES, INVESTMENT].includes(paginationType);
     const hideEntries = false;
@@ -38,17 +40,17 @@ const DataTable: React.FC<Props> = ({
     const hideSearch = false;
     const headers = TableHeaders[paginationType];
     const dispatch = useDispatch();
-    const { limit, sort, column, offset, query }: Layouts.Pagination = useSelector(
+    const { limit, sort, column, offset, query, filters }: Layouts.Pagination = useSelector(
         paginationSelectorFactory(paginationType)
     );
     const [loading, setLoading] = useState(true);
     const [allChecked, setAllChecked] = useState(false);
-    const [selectBulkAction, setSelectBulkAction] = useState('no action');
+    const [selectBulkAction, setSelectBulkAction] = useState(null);
 
     useEffect(() => {
         sendRequest().finally(() => setLoading(false));
         // return cancelDebouncedQuery;
-    }, [limit, offset, sort, column, query]);
+    }, [limit, offset, sort, column, query, filters]);
 
     const setPage = useCallback(
         (currentPage) => {
@@ -79,17 +81,14 @@ const DataTable: React.FC<Props> = ({
         [paginationType, dispatch]
     );
 
-    const bulkAction = useCallback(
-        (event: React.SyntheticEvent): void => {
-            const action = String((event.target as HTMLSelectElement).value);
-            setSelectBulkAction(action);
+    const bulkActionDropdown = useCallback(
+        (action: any): void => {
             if (action === 'delete') {
                 sendDeleteRequest();
-                // sendDeleteRequest().finally(() => setLoading(false));
             } else if (action === 'copy') {
                 sendCopyRequest();
             }
-            // return cancelDebouncedQuery;
+            setSelectBulkAction(null);
         },
         [paginationType, dispatch]
     );
@@ -104,7 +103,6 @@ const DataTable: React.FC<Props> = ({
     };
 
     const isTwoRowsHeader = useMemo(() => headers.some((i) => i.subTitles?.length), [headers]);
-
     const renderTableHeader = () => {
         const getTh = (item: Type.DataTableHeader) => (
             <th
@@ -183,6 +181,8 @@ const DataTable: React.FC<Props> = ({
         return <EmptyTable colSpan={length}>{t('Table is empty')}</EmptyTable>;
     };
 
+    // const [vegetagle, setVegetable] = useState(undefined);
+
     return (
         <>
             {(!hideEntries || showFilters || !hideSearch) && (
@@ -190,14 +190,19 @@ const DataTable: React.FC<Props> = ({
                     {!hideEntries && (
                         <div className="flex md:w-1/12">
                             <label className="control-label mt-3 mr-3">{t('Action')} </label>
-                            <select
+                            <Dropdown
+                                placeholder={t('Select Action')}
                                 value={selectBulkAction}
-                                onChange={bulkAction}
-                                className="form-control">
-                                <option value="no action">No action</option>
-                                <option value="delete">Delete</option>
-                                <option value="copy">Copy</option>
-                            </select>
+                                onChange={(v: any) => {
+                                    if (checkedIds.find((d: any) => d.checked === true)) {
+                                        bulkActionDropdown(v);
+                                        setSelectBulkAction(v);
+                                    } else {
+                                        dispatch(setErrorToastAction('Select at least one item'));
+                                    }
+                                }}
+                                options={['copy', 'delete']}
+                            />
                         </div>
                     )}
                 </div>
@@ -207,16 +212,14 @@ const DataTable: React.FC<Props> = ({
                 <tbody>{renderTableBody()}</tbody>
             </table>
             {!loading && (
-                <div className="flex justify-between w-full">
+                <div className="flex justify-between w-full mt-5 mb-10">
                     <div>
-                        {totalAmount / limit > 1 && (
-                            <select value={limit} onChange={setLimit} className="form-control">
-                                <option value={10}>10</option>
-                                <option value={25}>25</option>
-                                <option value={50}>50</option>
-                                <option value={100}>100</option>
-                            </select>
-                        )}
+                        <select value={limit} onChange={setLimit} className="form-control">
+                            <option value={10}>10</option>
+                            <option value={25}>25</option>
+                            <option value={50}>50</option>
+                            <option value={100}>100</option>
+                        </select>
                     </div>
                     {totalAmount / limit > 1 && (
                         <RawPagination

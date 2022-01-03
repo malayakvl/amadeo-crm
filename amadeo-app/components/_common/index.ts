@@ -7,3 +7,4 @@ export { default as ButtonTableAction } from './ButtonTableAction/ButtonTableAct
 export { default as Modal } from './Modal';
 export { default as ConfirmationModal } from './modal/ConfirmationModal';
 export { default as Button } from './Button';
+export { default as Dropdown } from './Dropdown';

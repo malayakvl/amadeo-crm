@@ -98,7 +98,6 @@ function ProductForm({
 }) {
     const t = useTranslations();
     const dispatch = useDispatch();
-    const reactTags = React.createRef<ReactTags>();
 
     const additionalProps = useSelector(productAdditionalSelector);
     const additionalSelectedProps = useSelector(selectedAdditionalsSelector);
@@ -174,13 +173,13 @@ function ProductForm({
             then: Yup.number().required(t('Required field')),
             otherwise: Yup.number().min(0)
         }),
-        sku: Yup.string().when('configured', {
-            is: false,
-            then: Yup.string()
-                .required(t('Required field'))
-                .max(140, t('Must be less characters', { charNumber: 140 })),
-            otherwise: Yup.string().min(0)
-        }),
+        // sku: Yup.string().when('configured', {
+        //     is: false,
+        //     then: Yup.string()
+        //         .required(t('Required field'))
+        //         .max(140, t('Must be less characters', { charNumber: 140 })),
+        //     otherwise: Yup.string().min(0)
+        // }),
         color:
             selectedSizes.length === 0 && selectedColors.length === 0
                 ? Yup.string().required(t('Select color or size'))
@@ -271,12 +270,19 @@ function ProductForm({
                                     />
                                 </div>
 
-                                <div className="mb-4 hidden">
+                                <InputSwitcher
+                                    label={'Configured'}
+                                    name={'configured'}
+                                    style={null}
+                                    props={props}
+                                    onChange={onChangeConfigured}
+                                />
+
+                                <div className="mb-4">
                                     <label className="control-label">{t('Hashtag')}</label>
                                     <div className="relative">
                                         <em className="input-tips">{t('Select one')}</em>
                                         <ReactTags
-                                            ref={reactTags}
                                             tags={tags}
                                             allowNew={true}
                                             suggestions={suggestions}
@@ -388,13 +394,6 @@ function ProductForm({
                                     </div>
                                 </div>
 
-                                <InputSwitcher
-                                    label={'Configured'}
-                                    name={'configured'}
-                                    style={null}
-                                    props={props}
-                                    onChange={onChangeConfigured}
-                                />
                                 {props.values.configured && (
                                     <>
                                         <RenderVariant

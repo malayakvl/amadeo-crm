@@ -1,0 +1,28 @@
+.dropdown {
+  @apply rounded-lg p-2.5 text-xs text-gray-350
+    font-medium placeholder-gray-180 relative;
+
+  .dropdown-toggler {
+    @apply font-bold relative pr-4;
+
+    &:after {
+      content: " ";
+      background-image: url("../../public/images/dropdown-arrow.svg");
+      background-repeat: no-repeat;
+      //display: inline-block;
+      //width: 14px;
+      //height: 8px;
+      //right: -5px;
+      @apply absolute inline-block w-[14px] h-[8px] -right-0.5 top-1.5;
+    }
+  }
+
+  .dropdown-menu {
+    @apply absolute bg-white rounded-lg w-full border-gray-180 border
+      top-0 left-0 text-xs z-50 top-[35px];
+
+    .dropdown-menu-item {
+      @apply pt-1.5 pb-1.5 cursor-pointer pl-2 pr-2 font-bold;
+    }
+  }
+}

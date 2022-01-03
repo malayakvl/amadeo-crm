@@ -16,6 +16,7 @@ declare namespace Layouts {
         sort: string;
         column: string;
         query: string;
+        filters?: any;
         meta?: Meta;
     }
     interface CheckedIds {

@@ -25,6 +25,8 @@ const initialState: {
         styles: any[];
         materials: any[];
         tags: any[];
+        priceRange: any;
+        qtyRange: any;
     };
     selectedAdditionals: Products.Additionals;
     isFetched: boolean;
@@ -41,7 +43,9 @@ const initialState: {
         sizes: [],
         styles: [],
         materials: [],
-        tags: []
+        tags: [],
+        priceRange: {},
+        qtyRange: {}
     },
     selectedAdditionals: {
         colors: [],
@@ -144,7 +148,7 @@ const ACTION_HANDLERS: any = {
     [fetchProductsAction]: {
         next: (
             state: State.Products,
-            action: Type.ReduxAction<Pick<State.Notifications, 'count' | 'items'>>
+            action: Type.ReduxAction<Pick<State.Products, 'count' | 'items'>>
         ): State.Products => ({
             ...state,
             ...action.payload,
@@ -215,7 +219,8 @@ const ACTION_HANDLERS: any = {
                 colors: [],
                 sizes: [],
                 styles: [],
-                materials: []
+                materials: [],
+                tags: []
             },
             uploadedFiles: []
         });

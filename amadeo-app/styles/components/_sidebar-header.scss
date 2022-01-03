@@ -116,3 +116,44 @@
     }
   }
 }
+
+.btn-langs {
+  @apply border-0 relative text-base font-bold uppercase text-gray-350 ml-5;
+
+  span {
+    padding-left:40px;
+    padding-right: 25px;
+    @apply relative;
+
+    &:before {
+      content: '';
+      top:0;
+      left:5px;
+      position: absolute;
+      background-image: url("../../public/images/lang-icon.svg");
+      background-repeat: no-repeat;
+      display: block;
+      width: 20px;
+      height: 20px;
+    }
+    &:after {
+      content: '';
+      right:-5px;
+      top:6px;
+      position: absolute;
+      background-image: url("../../public/images/lang-arrow.svg");
+      background-repeat: no-repeat;
+      display: block;
+      width: 14px;
+      height: 8px;
+    }
+  }
+}
+
+.lang-menu {
+  @apply absolute bg-white rounded-lg max-w-[105px] w-[105px] top-9 left-5 p-4 text-xs z-50;
+
+  li {
+    @apply text-base uppercase text-left font-bold cursor-pointer text-gray-350;
+  }
+}
