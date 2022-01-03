@@ -1,7 +1,6 @@
 import { ThunkAction, Action } from '@reduxjs/toolkit';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import reduxPromise from 'redux-promise';
-// import thunkMiddleware from 'redux-thunk';
 import reduxThunkFsa from 'redux-thunk-fsa';
 import { createStore, applyMiddleware, combineReducers } from 'redux';
 import logger from 'redux-logger';

@@ -4,7 +4,7 @@ import * as Yup from 'yup';
 import { useTranslations } from 'next-intl';
 import { addressSelector } from '../../redux/address/selectors';
 import { InputText } from '../_form';
-import { addAddressAction, fetchAddressAction } from '../../redux/address'
+import { addAddressAction, fetchAddressAction } from '../../redux/address';
 import { prepareCountriesDropdown } from '../../lib/functions';
 import { useEffect, useState } from 'react';
 import { userSelector } from '../../redux/user/selectors';
@@ -34,27 +34,25 @@ function Address({ locale }: { locale: string }) {
                 setSelectedAddressType(item);
             }
         });
-
-
-    }, [address])
+    }, [address]);
 
     useEffect(() => {
         dispatch(fetchAddressAction());
-
     }, []);
 
     const [countries, setCountries] = useState([]);
     const [selectedCountry, setSelectedCountry] = useState({ label: 'Afghanistan', value: 1 });
-    const [selectedAddressType, setSelectedAddressType] = useState({ value: 'home address', label: t('home address') })
+    const [selectedAddressType, setSelectedAddressType] = useState({
+        value: 'home address',
+        label: t('home address')
+    });
 
     function onChangeCountry(value: any) {
         setSelectedCountry(value);
-
     }
 
     function onChangeAddressType(value: any) {
         setSelectedAddressType(value);
-
     }
 
     const SubmitSchema = Yup.object().shape({
@@ -76,8 +74,8 @@ function Address({ locale }: { locale: string }) {
             initialValues={address}
             validationSchema={SubmitSchema}
             onSubmit={(values) => {
-                values.country_id = selectedCountry.value
-                values.address_type = selectedAddressType.value
+                values.country_id = selectedCountry.value;
+                values.address_type = selectedAddressType.value;
                 dispatch(addAddressAction(values));
             }}>
             {(props) => (
