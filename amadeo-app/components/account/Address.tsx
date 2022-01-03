@@ -7,7 +7,6 @@ import { InputText } from '../_form';
 import { addAddressAction, fetchAddressAction } from '../../redux/address';
 import { prepareCountriesDropdown } from '../../lib/functions';
 import { useEffect, useState } from 'react';
-import { userSelector } from '../../redux/user/selectors';
 import { getCountries } from '../../lib/staff';
 import Select from 'react-select';
 
@@ -56,7 +55,7 @@ function Address({ locale }: { locale: string }) {
     }
 
     const SubmitSchema = Yup.object().shape({
-        // country_id: Yup.string().required(t('Required field')),
+        country_id: Yup.string().required(t('Required field')),
         post_code: Yup.string().required(t('Required field')),
         address_type: Yup.string().required(t('Required field')),
         city: Yup.string().required(t('Required field')),
