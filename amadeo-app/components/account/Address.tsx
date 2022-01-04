@@ -3,10 +3,10 @@ import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { useTranslations } from 'next-intl';
 import { InputText } from '../_form';
-import { addAddressAction } from '../../redux/address/actions';
 import { prepareCountriesDropdown } from '../../lib/functions';
 import { useEffect, useState } from 'react';
 import { getCountries } from '../../lib/staff';
+import { saveAddressAction } from '../../redux/profile';
 import Select from 'react-select';
 
 function Address({ locale, address }: { address: Profile.Address, locale: string }) {
@@ -61,7 +61,7 @@ function Address({ locale, address }: { address: Profile.Address, locale: string
             onSubmit={(values) => {
                 values.country_id = selectedCountry.value;
                 values.address_type = selectedAddressType.value;
-                dispatch(addAddressAction(values));
+                dispatch(saveAddressAction(values));
             }}>
             {(props) => (
                 <form onSubmit={props.handleSubmit} className="mt-5">
