@@ -7,6 +7,7 @@ declare namespace State {
         notifications: Notifications;
         layouts: Layouts;
         products: Products;
+        countries: Countries
     }
 
     type Address = Address.Root;
@@ -15,4 +16,5 @@ declare namespace State {
     type Notifications = User.Notifications;
     type Layouts = Layouts.Root;
     type Products = Products.Root;
+    type Countries = any
 }

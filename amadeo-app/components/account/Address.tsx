@@ -1,39 +1,20 @@
-import { useDispatch } from 'react-redux';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { useTranslations } from 'next-intl';
 import { InputText } from '../_form';
 import { prepareCountriesDropdown } from '../../lib/functions';
 import { useEffect, useState } from 'react';
-import { getCountries } from '../../lib/staff';
 import { saveAddressAction } from '../../redux/profile';
 import Select from 'react-select';
+import { useDispatch, useSelector } from 'react-redux';
+import { countriesSelector } from '../../redux/countries/selectors'
 
 function Address({ locale, address }: { address: Profile.Address, locale: string }) {
     const t = useTranslations();
     const dispatch = useDispatch();
 
-    useEffect(() => {
-        getCountries().then((countries) => {
-            const preparedCountriesDropdown = prepareCountriesDropdown(countries, locale);
+    const countries = useSelector(countriesSelector);
 
-            preparedCountriesDropdown.forEach((item: any) => {
-                if (item.value === address.country_id) {
-                    setSelectedCountry(item);
-                }
-            });
-
-            setCountries(preparedCountriesDropdown);
-        });
-
-        addressTypeData.forEach((item: any) => {
-            if (item.value === address.address_type) {
-                setSelectedAddressType(item);
-            }
-        });
-    }, [address]);
-
-    const [countries, setCountries] = useState([]);
     const addressTypeData = [
         { value: 'home address', label: t('home address') },
         { value: 'email adderss', label: t('email adderss') }
@@ -42,8 +23,21 @@ function Address({ locale, address }: { address: Profile.Address, locale: string
     const [selectedCountry, setSelectedCountry] = useState({ label: 'Afghanistan', value: 1 });
     const [selectedAddressType, setSelectedAddressType] = useState({
         value: 'home address',
-        label: t('home address')
+        label: t('home address'),
     })
+
+    const preparedCountriesDropdown = prepareCountriesDropdown(countries, locale)
+
+    useEffect(() => {        
+        if (address.country_id) {
+            setSelectedCountry(preparedCountriesDropdown.find((item: any) => item.value === address.country_id));
+        }
+
+        if (address.address_type) {
+            setSelectedAddressType(addressTypeData.find((item: any) => item.value === address.address_type));
+        }
+
+    }, [address, countries]);
 
     const SubmitSchema = Yup.object().shape({
         country_id: Yup.string().required(t('Required field')),
@@ -73,7 +67,7 @@ function Address({ locale, address }: { address: Profile.Address, locale: string
                             placeholder={t('Country')}
                             name="country_id"
                             value={selectedCountry}
-                            options={countries}
+                            options={preparedCountriesDropdown}
                         />
                     </div>
 
