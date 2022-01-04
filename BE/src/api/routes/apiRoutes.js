@@ -46,7 +46,7 @@ apiRoutes.route('/profile')
     .post(UserController.updateProfile)
     .get(UserController.getProfile);
 apiRoutes.route('/address')
-    .post(UserController.addAddress);
+    .post(UserController.saveAddress);
 apiRoutes.route('/fetch-notifications').get(NotificationController.fetchData);
 apiRoutes.route('/count-notice').get(NotificationController.fetchNew);
 apiRoutes.route('/new-notice').get(NotificationController.fetchLatest);

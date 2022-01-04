@@ -219,7 +219,7 @@ class User {
      * @param addressData json object
      * @returns {Promise<{error: {code: number, message: string}, user: null}|{success: boolean}>}
      */
-    async addAddress(userId, addressData) {
+    async saveAddress(userId, addressData) {
         const client = await pool.connect();
 
         try {
