@@ -7,16 +7,14 @@ import axios from 'axios';
 
 export const fetchCountriesAction: any = createAction(
     'profile/FETCH_COUNTRIES',
-    async () =>
-        async (dispatch: Type.Dispatch, getState: () => State.Root) => {
-            const state = getState();
-            const res = await axios.get(`${baseUrl}/countries`, {
-                headers: {
-                    ...authHeader(state.user.user.email)
-                }
-            });
+    async () => async (dispatch: Type.Dispatch, getState: () => State.Root) => {
+        const state = getState();
+        const res = await axios.get(`${baseUrl}/countries`, {
+            headers: {
+                ...authHeader(state.user.user.email)
+            }
+        });
 
-            return res.data.countries            
-
-        }
-)
+        return res.data.countries;
+    }
+);

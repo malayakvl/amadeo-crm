@@ -10,7 +10,7 @@ import { profileSelector } from '../../redux/profile/selectors';
 import { fetchProfileAction, updateProfileAction } from '../../redux/profile';
 import { baseApiUrl } from '../../constants';
 import { userSelector } from '../../redux/user/selectors';
-import { fetchCountriesAction } from '../../redux/countries/actions'
+import { fetchCountriesAction } from '../../redux/countries/actions';
 
 function Profile() {
     const t = useTranslations();
@@ -24,8 +24,7 @@ function Profile() {
     useEffect(() => {
         if (user.email) {
             dispatch(fetchProfileAction());
-            dispatch(fetchCountriesAction())
-
+            dispatch(fetchCountriesAction());
         }
     }, [user?.email]);
 

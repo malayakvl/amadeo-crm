@@ -7,36 +7,41 @@ import { useEffect, useState } from 'react';
 import { saveAddressAction } from '../../redux/profile';
 import Select from 'react-select';
 import { useDispatch, useSelector } from 'react-redux';
-import { countriesSelector } from '../../redux/countries/selectors'
+import { countriesSelector } from '../../redux/countries/selectors';
 
-function Address({ locale, address }: { address: Profile.Address, locale: string }) {
+function Address({ locale, address }: { address: Profile.Address; locale: string }) {
     const t = useTranslations();
     const dispatch = useDispatch();
 
     const countries = useSelector(countriesSelector);
-
     const addressTypeData = [
         { value: 'home address', label: t('home address') },
         { value: 'email adderss', label: t('email adderss') }
-    ]
+    ];
+
+    const defaultAddressType: any = {
+        value: 'home address',
+        label: t('home address')
+    };
 
     const [selectedCountry, setSelectedCountry] = useState({ label: 'Afghanistan', value: 1 });
-    const [selectedAddressType, setSelectedAddressType] = useState({
-        value: 'home address',
-        label: t('home address'),
-    })
 
-    const preparedCountriesDropdown = prepareCountriesDropdown(countries, locale)
+    const [selectedAddressType, setSelectedAddressType] = useState(defaultAddressType);
 
-    useEffect(() => {        
+    const preparedCountriesDropdown = prepareCountriesDropdown(countries, locale);
+
+    useEffect(() => {
         if (address.country_id) {
-            setSelectedCountry(preparedCountriesDropdown.find((item: any) => item.value === address.country_id));
+            setSelectedCountry(
+                preparedCountriesDropdown.find((item: any) => item.value === address.country_id)
+            );
         }
 
         if (address.address_type) {
-            setSelectedAddressType(addressTypeData.find((item: any) => item.value === address.address_type));
+            setSelectedAddressType(
+                addressTypeData.find((item: any) => item.value === address.address_type)
+            );
         }
-
     }, [address, countries]);
 
     const SubmitSchema = Yup.object().shape({
