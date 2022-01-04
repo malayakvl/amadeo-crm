@@ -1,18 +1,16 @@
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { useTranslations } from 'next-intl';
-import { addressSelector } from '../../redux/address/selectors';
 import { InputText } from '../_form';
-import { addAddressAction, fetchAddressAction } from '../../redux/address';
+import { addAddressAction } from '../../redux/address/actions';
 import { prepareCountriesDropdown } from '../../lib/functions';
 import { useEffect, useState } from 'react';
 import { getCountries } from '../../lib/staff';
 import Select from 'react-select';
 
-function Address({ locale }: { locale: string }) {
+function Address({ locale, address }: { address: Profile.Address, locale: string }) {
     const t = useTranslations();
-    const address = useSelector(addressSelector);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -35,24 +33,17 @@ function Address({ locale }: { locale: string }) {
         });
     }, [address]);
 
-    useEffect(() => {
-        dispatch(fetchAddressAction());
-    }, []);
-
     const [countries, setCountries] = useState([]);
+    const addressTypeData = [
+        { value: 'home address', label: t('home address') },
+        { value: 'email adderss', label: t('email adderss') }
+    ]
+
     const [selectedCountry, setSelectedCountry] = useState({ label: 'Afghanistan', value: 1 });
     const [selectedAddressType, setSelectedAddressType] = useState({
         value: 'home address',
         label: t('home address')
-    });
-
-    function onChangeCountry(value: any) {
-        setSelectedCountry(value);
-    }
-
-    function onChangeAddressType(value: any) {
-        setSelectedAddressType(value);
-    }
+    })
 
     const SubmitSchema = Yup.object().shape({
         country_id: Yup.string().required(t('Required field')),
@@ -61,11 +52,6 @@ function Address({ locale }: { locale: string }) {
         city: Yup.string().required(t('Required field')),
         address_line_1: Yup.string().required(t('Required field'))
     });
-
-    const addressTypeData = [
-        { value: 'home address', label: t('home address') },
-        { value: 'email adderss', label: t('email adderss') }
-    ];
 
     return (
         <Formik
@@ -83,7 +69,7 @@ function Address({ locale }: { locale: string }) {
                         <Select
                             className={'form-control-dropdown'}
                             classNamePrefix={'inventory'}
-                            onChange={onChangeCountry}
+                            onChange={(value: any) => setSelectedCountry(value)}
                             placeholder={t('Country')}
                             name="country_id"
                             value={selectedCountry}
@@ -118,7 +104,7 @@ function Address({ locale }: { locale: string }) {
                             placeholder={t('Country')}
                             name="country_id"
                             options={addressTypeData}
-                            onChange={onChangeAddressType}
+                            onChange={(value: any) => setSelectedAddressType(value)}
                             value={selectedAddressType}
                         />
                     </div>

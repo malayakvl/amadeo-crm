@@ -4,19 +4,40 @@ import multer from 'multer';
 import fs from 'fs';
 
 class UserController {
-    async getProfile (req, res) {
+    async getProfile(req, res) {
         const user = req.user;
+
         if (!user) {
-            return res.status(401).json({user: null, addresses: {}});
+            return res.status(401).json({});
         }
+
         delete user.salt;
         delete user.password;
         delete user.hash;
         delete user.expired_at;
-        return res.status(200).json({ user: user, addresses: {} });
+
+        let response = {
+            ...user,
+            address: {}
+        }
+
+        const address = await userModel.findUserAddress(req.user.id);
+
+        if (address) {
+            const country = await countryModel.findById(address.country_id)
+
+            response.address = {
+                ...address,
+                country
+
+            }
+
+        }
+
+        return res.status(200).json(response);
     }
 
-    async updateProfile (req, res) {
+    async updateProfile(req, res) {
         // const _user = req.user;
         if (!req.user) {
             return res.status(402).json('Something wend wrong');
@@ -54,7 +75,7 @@ class UserController {
         });
     }
 
-    async addAddress (req, res) {
+    async addAddress(req, res) {
         let status;
         const user = req.user;
         if (user) {
@@ -65,29 +86,7 @@ class UserController {
         }
     }
 
-    async fetchAddress (req, res) {
-        if (req.user) {
-            const address = await userModel.findUserAddress(req.user.id);
-            const country = await countryModel.findById(address.country_id)
-
-            let response = {
-                ...address,
-                country
-            }
-
-            if (address) {
-                return res.status(200).json({ address: response });
-            }
-
-            return res.status(200).json({ address: {} });
-        } else {
-            return res.status(401).json('Something wend wrong');
-        }
-        
-        
-    }
-
-    async changePassword (req, res) {
+    async changePassword(req, res) {
         if (req.user) {
             const status = await userModel.changePassword(req.user, req.body);
             if (status) {

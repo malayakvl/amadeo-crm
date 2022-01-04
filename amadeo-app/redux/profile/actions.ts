@@ -20,7 +20,7 @@ export const fetchProfileAction: any = createAction(
                 }
             });
             return {
-                profile: res.data.user
+                profile: res.data
             };
         }
 );

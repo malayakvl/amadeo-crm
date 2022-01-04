@@ -6,21 +6,6 @@ const { publicRuntimeConfig } = getConfig();
 const baseUrl = `${publicRuntimeConfig.apiUrl}/api`;
 import { setSuccessToastAction } from '../layouts';
 
-export const fetchAddressAction: any = createAction(
-    'addresses/FETCH_ADDRESS',
-    async () =>
-        async (dispatch: Type.Dispatch, getState: () => State.Root): Promise<{ address: any }> => {
-            const state = getState();
-            const res = await axios.get(`${baseUrl}/address`, {
-                headers: {
-                    ...authHeader(state.user.user.email)
-                }
-            });
-
-            return res.data.address;
-        }
-);
-
 export const addAddressAction: any = createAction(
     'assetModels/ADD_ADDRESS',
     async (data: any) =>
