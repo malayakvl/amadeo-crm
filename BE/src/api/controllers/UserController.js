@@ -17,8 +17,9 @@ class UserController {
         delete user.expired_at;
 
         let response = {
-            user: user,
-            address: {}
+            ...user,
+            address: {},
+            user: user
         }
 
         const address = await userModel.findUserAddress(req.user.id);
