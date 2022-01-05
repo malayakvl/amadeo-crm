@@ -49,3 +49,22 @@
     }
   }
 }
+
+.btn-export {
+  @apply rounded-lg text-white text-base font-bold bg-green-250 p-2.5;
+
+  span {
+    @apply relative pl-7;
+
+    &:before {
+      content: " ";
+      display: inline-block;
+      background: url("../../public/images/export-csv.svg");
+      width: 18px;
+      height: 20px;
+      background-repeat: no-repeat;
+      position: absolute;
+      left: 0;
+    }
+  }
+}

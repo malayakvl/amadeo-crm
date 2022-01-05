@@ -26,3 +26,10 @@
     }
   }
 }
+.notice-item-size {
+  @apply float-left ml-3 w-[90px] mb-2;
+
+  label {
+    @apply ml-2;
+  }
+}

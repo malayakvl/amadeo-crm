@@ -4,6 +4,7 @@ declare namespace Products {
         additional: {
             colors: Color[];
             sizes: Size[];
+            sizesTable: any;
             styles: Style[];
             materials: Material[];
             priceRange: Range;

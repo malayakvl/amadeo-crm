@@ -16,6 +16,45 @@ class ProductController {
         }
         return res.status(200).json({ additional: additional.additional });
     }
+    
+    async import (req, res) {
+        if (!req.user) {
+            return res.status(401).json('Access deny');
+        }
+        const dirUpload = `${process.env.DOWNLOAD_FOLDER}/users/${req.user.id}`;
+        if (!fs.existsSync(dirUpload)) {
+            fs.mkdirSync(dirUpload);
+        }
+        const storage = multer.diskStorage({
+            destination: function (req, file, cb) {
+                cb(null, `public/uploads/users/${req.user.id}`);
+            },
+            filename: function (req, file, cb) {
+                cb(null, Date.now() + '-' + file.originalname);
+            }
+        });
+        const upload = multer({ storage: storage }).single('file');
+        upload(req, res, async function (err) {
+            if (err instanceof multer.MulterError) {
+                return res.status(500).json(err);
+            } else if (err) {
+                return res.status(500).json(err);
+            }
+            const dataUser = {};
+            if (req.file) {
+                dataUser.file = `/uploads/users/${req.user.id}/${req.file.filename}`;
+            }
+            console.log(dataUser);
+            await productModel.import(dataUser);
+            // const user = await userModel.findUserByEmail(req.user.email);
+            // delete user.password;
+            // delete user.salt;
+            // delete user.hash;
+            // delete user.expired_at;
+            return res.status(200).json({ success: true });
+        });
+        // return res.status(200).json({ success: true });
+    }
 
     async addProduct (req, res) {
         if (!req.user) {

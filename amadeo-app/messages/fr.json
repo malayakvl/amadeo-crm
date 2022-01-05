@@ -154,5 +154,8 @@
   "copy": "Copy",
   "delete": "Delete",
   "Select at least one item": "Select at least one item",
-  "Item Per Page": "Item Per Page"
+  "Item Per Page": "Item Per Page",
+  "Connect Shopify": "Connect Shopify",
+  "Shopify Sync": "Shopify Sync",
+  "Shopify Shop": "Shopify Shop"
 }

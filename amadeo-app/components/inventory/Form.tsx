@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { Fragment, useCallback, useState } from 'react';
 import * as Yup from 'yup';
 import { useTranslations } from 'next-intl';
 import { useEffect } from 'react';
@@ -20,7 +20,7 @@ import {
 } from '../../redux/products/selectors';
 import { findTagAction, setIdentAction, updateProductAction } from '../../redux/products/actions';
 import 'suneditor/dist/css/suneditor.min.css';
-import { InventoryPhotos, RenderVariant } from './index';
+import { InventoryPhotos, RenderSizes, RenderVariant } from './index';
 
 const SunEditor = dynamic(() => import('suneditor-react'), {
     ssr: false
@@ -107,11 +107,12 @@ function ProductForm({
 
     const [editorContent, setEditorContent] = useState(productData.product.description);
     const [selectedColors, setSelectedColors] = useState([]);
-    const [selectedSizes, setSelectedSizes] = useState([]);
+    const [selectedSizes, setSelectedSizes] = useState<any[]>([]);
     const [selectedMaterials, setSelectedMaterials] = useState<any>(null);
     const [tags, setTags] = useState<any[]>([]);
     const [suggestions, setSuggestions] = useState([]);
     const [isBusy, setIsBusy] = useState(false);
+    const [showSizeTable, setShowSizeTable] = useState(false);
 
     const onDelete = useCallback(
         (tagIndex: number) => {
@@ -154,8 +155,19 @@ function ProductForm({
     const handleChangeColor = (selectedOption: any) => {
         setSelectedColors(selectedOption);
     };
-    const handleChangeSize = (selectedOption: any) => {
-        setSelectedSizes(selectedOption);
+    const handleChangeSize = (selectedOption: any, configured: boolean) => {
+        if (!configured) {
+            setSelectedSizes(selectedOption);
+        } else {
+            const _sizes: any = selectedSizes;
+            setSelectedSizes([]);
+            if (!_sizes.find((v: any) => v.value === selectedOption.value)) {
+                setSelectedSizes([...selectedSizes, selectedOption]);
+            }
+        }
+    };
+    const removeSizeHandler = (id: number) => {
+        setSelectedSizes(selectedSizes.filter((v: any) => v.value !== id));
     };
 
     const SubmitSchema = Yup.object().shape({
@@ -372,18 +384,83 @@ function ProductForm({
                                 <div className="mb-4">
                                     <label className="control-label">{t('Size')}</label>
                                     <div className="relative">
-                                        <em className="input-tips">{t('Select one')}</em>
-                                        <Select
-                                            isMulti={props.values.configured}
-                                            className={'form-control-dropdown'}
-                                            classNamePrefix={'inventory'}
-                                            options={prepareAdditionalDropdown(
-                                                additionalProps.sizes,
-                                                locale
-                                            )}
-                                            value={selectedSizes}
-                                            onChange={handleChangeSize}
-                                        />
+                                        <em
+                                            className="input-tips cursor-pointer underline"
+                                            role="presentation"
+                                            onClick={() => setShowSizeTable(!showSizeTable)}>
+                                            {t('Select one')}
+                                        </em>
+                                        {
+                                            <RenderSizes
+                                                sizes={selectedSizes}
+                                                configured={props.values.configured}
+                                                removeSizeHandler={removeSizeHandler}
+                                            />
+                                        }
+                                        {showSizeTable && (
+                                            <table className="text-[10px] absolute bg-white right-0 top-0 z-50">
+                                                <tbody>
+                                                    {additionalProps.sizesTable.map(
+                                                        (size: any, index: number) => (
+                                                            <tr key={index}>
+                                                                {[1, 2, 3, 4, 5].map(
+                                                                    (num: number) => (
+                                                                        <Fragment
+                                                                            key={`${size.id}_${num}`}>
+                                                                            {size[
+                                                                                `name_${num}`
+                                                                            ] && (
+                                                                                <td
+                                                                                    role="presentation"
+                                                                                    className="border p-2 cursor-pointer"
+                                                                                    onClick={() =>
+                                                                                        handleChangeSize(
+                                                                                            {
+                                                                                                value: size[
+                                                                                                    `id_${num}`
+                                                                                                ],
+                                                                                                label: size[
+                                                                                                    `name_${num}`
+                                                                                                ]
+                                                                                            },
+                                                                                            props
+                                                                                                .values
+                                                                                                .configured
+                                                                                        )
+                                                                                    }>
+                                                                                    {
+                                                                                        size[
+                                                                                            `name_${num}`
+                                                                                        ]
+                                                                                    }
+                                                                                </td>
+                                                                            )}
+                                                                            {!size[
+                                                                                `name_${num}`
+                                                                            ] && (
+                                                                                <td className="border p-2 cursor-pointer" />
+                                                                            )}
+                                                                        </Fragment>
+                                                                    )
+                                                                )}
+                                                            </tr>
+                                                        )
+                                                    )}
+                                                </tbody>
+                                            </table>
+                                        )}
+
+                                        {/*<Select*/}
+                                        {/*    isMulti={props.values.configured}*/}
+                                        {/*    className={'form-control-dropdown'}*/}
+                                        {/*    classNamePrefix={'inventory'}*/}
+                                        {/*    options={prepareAdditionalDropdown(*/}
+                                        {/*        additionalProps.sizes,*/}
+                                        {/*        locale*/}
+                                        {/*    )}*/}
+                                        {/*    value={selectedSizes}*/}
+                                        {/*    onChange={handleChangeSize}*/}
+                                        {/*/>*/}
                                         {props.errors['size'] &&
                                             selectedColors.length === 0 &&
                                             selectedSizes.length === 0 && (
