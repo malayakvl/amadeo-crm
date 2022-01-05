@@ -17,22 +17,20 @@ class UserController {
         delete user.expired_at;
 
         let response = {
-            ...user,
+            user: user,
             address: {}
         }
 
         const address = await userModel.findUserAddress(req.user.id);
-
         if (address) {
             const country = await countryModel.findById(address.country_id)
 
             response.address = {
                 ...address,
                 country
-
             }
-
         }
+        console.log(response);
 
         return res.status(200).json(response);
     }
