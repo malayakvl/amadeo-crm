@@ -1,25 +1,23 @@
 import { ThunkAction, Action } from '@reduxjs/toolkit';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import reduxPromise from 'redux-promise';
-// import thunkMiddleware from 'redux-thunk';
 import reduxThunkFsa from 'redux-thunk-fsa';
 import { createStore, applyMiddleware, combineReducers } from 'redux';
 import logger from 'redux-logger';
-
-import addressReducer from '../redux/address';
 import profileReducer from '../redux/profile/index';
 import userReducer from '../redux/user/index';
 import notificationsReducer from '../redux/notifications/index';
 import layoutsReducer from '../redux/layouts/index';
 import productsReducer from '../redux/products/index';
+import countriesReducer from '../redux/countries/index';
 
 const reducers = combineReducers({
-    address: addressReducer,
     profile: profileReducer,
     user: userReducer,
     notifications: notificationsReducer,
     layouts: layoutsReducer,
-    products: productsReducer
+    products: productsReducer,
+    countries: countriesReducer
 });
 
 const initStore = (initialState = {}) => {
