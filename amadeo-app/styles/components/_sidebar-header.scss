@@ -27,7 +27,7 @@
 }
 
 .profile-menu {
-  @apply absolute bg-white rounded-lg max-w-[145px] w-[145px] top-10 -left-3 p-4 text-xs;
+  @apply absolute bg-white rounded-lg max-w-[145px] w-[145px] top-10 -left-3 p-4 text-xs z-30;
 
   li {
     @apply mb-3;
