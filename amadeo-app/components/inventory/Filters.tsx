@@ -221,7 +221,7 @@ const InventoryFilters: React.FC<any> = (locale: string) => {
                                         />
                                         <ul className="py-1">
                                             {(filterAdditionals as any).sizes.map((size: any) => (
-                                                <li className="notice-item" key={size.value}>
+                                                <li className="notice-item-size" key={size.value}>
                                                     <span className="block">
                                                         <input
                                                             type="checkbox"

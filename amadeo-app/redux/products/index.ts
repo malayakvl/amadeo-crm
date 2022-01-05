@@ -22,7 +22,7 @@ const initialState: {
     additional: {
         sizes: any[];
         colors: any[];
-        styles: any[];
+        sizesTable: any[];
         materials: any[];
         tags: any[];
         priceRange: any;
@@ -41,7 +41,7 @@ const initialState: {
     additional: {
         colors: [],
         sizes: [],
-        styles: [],
+        sizesTable: [],
         materials: [],
         tags: [],
         priceRange: {},

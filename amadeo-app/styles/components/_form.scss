@@ -26,6 +26,8 @@
 .form-control-dropdown {
   /*  inventory-select */
   .inventory__input {
+    font-size: 12px !important;
+    font-weight: bold !important;
     //min-width: 0 !important;
     @apply text-sm;
   }

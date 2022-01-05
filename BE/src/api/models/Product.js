@@ -3,6 +3,7 @@ import tagModel from "./Tag.js";
 import { logger } from '../../common/logger.js';
 import fs from 'fs';
 import path from 'path';
+import csv from 'csv-parser';
 
 const copyRecursiveSync = function(src, dest) {
     var exists = fs.existsSync(src);
@@ -24,21 +25,23 @@ class Product {
         const client = await pool.connect();
         try {
             const queryColors = 'SELECT table_translation FROM common__tools._get_translation(\'data\', \'product_colors\', \'id\', \'name, code\');';
-            const querySizes = 'SELECT table_translation FROM common__tools._get_translation(\'data\', \'product_sizes\', \'id\', \'name\');';
-            const queryStyles = 'SELECT table_translation FROM common__tools._get_translation(\'data\', \'product_styles\', \'id\', \'name\');';
+            const querySizes = 'SELECT table_translation FROM common__tools._get_translation(\'data\', \'product_sizes\', \'id\', \'name\', \'\', \'id\');';
+            const querySizesTable = 'SELECT data.get_products_size_list();';
+            // const queryStyles = 'SELECT table_translation FROM common__tools._get_translation(\'data\', \'product_styles\', \'id\', \'name\');';
             const queryMaterials = 'SELECT table_translation FROM common__tools._get_translation(\'data\', \'product_materials\', \'id\', \'name\');';
             const queryPrices = 'SELECT * FROM data.get_products_price_range();';
             const queryQty = 'SELECT * FROM data.get_products_quantity_range();';
             const resColors = await client.query(queryColors);
             const resSizes = await client.query(querySizes);
-            const resStyles = await client.query(queryStyles);
+            const resSizesTable = await client.query(querySizesTable);
+            // const resStyles = await client.query(queryStyles);
             const resMaterials = await client.query(queryMaterials);
             const resPrices = await client.query(queryPrices);
             const resQty = await client.query(queryQty);
             return { additional: {
                     colors: resColors.rows.length ? resColors.rows[0].table_translation : null,
                     sizes: resSizes.rows.length ? resSizes.rows[0].table_translation : null,
-                    styles: resStyles.rows.length ? resStyles.rows[0].table_translation : null,
+                    sizesTable: resSizesTable.rows.length ? resSizesTable.rows[0].get_products_size_list : null,
                     materials: resMaterials.rows.length ? resMaterials.rows[0].table_translation : null,
                     priceRange: resPrices.rows.length ? resPrices.rows[0].get_products_price_range : null,
                     qtyRange: resQty.rows.length ? resQty.rows[0].get_products_quantity_range : null
@@ -56,6 +59,18 @@ class Product {
         } finally {
             client.release();
         }
+    }
+    
+    
+    async import (data) {
+        fs.createReadStream(`./public${data.file}`)
+            .pipe(csv())
+            .on('data', (row) => {
+                console.log(row['Body (HTML)']);
+            })
+            .on('end', () => {
+                console.log('CSV file successfully processed');
+            });
     }
     
     

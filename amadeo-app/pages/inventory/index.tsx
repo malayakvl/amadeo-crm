@@ -8,10 +8,15 @@ import {
     AddProduct,
     ListProducts,
     EditProduct,
-    InventoryFilters
+    InventoryFilters,
+    SyncProduct
 } from '../../components/inventory';
 import { activeTabSelector } from '../../redux/products/selectors';
-import { fetchAdditionalAction, setActiveTabAction } from '../../redux/products/actions';
+import {
+    fetchAdditionalAction,
+    setActiveTabAction,
+    importProductAction
+} from '../../redux/products/actions';
 
 export default function Index({ session, locale }: { session: any; locale: string }) {
     if (!session) return <></>;
@@ -19,10 +24,24 @@ export default function Index({ session, locale }: { session: any; locale: strin
     const user = useSelector(userSelector);
     const dispatch = useDispatch();
     const activeTab = useSelector(activeTabSelector);
+    const hiddenFileInput = React.useRef(null);
 
     useEffect(() => {
         dispatch(fetchAdditionalAction());
     }, []);
+
+    const handleClick = () => {
+        (hiddenFileInput as any).current.click();
+    };
+
+    const handleChange = (event: any) => {
+        const fileUploaded = event.target.files[0];
+        const formData = new FormData();
+        if (fileUploaded) {
+            formData.append('file', fileUploaded);
+        }
+        dispatch(importProductAction(formData));
+    };
 
     return (
         <>
@@ -33,6 +52,17 @@ export default function Index({ session, locale }: { session: any; locale: strin
 
             <div className="page-title">
                 <h1>{t('Inventory')}</h1>
+                <div className="float-right">
+                    <button className="btn-export" onClick={handleClick}>
+                        <span>Import products using CSV file</span>
+                    </button>
+                    <input
+                        type="file"
+                        onChange={handleChange}
+                        ref={hiddenFileInput}
+                        style={{ display: 'none' }}
+                    />
+                </div>
             </div>
             <div className="block-white-8 mr-10">
                 <div className="block">
@@ -81,7 +111,9 @@ export default function Index({ session, locale }: { session: any; locale: strin
                         {activeTab === 'add' && <AddProduct locale={locale} />}
                         {activeTab === 'edit' && <EditProduct locale={locale} />}
                     </div>
-                    <div className={`w-full ${activeTab !== 'password' ? 'hidden' : ''}`} />
+                    <div className={`w-full ${activeTab !== 'sync' ? 'hidden' : ''}`}>
+                        <SyncProduct />
+                    </div>
                 </div>
             </div>
         </>

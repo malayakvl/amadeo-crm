@@ -8,7 +8,6 @@ const RenderVariant: React.FC<any> = ({ colors, sizes, props, additional }) => {
     const t = useTranslations();
     const [checkedVariant, setCheckedVariant] = useState('');
     const dispatch = useDispatch();
-
     const setupIdent = (variants: any[]) => {
         dispatch(setIdentAction(true));
         if (checkedVariant) {
@@ -43,6 +42,7 @@ const RenderVariant: React.FC<any> = ({ colors, sizes, props, additional }) => {
     tmpSizes.forEach((_size: any) => {
         _sizes.push(_size.label);
     });
+
     const attributes = {
         color: _colors.length > 0 ? _colors : ['none'],
         size: _sizes.length > 0 ? _sizes : ['none']

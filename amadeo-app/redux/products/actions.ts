@@ -47,6 +47,28 @@ export const updateProductAction: any = createAction(
                 });
         }
 );
+export const importProductAction: any = createAction(
+    'product/IMPORT_PRODUCT',
+    async (data: any, id: number | null | undefined) =>
+        (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
+            const state = getState();
+            const isNew = id;
+            return axios
+                .post(`${baseUrl}/products/import`, data, {
+                    headers: {
+                        ...authHeader(state.user.user.email)
+                    }
+                })
+                .then(async () => {
+                    dispatch(
+                        setSuccessToastAction(`Product has been ${isNew ? 'updated' : 'created'}`)
+                    );
+                    dispatch(fetchAdditionalAction());
+                    dispatch(fetchProductsAction());
+                    dispatch(setActiveTabAction('products'));
+                });
+        }
+);
 
 export const fetchProductsAction: any = createAction(
     'products/FETCH_PRODUCTS',
