@@ -192,7 +192,7 @@ const ListProducts: React.FC<any> = (locale: string) => {
                                     />
                                 )}
                                 {!item.previewphoto && (
-                                    <div className="border rounded-lg w-[85px] h-[95px] block flex items-center text-center">
+                                    <div className="border rounded-lg w-[85px] h-[95px] flex items-center text-center">
                                         <BanIcon
                                             width={30}
                                             height={30}

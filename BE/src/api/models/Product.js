@@ -62,11 +62,37 @@ class Product {
     }
     
     
-    async import (data) {
+    async import (data, user) {
         fs.createReadStream(`./public${data.file}`)
             .pipe(csv())
-            .on('data', (row) => {
-                console.log(row['Body (HTML)']);
+            .on('data', async (row) => {
+                let product = {
+                    name: row.name,
+                    description: row.description,
+                    photos: row.photos,
+                    tags: row.tags,
+                    publish: 'TRUE'.toUpperCase() === row.publish.toUpperCase(),
+                    user_id: user.id
+                }
+                
+                const client = await pool.connect();
+                
+                let query = `
+                    INSERT INTO data.products
+                    (name, description, tags, photos, publish, configured, user_id )
+                    VALUES (
+                        '${product.name}',
+                        '${product.description}',
+                        '${product.tags}',
+                        '${product.photos}',
+                        '${product.publish}',
+                        '${false}',
+                        '${product.user_id}'
+                    )
+                `
+
+                await client.query(query);
+
             })
             .on('end', () => {
                 console.log('CSV file successfully processed');

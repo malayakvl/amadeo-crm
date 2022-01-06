@@ -20,37 +20,51 @@ class ProductController {
     async import (req, res) {
         if (!req.user) {
             return res.status(401).json('Access deny');
+
         }
-        const dirUpload = `${process.env.DOWNLOAD_FOLDER}/users/${req.user.id}`;
+
+        const dirUpload = `public/uploads/users/${req.user.id}`;
+
         if (!fs.existsSync(dirUpload)) {
-            fs.mkdirSync(dirUpload);
+            fs.mkdirSync(dirUpload, {recursive: true});
+
         }
+
         const storage = multer.diskStorage({
             destination: function (req, file, cb) {
-                cb(null, `public/uploads/users/${req.user.id}`);
+                cb(null, dirUpload);
+
             },
+
             filename: function (req, file, cb) {
                 cb(null, Date.now() + '-' + file.originalname);
+
             }
+
         });
+
         const upload = multer({ storage: storage }).single('file');
+
         upload(req, res, async function (err) {
             if (err instanceof multer.MulterError) {
                 return res.status(500).json(err);
-            } else if (err) {
+
+            } 
+            
+            if (err) {
                 return res.status(500).json(err);
+
             }
+
             const dataUser = {};
+
             if (req.file) {
                 dataUser.file = `/uploads/users/${req.user.id}/${req.file.filename}`;
+
             }
-            console.log(dataUser);
-            await productModel.import(dataUser);
-            // const user = await userModel.findUserByEmail(req.user.email);
-            // delete user.password;
-            // delete user.salt;
-            // delete user.hash;
-            // delete user.expired_at;
+
+            await productModel.import(dataUser, req.user);
+
             return res.status(200).json({ success: true });
         });
         // return res.status(200).json({ success: true });
