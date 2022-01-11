@@ -56,14 +56,9 @@ class ProductController {
 
             }
 
-            const dataUser = {};
+            let file = `./public/uploads/users/${req.user.id}/${req.file.filename}`
 
-            if (req.file) {
-                dataUser.file = `/uploads/users/${req.user.id}/${req.file.filename}`;
-
-            }
-
-            await productModel.import(dataUser, req.user);
+            await productModel.import(file, req.user);
 
             return res.status(200).json({ success: true });
         });

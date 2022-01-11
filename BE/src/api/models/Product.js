@@ -3,7 +3,7 @@ import tagModel from "./Tag.js";
 import { logger } from '../../common/logger.js';
 import fs from 'fs';
 import path from 'path';
-import csv from 'csv-parser';
+import CsvProductsImporter from '../lib/CsvProductsImporter.js'
 
 const copyRecursiveSync = function(src, dest) {
     var exists = fs.existsSync(src);
@@ -61,72 +61,13 @@ class Product {
         }
     }
     
-    
-    async import (data, user) {
-        fs.createReadStream(`./public${data.file}`)
-            .pipe(csv())
-            .on('data', async (row) => {
-                let product = {
-                    id: row.id,
-                    name: row.name,
-                    description: row.description,
-                    photos: row.photos,
-                    tags: row.tags,
-                    publish: 'TRUE'.toUpperCase() === row.publish.toUpperCase(),
-                    user_id: user.id
-                };
-                
-                const client = await pool.connect();
-                
-                let existingProduct = {product: undefined};
+    async import (file, user) {
+        const ImportCsvProducts = new CsvProductsImporter()
 
-                if (product.id) {
-                    existingProduct = await this.fetchProduct(product.id, user.id);
-
-                    if (existingProduct.product !== undefined) {
-                        let query = `
-                            UPDATE data.products SET
-                                name = '${product.name}',
-                                description = '${product.description}', 
-                                tags = '${product.tags}', 
-                                photos ='${product.photos}',
-                                publish = '${product.publish}',
-                                configured =  '${false}',
-                                user_id = '${product.user_id}'
-                            WHERE id = ${product.id} AND user_id = ${user.id};
-                        `
-
-                        await client.query(query);
-
-                    }
-
-                    return;
-
-                }
-                
-                let query = `
-                    INSERT INTO data.products
-                    (name, description, tags, photos, publish, configured, user_id )
-                    VALUES (
-                        '${product.name}',
-                        '${product.description}',
-                        '${product.tags}',
-                        '${product.photos}',
-                        '${product.publish}',
-                        '${false}',
-                        '${product.user_id}'
-                    )
-                `
-
-                await client.query(query);
-
-            })
-            .on('end', () => {
-                console.log('CSV file successfully processed');
-            });
+        ImportCsvProducts.user = user
+        ImportCsvProducts.file = file
+        ImportCsvProducts.save()
     }
-    
-    
     
     async prepareTags(tags) {
         const productTags = [];
