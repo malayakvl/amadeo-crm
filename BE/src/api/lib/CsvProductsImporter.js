@@ -91,46 +91,65 @@ export default class CsvProductsImporter {
     }
 
     /**
+     * @param {object[]}
      * @return {object[]}
      */
-    parse() {
-        const fileContent = fs.readFileSync(this._file, 'utf-8')
-
-        let rows = parse(fileContent, { columns: true })
+    _formatCsvRows(productRows) {
         let products = []
+        let nextProductIndex = 0
 
-        let nextIndex = 0
-
-        rows.forEach((row, index1) => {
-            if (nextIndex !== index1) {
+        productRows.forEach((productRow, productIndex) => {
+            if (nextProductIndex !== productIndex) {
                 return
 
             }
 
-            let nextRow = rows[(1 + index1)]
+            productRow.optionRows = []
 
-            if (nextRow && !nextRow.product_name) {
-                const nextRows = rows.slice((1 + index1))
-                row.options = []
+            const nextProductRowIndex = (1 + productIndex)
+            const nextRow = productRows[nextProductRowIndex]
 
-                nextRows.every((optionRow, index2) => {
-                    row.options.push(optionRow)
-
-                    let nextRow = nextRows[(1 + index2)]
-
-                    if (nextRow && nextRow.product_name) {
-                        nextIndex = ((index1 + 1) + (index2 + 1))
-                        return false
-
-                    }
-
-                    return true
-
-                })
+            if (!nextRow) {
+                products.push(productRow)
+                return
 
             }
 
-            products.push(row)
+            //Check if the next row isn't option row
+            if (nextRow.product_name) {
+                products.push(productRow)
+                return
+
+            }
+
+            const rowsAfterProductRow = productRows.slice(nextProductRowIndex)
+            const startOptionsIndex = nextProductRowIndex
+
+            rowsAfterProductRow.every((optionRow, optionIndex) => { 
+                productRow.optionRows.push(optionRow)
+
+                const nextOptionRowIndex = (1 + optionIndex)
+                const nextRow = rowsAfterProductRow[nextOptionRowIndex]
+
+                if (!nextRow) {
+                    return false
+    
+                }
+
+                //Check if next row is option row
+                if (!nextRow.product_name) {
+                    return true
+
+                }
+
+                nextProductIndex = (startOptionsIndex + nextOptionRowIndex)
+
+                return false
+
+            })
+
+           
+            products.push(productRow)
 
         })
 
@@ -139,7 +158,10 @@ export default class CsvProductsImporter {
     }
 
     save() {
-        let products = this.parse()
+        const fileContent = fs.readFileSync(this._file, 'utf-8')
+        const rows = parse(fileContent, { columns: true })
+
+        let products = this._formatCsvRows(rows)
         return
     }
 }
