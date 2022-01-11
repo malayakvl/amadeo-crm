@@ -94,38 +94,33 @@ export default class CsvProductsImporter {
      * @param {object[]}
      * @return {object[]}
      */
-    _formatCsvRows(productRows) {
-        let products = []
-        let nextProductIndex = 0
+    _formatCsvRows(rows) {
+        let formatedRows = []
+        let nextPositionIndex = 0
 
-        productRows.forEach((productRow, productIndex) => {
-            if (nextProductIndex !== productIndex) {
+        rows.forEach((row, rowIndex) => {
+            if (nextPositionIndex !== rowIndex) {
                 return
 
             }
+
+            const productRow = row
+            const nextRowIndex = (1 + rowIndex)
+            const nextRow = rows[nextRowIndex]
 
             productRow.optionRows = []
-
-            const nextProductRowIndex = (1 + productIndex)
-            const nextRow = productRows[nextProductRowIndex]
-
-            if (!nextRow) {
-                products.push(productRow)
+            
+            //Check if next row exists or isn't option row 
+            if (!nextRow || nextRow.product_name) {
+                formatedRows.push(productRow)
                 return
 
             }
 
-            //Check if the next row isn't option row
-            if (nextRow.product_name) {
-                products.push(productRow)
-                return
+            const rowsAfterProductRow = rows.slice(nextRowIndex)
+            const startOptionsIndex = nextRowIndex
 
-            }
-
-            const rowsAfterProductRow = productRows.slice(nextProductRowIndex)
-            const startOptionsIndex = nextProductRowIndex
-
-            rowsAfterProductRow.every((optionRow, optionIndex) => { 
+            rowsAfterProductRow.every((optionRow, optionIndex) => {
                 productRow.optionRows.push(optionRow)
 
                 const nextOptionRowIndex = (1 + optionIndex)
@@ -133,7 +128,7 @@ export default class CsvProductsImporter {
 
                 if (!nextRow) {
                     return false
-    
+
                 }
 
                 //Check if next row is option row
@@ -142,18 +137,18 @@ export default class CsvProductsImporter {
 
                 }
 
-                nextProductIndex = (startOptionsIndex + nextOptionRowIndex)
+                nextPositionIndex = (startOptionsIndex + nextOptionRowIndex)
 
                 return false
 
             })
 
-           
-            products.push(productRow)
+
+            formatedRows.push(row)
 
         })
 
-        return products
+        return formatedRows
 
     }
 
@@ -161,7 +156,7 @@ export default class CsvProductsImporter {
         const fileContent = fs.readFileSync(this._file, 'utf-8')
         const rows = parse(fileContent, { columns: true })
 
-        let products = this._formatCsvRows(rows)
+        let productRows = this._formatCsvRows(rows)
         return
     }
 }
