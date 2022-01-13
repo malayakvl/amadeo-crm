@@ -3,7 +3,6 @@ import tagModel from "./Tag.js";
 import { logger } from '../../common/logger.js';
 import fs from 'fs';
 import path from 'path';
-import CsvProductsImporter from '../lib/CsvProductsImporter.js'
 
 const copyRecursiveSync = function(src, dest) {
     var exists = fs.existsSync(src);
@@ -59,14 +58,6 @@ class Product {
         } finally {
             client.release();
         }
-    }
-    
-    async import (file, user) {
-        const ImportCsvProducts = new CsvProductsImporter()
-
-        ImportCsvProducts.user = user
-        ImportCsvProducts.file = file
-        ImportCsvProducts.save()
     }
     
     async prepareTags(tags) {
@@ -358,7 +349,6 @@ class Product {
             const res = await client.query(productQuery);
             const products = res.rows.length > 0 ? res.rows : [];
             const error = null;
-
             return {
                 products,
                 size,

@@ -1,6 +1,7 @@
 import productModel from '../models/Product.js';
 import multer from 'multer';
 import fs from 'fs';
+import CsvProductsImporter from '../lib/CsvProductsImporter/index.js'
 
 class ProductController {
     /**
@@ -58,7 +59,8 @@ class ProductController {
 
             let file = `./public/uploads/users/${req.user.id}/${req.file.filename}`
 
-            await productModel.import(file, req.user);
+            const csvProductsImporter = new CsvProductsImporter(req.user, file)
+            await csvProductsImporter.save()
 
             return res.status(200).json({ success: true });
         });
