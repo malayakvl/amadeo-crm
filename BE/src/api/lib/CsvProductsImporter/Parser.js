@@ -1,4 +1,5 @@
 import { parse } from 'csv-parse/sync';
+import Color from '../../models/Color.js';
 import Tag from '../../models/Tag.js';
 
 export default class {
@@ -131,14 +132,19 @@ export default class {
     /**
      * 
      * @param {object[]} options 
+     * @return {Promise<object[]>}
      */
-    _parseOptions(options) {
-        options.forEach((option, index) => {
-            const color_id = 1
+    async _parseOptions(options) {
+        options.forEach(async (option, index) => {
+            const color = new Color
+            const foundColor = await color.findByName(option.color)
+            const color_id = foundColor.id
+
             const size_id = 1
+
             const price = option.price
-            const quantity = option.quantity ? option.quantity : ''
-            const sku = option.sku ? option.sku : ''
+            const quantity = option.quantity
+            const sku = option.sku
 
             options[index] = {color_id, size_id, price, quantity, sku}
 
@@ -162,7 +168,7 @@ export default class {
         for (const row of formatedRows) {
             const name = row.product_name
             const description = row.description
-            const options = this._parseOptions(row.options)
+            const options = await this._parseOptions(row.options)
             const tags = await this._parseHashtags(row.hashtag)
             const publish = this._parsePublish(row.publish)
             const photos = this._parsePhotos(row.photos)

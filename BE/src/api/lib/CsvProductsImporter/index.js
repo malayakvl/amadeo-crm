@@ -88,7 +88,7 @@ export default class {
                 name = '${name}',
                 description = '${description}', 
                 tags = '${tags}', 
-                photos ='${photos}',
+                photos = '${photos}',
                 publish = '${publish}',
                 configured =  '${false}',
                 user_id = '${this._user.id}'
