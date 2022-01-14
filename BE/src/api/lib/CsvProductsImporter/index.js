@@ -58,14 +58,14 @@ export default class {
 
         const id = (await client.query(query)).rows[0].id;
 
-        for await (let option of product.options) {
+        for (let option of product.options) {
             const size_id = option.size_id
             const color_id = option.color_id
             const price = option.price
             const qty = option.quantity
             const sku = option.sku
 
-            Product.addConfiguration(id, { size_id, color_id }, { price, qty, sku })
+            await Product.addConfiguration(id, { size_id, color_id }, { price, qty, sku })
 
         }
 
@@ -113,6 +113,13 @@ export default class {
         const fileContent = fs.readFileSync(this._file, 'utf-8')
         const products = await this.parser.proccess(fileContent)
 
-        products.forEach(product => this._create(product))
+        // for (const product of products) {
+        //     await this._create(product)
+
+        // }
+
+        return true
+
     }
+
 }

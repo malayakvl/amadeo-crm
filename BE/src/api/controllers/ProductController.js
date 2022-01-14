@@ -10,15 +10,15 @@ class ProductController {
      * @param res
      * @returns {Promise<*>}
      */
-    async fetchAdditional (req, res) {
+    async fetchAdditional(req, res) {
         const additional = await productModel.getAdditional();
         if (!additional) {
             return res.status(401).json('Something wend wrong');
         }
         return res.status(200).json({ additional: additional.additional });
     }
-    
-    async import (req, res) {
+
+    async import(req, res) {
         if (!req.user) {
             return res.status(401).json('Access deny');
 
@@ -27,7 +27,7 @@ class ProductController {
         const dirUpload = `public/uploads/users/${req.user.id}`;
 
         if (!fs.existsSync(dirUpload)) {
-            fs.mkdirSync(dirUpload, {recursive: true});
+            fs.mkdirSync(dirUpload, { recursive: true });
 
         }
 
@@ -50,8 +50,8 @@ class ProductController {
             if (err instanceof multer.MulterError) {
                 return res.status(500).json(err);
 
-            } 
-            
+            }
+
             if (err) {
                 return res.status(500).json(err);
 
@@ -60,14 +60,17 @@ class ProductController {
             let file = `./public/uploads/users/${req.user.id}/${req.file.filename}`
 
             const csvProductsImporter = new CsvProductsImporter(req.user, file)
-            await csvProductsImporter.save()
+            const result = await csvProductsImporter.save()
 
-            return res.status(200).json({ success: true });
+            console.log(result)
+
+            return res.status(200).json({ success: true })
+
         });
-        // return res.status(200).json({ success: true });
+
     }
 
-    async addProduct (req, res) {
+    async addProduct(req, res) {
         if (!req.user) {
             return res.status(401).json('Access deny');
         }
@@ -107,7 +110,7 @@ class ProductController {
         });
     }
 
-    async fetchData (req, res) {
+    async fetchData(req, res) {
         const { limit, offset, queryFilter } = req.query;
 
         if (!req.user) {
@@ -122,7 +125,7 @@ class ProductController {
         }
     }
 
-    async fetchProduct (req, res) {
+    async fetchProduct(req, res) {
         if (!req.user) {
             return res.status(401).json('Access deny');
         }
@@ -134,55 +137,55 @@ class ProductController {
         }
     }
 
-    async deleteRow (req, res) {
+    async deleteRow(req, res) {
         const ids = [];
         ids.push(req.params.id);
-    
+
         await productModel.bulkDelete(ids, req.user.id);
-        
-        return res.status(200).json({ success: true });
-    }
-    
-    async copyRow (req, res) {
-        const ids = [];
-        ids.push(req.params.id);
-        await productModel.copyProduct(ids, req.user.id);
-        
+
         return res.status(200).json({ success: true });
     }
 
-    async deletePhoto (req, res) {
+    async copyRow(req, res) {
+        const ids = [];
+        ids.push(req.params.id);
+        await productModel.copyProduct(ids, req.user.id);
+
+        return res.status(200).json({ success: true });
+    }
+
+    async deletePhoto(req, res) {
         if (!req.user) {
             return res.status(401).json('Access deny');
         }
         await productModel.deletePhoto(req.params.id, req.user.id, req.body.data);
         // delete photo
-        fs.unlink(`${process.env.DOWNLOAD_FOLDER}/${req.body.data.replace('/uploads', '')}`,function(err){
-            if(err) return console.log(err);
+        fs.unlink(`${process.env.DOWNLOAD_FOLDER}/${req.body.data.replace('/uploads', '')}`, function (err) {
+            if (err) return console.log(err);
         });
         // fs.unlinkSync(`public/${req.body.data}`);
         return res.status(200).json({ success: true });
     }
-    
-    async bulkDelete (req, res) {
+
+    async bulkDelete(req, res) {
         if (!req.user) {
             return res.status(401).json('Access deny');
         }
         const ids = [];
         JSON.parse(req.body.data).filter(id => id.checked).forEach(data => ids.push(data.id));
         await productModel.bulkDelete(ids, req.user.id);
-        
+
         return res.status(200).json({ success: true });
     }
-    
-    async bulkCopy (req, res) {
+
+    async bulkCopy(req, res) {
         if (!req.user) {
             return res.status(401).json('Access deny');
         }
         const ids = [];
         JSON.parse(req.body.data).filter(id => id.checked).forEach(data => ids.push(data.id));
         await productModel.copyProducts(ids, req.user.id);
-        
+
         return res.status(200).json({ success: true });
     }
 }

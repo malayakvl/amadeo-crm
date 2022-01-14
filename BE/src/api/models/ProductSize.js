@@ -1,10 +1,10 @@
 import pool from './connect.js';
 
-export default class Color {
+export default class ProductSize {
     /**
      * @private
      */
-    _table = 'data.product_colors'
+    _table = 'data.product_sizes'
 
     /**
      * @param {string} name
@@ -21,6 +21,10 @@ export default class Color {
         }
 
         return false
+        // const query = `SELECT * FROM ${this._table} WHERE name = $1`
+        // return pool.connect()
+        //     .then(client => client.query(query, [name]))
+        //     .then(result => result.rowCount ? result.rows[0] : false)
 
     }
 

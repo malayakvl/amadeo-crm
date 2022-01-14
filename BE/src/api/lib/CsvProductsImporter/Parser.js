@@ -1,5 +1,6 @@
 import { parse } from 'csv-parse/sync';
-import Color from '../../models/Color.js';
+import ProductColor from '../../models/ProductColor.js';
+import ProductSize from '../../models/ProductSize.js'
 import Tag from '../../models/Tag.js';
 
 export default class {
@@ -93,13 +94,11 @@ export default class {
         const withoutLattice = hashtags.replace(/#/g, '')
         const names = parse(withoutLattice, { trim: true })[0]
 
-        let tagsIds = []
-
-        for (const name of names) {
+        let tagsIds = await Promise.all(names.map(async (name) => {
             const hashtag = await Tag.findOrCreate(name)
-            tagsIds.push(hashtag.id)
+            return hashtag.id
 
-        }
+        }));
 
         return tagsIds
 
@@ -122,7 +121,7 @@ export default class {
     _parsePhotos(photos) {
         if (!photos) {
             return []
-            
+
         }
 
         return parse(photos, { trim: true })[0]
@@ -135,22 +134,23 @@ export default class {
      * @return {Promise<object[]>}
      */
     async _parseOptions(options) {
-        options.forEach(async (option, index) => {
-            const color = new Color
+        const color = new ProductColor()
+        const size = new ProductSize()
+
+        let result = await Promise.all(options.map(async (option) => {
             const foundColor = await color.findByName(option.color)
             const color_id = foundColor.id
-
-            const size_id = 1
-
+            const foundSize = await size.findByName(option.size)
+            const size_id = foundSize.id
             const price = option.price
             const quantity = option.quantity
             const sku = option.sku
 
-            options[index] = {color_id, size_id, price, quantity, sku}
+            return { color_id, size_id, price, quantity, sku }
 
-        })
-        
-        return options
+        }));
+
+        return result
 
     }
 
@@ -163,9 +163,7 @@ export default class {
         const rows = parse(fileContent, { columns: true, trim: true })
         const formatedRows = this._formatCsvRows(rows)
 
-        let products = []
-
-        for (const row of formatedRows) {
+        let products = await Promise.all(formatedRows.map(async (row) => {
             const name = row.product_name
             const description = row.description
             const options = await this._parseOptions(row.options)
@@ -173,8 +171,9 @@ export default class {
             const publish = this._parsePublish(row.publish)
             const photos = this._parsePhotos(row.photos)
 
-            products.push({ name, description, options, tags, publish, photos })
-        }
+            return { name, description, options, tags, publish, photos }
+
+        }));
 
         return products
 
