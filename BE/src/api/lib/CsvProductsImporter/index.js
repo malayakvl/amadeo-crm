@@ -37,37 +37,37 @@ export default class {
     /**
      * @private
      * @param {object} product
-     * @param {boolean} publish 
+     * @return {void}
      */
     async _create(product) {
         const client = await pool.connect()
-
-        let query = `
+        const id = (await client.query(`
             INSERT INTO data.products
             (name, description, tags, photos, publish, configured, user_id )
-            VALUES (
-                '${product.name}',
-                '${product.description}',
-                '{${product.tags}}',
-                '{${product.photos}}',
-                ${product.publish},
-                ${false},
-                ${this._user.id}
-            ) RETURNING id
-        `
+            VALUES ( $1, $2, $3, $4, $5, $6, $7) RETURNING id`,
+            [
+                product.name,
+                product.description,
+                product.tags,
+                product.photos,
+                product.publish,
+                true,
+                this._user.id
+            ]
+        )).rows[0].id;
 
-        const id = (await client.query(query)).rows[0].id;
-
-        for (let option of product.options) {
+        for (const option of product.options) {
             const size_id = option.size_id
             const color_id = option.color_id
             const price = option.price
             const qty = option.quantity
             const sku = option.sku
 
-            await Product.addConfiguration(id, { size_id, color_id }, { price, qty, sku })
+            Product.addConfiguration(id, { size_id, color_id }, { price, qty, sku })
 
         }
+
+        client.release()
 
     }
 
@@ -112,11 +112,9 @@ export default class {
 
         const fileContent = fs.readFileSync(this._file, 'utf-8')
         const products = await this.parser.proccess(fileContent)
+        const promises = products.map(product => this._create(product))
 
-        // for (const product of products) {
-        //     await this._create(product)
-
-        // }
+        await Promise.all(promises)
 
         return true
 

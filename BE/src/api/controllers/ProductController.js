@@ -62,11 +62,9 @@ class ProductController {
             const csvProductsImporter = new CsvProductsImporter(req.user, file)
             const result = await csvProductsImporter.save()
 
-            console.log(result)
-
             return res.status(200).json({ success: true })
 
-        });
+        })
 
     }
 

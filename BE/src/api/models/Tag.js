@@ -54,6 +54,7 @@ class Tag {
     async findByName(name) {
         const client = await pool.connect()
         const res = await client.query(`SELECT * FROM data.hashtags WHERE name = '${name}'`)
+        client.release()
 
         return res.rows[0]
 

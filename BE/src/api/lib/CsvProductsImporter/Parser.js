@@ -94,11 +94,16 @@ export default class {
         const withoutLattice = hashtags.replace(/#/g, '')
         const names = parse(withoutLattice, { trim: true })[0]
 
-        let tagsIds = await Promise.all(names.map(async (name) => {
-            const hashtag = await Tag.findOrCreate(name)
-            return hashtag.id
+        let tagsIds = []
 
-        }));
+        const promises = names.map(async (name) => {
+            const hashtag = await Tag.findOrCreate(name)
+
+            tagsIds.push(hashtag.id)
+
+        });
+
+        await Promise.all(promises)
 
         return tagsIds
 
@@ -163,7 +168,9 @@ export default class {
         const rows = parse(fileContent, { columns: true, trim: true })
         const formatedRows = this._formatCsvRows(rows)
 
-        let products = await Promise.all(formatedRows.map(async (row) => {
+        let products = []
+
+        const promises = formatedRows.map(async (row) => {
             const name = row.product_name
             const description = row.description
             const options = await this._parseOptions(row.options)
@@ -171,9 +178,11 @@ export default class {
             const publish = this._parsePublish(row.publish)
             const photos = this._parsePhotos(row.photos)
 
-            return { name, description, options, tags, publish, photos }
+            products.push({ name, description, publish, tags, options, photos })
 
-        }));
+        });
+
+        await Promise.all(promises)
 
         return products
 
