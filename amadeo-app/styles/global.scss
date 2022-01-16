@@ -20,6 +20,12 @@
   .block-white-8 {
     @apply flex-row w-full bg-white rounded-lg p-8;
   }
+  .white-shadow-big {
+    box-shadow: 0 10px 20px rgba(170, 177, 180, 0.5);
+  }
+  .white-shadow-medium {
+    box-shadow: 0 5px 10px rgba(189, 201, 206, 0.5);
+  }
   .h-144 {
     height: 144px;
   }
@@ -28,6 +34,12 @@
   }
   .line-height-105percent {
     line-height: 105%;
+  }
+  .dark-blue-header {
+    @apply text-gray-350 font-bold text-[18px];
+  }
+  .loader {
+    @apply w-full h-full bg-black fixed z-50 opacity-75;
   }
 }
 

@@ -8,9 +8,14 @@ import {
     setPaginationAction,
     uncheckAllIdsAction
 } from '../../../redux/layouts';
-import { checkedIdsSelector, paginationSelectorFactory } from '../../../redux/layouts/selectors';
-import { RawPagination, EmptyTable, Dropdown } from '../../_common/index';
+import {
+    checkedIdsSelector,
+    paginationSelectorFactory,
+    switchHeaderSelector
+} from '../../../redux/layouts/selectors';
+import { RawPagination, EmptyTable, DropdownAction } from '../../_common/index';
 import { TableHeaders, PaginationType } from '../../../constants';
+import { setSwitchHeaderAction } from '../../../redux/layouts/actions';
 
 interface Props {
     paginationType: Type.PaginationType;
@@ -32,12 +37,13 @@ const DataTable: React.FC<Props> = ({
     const { PRODUCTS } = PaginationType;
     const t = useTranslations();
     const checkedIds = useSelector(checkedIdsSelector);
-    const showFilters = [PRODUCTS].includes(paginationType);
+    const switchAllHeader = useSelector(switchHeaderSelector);
+    // const showFilters = [PRODUCTS].includes(paginationType);
     // const hideEntries: boolean = [CATEGORIES, INVESTMENT].includes(paginationType);
-    const hideEntries = false;
+    // const hideEntries = false;
     const showIds: boolean = [PRODUCTS].includes(paginationType);
     // const hideSearch: boolean = [INVESTMENT].includes(paginationType);
-    const hideSearch = false;
+    // const hideSearch = false;
     const headers = TableHeaders[paginationType];
     const dispatch = useDispatch();
     const { limit, sort, column, offset, query, filters }: Layouts.Pagination = useSelector(
@@ -101,6 +107,9 @@ const DataTable: React.FC<Props> = ({
         }
         setAllChecked(!allChecked);
     };
+    const handleSwitchAction = (checked: boolean) => {
+        dispatch(setSwitchHeaderAction(checked));
+    };
 
     const isTwoRowsHeader = useMemo(() => headers.some((i) => i.subTitles?.length), [headers]);
     const renderTableHeader = () => {
@@ -108,11 +117,25 @@ const DataTable: React.FC<Props> = ({
             <th
                 rowSpan={isTwoRowsHeader && !item.subTitles?.length ? 2 : 1}
                 colSpan={item.subTitles?.length || 1}
-                key={item.titleKey}
+                key={item.titleKey ? item.titleKey : Math.random().toString(16).slice(2)}
                 className={classNames(item.className || 'text-left', {
                     sorting_disabled: !item.sortKey
                 })}>
-                {t(item.titleKey)}
+                {item.className === 'option-switcher' && (
+                    <label
+                        htmlFor="switchAll"
+                        className="flex items-center cursor-pointer relative">
+                        <input
+                            type="checkbox"
+                            id="switchAll"
+                            className="sr-only"
+                            checked={switchAllHeader}
+                            onChange={(e: any) => handleSwitchAction(e.target.checked)}
+                        />
+                        <div className="toggle-bg bg-gray-200 border border-gray-200 rounded-full dark:bg-gray-700 dark:border-gray-600" />
+                    </label>
+                )}
+                {item.titleKey ? t(item.titleKey) : ''}
                 {item.sortKey && (
                     <>
                         <div
@@ -142,11 +165,24 @@ const DataTable: React.FC<Props> = ({
             <>
                 <tr role="row">
                     {showIds && (
-                        <th>
+                        <th style={{ width: '30px' }}>
                             <input
                                 type="checkbox"
                                 onChange={handleAllChecked}
                                 checked={allChecked}
+                                className="float-left checkbox-action check-all"
+                            />
+                            <DropdownAction
+                                value={selectBulkAction}
+                                onChange={(v: any) => {
+                                    if (checkedIds.find((d: any) => d.checked === true)) {
+                                        bulkActionDropdown(v);
+                                        setSelectBulkAction(v);
+                                    } else {
+                                        dispatch(setErrorToastAction('Select at least one item'));
+                                    }
+                                }}
+                                options={['copy', 'delete']}
                             />
                         </th>
                     )}
@@ -185,28 +221,28 @@ const DataTable: React.FC<Props> = ({
 
     return (
         <>
-            {(!hideEntries || showFilters || !hideSearch) && (
-                <div className="mt-3 mb-3">
-                    {!hideEntries && (
-                        <div className="flex md:w-1/12">
-                            <label className="control-label mt-3 mr-3">{t('Action')} </label>
-                            <Dropdown
-                                placeholder={t('Select Action')}
-                                value={selectBulkAction}
-                                onChange={(v: any) => {
-                                    if (checkedIds.find((d: any) => d.checked === true)) {
-                                        bulkActionDropdown(v);
-                                        setSelectBulkAction(v);
-                                    } else {
-                                        dispatch(setErrorToastAction('Select at least one item'));
-                                    }
-                                }}
-                                options={['copy', 'delete']}
-                            />
-                        </div>
-                    )}
-                </div>
-            )}
+            {/*{(!hideEntries || showFilters || !hideSearch) && (*/}
+            {/*    <div className="mt-3 mb-3">*/}
+            {/*        {!hideEntries && (*/}
+            {/*            <div className="flex md:w-1/12">*/}
+            {/*                <label className="control-label mt-3 mr-3">{t('Action')} </label>*/}
+            {/*                <Dropdown*/}
+            {/*                    placeholder={t('Select Action')}*/}
+            {/*                    value={selectBulkAction}*/}
+            {/*                    onChange={(v: any) => {*/}
+            {/*                        if (checkedIds.find((d: any) => d.checked === true)) {*/}
+            {/*                            bulkActionDropdown(v);*/}
+            {/*                            setSelectBulkAction(v);*/}
+            {/*                        } else {*/}
+            {/*                            dispatch(setErrorToastAction('Select at least one item'));*/}
+            {/*                        }*/}
+            {/*                    }}*/}
+            {/*                    options={['copy', 'delete']}*/}
+            {/*                />*/}
+            {/*            </div>*/}
+            {/*        )}*/}
+            {/*    </div>*/}
+            {/*)}*/}
             <table className="min-w-full float-table">
                 <thead>{renderTableHeader()}</thead>
                 <tbody>{renderTableBody()}</tbody>

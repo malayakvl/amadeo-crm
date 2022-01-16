@@ -5,9 +5,11 @@ declare namespace Layouts {
             products: Pagination;
         };
         isSidebarOpen: boolean;
+        isDataLoading: boolean;
         toasts: Toast[];
         checkedIds: CheckedIds[];
         modalConfirmationMeta: ModalConfirmationMeta | null;
+        switchHeader: boolean;
     }
 
     interface Pagination {

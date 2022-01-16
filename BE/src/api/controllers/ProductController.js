@@ -44,8 +44,7 @@ class ProductController {
             if (req.file) {
                 dataUser.file = `/uploads/users/${req.user.id}/${req.file.filename}`;
             }
-            console.log(dataUser);
-            await productModel.import(dataUser);
+            await productModel.import(dataUser, req.user.id);
             // const user = await userModel.findUserByEmail(req.user.email);
             // delete user.password;
             // delete user.salt;
@@ -135,9 +134,9 @@ class ProductController {
     async copyRow (req, res) {
         const ids = [];
         ids.push(req.params.id);
-        await productModel.copyProduct(ids, req.user.id);
+        const data = await productModel.copyProduct(ids, req.user.id);
         
-        return res.status(200).json({ success: true });
+        return res.status(200).json({ success: true, productIds: data.productId });
     }
 
     async deletePhoto (req, res) {
@@ -159,6 +158,7 @@ class ProductController {
         }
         const ids = [];
         JSON.parse(req.body.data).filter(id => id.checked).forEach(data => ids.push(data.id));
+        console.log(ids);
         await productModel.bulkDelete(ids, req.user.id);
         
         return res.status(200).json({ success: true });
@@ -170,9 +170,9 @@ class ProductController {
         }
         const ids = [];
         JSON.parse(req.body.data).filter(id => id.checked).forEach(data => ids.push(data.id));
-        await productModel.copyProducts(ids, req.user.id);
+        const data = await productModel.copyProducts(ids, req.user.id);
         
-        return res.status(200).json({ success: true });
+        return res.status(200).json({ success: true, productIds: data.productId });
     }
 }
 

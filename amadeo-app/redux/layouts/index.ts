@@ -1,4 +1,4 @@
-import { handleActions } from 'redux-actions';
+import { Action, handleActions } from 'redux-actions';
 import {
     setPaginationAction,
     toggleSidebarAction,
@@ -11,7 +11,9 @@ import {
     initIdsAction,
     checkAllIdsAction,
     uncheckAllIdsAction,
-    setModalConfirmationMetaAction
+    setModalConfirmationMetaAction,
+    setSwitchHeaderAction,
+    showLoaderAction
 } from './actions';
 
 const initPagination = { limit: 25, offset: 0, sort: 'DESC', column: 'created_at', query: '' };
@@ -25,12 +27,10 @@ const initialState: State.Layouts = {
         }
     },
     isSidebarOpen: true,
+    isDataLoading: false,
     toasts: [],
     checkedIds: [],
-    // checkedIds: {
-    //     products: [],
-    //     notifications: []
-    // },
+    switchHeader: false,
     modalConfirmationMeta: null
 };
 
@@ -94,7 +94,18 @@ const ACTION_HANDLERS: any = {
         ...state,
         isSidebarOpen: !state.isSidebarOpen
     }),
-
+    [showLoaderAction]: {
+        next: (state: State.Layouts, action: Action<boolean>): State.Layouts => ({
+            ...state,
+            isDataLoading: action.payload
+        })
+    },
+    [setSwitchHeaderAction]: {
+        next: (state: State.Layouts, action: Action<boolean>): State.Layouts => ({
+            ...state,
+            switchHeader: action.payload
+        })
+    },
     [closeSidebarAction]: (state: State.Layouts): State.Layouts => ({
         ...state,
         isSidebarOpen: false

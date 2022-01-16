@@ -39,7 +39,7 @@ const NoticeCounter = ({ delay = 1000 }) => {
 
     return (
         <div className="relative">
-            <div className={`inline-block mt-1.5 ${noticeCnt > 0 ? 'cursor-pointer' : ''}`}>
+            <div className={`inline-block mt-2.5 ${noticeCnt > 0 ? 'cursor-pointer' : ''}`}>
                 <Image
                     src="/images/bell.svg"
                     width={16}
@@ -50,7 +50,7 @@ const NoticeCounter = ({ delay = 1000 }) => {
                     onClick={() => setShowLatest(!showLatest)}
                 />
             </div>
-            {noticeCnt > 0 && <span className="counter" />}
+            {noticeCnt > 0 && <span className="counter">{noticeCnt}</span>}
             {showLatest && noticeCnt > 0 && (
                 <div className="notice-menu" ref={node}>
                     <div className="corner" />

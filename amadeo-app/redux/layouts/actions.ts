@@ -3,6 +3,8 @@ import { createAction } from 'redux-actions';
 // ------------------------------------
 // Actions
 // ------------------------------------
+export const setSwitchHeaderAction: any = createAction('layouts/SWITCH_HEADER_ACTION');
+
 export const setCheckedAction: any = createAction('layouts/SET_CHECKED');
 
 export const setPaginationAction: any = createAction('layouts/SET_PAGINATION');
@@ -20,6 +22,8 @@ export const uncheckAllIdsAction: any = createAction('layouts/UNCHECK_ALL_IDS');
 export const toggleSidebarAction: any = createAction('layouts/TOGGLE_SIDEBAR');
 
 export const closeSidebarAction: any = createAction('layouts/CLOSE_SIDEBAR');
+
+export const showLoaderAction: any = createAction('layouts/SHOW_LOADER_ACTION');
 
 export const setErrorToastAction: any = createAction('layouts/SET_ERROR_TOAST');
 

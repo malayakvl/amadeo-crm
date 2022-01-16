@@ -19,6 +19,16 @@ export const isSidebarOpenSelector = createSelector(
     (layouts: State.Layouts): boolean => layouts.isSidebarOpen
 );
 
+export const isDataLoadingSelector = createSelector(
+    rootSelector,
+    (layouts: State.Layouts): boolean => layouts.isDataLoading
+);
+
+export const switchHeaderSelector = createSelector(
+    rootSelector,
+    (layouts: State.Layouts): boolean => layouts.switchHeader
+);
+
 export const checkedIdsSelector = createSelector(
     rootSelector,
     (layouts: State.Layouts): Layouts.CheckedIds[] => layouts.checkedIds

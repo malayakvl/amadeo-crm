@@ -3,11 +3,12 @@ import { useTranslations } from 'next-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { Range } from 'rc-slider';
 import 'rc-slider/assets/index.css';
-import { productAdditionalSelector } from '../../redux/products/selectors';
+import { productAdditionalSelector, productsCountSelector } from '../../redux/products/selectors';
 import { prepareAdditionalDropdown } from '../../lib/functions';
 import { setPaginationAction } from '../../redux/layouts';
 import { paginationSelectorFactory } from '../../redux/layouts/selectors';
 import { PaginationType } from '../../constants';
+import { FilterValues } from './index';
 
 const InventoryFilters: React.FC<any> = (locale: string) => {
     const t = useTranslations();
@@ -19,7 +20,9 @@ const InventoryFilters: React.FC<any> = (locale: string) => {
     );
     const colorNode = useRef<HTMLDivElement>(null);
     const sizeNode = useRef<HTMLDivElement>(null);
+    const count = useSelector(productsCountSelector);
 
+    const [showFilterValues, setShowFilterValues] = useState(false);
     const [dataFetched, setDataFetched] = useState(false);
     const [filterAdditionals, setFilterAdditionals] = useState({});
     const [colorSelected, setColorSelected] = useState<any>(filters.color_id);
@@ -33,7 +36,6 @@ const InventoryFilters: React.FC<any> = (locale: string) => {
     const [qtyRange, setQtyRange] = useState(
         filters.quantity[0] > 0 || filters.quantity[1] > 0 ? filters.quantity : [0, 0]
     );
-
     useEffect(() => {
         setPriceRange([additionalProps.priceRange.min, additionalProps.priceRange.min]);
         setQtyRange([additionalProps.qtyRange.min, additionalProps.qtyRange.min]);
@@ -114,6 +116,7 @@ const InventoryFilters: React.FC<any> = (locale: string) => {
     };
 
     const applyFilters = () => {
+        setShowFilterValues(true);
         dispatch(
             setPaginationAction({
                 type: PaginationType.PRODUCTS,
@@ -123,8 +126,16 @@ const InventoryFilters: React.FC<any> = (locale: string) => {
                         product_name: searchName,
                         color_id: colorSelected,
                         size_id: sizeSelected,
-                        price: priceRange[0] > 0 || priceRange[1] > 0 ? priceRange : [],
-                        quantity: qtyRange[0] > 0 || qtyRange[1] > 0 ? qtyRange : []
+                        price:
+                            priceRange[0] === priceRange[1] &&
+                            priceRange[0] === additionalProps.priceRange.min
+                                ? []
+                                : priceRange,
+                        quantity:
+                            qtyRange[0] === qtyRange[1] &&
+                            qtyRange[0] === additionalProps.qtyRange.min
+                                ? []
+                                : qtyRange
                     },
                     offset: 0
                 }
@@ -295,6 +306,17 @@ const InventoryFilters: React.FC<any> = (locale: string) => {
                             </button>
                         </div>
                     </div>
+                    {showFilterValues && (
+                        <div className="flex border border-l-0 border-r-0 border-b-0 pt-5 mt-6">
+                            <h2 className="dark-blue-header">
+                                Search Results{' '}
+                                <span className="text-gray-180 font-normal text-sm">
+                                    ({count} Results)
+                                </span>
+                            </h2>
+                            <FilterValues locale={locale} />
+                        </div>
+                    )}
                 </>
             )}
         </>

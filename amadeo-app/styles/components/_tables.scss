@@ -1,5 +1,5 @@
 .float-table {
-  input[type="checkbox"] {
+  .float-checkbox {
     appearance: none;
     margin: 0;
     font: inherit;
@@ -11,18 +11,60 @@
     transform: translateY(-0.075em);
   }
 
+  .copied-row {
+    @apply bg-gray-100;
+  }
+
   th {
-    @apply px-3 py-3 text-xs font-bold leading-4 tracking-wider text-left text-blue-350;
+    @apply px-3 py-3 text-xs font-bold leading-4 tracking-wider text-left text-blue-350 align-top;
+
+    .toggle-bg {
+      width: 20px;
+      height: 12px;
+    }
+    .toggle-bg::after {
+      width: 10px !important;
+      height: 10px !important;
+      top: 1px !important;
+    }
 
     &:first-child {
       @apply px-0;
+    }
+    .check-all {
+      width: 13px;
+      height: 13px;
+      border: 0.15em solid #99ABCE;
+      color: #99ABCE;
+      border-radius: 4px;
     }
   }
   td {
     @apply px-3 py-1 text-xs font-bold text-left text-gray-350 align-top;
 
+    .toggle-bg {
+      width: 20px;
+      height: 12px;
+    }
+    .toggle-bg::after {
+      width: 10px !important;
+      height: 10px !important;
+      top: 1px !important;
+    }
+
     &:first-child {
       @apply px-0;
+    }
+    .form-switch {
+      padding-left: 2.5em;
+    }
+
+    .form-check-input {
+      width: 20px;
+      height: 12px;
+    }
+    .form-check-input:checked {
+      background-size: inherit;
     }
   }
 
@@ -41,5 +83,30 @@
   .btn-delete {
     background-image: url("../../public/images/btn-delete.svg");
   }
+}
+
+.table-configuration td {
+  font-size: 16px !important;
+  font-weight: bold !important;
+  color: #4F5B84 !important;
+}
+
+.inventory-color {
+  width: 25px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-image: url("../../public/images/inventory-color.svg");
+}
+.inventory-size {
+  width: 70px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-image: url("../../public/images/inventory-size.svg");
+}
+.inventory-qty {
+  width: 100px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-image: url("../../public/images/inventory-qty.svg");
 }
 

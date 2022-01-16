@@ -49,8 +49,8 @@ const SidebarHeader: React.FC = () => {
     };
 
     return (
-        <div className="flex">
-            <div className="w-full sm:w-1/2 md:w-3/5 lg:w-3/5 xl:w-4/5">
+        <div className="flex items-center align-middle">
+            <div className="w-full sm:w-1/2 md:w-3/5 lg:w-3/5 xl:w-3/5 items-center">
                 <form>
                     <div className="relative">
                         <input className="form-control" placeholder="Click to Search" />
@@ -58,15 +58,13 @@ const SidebarHeader: React.FC = () => {
                     </div>
                 </form>
             </div>
-            <div className="w-full sm:w-1/2 md:w-2/5 lg:w-2/5 xl:w-1/5 flex items-center justify-end">
+            <div className="w-full sm:w-1/2 md:w-2/5 lg:w-2/5 xl:w-2/5 flex items-center justify-end">
                 <NoticeCounter delay={120000} />
 
-                <LangSwitcher />
-
-                <span className="divider" />
-                <div className="relative">
+                {/*<span className="divider" />*/}
+                <div className="relative ml-7">
                     <div
-                        className="inline-block mt-1 cursor-pointer"
+                        className="inline-block cursor-pointer"
                         role="presentation"
                         onClick={() => setShowProfileMenu(!showProfileMenu)}>
                         <Image
@@ -79,6 +77,7 @@ const SidebarHeader: React.FC = () => {
 
                         <span className="profile-name inline-block">
                             {user.first_name || user.last_name ? user.first_name : user.email}
+                            <span className="text-blue-350 pl-2">ID: {user.id}</span>
                             <em>{user.company_name || t('No Company Name')}</em>
                         </span>
                     </div>
@@ -143,8 +142,9 @@ const SidebarHeader: React.FC = () => {
                         </div>
                     )}
                 </div>
-                <span className="divider" />
-                <span className="mt-1">
+                <LangSwitcher />
+                {/*<span className="divider" />*/}
+                <span className="mt-1 ml-3">
                     <a
                         href={`/api/auth/signout`}
                         onClick={(e) => {

@@ -1,11 +1,14 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import Link from 'next/link';
 import Brand from './Brand';
 import Pages from './Pages';
+import { useRouter } from 'next/router';
 import { useTranslations } from 'next-intl';
 
 const SidebarCustomer: React.FC = () => {
     const t = useTranslations();
+    const router = useRouter();
+    console.log(router.route);
 
     return (
         <>
@@ -13,6 +16,18 @@ const SidebarCustomer: React.FC = () => {
                 <div className="overflow-y-auto overflow-x-hidden flex flex-col justify-between flex-grow">
                     <ul>
                         <Brand />
+                        {router.route !== '/dashboard' && (
+                            <li className="go-back">
+                                <Link href={'/dashboard'}>
+                                    <a>
+                                        <span>Go Back</span>
+                                    </a>
+                                </Link>
+                            </li>
+                        )}
+                        <li>
+                            <div className="separator" />
+                        </li>
                         <li className="active">
                             <Link href={'/dashboard'}>
                                 <a>
@@ -29,11 +44,39 @@ const SidebarCustomer: React.FC = () => {
                                 </a>
                             </Link>
                         </li>
+                        {router.route !== '/inventory' && (
+                            <li>
+                                <Link href={'/inventory'}>
+                                    <a>
+                                        <i className="inventory" />
+                                        <span className="s-caption">{t('Inventory')}</span>
+                                    </a>
+                                </Link>
+                            </li>
+                        )}
+                        {router.route === '/inventory' && (
+                            <Fragment>
+                                <li className="submenu">
+                                    <Link href={'/inventory'}>
+                                        <a>
+                                            <span className="s-caption">{t('Inventory')}</span>
+                                        </a>
+                                    </Link>
+                                </li>
+                                <li className="submenu">
+                                    <Link href={'/inventory'}>
+                                        <a>
+                                            <span className="s-caption">{t('Add Product')}</span>
+                                        </a>
+                                    </Link>
+                                </li>
+                            </Fragment>
+                        )}
                         <li>
-                            <Link href={'/inventory'}>
+                            <Link href={'/chatbot'}>
                                 <a>
-                                    <i className="inventory" />
-                                    <span className="s-caption">{t('Inventory')}</span>
+                                    <i className="chatbot" />
+                                    <span className="s-caption">{t('Chatbot')}</span>
                                 </a>
                             </Link>
                         </li>

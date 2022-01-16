@@ -5,6 +5,25 @@ import fs from 'fs';
 import path from 'path';
 import csv from 'csv-parser';
 
+function createListFromCSV(pathName){
+    return new Promise((resolve, reject) => {
+        const wholeCSV = [];
+        fs.createReadStream(pathName)
+            .on('error' , reject)
+            .pipe(csv())
+            .on('data', (row) => {
+                wholeCSV.push(row);
+            })
+            .on('end', ()=> {
+                resolve(wholeCSV);
+            });
+    })
+}
+
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 const copyRecursiveSync = function(src, dest) {
     var exists = fs.existsSync(src);
     var stats = exists && fs.statSync(src);
@@ -62,15 +81,102 @@ class Product {
     }
     
     
-    async import (data) {
-        fs.createReadStream(`./public${data.file}`)
-            .pipe(csv())
-            .on('data', (row) => {
-                console.log(row['Body (HTML)']);
-            })
-            .on('end', () => {
-                console.log('CSV file successfully processed');
-            });
+    
+    
+    async import (data, userId) {
+        const dataProduct = [];
+        const tmpData = await createListFromCSV(`./public${data.file}`);
+        const client = await pool.connect();
+        for (let i=0; i < tmpData.length; i++) {
+            if (tmpData[i+1]) {
+                if (tmpData[i+1].product_name === '') {
+                    let j = (i+1);
+                    const configuration = [];
+                    for (let k=(i+1); k < tmpData.length; k++) {
+                        if (tmpData[k].product_name !== '') {
+                            j = k;
+                            break;
+                        } else {
+                            configuration.push({
+                                "sku": "123",
+                                "price": tmpData[k].price,
+                                "quantity": tmpData[k].quantity,
+                                "color_name": tmpData[k].color ? capitalizeFirstLetter(tmpData[k].color) : null,
+                                "size_name": tmpData[k].size ? capitalizeFirstLetter(tmpData[k].size) : null
+                            })
+                        }
+                    }
+                    dataProduct.push({
+                        user_id: userId,
+                        name: tmpData[i].product_name,
+                        description: tmpData[i].description,
+                        material_name: tmpData[i].material_value ? capitalizeFirstLetter(tmpData[i].material_value) : null,
+                        photos: tmpData[i].photos ? tmpData[i].photos.split(',') : null,
+                        tags: tmpData[i].hashtag ? tmpData[i].hashtag.replaceAll('#', '').split(',') : null,
+                        publish: tmpData[i].publish === 'TRUE',
+                        configured: true,
+                        configuration: configuration
+                    })
+                    i = j - 1;
+                } else {
+                    dataProduct.push({
+                        user_id: userId,
+                        name: tmpData[i].product_name,
+                        description: tmpData[i].description,
+                        material_name: tmpData[i].material_value ? capitalizeFirstLetter(tmpData[i].material_value) : null,
+                        photos: tmpData[i].photos ? tmpData[i].photos.split(',') : null,
+                        tags: tmpData[i].hashtag ? tmpData[i].hashtag.replaceAll('#', '').split(',') : null,
+                        publish: tmpData[i].publish === 'TRUE',
+                        configured: true,
+                        configuration: [
+                            {
+                                "sku": "123",
+                                "price": tmpData[i].price,
+                                "quantity": tmpData[i].quantity,
+                                "color_name": tmpData[i].color ? capitalizeFirstLetter(tmpData[i].color) : null,
+                                "size_name": tmpData[i].size ? capitalizeFirstLetter(tmpData[i].size) : null
+                            }
+                        ]
+                    });
+                }
+            } else {
+                dataProduct.push({
+                    user_id: userId,
+                    name: tmpData[i].product_name,
+                    description: tmpData[i].description,
+                    material_name: tmpData[i].material_value ? capitalizeFirstLetter(tmpData[i].material_value) : null,
+                    photos: tmpData[i].photos ? tmpData[i].photos.split(',') : null,
+                    tags: tmpData[i].hashtag ? tmpData[i].hashtag.replaceAll('#', '').split(',') : null,
+                    publish: tmpData[i].publish === 'TRUE',
+                    configured: true,
+                    configuration: [
+                        {
+                            "sku": "123",
+                            "price": tmpData[i].price,
+                            "quantity": tmpData[i].quantity,
+                            "color_name": tmpData[i].color ? capitalizeFirstLetter(tmpData[i].color) : null,
+                            "size_name": tmpData[i].size ? capitalizeFirstLetter(tmpData[i].size) : null
+                        }
+                    ]
+                });
+            }
+        }
+        try {
+            await client.query(`SELECT * FROM data.import_products('${JSON.stringify(dataProduct)}')`);
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model Tags error:',
+                    { message: `SELECT * FROM data.import_products('${JSON.stringify(dataProduct)}')` }
+                );
+                logger.log(
+                    'error',
+                    'Model Tags error:',
+                    { message: e.message }
+                );
+            }
+        }
     }
     
     
@@ -144,7 +250,6 @@ class Product {
                         configured = ${dataProduct.configured ? dataProduct.configured : true},
                         publish = ${dataProduct.publish ? dataProduct.publish : true}
                      WHERE id=${_resProd.rows[0].id};`;
-                console.log(queryUpdate);
                 await client.query(queryUpdate);
                 
                 // update configuration
@@ -428,7 +533,7 @@ class Product {
             if (res.rows.length > 0) {
                 res.rows.forEach(product => {
                     const photos = product.photos;
-                    if (photos.length > 0) {
+                    if (photos) {
                         photos.forEach(photo => {
                             fs.unlink(`${process.env.DOWNLOAD_FOLDER}/${photo.replace('/uploads', '')}`,function(err){
                                 if(err) return console.log(err);
@@ -456,7 +561,6 @@ class Product {
     async copyProducts(ids) {
         if (ids.length > 0) {
             try {
-                console.log('IDS', ids);
                 const promisesQueries = [];
                 ids.forEach(id => {
                     const _ids = [];
@@ -464,7 +568,9 @@ class Product {
                     promisesQueries.push(this.copyProduct(_ids));
                 });
                 if (promisesQueries.length) {
-                    await Promise.all(promisesQueries);
+                    const data = await Promise.all(promisesQueries);
+                    
+                    return {productId: data}
                 }
             } catch (e) {
                 if (process.env.NODE_ENV === 'development') {
@@ -484,10 +590,10 @@ class Product {
     async copyProduct(ids) {
         const client = await pool.connect();
         const SQL = `SELECT * FROM data.copy_products('[${ids.join(',')}]');`;
-        console.log(SQL);
         try {
             const res = await client.query(SQL);
             const newIds = res.rows[0].id_json_arr;
+            
             if (newIds.length > 0) {
                 const promisesQueries = [];
                 newIds.forEach(id => {
@@ -497,6 +603,7 @@ class Product {
                     await Promise.all(promisesQueries);
                 }
             }
+            return {productId: newIds}
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
                 logger.log(
