@@ -10,6 +10,13 @@ declare namespace Layouts {
         checkedIds: CheckedIds[];
         modalConfirmationMeta: ModalConfirmationMeta | null;
         switchHeader: boolean;
+        activeTab: {
+            inventory: TabTypes;
+        };
+    }
+
+    interface TabTypes {
+        tab: string;
     }
 
     interface Pagination {

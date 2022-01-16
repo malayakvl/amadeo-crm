@@ -173,7 +173,6 @@ const DataTable: React.FC<Props> = ({
                                 className="float-left checkbox-action check-all"
                             />
                             <DropdownAction
-                                value={selectBulkAction}
                                 onChange={(v: any) => {
                                     if (checkedIds.find((d: any) => d.checked === true)) {
                                         bulkActionDropdown(v);

@@ -13,7 +13,8 @@ import {
     uncheckAllIdsAction,
     setModalConfirmationMetaAction,
     setSwitchHeaderAction,
-    showLoaderAction
+    showLoaderAction,
+    setActivePageAction
 } from './actions';
 
 const initPagination = { limit: 25, offset: 0, sort: 'DESC', column: 'created_at', query: '' };
@@ -31,7 +32,10 @@ const initialState: State.Layouts = {
     toasts: [],
     checkedIds: [],
     switchHeader: false,
-    modalConfirmationMeta: null
+    modalConfirmationMeta: null,
+    activeTab: {
+        inventory: { tab: 'products' }
+    }
 };
 
 // ------------------------------------
@@ -51,6 +55,21 @@ const ACTION_HANDLERS: any = {
             [action.payload.type]: {
                 ...state.pagination[action.payload.type],
                 ...action.payload.modifier
+            }
+        }
+    }),
+    [setActivePageAction]: (
+        state: State.Layouts,
+        action: Type.ReduxAction<{
+            type: string;
+            modifier: string;
+        }>
+    ): State.Layouts => ({
+        ...state,
+        activeTab: {
+            ...state.activeTab,
+            [action.payload.type]: {
+                tab: action.payload.modifier
             }
         }
     }),

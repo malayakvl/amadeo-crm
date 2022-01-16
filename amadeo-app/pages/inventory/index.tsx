@@ -13,15 +13,17 @@ import {
 } from '../../components/inventory';
 import { activeTabSelector } from '../../redux/products/selectors';
 import { fetchAdditionalAction, importProductAction } from '../../redux/products/actions';
+import { activeTabSelectorFactory } from '../../redux/layouts/selectors';
 
 export default function Index({ session, locale }: { session: any; locale: string }) {
     if (!session) return <></>;
     const t = useTranslations();
     // const user = useSelector(userSelector);
     const dispatch = useDispatch();
+    const activeTabLayout = useSelector(activeTabSelectorFactory('inventory'));
     const activeTab = useSelector(activeTabSelector);
     const hiddenFileInput = React.useRef(null);
-
+    console.log('ACTIVE TAB LAYOUT', activeTabLayout.tab);
     useEffect(() => {
         dispatch(fetchAdditionalAction());
     }, []);
@@ -101,17 +103,17 @@ export default function Index({ session, locale }: { session: any; locale: strin
             </div>
             <div className="block-white-8 mr-10 white-shadow-medium mt-10">
                 <div className="tabs-content">
-                    <div className={`w-full ${activeTab !== 'products' ? 'hidden' : ''}`}>
+                    <div className={`w-full ${activeTabLayout.tab !== 'products' ? 'hidden' : ''}`}>
                         <ListProducts locale={locale} />
                     </div>
                     <div
                         className={`w-full ${
-                            !['add', 'edit'].includes(activeTab) ? 'hidden' : ''
+                            !['add', 'edit'].includes(activeTabLayout.tab) ? 'hidden' : ''
                         }`}>
                         {activeTab === 'add' && <AddProduct locale={locale} />}
                         {activeTab === 'edit' && <EditProduct locale={locale} />}
                     </div>
-                    <div className={`w-full ${activeTab !== 'sync' ? 'hidden' : ''}`}>
+                    <div className={`w-full ${activeTabLayout.tab !== 'sync' ? 'hidden' : ''}`}>
                         <SyncProduct />
                     </div>
                 </div>

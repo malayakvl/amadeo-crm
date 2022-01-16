@@ -17,7 +17,7 @@ import bodyParser from 'body-parser';
 const app = express();
 const port = process.env.APPLICATION_PORT || '4000';
 const __dirname = path.resolve();
-const whitelist = ['http://localhost:3000', 'http://localhost:3001', 'http://localhost:4000', 'https://dev-tech.com.ua', 'https://api.dev-tech.com.ua'];
+const whitelist = ['http://localhost:3000', 'http://localhost:3001', 'http://localhost:4000', 'https://dev-tech.com.ua', 'https://api.dev-tech.com.ua', 'https://test.dev-tech.com.ua', 'https://test-api.dev-tech.com.ua'];
 const corsOptions = {
     origin: function (origin, callback) {
         if (whitelist.indexOf(origin) !== -1 || !origin) {
