@@ -98,7 +98,7 @@ class Product {
                             break;
                         } else {
                             configuration.push({
-                                "sku": "123",
+                                "sku": tmpData[k].sku,
                                 "price": tmpData[k].price,
                                 "quantity": tmpData[k].quantity,
                                 "color_name": tmpData[k].color ? capitalizeFirstLetter(tmpData[k].color) : null,
@@ -130,7 +130,7 @@ class Product {
                         configured: true,
                         configuration: [
                             {
-                                "sku": "123",
+                                "sku": tmpData[i].sku,
                                 "price": tmpData[i].price,
                                 "quantity": tmpData[i].quantity,
                                 "color_name": tmpData[i].color ? capitalizeFirstLetter(tmpData[i].color) : null,
@@ -412,10 +412,12 @@ class Product {
                         res.rows[0].quantity = resConfigs.rows[0].quantity;
                     }
                     let selectedTagsData = [];
-                    if (res.rows[0].tags.length > 0) {
-                        const queryTags = `SELECT table_translation FROM common__tools._get_translation('data', 'hashtags', 'id', 'name', ' id IN (${res.rows[0].tags.join(',')})');`;
-                        const resTags = await client.query(queryTags);
-                        selectedTagsData = resTags.rows[0].table_translation;
+                    if (res.rows[0].tags) {
+                        if (res.rows[0].tags.length > 0) {
+                            const queryTags = `SELECT table_translation FROM common__tools._get_translation('data', 'hashtags', 'id', 'name', ' id IN (${res.rows[0].tags.join(',')})');`;
+                            const resTags = await client.query(queryTags);
+                            selectedTagsData = resTags.rows[0].table_translation;
+                        }
                     }
                     res.rows[0].selectedColors = selectedColorsData;
                     res.rows[0].selectedSizes = selectedSizesData;

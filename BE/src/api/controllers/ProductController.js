@@ -45,11 +45,6 @@ class ProductController {
                 dataUser.file = `/uploads/users/${req.user.id}/${req.file.filename}`;
             }
             await productModel.import(dataUser, req.user.id);
-            // const user = await userModel.findUserByEmail(req.user.email);
-            // delete user.password;
-            // delete user.salt;
-            // delete user.hash;
-            // delete user.expired_at;
             return res.status(200).json({ success: true });
         });
         // return res.status(200).json({ success: true });

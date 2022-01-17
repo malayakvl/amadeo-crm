@@ -105,7 +105,7 @@ function ProductForm({
     const uploadedFiles = useSelector(uploadedFilesSelector);
     const isIdent = useSelector(getIdentSelector);
 
-    const [editorContent, setEditorContent] = useState(productData.product.description);
+    const [editorContent, setEditorContent] = useState('');
     const [selectedColors, setSelectedColors] = useState([]);
     const [selectedSizes, setSelectedSizes] = useState<any[]>([]);
     const [selectedMaterials, setSelectedMaterials] = useState<any>(null);
@@ -138,6 +138,10 @@ function ProductForm({
         setSuggestions(searchTagSuggestions);
         setIsBusy(false);
     }, [searchTagSuggestions]);
+
+    // useEffect(() => {
+    //     console.log('PEO', productData);
+    // }, [productData.product]);
 
     useEffect(() => {
         setSelectedSizes(additionalSelectedProps.sizes);

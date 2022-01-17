@@ -11,7 +11,6 @@ import {
     InventoryFilters,
     SyncProduct
 } from '../../components/inventory';
-import { activeTabSelector } from '../../redux/products/selectors';
 import { fetchAdditionalAction, importProductAction } from '../../redux/products/actions';
 import { activeTabSelectorFactory } from '../../redux/layouts/selectors';
 
@@ -21,7 +20,6 @@ export default function Index({ session, locale }: { session: any; locale: strin
     // const user = useSelector(userSelector);
     const dispatch = useDispatch();
     const activeTabLayout = useSelector(activeTabSelectorFactory('inventory'));
-    const activeTab = useSelector(activeTabSelector);
     const hiddenFileInput = React.useRef(null);
     console.log('ACTIVE TAB LAYOUT', activeTabLayout.tab);
     useEffect(() => {
@@ -98,7 +96,7 @@ export default function Index({ session, locale }: { session: any; locale: strin
                     {/*        </button>*/}
                     {/*    </nav>*/}
                     {/*)}*/}
-                    {activeTab === 'products' && <InventoryFilters locale={locale} />}
+                    {activeTabLayout.tab === 'products' && <InventoryFilters locale={locale} />}
                 </div>
             </div>
             <div className="block-white-8 mr-10 white-shadow-medium mt-10">
@@ -110,8 +108,8 @@ export default function Index({ session, locale }: { session: any; locale: strin
                         className={`w-full ${
                             !['add', 'edit'].includes(activeTabLayout.tab) ? 'hidden' : ''
                         }`}>
-                        {activeTab === 'add' && <AddProduct locale={locale} />}
-                        {activeTab === 'edit' && <EditProduct locale={locale} />}
+                        {activeTabLayout.tab === 'add' && <AddProduct locale={locale} />}
+                        {activeTabLayout.tab === 'edit' && <EditProduct locale={locale} />}
                     </div>
                     <div className={`w-full ${activeTabLayout.tab !== 'sync' ? 'hidden' : ''}`}>
                         <SyncProduct />

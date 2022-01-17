@@ -15,13 +15,13 @@ import {
     bulkDeleteAction,
     bulkCopyAction,
     fetchProductAction,
-    setActiveTabAction,
     deleteProductAction,
     copyProductAction
 } from '../../redux/products/actions';
 import { baseApiUrl } from '../../constants';
 import { setModalConfirmationMetaAction } from '../../redux/layouts';
 import { BanIcon } from '@heroicons/react/solid';
+import { setActivePageAction } from '../../redux/layouts/actions';
 
 const ListProducts: React.FC<any> = () => {
     const t = useTranslations();
@@ -88,7 +88,13 @@ const ListProducts: React.FC<any> = () => {
     const handleEditBtnClick = useCallback(
         (event: React.SyntheticEvent): void => {
             const id = Number(event.currentTarget.getAttribute('data-id'));
-            dispatch(setActiveTabAction('edit'));
+            // dispatch(setActiveTabAction('edit'));
+            dispatch(
+                setActivePageAction({
+                    type: 'inventory',
+                    modifier: 'edit'
+                })
+            );
             dispatch(fetchProductAction(id));
         },
         [items, dispatch]
@@ -240,12 +246,14 @@ const ListProducts: React.FC<any> = () => {
                                 <span className="text-blue-350">{item.id}</span> <br />
                                 <span className="text-[18px]">{item.name}</span>
                                 <br />
-                                <div
-                                    className="text-blue-350 mt-4 block font-normal text-sm"
-                                    dangerouslySetInnerHTML={{
-                                        __html: `${item.description.substring(0, 250)} ...`
-                                    }}
-                                />
+                                {item.description && (
+                                    <div
+                                        className="text-blue-350 mt-4 block font-normal text-sm"
+                                        dangerouslySetInnerHTML={{
+                                            __html: `${item.description.substring(0, 250)} ...`
+                                        }}
+                                    />
+                                )}
                             </td>
                             <td>
                                 <label

@@ -8,7 +8,7 @@ import { setSuccessToastAction } from '../layouts';
 import { paginationSelectorFactory } from '../layouts/selectors';
 import { PaginationType } from '../../constants';
 import queryString from 'query-string';
-import { showLoaderAction } from '../layouts/actions';
+import { setActivePageAction, showLoaderAction } from '../layouts/actions';
 
 export const fetchAdditionalAction: any = createAction(
     'products/FETCH_ADDITIONAL',
@@ -32,6 +32,7 @@ export const updateProductAction: any = createAction(
         (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
             const state = getState();
             const isNew = id;
+            dispatch(showLoaderAction(true));
             return axios
                 .post(`${baseUrl}/product`, data, {
                     headers: {
@@ -44,7 +45,13 @@ export const updateProductAction: any = createAction(
                     );
                     dispatch(fetchAdditionalAction());
                     dispatch(fetchProductsAction());
-                    dispatch(setActiveTabAction('products'));
+                    dispatch(showLoaderAction(false));
+                    dispatch(
+                        setActivePageAction({
+                            type: 'inventory',
+                            modifier: 'products'
+                        })
+                    );
                 });
         }
 );
@@ -116,11 +123,15 @@ export const fetchProductAction: any = createAction(
             getState: () => State.Root
         ): Promise<{ product: Products.Product }> => {
             const state = getState();
+            dispatch(showLoaderAction(true));
             const res = await axios.get(`${baseUrl}/fetch-product/${id}`, {
                 headers: {
                     ...authHeader(state.user.user.email)
                 }
             });
+            if (res.status) {
+                dispatch(showLoaderAction(false));
+            }
             return {
                 product: res.data.product
             };
