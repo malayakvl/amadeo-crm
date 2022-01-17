@@ -1,11 +1,15 @@
 import React from 'react';
 import { useTranslations } from 'next-intl';
 
-const RenderSizes: React.FC<any> = ({ sizes, removeSizeHandler, configured }) => {
+const RenderSizes: React.FC<any> = ({ sizes, configured, removeSizeHandler, showSizeHandler }) => {
     const t = useTranslations();
 
     return (
-        <div className="react-tags" style={{ minHeight: '39px' }}>
+        <div
+            role="presentation"
+            className="react-tags"
+            style={{ minHeight: '39px' }}
+            onClick={() => showSizeHandler()}>
             {sizes.length > 0 && configured && (
                 <>
                     {sizes.map((size: any) => (
