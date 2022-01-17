@@ -65,7 +65,11 @@ const InventoryPhotos: React.FC<any> = ({ productData, uploadedFiles, photos }) 
                                 (_file: string, _index: React.Key | null | undefined) => (
                                     <li key={_index}>
                                         <img
-                                            src={`${baseApiUrl}/${_file}`}
+                                            src={
+                                                /(http(s?)):\/\//i.test(_file)
+                                                    ? _file
+                                                    : `${baseApiUrl}/${_file}`
+                                            }
                                             alt=""
                                             className="object-cover h-[85px]"
                                         />
