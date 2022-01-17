@@ -146,54 +146,6 @@ const ListProducts: React.FC<any> = () => {
         );
     };
 
-    // const renderConfiguration = (configuration: any, productId: number) => {
-    //     return (
-    //         <table className="w-full">
-    //             <tbody>
-    //                 {configuration.map((config: any, i: number) => (
-    //                     <tr key={config.color_id}>
-    //                         <td>
-    //                             <div
-    //                                 className="rounded-full w-3 h-3 inline-block mt-1"
-    //                                 style={{ backgroundColor: `${config.color_code}` }}
-    //                             />
-    //                         </td>
-    //                         <td>
-    //                             <Fragment>
-    //                                 {config.configuration.map((_config: any) => (
-    //                                     <div key={_config.size_name} className="block">
-    //                                         <span className="ml-5 w-[30px] inline-block">
-    //                                             {_config.size_name}
-    //                                         </span>
-    //                                         <span className="ml-5 w-[50px] inline-block">
-    //                                             &euro;{_config.price}
-    //                                         </span>
-    //                                         <span className="ml-5 w-[50px] inline-block">
-    //                                             {_config.quantity}
-    //                                         </span>
-    //                                     </div>
-    //                                 ))}
-    //                             </Fragment>
-    //                         </td>
-    //                     </tr>
-    //                 ))}
-    //                 <tr>
-    //                     <td colSpan={2}>
-    //                         <div
-    //                             className="block text-gray-180 text-[9px] cursor-pointer"
-    //                             role="presentation"
-    //                             onClick={() => handleShowMore(productId)}>
-    //                             <span className="border rounded-lg pt-0.5 pb-0.5 pl-1 pr-1 uppercase">
-    //                                 {t('Show less')}
-    //                             </span>
-    //                         </div>
-    //                     </td>
-    //                 </tr>
-    //             </tbody>
-    //         </table>
-    //     );
-    // };
-
     return (
         <>
             <div className="inline-block min-w-full overflow-hidden align-middle">
@@ -223,7 +175,7 @@ const ListProducts: React.FC<any> = () => {
                                     }
                                 />
                             </td>
-                            <td>
+                            <td style={{ width: '150px' }}>
                                 {item.previewphoto && (
                                     <img
                                         src={`${baseApiUrl}/${item.previewphoto}`}
