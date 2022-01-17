@@ -106,19 +106,45 @@ class Product {
                             })
                         }
                     }
-                    dataProduct.push({
-                        user_id: userId,
-                        name: tmpData[i].product_name,
-                        description: tmpData[i].description,
-                        material_name: tmpData[i].material_value ? capitalizeFirstLetter(tmpData[i].material_value) : null,
-                        photos: tmpData[i].photos ? tmpData[i].photos.split(',') : null,
-                        tags: tmpData[i].hashtag ? tmpData[i].hashtag.replaceAll('#', '').split(',') : null,
-                        publish: tmpData[i].publish === 'TRUE',
-                        configured: true,
-                        configuration: configuration
-                    })
+                    if (tmpData[i].product_name) {
+                        dataProduct.push({
+                            user_id: userId,
+                            name: tmpData[i].product_name,
+                            description: tmpData[i].description,
+                            material_name: tmpData[i].material_value ? capitalizeFirstLetter(tmpData[i].material_value) : null,
+                            photos: tmpData[i].photos ? tmpData[i].photos.split(',') : null,
+                            tags: tmpData[i].hashtag ? tmpData[i].hashtag.replaceAll('#', '').split(',') : null,
+                            publish: tmpData[i].publish === 'TRUE',
+                            configured: true,
+                            configuration: configuration
+                        });
+                    }
                     i = j - 1;
                 } else {
+                    if (tmpData[i].product_name) {
+                        dataProduct.push({
+                            user_id: userId,
+                            name: tmpData[i].product_name,
+                            description: tmpData[i].description,
+                            material_name: tmpData[i].material_value ? capitalizeFirstLetter(tmpData[i].material_value) : null,
+                            photos: tmpData[i].photos ? tmpData[i].photos.split(',') : null,
+                            tags: tmpData[i].hashtag ? tmpData[i].hashtag.replaceAll('#', '').split(',') : null,
+                            publish: tmpData[i].publish === 'TRUE',
+                            configured: true,
+                            configuration: [
+                                {
+                                    "sku": tmpData[i].sku,
+                                    "price": tmpData[i].price,
+                                    "quantity": tmpData[i].quantity,
+                                    "color_name": tmpData[i].color ? capitalizeFirstLetter(tmpData[i].color) : null,
+                                    "size_name": tmpData[i].size ? capitalizeFirstLetter(tmpData[i].size) : null
+                                }
+                            ]
+                        });
+                    }
+                }
+            } else {
+                if (tmpData[i].product_name) {
                     dataProduct.push({
                         user_id: userId,
                         name: tmpData[i].product_name,
@@ -130,7 +156,7 @@ class Product {
                         configured: true,
                         configuration: [
                             {
-                                "sku": tmpData[i].sku,
+                                "sku": "123",
                                 "price": tmpData[i].price,
                                 "quantity": tmpData[i].quantity,
                                 "color_name": tmpData[i].color ? capitalizeFirstLetter(tmpData[i].color) : null,
@@ -139,28 +165,9 @@ class Product {
                         ]
                     });
                 }
-            } else {
-                dataProduct.push({
-                    user_id: userId,
-                    name: tmpData[i].product_name,
-                    description: tmpData[i].description,
-                    material_name: tmpData[i].material_value ? capitalizeFirstLetter(tmpData[i].material_value) : null,
-                    photos: tmpData[i].photos ? tmpData[i].photos.split(',') : null,
-                    tags: tmpData[i].hashtag ? tmpData[i].hashtag.replaceAll('#', '').split(',') : null,
-                    publish: tmpData[i].publish === 'TRUE',
-                    configured: true,
-                    configuration: [
-                        {
-                            "sku": "123",
-                            "price": tmpData[i].price,
-                            "quantity": tmpData[i].quantity,
-                            "color_name": tmpData[i].color ? capitalizeFirstLetter(tmpData[i].color) : null,
-                            "size_name": tmpData[i].size ? capitalizeFirstLetter(tmpData[i].size) : null
-                        }
-                    ]
-                });
             }
         }
+        console.log(dataProduct);
         try {
             await client.query(`SELECT * FROM data.import_products('${JSON.stringify(dataProduct)}')`);
         } catch (e) {
