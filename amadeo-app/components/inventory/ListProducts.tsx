@@ -178,7 +178,11 @@ const ListProducts: React.FC<any> = () => {
                             <td style={{ width: '150px' }}>
                                 {item.previewphoto && (
                                     <img
-                                        src={`${baseApiUrl}/${item.previewphoto}`}
+                                        src={
+                                            /(http(s?)):\/\//i.test(item.previewphoto)
+                                                ? item.previewphoto
+                                                : `${baseApiUrl}/${item.previewphoto}`
+                                        }
                                         alt=""
                                         className="object-scale-down h-[95px] w-[85px] rounded-lg border p-1.5"
                                     />
