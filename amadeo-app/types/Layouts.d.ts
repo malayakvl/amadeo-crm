@@ -3,6 +3,7 @@ declare namespace Layouts {
         pagination: {
             notifications: Pagination;
             products: Pagination;
+            shipping: Pagination;
         };
         isSidebarOpen: boolean;
         toasts: Toast[];
