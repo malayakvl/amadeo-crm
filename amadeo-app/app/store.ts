@@ -10,6 +10,7 @@ import notificationsReducer from '../redux/notifications/index';
 import layoutsReducer from '../redux/layouts/index';
 import productsReducer from '../redux/products/index';
 import countriesReducer from '../redux/countries/index';
+import shippingReducer from '../redux/shipping/index';
 
 const reducers = combineReducers({
     profile: profileReducer,
@@ -17,7 +18,8 @@ const reducers = combineReducers({
     notifications: notificationsReducer,
     layouts: layoutsReducer,
     products: productsReducer,
-    countries: countriesReducer
+    countries: countriesReducer,
+    shippings: shippingReducer
 });
 
 const initStore = (initialState = {}) => {

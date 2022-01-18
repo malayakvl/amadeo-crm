@@ -58,7 +58,7 @@ const SidebarCustomer: React.FC = () => {
                             </Link>
                         </li>
                         <li>
-                            <Link href={'/'}>
+                            <Link href={'/shipping'}>
                                 <a>
                                     <i className="shipping" />
                                     <span className="s-caption">{t('Shipping')}</span>

@@ -29,13 +29,13 @@ const DataTable: React.FC<Props> = ({
     sendDeleteRequest,
     sendCopyRequest
 }) => {
-    const { PRODUCTS } = PaginationType;
+    const { PRODUCTS, SHIPPING } = PaginationType;
     const t = useTranslations();
     const checkedIds = useSelector(checkedIdsSelector);
     const showFilters = [PRODUCTS].includes(paginationType);
     // const hideEntries: boolean = [CATEGORIES, INVESTMENT].includes(paginationType);
     const hideEntries = false;
-    const showIds: boolean = [PRODUCTS].includes(paginationType);
+    const showIds: boolean = [PRODUCTS].includes(paginationType) || [SHIPPING].includes(paginationType);
     // const hideSearch: boolean = [INVESTMENT].includes(paginationType);
     const hideSearch = false;
     const headers = TableHeaders[paginationType];
@@ -182,7 +182,6 @@ const DataTable: React.FC<Props> = ({
     };
 
     // const [vegetagle, setVegetable] = useState(undefined);
-
     return (
         <>
             {(!hideEntries || showFilters || !hideSearch) && (

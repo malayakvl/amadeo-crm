@@ -5,7 +5,8 @@ export const baseApiUrl = publicRuntimeConfig.apiUrl;
 
 export enum PaginationType {
     NOTIFICATIONS = 'notifications',
-    PRODUCTS = 'products'
+    PRODUCTS = 'products',
+    SHIPPING = 'shipping'
 }
 
 export const TableHeaders: { [key in PaginationType]: Type.DataTableHeader[] } = {
@@ -15,5 +16,11 @@ export const TableHeaders: { [key in PaginationType]: Type.DataTableHeader[] } =
         { titleKey: 'Options' },
         { titleKey: 'Actions', className: 'Actions' }
     ],
-    [PaginationType.NOTIFICATIONS]: []
+    [PaginationType.NOTIFICATIONS]: [],
+    [PaginationType.SHIPPING]: [
+        { sortKey: 'method', titleKey: 'Method' },
+        { sortKey: 'price', titleKey: 'Price' },
+        { titleKey: 'Enabled' },
+        { titleKey: 'Actions', className: 'Actions' }
+    ]
 };
