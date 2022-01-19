@@ -1,4 +1,5 @@
 // Each table pagination and controls meta stored to redux separately
+import classNames from 'classnames';
 import getConfig from 'next/config';
 const { publicRuntimeConfig } = getConfig();
 export const baseApiUrl = publicRuntimeConfig.apiUrl;
@@ -23,9 +24,13 @@ export const TableHeaders: { [key in PaginationType]: Type.DataTableHeader[] } =
     ],
     [PaginationType.NOTIFICATIONS]: [],
     [PaginationType.SHIPPING]: [
-        { sortKey: 'method', titleKey: 'Method' },
-        { sortKey: 'price', titleKey: 'Price' },
-        { titleKey: 'Enabled' },
-        { titleKey: 'Actions', className: 'Actions' }
+        { className: 'shipping-dropdown' },
+        { className: 'shipping-number' },
+        { className: 'shipping-logo' },
+        { titleKey: 'Shipping Method' },
+        { className: 'option-switcher' },
+        { className: 'shipping-countries' },
+        { titleKey: 'Price', className: 'text-right' },
+        {},
     ]
 };

@@ -59,7 +59,7 @@ const SidebarFull: React.FC = () => {
                 </Link>
             </li>
             <li>
-                <Link href={'/'}>
+                <Link href={'/shipping/list'}>
                     <a>
                         <i className="shipping" />
                         <span className="s-caption">{t('Shipping')}</span>

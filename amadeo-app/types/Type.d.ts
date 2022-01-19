@@ -12,7 +12,7 @@ declare namespace Type {
 
     interface DataTableHeader {
         sortKey?: string;
-        titleKey: string | null;
+        titleKey?: string | null;
         className?: string;
         subTitles?: DataTableHeader[];
     }
