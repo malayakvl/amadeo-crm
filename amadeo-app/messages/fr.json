@@ -160,5 +160,6 @@
   "Shopify Shop": "Shopify Shop",
   "upload_csv": "Upload products usins a .csv file",
   "Chatbot": "Chatbot",
-  "Product has been imported": "Product has been imported"
+  "Product has been imported": "Product has been imported",
+  "how_to_use_cahtbot": "How to use chatbot?<br/> Here we will place clear instructions on how to use the chatbot in case merchant would need to add more scenarios"
 }

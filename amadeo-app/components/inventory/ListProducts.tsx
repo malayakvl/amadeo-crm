@@ -215,16 +215,6 @@ const ListProducts: React.FC<any> = () => {
                                 <label
                                     htmlFor={item.id}
                                     className="flex items-center cursor-pointer relative">
-                                    {/*<input*/}
-                                    {/*    className="float-checkbox"*/}
-                                    {/*    type="checkbox"*/}
-                                    {/*    onChange={() => dispatch(checkIdsAction(item.id))}*/}
-                                    {/*    value={item.id}*/}
-                                    {/*    checked={*/}
-                                    {/*        checkedIds.find((data: any) => data.id === item.id)*/}
-                                    {/*            ?.checked || false*/}
-                                    {/*    }*/}
-                                    {/*/>*/}
                                     <input
                                         type="checkbox"
                                         id={item.id}
@@ -232,7 +222,6 @@ const ListProducts: React.FC<any> = () => {
                                         value={`switcher_${item.id}`}
                                         checked={showMoreConfigs[item.id] || false}
                                         onChange={() => {
-                                            // setSwitcherValue(e.target.value);
                                             handleShowMore(item.id);
                                         }}
                                     />

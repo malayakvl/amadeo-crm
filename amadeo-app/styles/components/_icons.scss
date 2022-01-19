@@ -32,3 +32,38 @@
 .f-password {
   background-image: url("../../public/images/input-password.svg");
 }
+
+.info {
+  background-image: url("../../public/images/icon-info.svg");
+  @apply inline-block w-[14px] h-[14px];
+}
+.scenario {
+  background-image: url("../../public/images/icon-table-chatbot.svg");
+  background-repeat: no-repeat;
+  @apply inline-block w-[16px] h-[14px] float-left mr-1.5 mt-0;
+}
+.message {
+  background-image: url("../../public/images/icon-message.svg");
+  background-repeat: no-repeat;
+  @apply inline-block w-[14px] h-[14px] float-left mr-1.5 mt-0.5;
+}
+.eye {
+  background-image: url("../../public/images/icon-eye.svg");
+  background-repeat: no-repeat;
+  @apply inline-block w-[14px] h-[14px] float-left mr-1.5 mt-0.5;
+}
+.action-triangle {
+  background-image: url("../../public/images/action-arrow.svg");
+  background-repeat: no-repeat;
+  @apply inline-block w-[14px] h-[14px] float-left mr-1.5 mt-0.5;
+}
+.trans-fr {
+  background-image: url("../../public/images/fr-glag.svg");
+  background-repeat: no-repeat;
+  @apply inline-block float-left w-[36px] h-[24px];
+}
+.trans-en {
+  background-image: url("../../public/images/en-flag.svg");
+  background-repeat: no-repeat;
+  @apply inline-block float-left w-[36px] h-[24px];
+}

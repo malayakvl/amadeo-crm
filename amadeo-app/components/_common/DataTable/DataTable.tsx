@@ -22,11 +22,13 @@ interface Props {
     children: React.ReactNode[];
     totalAmount: number;
     sendRequest: () => Promise<void>;
-    sendDeleteRequest: () => Promise<void> | null;
-    sendCopyRequest: () => Promise<void> | null;
+    sendDeleteRequest?: () => Promise<void>;
+    sendCopyRequest?: () => Promise<void>;
+    hidePaginationBar?: boolean;
 }
 
 const DataTable: React.FC<Props> = ({
+    hidePaginationBar,
     paginationType,
     children,
     totalAmount,
@@ -51,7 +53,7 @@ const DataTable: React.FC<Props> = ({
     );
     const [loading, setLoading] = useState(true);
     const [allChecked, setAllChecked] = useState(false);
-    const [selectBulkAction, setSelectBulkAction] = useState(null);
+    // const [selectBulkAction, setSelectBulkAction] = useState(null);
 
     useEffect(() => {
         sendRequest().finally(() => setLoading(false));
@@ -89,12 +91,12 @@ const DataTable: React.FC<Props> = ({
 
     const bulkActionDropdown = useCallback(
         (action: any): void => {
-            if (action === 'delete') {
+            if (action === 'delete' && sendDeleteRequest) {
                 sendDeleteRequest();
-            } else if (action === 'copy') {
+            } else if (action === 'copy' && sendCopyRequest) {
                 sendCopyRequest();
             }
-            setSelectBulkAction(null);
+            // setSelectBulkAction(null);
         },
         [paginationType, dispatch]
     );
@@ -135,6 +137,7 @@ const DataTable: React.FC<Props> = ({
                         <div className="toggle-bg bg-gray-200 border border-gray-200 rounded-full dark:bg-gray-700 dark:border-gray-600" />
                     </label>
                 )}
+                {item.iconClass && <i className={item.iconClass} />}
                 {item.titleKey ? t(item.titleKey) : ''}
                 {item.sortKey && (
                     <>
@@ -176,7 +179,7 @@ const DataTable: React.FC<Props> = ({
                                 onChange={(v: any) => {
                                     if (checkedIds.find((d: any) => d.checked === true)) {
                                         bulkActionDropdown(v);
-                                        setSelectBulkAction(v);
+                                        // setSelectBulkAction(v);
                                     } else {
                                         dispatch(setErrorToastAction('Select at least one item'));
                                     }
@@ -216,37 +219,13 @@ const DataTable: React.FC<Props> = ({
         return <EmptyTable colSpan={length}>{t('Table is empty')}</EmptyTable>;
     };
 
-    // const [vegetagle, setVegetable] = useState(undefined);
-
     return (
         <>
-            {/*{(!hideEntries || showFilters || !hideSearch) && (*/}
-            {/*    <div className="mt-3 mb-3">*/}
-            {/*        {!hideEntries && (*/}
-            {/*            <div className="flex md:w-1/12">*/}
-            {/*                <label className="control-label mt-3 mr-3">{t('Action')} </label>*/}
-            {/*                <Dropdown*/}
-            {/*                    placeholder={t('Select Action')}*/}
-            {/*                    value={selectBulkAction}*/}
-            {/*                    onChange={(v: any) => {*/}
-            {/*                        if (checkedIds.find((d: any) => d.checked === true)) {*/}
-            {/*                            bulkActionDropdown(v);*/}
-            {/*                            setSelectBulkAction(v);*/}
-            {/*                        } else {*/}
-            {/*                            dispatch(setErrorToastAction('Select at least one item'));*/}
-            {/*                        }*/}
-            {/*                    }}*/}
-            {/*                    options={['copy', 'delete']}*/}
-            {/*                />*/}
-            {/*            </div>*/}
-            {/*        )}*/}
-            {/*    </div>*/}
-            {/*)}*/}
             <table className="min-w-full float-table">
                 <thead>{renderTableHeader()}</thead>
                 <tbody>{renderTableBody()}</tbody>
             </table>
-            {!loading && (
+            {!loading && !hidePaginationBar && (
                 <div className="flex justify-between w-full mt-5 mb-10">
                     <div>
                         <select value={limit} onChange={setLimit} className="form-control">

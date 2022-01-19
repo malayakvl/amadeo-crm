@@ -7,6 +7,7 @@ import NotificationController from '../controllers/NotificationController.js';
 import ProductController from '../controllers/ProductController.js';
 import TagController from '../controllers/TagController.js';
 import userModel from '../models/User.js';
+import ChatbotController from "../controllers/ChatbotController.js";
 
 const apiRoutes = express.Router();
 
@@ -65,6 +66,12 @@ apiRoutes.route('/products/bulk-copy').post(ProductController.bulkCopy);
 apiRoutes.route('/products/import').post(ProductController.import);
 
 apiRoutes.route('/tags/find').get(TagController.fetchTags);
+
+apiRoutes.route('/chatbot').post(ChatbotController.storeItem);
+apiRoutes.route('/fetch-chatbot-messages').get(ChatbotController.fetchItems);
+apiRoutes.route('/fetch-chatbot-default-messages').get(ChatbotController.fetchItemsSystem);
+apiRoutes.route('/fetch-chatbot-message/:id').get(ChatbotController.fetchItem);
+
 
 apiRoutes.get('/*', defaultHandler);
 
