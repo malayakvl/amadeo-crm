@@ -8,6 +8,7 @@ import { setSuccessToastAction } from '../layouts';
 import { paginationSelectorFactory } from '../layouts/selectors';
 import { PaginationType } from '../../constants';
 import queryString from 'query-string';
+import { setActivePageAction, showLoaderAction } from '../layouts/actions';
 
 export const fetchAdditionalAction: any = createAction(
     'products/FETCH_ADDITIONAL',
@@ -31,6 +32,7 @@ export const updateProductAction: any = createAction(
         (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
             const state = getState();
             const isNew = id;
+            dispatch(showLoaderAction(true));
             return axios
                 .post(`${baseUrl}/product`, data, {
                     headers: {
@@ -43,16 +45,22 @@ export const updateProductAction: any = createAction(
                     );
                     dispatch(fetchAdditionalAction());
                     dispatch(fetchProductsAction());
-                    dispatch(setActiveTabAction('products'));
+                    dispatch(showLoaderAction(false));
+                    dispatch(
+                        setActivePageAction({
+                            type: 'inventory',
+                            modifier: 'products'
+                        })
+                    );
                 });
         }
 );
 export const importProductAction: any = createAction(
     'product/IMPORT_PRODUCT',
-    async (data: any, id: number | null | undefined) =>
+    async (data: any) =>
         (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
             const state = getState();
-            const isNew = id;
+            dispatch(showLoaderAction(true));
             return axios
                 .post(`${baseUrl}/products/import`, data, {
                     headers: {
@@ -60,9 +68,8 @@ export const importProductAction: any = createAction(
                     }
                 })
                 .then(async () => {
-                    dispatch(
-                        setSuccessToastAction(`Product has been ${isNew ? 'updated' : 'created'}`)
-                    );
+                    dispatch(showLoaderAction(false));
+                    dispatch(setSuccessToastAction(`Product has been imported`));
                     dispatch(fetchAdditionalAction());
                     dispatch(fetchProductsAction());
                     dispatch(setActiveTabAction('products'));
@@ -82,6 +89,7 @@ export const fetchProductsAction: any = createAction(
                 PaginationType.PRODUCTS
             )(state);
             const queryFilter = JSON.stringify(filters);
+            dispatch(showLoaderAction(true));
             return axios
                 .get(
                     `${baseUrl}/fetch-products?${queryString.stringify({
@@ -98,10 +106,13 @@ export const fetchProductsAction: any = createAction(
                         }
                     }
                 )
-                .then((res: any) => ({
-                    count: res.data.count,
-                    items: res.data.items
-                }));
+                .then((res: any) => {
+                    dispatch(showLoaderAction(false));
+                    return {
+                        count: res.data.count,
+                        items: res.data.items
+                    };
+                });
         }
 );
 export const fetchProductAction: any = createAction(
@@ -112,11 +123,15 @@ export const fetchProductAction: any = createAction(
             getState: () => State.Root
         ): Promise<{ product: Products.Product }> => {
             const state = getState();
+            dispatch(showLoaderAction(true));
             const res = await axios.get(`${baseUrl}/fetch-product/${id}`, {
                 headers: {
                     ...authHeader(state.user.user.email)
                 }
             });
+            if (res.status) {
+                dispatch(showLoaderAction(false));
+            }
             return {
                 product: res.data.product
             };
@@ -141,6 +156,7 @@ export const deleteProductAction: any = createAction(
     async (id: number) =>
         (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
             const state = getState();
+            dispatch(showLoaderAction(true));
             return axios
                 .delete(`${baseUrl}/products/delete/${id}`, {
                     headers: {
@@ -148,6 +164,7 @@ export const deleteProductAction: any = createAction(
                     }
                 })
                 .then(async () => {
+                    dispatch(showLoaderAction(false));
                     await dispatch(fetchProductsAction());
                     dispatch(setSuccessToastAction('Product has been deleted'));
                     dispatch(setActiveTabAction('products'));
@@ -160,13 +177,16 @@ export const copyProductAction: any = createAction(
     async (id: number) =>
         (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
             const state = getState();
+            dispatch(showLoaderAction(true));
             return axios
                 .get(`${baseUrl}/products/copy/${id}`, {
                     headers: {
                         ...authHeader(state.user.user.email)
                     }
                 })
-                .then(async () => {
+                .then(async (res) => {
+                    dispatch(showLoaderAction(false));
+                    await dispatch(copyIdsAction(res.data.productIds));
                     await dispatch(fetchProductsAction());
                     dispatch(setSuccessToastAction('Product has been copied'));
                 });
@@ -198,6 +218,7 @@ export const bulkDeleteAction: any = createAction(
     async () =>
         async (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
             const state = getState();
+            dispatch(showLoaderAction(true));
             return axios
                 .post(
                     `${baseUrl}/products/bulk-delete`,
@@ -209,6 +230,7 @@ export const bulkDeleteAction: any = createAction(
                     }
                 )
                 .then(async () => {
+                    dispatch(showLoaderAction(false));
                     dispatch(setSuccessToastAction('Products has been deleted'));
                     await dispatch(fetchProductsAction());
                 });
@@ -219,6 +241,7 @@ export const bulkCopyAction: any = createAction(
     async () =>
         async (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
             const state = getState();
+            dispatch(showLoaderAction(true));
             return axios
                 .post(
                     `${baseUrl}/products/bulk-copy`,
@@ -229,7 +252,13 @@ export const bulkCopyAction: any = createAction(
                         }
                     }
                 )
-                .then(async () => {
+                .then(async (res) => {
+                    const _copyIds: number[] = [];
+                    res.data.productIds.forEach((id: any) => {
+                        _copyIds.push(id.productId[0]);
+                    });
+                    dispatch(showLoaderAction(false));
+                    await dispatch(copyIdsAction(_copyIds));
                     dispatch(setSuccessToastAction('Products has been copied'));
                     await dispatch(fetchProductsAction());
                 });
@@ -245,4 +274,5 @@ export const setSelectedSizesAction: any = createAction('products/SET_SIZES');
 export const setSelectedAdditionalAction: any = createAction(
     'products/SET_PRODUCT_SELECTED_ADDITIONAL'
 );
-export const setIdentAction: any = createAction('layouts/SET_IDENT_VARIANT');
+export const setIdentAction: any = createAction('products/SET_IDENT_VARIANT');
+export const copyIdsAction: any = createAction('products/COPY_IDS');

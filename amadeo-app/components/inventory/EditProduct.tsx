@@ -38,7 +38,6 @@ const EditProduct: React.FC<PropsProduct> = ({ locale }) => {
                     tags: _tags
                 })
             );
-
             if (productData.product.configured) {
                 productData.configurations.forEach((configuration: any) => {
                     const conf = configuration.configuration;
@@ -50,7 +49,7 @@ const EditProduct: React.FC<PropsProduct> = ({ locale }) => {
                     } else if (!conf.color_id && conf.size_id) {
                         index = `none_${_sizes.find((v: any) => v.value === conf.size_id).label}`;
                     } else if (conf.color_id && !conf.size_id) {
-                        index = `${_colors.find((v: any) => v.value === conf.color).label}_none`;
+                        index = `${_colors.find((v: any) => v.value === conf.color_id).label}_none`;
                     }
                     productData.product[`configurePrice_${index}`] = configuration.price;
                     productData.product[`configureQty_${index}`] = configuration.quantity;

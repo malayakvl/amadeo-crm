@@ -1,4 +1,4 @@
-import { handleActions } from 'redux-actions';
+import { Action, handleActions } from 'redux-actions';
 import {
     setPaginationAction,
     toggleSidebarAction,
@@ -11,7 +11,10 @@ import {
     initIdsAction,
     checkAllIdsAction,
     uncheckAllIdsAction,
-    setModalConfirmationMetaAction
+    setModalConfirmationMetaAction,
+    setSwitchHeaderAction,
+    showLoaderAction,
+    setActivePageAction
 } from './actions';
 
 const initPagination = { limit: 25, offset: 0, sort: 'DESC', column: 'created_at', query: '' };
@@ -26,13 +29,14 @@ const initialState: State.Layouts = {
         shipping: {...initPagination}
     },
     isSidebarOpen: true,
+    isDataLoading: false,
     toasts: [],
     checkedIds: [],
-    // checkedIds: {
-    //     products: [],
-    //     notifications: []
-    // },
-    modalConfirmationMeta: null
+    switchHeader: false,
+    modalConfirmationMeta: null,
+    activeTab: {
+        inventory: { tab: 'products' }
+    }
 };
 
 // ------------------------------------
@@ -52,6 +56,21 @@ const ACTION_HANDLERS: any = {
             [action.payload.type]: {
                 ...state.pagination[action.payload.type],
                 ...action.payload.modifier
+            }
+        }
+    }),
+    [setActivePageAction]: (
+        state: State.Layouts,
+        action: Type.ReduxAction<{
+            type: string;
+            modifier: string;
+        }>
+    ): State.Layouts => ({
+        ...state,
+        activeTab: {
+            ...state.activeTab,
+            [action.payload.type]: {
+                tab: action.payload.modifier
             }
         }
     }),
@@ -95,7 +114,18 @@ const ACTION_HANDLERS: any = {
         ...state,
         isSidebarOpen: !state.isSidebarOpen
     }),
-
+    [showLoaderAction]: {
+        next: (state: State.Layouts, action: Action<boolean>): State.Layouts => ({
+            ...state,
+            isDataLoading: action.payload
+        })
+    },
+    [setSwitchHeaderAction]: {
+        next: (state: State.Layouts, action: Action<boolean>): State.Layouts => ({
+            ...state,
+            switchHeader: action.payload
+        })
+    },
     [closeSidebarAction]: (state: State.Layouts): State.Layouts => ({
         ...state,
         isSidebarOpen: false

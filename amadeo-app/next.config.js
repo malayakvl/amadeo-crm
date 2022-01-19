@@ -10,7 +10,9 @@ module.exports = {
             'images.unsplash.com',
             'localhost',
             'api.dev-tech.com.ua',
-            'dev-tech.com.ua'
+            'dev-tech.com.ua',
+            'test-api.dev-tech.com.ua',
+            'test.dev-tech.com.ua'
         ]
     },
     i18n: {

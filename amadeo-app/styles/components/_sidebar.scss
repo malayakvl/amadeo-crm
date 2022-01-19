@@ -1,7 +1,30 @@
 .sidebar {
   background: #141A3C;
+  border-radius: 0 24px 24px 0;
   @apply max-w-[240px] xl:min-w-[240px] h-screen
     hidden md:fixed md:flex flex-col top-0 left-0 h-full text-white transition-all duration-300 border-none;
+
+  .go-back {
+    @apply text-white text-base font-bold tracking-wide truncate cursor-pointer w-full text-right relative;
+
+    a {
+      @apply inline-block;
+    }
+
+    span {
+      @apply relative pl-3;
+
+      &:before {
+        content: "";
+        background-image: url("../../public/images/arrow-menu.svg");
+        position: absolute;
+        width: 13px;
+        height: 8px;
+        top: 7px;
+        left: -10px;
+      }
+    }
+  }
 
   .brand {
     background-image: url("../../public/images/logo-sidebar.svg");
@@ -22,7 +45,7 @@
         @apply  relative flex flex-row items-center;
 
         .s-caption {
-          @apply text-blue-350 ml-2 text-xs font-bold tracking-wide truncate cursor-pointer;
+          @apply text-blue-350 ml-2 text-base font-bold tracking-wide truncate cursor-pointer w-full;
         }
       }
 
@@ -37,6 +60,9 @@
         width: 20px;
         height: 20px;
         @apply inline-flex justify-center items-center cursor-pointer;
+      }
+      .chatbot {
+        background-image: url("../../public/images/icon-chatbot.svg");
       }
       .dashboard {
         background-image: url("../../public/images/icon-dashboard.svg");
@@ -102,6 +128,10 @@
       }
 
     }
+  }
+
+  li.submenu {
+    text-align: right;
   }
 
   .nav-footer {

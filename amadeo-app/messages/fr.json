@@ -104,7 +104,7 @@
   "Payments": "Payments",
   "Sync Products": "Sync Products",
   "Products": "Products",
-  "Add Product": "Add Product",
+  "Add Product": "Add a Product",
   "Product Name": "Product Name",
   "Product Description": "Product Description",
   "Product images": "Product images",
@@ -119,7 +119,7 @@
   "Product has been created": "Product has been created",
   "Photo": "Photo",
   "Options": "Options",
-  "Reference | Name | Description": "Reference | Name | Description",
+  "Reference | Name | Description": "Details",
   "Duplicate": "Duplicate",
   "Configured": "This product has options, like size or color",
   "Table is empty": "Table is empty",
@@ -157,5 +157,8 @@
   "Item Per Page": "Item Per Page",
   "Connect Shopify": "Connect Shopify",
   "Shopify Sync": "Shopify Sync",
-  "Shopify Shop": "Shopify Shop"
+  "Shopify Shop": "Shopify Shop",
+  "upload_csv": "Upload products usins a .csv file",
+  "Chatbot": "Chatbot",
+  "Product has been imported": "Product has been imported"
 }

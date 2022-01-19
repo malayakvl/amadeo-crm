@@ -33,6 +33,10 @@ export const getIdentSelector = createSelector(
     rootSelector,
     (products: State.Products): boolean => products.setupIdent
 );
+export const isFetchedSelector = createSelector(
+    rootSelector,
+    (products: State.Products): boolean => products.isFetched
+);
 export const uploadedFilesSelector = createSelector(
     rootSelector,
     (products: State.Products): File[] => products.uploadedFiles
@@ -48,6 +52,10 @@ export const productsCountSelector = createSelector(
 export const activeTabSelector = createSelector(
     rootSelector,
     (products: State.Products): string => products.activeTab
+);
+export const copyIdsSelector = createSelector(
+    rootSelector,
+    (products: State.Products): number[] => products.copyProductIds
 );
 export const productItemSelector = createSelector(
     rootSelector,

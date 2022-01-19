@@ -51,7 +51,8 @@
 }
 
 .btn-export {
-  @apply rounded-lg text-white text-base font-bold bg-green-250 p-2.5;
+  @apply rounded-lg text-white text-base font-bold bg-green-250 p-2.5 mb-2;
+  box-shadow: 0 10px 20px rgba(0, 200, 104, 0.25);
 
   span {
     @apply relative pl-7;

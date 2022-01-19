@@ -105,7 +105,7 @@ function ProductForm({
     const uploadedFiles = useSelector(uploadedFilesSelector);
     const isIdent = useSelector(getIdentSelector);
 
-    const [editorContent, setEditorContent] = useState(productData.product.description);
+    const [editorContent, setEditorContent] = useState('');
     const [selectedColors, setSelectedColors] = useState([]);
     const [selectedSizes, setSelectedSizes] = useState<any[]>([]);
     const [selectedMaterials, setSelectedMaterials] = useState<any>(null);
@@ -139,6 +139,10 @@ function ProductForm({
         setIsBusy(false);
     }, [searchTagSuggestions]);
 
+    // useEffect(() => {
+    //     console.log('PEO', productData);
+    // }, [productData.product]);
+
     useEffect(() => {
         setSelectedSizes(additionalSelectedProps.sizes);
         setSelectedColors(additionalSelectedProps.colors);
@@ -168,6 +172,9 @@ function ProductForm({
     };
     const removeSizeHandler = (id: number) => {
         setSelectedSizes(selectedSizes.filter((v: any) => v.value !== id));
+    };
+    const showSizeHandler = () => {
+        setShowSizeTable(!showSizeTable);
     };
 
     const SubmitSchema = Yup.object().shape({
@@ -381,6 +388,15 @@ function ProductForm({
                                             )}
                                     </div>
                                 </div>
+                                {/*{*/}
+                                {/*    <RenderSizes*/}
+                                {/*        sizes={selectedSizes}*/}
+                                {/*        configured={props.values.configured}*/}
+                                {/*        removeSizeHandler={removeSizeHandler}*/}
+                                {/*        props={props}*/}
+                                {/*        additionalProps={additionalProps}*/}
+                                {/*    />*/}
+                                {/*}*/}
                                 <div className="mb-4">
                                     <label className="control-label">{t('Size')}</label>
                                     <div className="relative">
@@ -395,6 +411,7 @@ function ProductForm({
                                                 sizes={selectedSizes}
                                                 configured={props.values.configured}
                                                 removeSizeHandler={removeSizeHandler}
+                                                showSizeHandler={showSizeHandler}
                                             />
                                         }
                                         {showSizeTable && (
@@ -449,18 +466,6 @@ function ProductForm({
                                                 </tbody>
                                             </table>
                                         )}
-
-                                        {/*<Select*/}
-                                        {/*    isMulti={props.values.configured}*/}
-                                        {/*    className={'form-control-dropdown'}*/}
-                                        {/*    classNamePrefix={'inventory'}*/}
-                                        {/*    options={prepareAdditionalDropdown(*/}
-                                        {/*        additionalProps.sizes,*/}
-                                        {/*        locale*/}
-                                        {/*    )}*/}
-                                        {/*    value={selectedSizes}*/}
-                                        {/*    onChange={handleChangeSize}*/}
-                                        {/*/>*/}
                                         {props.errors['size'] &&
                                             selectedColors.length === 0 &&
                                             selectedSizes.length === 0 && (

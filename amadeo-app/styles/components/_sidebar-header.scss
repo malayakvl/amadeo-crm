@@ -5,17 +5,19 @@
 }
 
 .counter {
-  @apply absolute top-1.5 right-0.5 inline-flex items-center justify-center
-    px-1.5 py-1.5 text-xs font-bold leading-none
-    red-yellow-gradient transform translate-x-1/2 -translate-y-1/2
-    rounded-full;
+  //@apply absolute top-1.5 right-0.5 inline-flex items-center justify-center
+  //  px-1.5 py-1.5 text-xs font-bold leading-none
+  //  red-yellow-gradient transform translate-x-1/2 -translate-y-1/2
+  //  rounded-full text-white;
+  @apply absolute top-1.5 -right-5 items-center justify-center px-1 py-0.5 text-white not-italic
+  mr-2 text-[10px] font-bold leading-none red-yellow-gradient rounded-full;
 }
 
 .profile-name {
-  @apply text-xs font-bold text-gray-350 pl-3;
+  @apply text-sm font-bold text-gray-350 pl-3;
 
   em {
-    @apply block not-italic text-blue-350 -mt-1;
+    @apply block not-italic text-blue-350 -mt-1 text-xs;
   }
 }
 .corner {

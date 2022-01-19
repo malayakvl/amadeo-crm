@@ -10,7 +10,6 @@ declare namespace Products {
             priceRange: Range;
             qtyRange: Range;
         };
-        // objectsAdditional: Products.Additionals;
         product: Product;
         loading: boolean;
         isFetched: boolean;
@@ -25,6 +24,7 @@ declare namespace Products {
         selectedAdditionals: Products.Additionals;
         tagSuggestions: any[];
         setupIdent: boolean;
+        copyProductIds: number[];
     }
 
     interface Additionals {

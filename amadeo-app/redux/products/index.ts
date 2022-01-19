@@ -12,7 +12,8 @@ import {
     setSelectedSizesAction,
     setSelectedAdditionalAction,
     findTagAction,
-    setIdentAction
+    setIdentAction,
+    copyIdsAction
 } from './actions';
 
 const initialState: {
@@ -37,6 +38,7 @@ const initialState: {
     activeTab: string;
     tagSuggestions: any[];
     setupIdent: boolean;
+    copyProductIds: number[];
 } = {
     additional: {
         colors: [],
@@ -81,7 +83,8 @@ const initialState: {
     items: [],
     tagSuggestions: [],
     activeTab: 'products',
-    setupIdent: false
+    setupIdent: false,
+    copyProductIds: []
 };
 
 const ACTION_HANDLERS: any = {
@@ -188,6 +191,12 @@ const ACTION_HANDLERS: any = {
         next: (state: State.Products, action: Action<string>): State.Products => ({
             ...state,
             activeTab: action.payload
+        })
+    },
+    [copyIdsAction]: {
+        next: (state: State.Products, action: Action<any>): State.Products => ({
+            ...state,
+            copyProductIds: action.payload
         })
     },
     [setIdentAction]: {
