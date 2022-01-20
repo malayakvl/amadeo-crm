@@ -29,7 +29,6 @@ function ChatbotForm() {
                 initialValues={item}
                 validationSchema={SubmitSchema}
                 onSubmit={(values) => {
-                    console.log(values);
                     const formData = new FormData();
                     Object.keys(values).forEach((key: string) => {
                         formData.append(key, (values as any)[key]);
