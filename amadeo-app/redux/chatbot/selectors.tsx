@@ -20,3 +20,15 @@ export const itemsSystemSelector = createSelector(
     rootSelector,
     (chatbot: State.Chatbot): any => chatbot.itemsSystem
 );
+export const itemSelector = createSelector(
+    rootSelector,
+    (chatbot: State.Chatbot): any => chatbot.item
+);
+export const showFormSelector = createSelector(
+    rootSelector,
+    (chatbot: State.Chatbot): any => chatbot.showForm
+);
+export const showedItemsSelector = createSelector(
+    rootSelector,
+    (chatbot: State.Chatbot): any => chatbot.showedItems
+);

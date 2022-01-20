@@ -1,5 +1,5 @@
 import { createAction } from 'redux-actions';
-import { authHeader } from '../../lib/functions';
+import { authHeader, toggleModalConfirmation } from '../../lib/functions';
 import axios from 'axios';
 import getConfig from 'next/config';
 const { publicRuntimeConfig } = getConfig();
@@ -10,7 +10,7 @@ import { PaginationType } from '../../constants';
 import queryString from 'query-string';
 import { showLoaderAction } from '../layouts/actions';
 
-export const updateFormAction: any = createAction(
+export const submitFormAction: any = createAction(
     'chatbot/ADD_UPDATE_DATA',
     async (data: any, id: number | null | undefined) =>
         (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
@@ -25,9 +25,9 @@ export const updateFormAction: any = createAction(
                 })
                 .then(async () => {
                     dispatch(
-                        setSuccessToastAction(`Message has been ${isNew ? 'updated' : 'created'}`)
+                        setSuccessToastAction(`Record has been ${isNew ? 'updated' : 'created'}`)
                     );
-                    dispatch(fetchDataAction());
+                    dispatch(fetchDataAction('users'));
                     dispatch(showLoaderAction(false));
                 });
         }
@@ -124,9 +124,57 @@ export const fetchFormAction: any = createAction(
             });
             if (res.status) {
                 dispatch(showLoaderAction(false));
+                dispatch(showFormAction(true));
             }
             return {
                 item: res.data.item
             };
         }
 );
+export const deleteAction: any = createAction(
+    'chatbot/DELETE_RECORD',
+    async (id: number) =>
+        (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
+            const state = getState();
+            dispatch(showLoaderAction(true));
+            return axios
+                .delete(`${baseUrl}/chatbot/delete/${id}`, {
+                    headers: {
+                        ...authHeader(state.user.user.email)
+                    }
+                })
+                .then(async () => {
+                    dispatch(showLoaderAction(false));
+                    await dispatch(fetchDataAction('users'));
+                    dispatch(setSuccessToastAction('Record has been deleted'));
+                    toggleModalConfirmation();
+                });
+        }
+);
+export const bulkDeleteAction: any = createAction(
+    'products/BULK_DELETE',
+    async () =>
+        async (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
+            const state = getState();
+            dispatch(showLoaderAction(true));
+            return axios
+                .post(
+                    `${baseUrl}/products/bulk-delete`,
+                    { data: JSON.stringify(state.layouts.checkedIds) },
+                    {
+                        headers: {
+                            ...authHeader(state.user.user.email)
+                        }
+                    }
+                )
+                .then(async () => {
+                    dispatch(showLoaderAction(false));
+                    dispatch(setSuccessToastAction('Records has been deleted'));
+                    await dispatch(fetchDataAction());
+                });
+        }
+);
+
+export const showFormAction: any = createAction('chatbot/CHATBOT_SHOWFORM');
+export const setEmptyFormAction: any = createAction('chatbot/EMPTY_FORM');
+export const showItemAction: any = createAction('chatbot/CHATBOT_SHOWITEM');

@@ -1,5 +1,12 @@
-import { handleActions } from 'redux-actions';
-import { fetchDataAction, fetchFormAction, fetchDataSystemAction } from './actions';
+import { Action, handleActions } from 'redux-actions';
+import {
+    fetchDataAction,
+    fetchFormAction,
+    fetchDataSystemAction,
+    showFormAction,
+    showItemAction,
+    setEmptyFormAction
+} from './actions';
 
 const initialState: {
     isFetched: boolean;
@@ -8,6 +15,8 @@ const initialState: {
     items: Chatbot.ChatbotItem[];
     itemsSystem: Chatbot.ChatbotItem[];
     item: Chatbot.ChatbotItem;
+    showForm: boolean;
+    showedItems: number[];
 } = {
     loading: false,
     isFetched: false,
@@ -23,7 +32,9 @@ const initialState: {
         active: true,
         created_at: null,
         updated_at: null
-    }
+    },
+    showForm: false,
+    showedItems: []
 };
 
 const ACTION_HANDLERS: any = {
@@ -74,10 +85,46 @@ const ACTION_HANDLERS: any = {
             loading: false,
             isFetched: true
         })
+    },
+    [setEmptyFormAction]: {
+        next: (state: State.Chatbot): State.Chatbot => ({
+            ...state,
+            item: {
+                id: null,
+                name: '',
+                trigger: '',
+                description_fr: '',
+                description_en: '',
+                active: true,
+                created_at: null,
+                updated_at: null
+            }
+        })
+    },
+    [showFormAction]: {
+        next: (state: State.Chatbot, action: Action<boolean>): State.Chatbot => ({
+            ...state,
+            showForm: action.payload
+        })
+    },
+    [showItemAction]: {
+        next: (state: State.Chatbot, action: Action<number>): State.Chatbot => ({
+            ...state,
+            showedItems: state.showedItems.includes(action.payload)
+                ? state.showedItems.filter((id) => id !== action.payload)
+                : [...state.showedItems, action.payload]
+        })
     }
 };
 
-export { fetchDataAction, fetchFormAction, fetchDataSystemAction };
+export {
+    fetchDataAction,
+    fetchFormAction,
+    fetchDataSystemAction,
+    showFormAction,
+    showItemAction,
+    setEmptyFormAction
+};
 
 // ------------------------------------
 // Reducer

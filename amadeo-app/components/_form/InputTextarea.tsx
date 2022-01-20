@@ -8,9 +8,10 @@ interface Props {
     label: string | null;
     placeholder: string | null;
     props: any;
+    rows?: number;
 }
 
-const InputTextarea: React.FC<Props> = ({ style, icon, name, label, placeholder, props }) => {
+const InputTextarea: React.FC<Props> = ({ style, icon, name, label, placeholder, props, rows }) => {
     const t = useTranslations();
 
     useEffect(
@@ -42,6 +43,7 @@ const InputTextarea: React.FC<Props> = ({ style, icon, name, label, placeholder,
                     onChange={props.handleChange}
                     value={inputValue || ''}
                     name={name}
+                    rows={rows ? rows : 4}
                 />
                 <i
                     role="presentation"

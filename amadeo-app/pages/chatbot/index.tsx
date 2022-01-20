@@ -1,21 +1,21 @@
 import Head from 'next/head';
 import { getSession } from 'next-auth/client';
-import React, { useState } from 'react';
+import React from 'react';
 import { useTranslations } from 'next-intl';
-import * as Yup from 'yup';
 import { ChatbotForm, DefaultMessages, ListMessages } from '../../components/chatbot/index';
+import { useSelector, useDispatch } from 'react-redux';
+import { showFormSelector } from '../../redux/chatbot/selectors';
+import { showFormAction } from '../../redux/chatbot';
 
-export default function Index({ session, locale }: { session: any; locale: string }) {
+export default function Index({ session }: { session: any }) {
     if (!session) return <></>;
     const t = useTranslations();
-    // const dispatch = useDispatch();
-    const [showForm, setShowForm] = useState(false);
+    const dispatch = useDispatch();
+    const showForm = useSelector(showFormSelector);
 
-    const SubmitSchema = Yup.object().shape({
-        name: Yup.string()
-            .max(140, t('Must be less characters', { charNumber: 140 }))
-            .required(t('Required field'))
-    });
+    const handleShowForm = () => {
+        dispatch(showFormAction(!showForm));
+    };
 
     return (
         <>
@@ -49,7 +49,7 @@ export default function Index({ session, locale }: { session: any; locale: strin
                             (987,652 Results)
                         </span>
                         <div className="float-right text-right">
-                            <button className="gradient-btn" onClick={() => setShowForm(!showForm)}>
+                            <button className="gradient-btn" onClick={() => handleShowForm()}>
                                 <span>{t('Add a new Reply')}</span>
                             </button>
                         </div>
@@ -58,7 +58,7 @@ export default function Index({ session, locale }: { session: any; locale: strin
 
                 {showForm && (
                     <div className="shadow-border">
-                        <ChatbotForm formData={{}} />
+                        <ChatbotForm />
                     </div>
                 )}
 
