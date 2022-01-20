@@ -2,7 +2,6 @@ import Head from 'next/head';
 import { getSession } from 'next-auth/client';
 import React, { useEffect } from 'react';
 import { useTranslations } from 'next-intl';
-// import { userSelector } from '../../redux/user/selectors';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     AddProduct,

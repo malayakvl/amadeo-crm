@@ -3,9 +3,9 @@
   "version": "1.0.1",
   "private": true,
   "scripts": {
-    "dev": "next dev  -p 3001",
+    "dev": "next dev",
     "build": "next build",
-    "start": "next start  -p 3001",
+    "start": "next start",
     "prod": "next export",
     "lint": "eslint --fix .",
     "format": "prettier --write './**/*.{js,jsx,ts,tsx,css,md,json}' --config ./.prettierrc"

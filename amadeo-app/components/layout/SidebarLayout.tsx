@@ -1,4 +1,4 @@
-import SidebarCustomer from '../Sidebar/SidebarCustomer';
+import SidebarCustomer from '../Sidebar/Customers';
 import SidebarBuyer from '../Sidebar/SidebarBuyer';
 import SidebarHeader from '../header/SidebarHeader';
 import React from 'react';
