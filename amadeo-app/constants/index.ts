@@ -5,7 +5,8 @@ export const baseApiUrl = publicRuntimeConfig.apiUrl;
 
 export enum PaginationType {
     NOTIFICATIONS = 'notifications',
-    PRODUCTS = 'products'
+    PRODUCTS = 'products',
+    CHATBOT = 'chatbot'
 }
 
 export const TableHeaders: { [key in PaginationType]: Type.DataTableHeader[] } = {
@@ -17,8 +18,14 @@ export const TableHeaders: { [key in PaginationType]: Type.DataTableHeader[] } =
         { titleKey: null, className: 'inventory-size' },
         { titleKey: null, className: 'inventory-qty' },
         { titleKey: 'Price', className: 'inventory-price' },
-        // { titleKey: 'Options' },
         { titleKey: 'Actions', className: 'Actions' }
     ],
-    [PaginationType.NOTIFICATIONS]: []
+    [PaginationType.NOTIFICATIONS]: [],
+    [PaginationType.CHATBOT]: [
+        { titleKey: null, className: '' },
+        { titleKey: null, className: 'option-switcher' },
+        { sortKey: 'scenario', titleKey: 'Scenario', iconClass: 'scenario' },
+        { titleKey: 'Trigger', iconClass: 'message' },
+        { titleKey: null, iconClass: 'eye', className: 'chat-eye' }
+    ]
 };

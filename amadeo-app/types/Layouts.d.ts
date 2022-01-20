@@ -3,6 +3,7 @@ declare namespace Layouts {
         pagination: {
             notifications: Pagination;
             products: Pagination;
+            chatbot: Pagination;
         };
         isSidebarOpen: boolean;
         isDataLoading: boolean;

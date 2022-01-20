@@ -12,6 +12,7 @@ import userReducer from '../redux/user/index';
 import notificationsReducer from '../redux/notifications/index';
 import layoutsReducer from '../redux/layouts/index';
 import productsReducer from '../redux/products/index';
+import chatbotReducer from '../redux/chatbot/index';
 
 const reducers = combineReducers({
     address: addressReducer,
@@ -19,7 +20,8 @@ const reducers = combineReducers({
     user: userReducer,
     notifications: notificationsReducer,
     layouts: layoutsReducer,
-    products: productsReducer
+    products: productsReducer,
+    chatbot: chatbotReducer
 });
 
 const initStore = (initialState = {}) => {

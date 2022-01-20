@@ -139,10 +139,6 @@ function ProductForm({
         setIsBusy(false);
     }, [searchTagSuggestions]);
 
-    // useEffect(() => {
-    //     console.log('PEO', productData);
-    // }, [productData.product]);
-
     useEffect(() => {
         setSelectedSizes(additionalSelectedProps.sizes);
         setSelectedColors(additionalSelectedProps.colors);
@@ -192,13 +188,6 @@ function ProductForm({
             then: Yup.number().required(t('Required field')),
             otherwise: Yup.number().min(0)
         }),
-        // sku: Yup.string().when('configured', {
-        //     is: false,
-        //     then: Yup.string()
-        //         .required(t('Required field'))
-        //         .max(140, t('Must be less characters', { charNumber: 140 })),
-        //     otherwise: Yup.string().min(0)
-        // }),
         color:
             selectedSizes.length === 0 && selectedColors.length === 0
                 ? Yup.string().required(t('Select color or size'))
@@ -388,15 +377,6 @@ function ProductForm({
                                             )}
                                     </div>
                                 </div>
-                                {/*{*/}
-                                {/*    <RenderSizes*/}
-                                {/*        sizes={selectedSizes}*/}
-                                {/*        configured={props.values.configured}*/}
-                                {/*        removeSizeHandler={removeSizeHandler}*/}
-                                {/*        props={props}*/}
-                                {/*        additionalProps={additionalProps}*/}
-                                {/*    />*/}
-                                {/*}*/}
                                 <div className="mb-4">
                                     <label className="control-label">{t('Size')}</label>
                                     <div className="relative">
