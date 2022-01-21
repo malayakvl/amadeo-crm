@@ -7,7 +7,7 @@ class Shipping {
         try {
             const query = `SELECT * FROM data.shipping`
             const res = await client.query(query);
-            return res.rows.length ? res.rows[0].table_translation : null;
+            return res.rows.length ? res.rows : null;
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
                 logger.log(
@@ -16,7 +16,7 @@ class Shipping {
                     { message: e.message }
                 );
             }
-            return { success: false, error: { code: 404, message: 'Country Not found' } };
+            return { success: false, error: { code: 404, message: 'Shippings Not found' } };
         } finally {
             client.release();
         }

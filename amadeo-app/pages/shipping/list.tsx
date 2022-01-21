@@ -1,17 +1,18 @@
 import { useCallback } from "react";
-import { ButtonTableAction, DataTable } from "../../components/_common";
+import { DataTable } from "../../components/_common";
 import { PaginationType } from "../../constants";
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchShippingAction } from "../../redux/shipping/actions";
+import { fetchShippingsAction } from "../../redux/shipping/actions";
 import { shippingsSelector } from '../../redux/shipping/selectors'
 import { useTranslations } from "next-intl";
 import Image from 'next/image';
+import { baseApiUrl } from '../../constants';
 
 export default function List() {
     const dispatch = useDispatch()
 
     const sendRequest = useCallback(() => {
-        return dispatch(fetchShippingAction())
+        return dispatch(fetchShippingsAction())
     }, [dispatch]);
 
     const items = useSelector(shippingsSelector);
@@ -54,10 +55,10 @@ export default function List() {
                                 {item.id}
                             </td>
                             <td className="text-center">
-                                image
+                                <Image src={`${baseApiUrl}/${item.image}`} width={50} height={50} />
                             </td>
                             <td>
-                                {item.method}
+                                {item.name}
                             </td>
                             <td>
                                 <label className="flex items-center cursor-pointer relative">
@@ -65,7 +66,7 @@ export default function List() {
                                         type="checkbox"
                                         className="sr-only"
                                         value={`switcher_${item.id}`}
-                                        checked={item.enabled}
+                                        checked={item.status}
                                         onChange={() => {
                                             // setSwitcherValue(e.target.value);
                                             // handleShowMore(item.id);
@@ -76,9 +77,6 @@ export default function List() {
                             </td>
                             <td className="text-center">
                                 countries
-                            </td>
-                            <td className="text-right">
-                                {item.price}
                             </td>
 
                             <td className="text-right whitespace-nowrap">

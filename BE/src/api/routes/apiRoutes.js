@@ -66,6 +66,7 @@ apiRoutes.route('/products/import').post(ProductController.import);
 
 apiRoutes.route('/tags/find').get(TagController.fetchTags);
 apiRoutes.route('/shipping/create').post(ShippingController.create)
+apiRoutes.route('/shipping/fetch-all').get(ShippingController.fetchAll)
 apiRoutes.get('/*', defaultHandler);
 
 export default apiRoutes;

@@ -8,27 +8,20 @@ export default new class ShippingController {
             return res.status(402).json('Something wend wrong');
 
         }
-
-        const dirUpload = `${process.env.DOWNLOAD_FOLDER}/shipping/`;
-
-        if (!fs.existsSync(dirUpload)) {
-            fs.mkdirSync(dirUpload);
-
-        }
-
-        const filename = Date.now() + '-' + Math.floor(Math.random() * 100);
-        const path = 'public/uploads/shipping/'
-
+        
         const storage = multer.diskStorage({
             destination: function (req, file, cb) {
-                cb(null, path);
+                cb(null, 'public/uploads/shipping/');
             },
             filename: function (req, file, cb) {
-                cb(null, filename);
+                const unique = (Date.now() + '-' + Math.floor(Math.random() * 100))
+                const extension = file.originalname.split('.').pop()
+
+                cb(null, `${unique}.${extension}`);
             }
         });
 
-        const upload = multer({ storage: storage }).single('logo');
+        const upload = multer({ storage }).single('logo');
 
         upload(req, res, async function (err) {
             if (err instanceof multer.MulterError) {
@@ -43,10 +36,17 @@ export default new class ShippingController {
 
             }
             
-            shippingModel.create(req.body.name, `${path}${filename}`);
+            shippingModel.create(req.body.name, `/uploads/shipping/${req.file.filename}`);
             
             return res.status(200).json({});
         });
+
+    }
+
+    async fetchAll(req, res) {
+        const shippings = await shippingModel.getAll()
+        
+        return res.status(200).json({shippings})
 
     }
 }

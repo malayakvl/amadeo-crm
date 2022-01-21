@@ -1,10 +1,10 @@
-import { fetchShippingAction } from "./actions";
+import { fetchShippingsAction } from "./actions";
 import { handleActions } from 'redux-actions';
 
 const initialState: State.Shippings = []
 
 const ACTION_HANDLERS: any = {
-    [fetchShippingAction]: {
+    [fetchShippingsAction]: {
         next: (
             state: State.Shippings,
             action: Type.ReduxAction<State.Shippings>

@@ -1,6 +1,6 @@
 interface Shipping {
     id: number;
-    method: string;
-    price: number;
-    enabled: boolean;
+    name: string;
+    image: string;
+    status: boolean;
 }
