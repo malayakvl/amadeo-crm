@@ -6,6 +6,7 @@ import CountryController from '../controllers/CountryController.js';
 import NotificationController from '../controllers/NotificationController.js';
 import ProductController from '../controllers/ProductController.js';
 import TagController from '../controllers/TagController.js';
+import ShippingController from '../controllers/ShippingController.js';
 import userModel from '../models/User.js';
 
 const apiRoutes = express.Router();
@@ -64,7 +65,7 @@ apiRoutes.route('/products/bulk-copy').post(ProductController.bulkCopy);
 apiRoutes.route('/products/import').post(ProductController.import);
 
 apiRoutes.route('/tags/find').get(TagController.fetchTags);
-
+apiRoutes.route('/shipping/create').post(ShippingController.create)
 apiRoutes.get('/*', defaultHandler);
 
 export default apiRoutes;

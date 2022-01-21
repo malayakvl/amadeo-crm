@@ -8,8 +8,8 @@ const ACTION_HANDLERS: any = {
         next: (
             state: State.Shippings,
             action: Type.ReduxAction<State.Shippings>
-        ): State.Countries => action.payload,
-    }
+        ): State.Shippings => action.payload,
+    },
 }
 
 export default handleActions(ACTION_HANDLERS, initialState as any);

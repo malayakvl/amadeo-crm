@@ -53,10 +53,10 @@ export default function List() {
                             <td className="text-center">
                                 {item.id}
                             </td>
-                            <td>
+                            <td className="text-center">
                                 image
                             </td>
-                            <td >
+                            <td>
                                 {item.method}
                             </td>
                             <td>
@@ -74,7 +74,7 @@ export default function List() {
                                     <div className="toggle-bg bg-gray-200 border border-gray-200 rounded-full dark:bg-gray-700 dark:border-gray-600" />
                                 </label>
                             </td>
-                            <td>
+                            <td className="text-center">
                                 countries
                             </td>
                             <td className="text-right">

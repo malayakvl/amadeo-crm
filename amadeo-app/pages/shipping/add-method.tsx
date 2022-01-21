@@ -2,9 +2,13 @@ import { Formik } from "formik";
 import { useTranslations } from "next-intl";
 import { InputText } from '../../components/_form';
 import * as Yup from 'yup';
+import { createShippingAction } from '../../redux/shipping/actions';
+import { useDispatch } from 'react-redux';
 
 export default function Shipping() {
     const t = useTranslations();
+    const dispatch = useDispatch();
+
     const submitSchema = Yup.object().shape({
         name: Yup.string()
             .min(3, t('Must be more characters'))
@@ -21,10 +25,16 @@ export default function Shipping() {
 
             <Formik
                 enableReinitialize
-                initialValues={{}}
+                initialValues={{ name: '', logo: '' }}
                 validationSchema={submitSchema}
                 onSubmit={(values) => {
-                    console.log(values)
+                    const formData = new FormData();
+
+                    formData.append('logo', values.logo);
+                    formData.append('name', values.name);
+                    
+                    dispatch(createShippingAction(formData))
+
                 }}
                 render={(props) => {
                     return (
@@ -44,12 +54,15 @@ export default function Shipping() {
                             <label className="block text-xs text-blue-350 font-bold">
                                 <div>{t('Method image')}</div>
                                 <input className="mt-4 w-52" name="logo" type="file" onChange={(event) => {
-                                    props.setFieldValue("logo", event.currentTarget.files[0]);
+                                    props.setFieldValue("logo", event.currentTarget.files?.[0]);
 
                                 }} />
-                                {props.errors.logo ? (
-                                    <div className="error-el">{props.errors.logo}</div>
-                                ) : null}
+
+                                {props.errors.hasOwnProperty('logo') &&
+                                    <h2>
+                                        <div className="error-el">{props.errors?.logo}</div>
+                                    </h2>
+                                }
                             </label>
 
                             <button className="mt-8 gradient-btn" type="submit">Create</button>
