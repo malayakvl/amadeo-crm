@@ -68,9 +68,13 @@ apiRoutes.route('/products/import').post(ProductController.import);
 apiRoutes.route('/tags/find').get(TagController.fetchTags);
 
 apiRoutes.route('/chatbot').post(ChatbotController.storeItem);
+apiRoutes.route('/chatbot/delete/:id').delete(ChatbotController.deleteRow);
 apiRoutes.route('/fetch-chatbot-messages').get(ChatbotController.fetchItems);
 apiRoutes.route('/fetch-chatbot-default-messages').get(ChatbotController.fetchItemsSystem);
 apiRoutes.route('/fetch-chatbot-message/:id').get(ChatbotController.fetchItem);
+apiRoutes.route('/chatbot/bulk-delete').post(ChatbotController.bulkDelete);
+apiRoutes.route('/chatbot/change-active/:id').get(ChatbotController.changeActive);
+apiRoutes.route('/chatbot/change-active-all').get(ChatbotController.changeAllActive);
 
 
 apiRoutes.get('/*', defaultHandler);

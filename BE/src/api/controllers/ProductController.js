@@ -153,7 +153,6 @@ class ProductController {
         }
         const ids = [];
         JSON.parse(req.body.data).filter(id => id.checked).forEach(data => ids.push(data.id));
-        console.log(ids);
         await productModel.bulkDelete(ids, req.user.id);
         
         return res.status(200).json({ success: true });

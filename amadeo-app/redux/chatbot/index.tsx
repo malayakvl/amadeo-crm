@@ -26,9 +26,9 @@ const initialState: {
     item: {
         id: null,
         name: '',
-        trigger: '',
-        description_fr: '',
-        description_en: '',
+        keywords: '',
+        message_fr: '',
+        message_en: '',
         active: true,
         created_at: null,
         updated_at: null
@@ -92,9 +92,9 @@ const ACTION_HANDLERS: any = {
             item: {
                 id: null,
                 name: '',
-                trigger: '',
-                description_fr: '',
-                description_en: '',
+                keywords: '',
+                message_fr: '',
+                message_en: '',
                 active: true,
                 created_at: null,
                 updated_at: null

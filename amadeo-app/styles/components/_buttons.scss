@@ -1,4 +1,5 @@
 .gradient-btn {
+  box-shadow: 0 10px 20px rgba(247, 109, 109, 0.2), inset 0px -4px 0px rgba(0, 0, 0, 0.1);
   @apply basic-btn red-yellow-gradient font-bold text-sm text-white rounded-lg px-4 py-2.5
 }
 
@@ -63,6 +64,27 @@
       background: url("../../public/images/export-csv.svg");
       width: 18px;
       height: 20px;
+      background-repeat: no-repeat;
+      position: absolute;
+      left: 0;
+    }
+  }
+}
+
+.btn-sync-fb {
+  background: #3680FB;
+  @apply rounded-lg text-white text-base font-bold p-2.5 mb-2;
+  box-shadow: 0 10px 20px rgba(153, 171, 206, 0.35), inset 0px -4px 0px rgba(0, 0, 0, 0.1);
+
+  span {
+    @apply relative pl-8;
+
+    &:before {
+      content: " ";
+      display: inline-block;
+      background: url("../../public/images/sync-fb.svg");
+      width: 24px;
+      height: 24px;
       background-repeat: no-repeat;
       position: absolute;
       left: 0;

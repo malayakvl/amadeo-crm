@@ -1,5 +1,4 @@
 import React from 'react';
-import { useTranslations } from 'next-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { showedItemsSelector } from '../../redux/chatbot/selectors';
 import { showItemAction } from '../../redux/chatbot';
@@ -12,9 +11,9 @@ const Row: React.FC<any> = ({
     disableChecker,
     handleEditBtnClick,
     handleDeleteBtnClick,
-    handleActiveBtnClick
+    handleActiveBtnClick,
+    itemActive
 }) => {
-    const t = useTranslations();
     const dispatch = useDispatch();
     const showedItems = useSelector(showedItemsSelector);
     const checkedIds = useSelector(checkedIdsSelector);
@@ -37,29 +36,16 @@ const Row: React.FC<any> = ({
                     )}
                 </td>
                 <td>
-                    {/*{disableChecker && (*/}
-                    {/*    <label*/}
-                    {/*        htmlFor={item.id}*/}
-                    {/*        className="flex items-center cursor-pointer relative mt-1">*/}
-                    {/*        <input*/}
-                    {/*            type="checkbox"*/}
-                    {/*            id={item.id}*/}
-                    {/*            className="sr-only"*/}
-                    {/*            checked={true}*/}
-                    {/*        />*/}
-                    {/*        <div className="toggle-bg bg-gray-200 border border-gray-200 rounded-full dark:bg-gray-700 dark:border-gray-600" />*/}
-                    {/*    </label>*/}
-                    {/*)}*/}
                     {!disableChecker && (
                         <label
-                            htmlFor={`swithcer_${item.id}`}
+                            htmlFor={item.id}
                             className="flex items-center cursor-pointer relative mt-1">
                             <input
                                 type="checkbox"
                                 id={item.id}
                                 className="sr-only"
                                 value={`switcher_${item.id}`}
-                                checked={item.active || false}
+                                checked={itemActive}
                                 onChange={() => {
                                     handleActiveBtnClick(item.id);
                                 }}
@@ -69,7 +55,7 @@ const Row: React.FC<any> = ({
                     )}
                 </td>
                 <td style={{ width: '20%' }}>{item.name}</td>
-                <td>{item.trigger}</td>
+                <td>{item.keywords}</td>
                 <td
                     className="chat-eye cursor-pointer"
                     role="presentation"
@@ -99,7 +85,7 @@ const Row: React.FC<any> = ({
                         <div
                             className="pl-5 inline-block"
                             dangerouslySetInnerHTML={{
-                                __html: t('how_to_use_cahtbot')
+                                __html: item.message_fr
                             }}
                         />
                     </div>
@@ -109,7 +95,7 @@ const Row: React.FC<any> = ({
                         <div
                             className="pl-5 inline-block"
                             dangerouslySetInnerHTML={{
-                                __html: t('how_to_use_cahtbot')
+                                __html: item.message_fr
                             }}
                         />
                     </div>
