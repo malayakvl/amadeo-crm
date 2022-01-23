@@ -1,11 +1,10 @@
 import React from 'react';
-import Brand from './Brand';
-import Pages from './Pages';
 import { useRouter } from 'next/router';
-import SidebarInventory from './submenu/Inventory';
-import SidebarFull from './SidebarFull';
+// import Brand from './Brand';
+// import Pages from './Pages';
+import { SidebarInventory, SidebarFull } from './customers/index';
 
-const SidebarCustomer: React.FC = () => {
+const SidebarCustomers: React.FC = () => {
     const router = useRouter();
 
     return (
@@ -13,15 +12,15 @@ const SidebarCustomer: React.FC = () => {
             <div className="sidebar">
                 <div className="overflow-y-auto overflow-x-hidden flex flex-col justify-between flex-grow">
                     <ul>
-                        <Brand />
+                        {/*<Brand />*/}
                         {router.route === '/inventory' && <SidebarInventory />}
                         {router.route !== '/inventory' && <SidebarFull />}
                     </ul>
-                    <Pages />
+                    {/*<Pages />*/}
                 </div>
             </div>
         </>
     );
 };
 
-export default SidebarCustomer;
+export default SidebarCustomers;

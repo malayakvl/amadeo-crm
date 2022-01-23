@@ -36,14 +36,14 @@ const DataTable: React.FC<Props> = ({
     sendDeleteRequest,
     sendCopyRequest
 }) => {
-    const { PRODUCTS } = PaginationType;
+    const { PRODUCTS, CHATBOT } = PaginationType;
     const t = useTranslations();
     const checkedIds = useSelector(checkedIdsSelector);
     const switchAllHeader = useSelector(switchHeaderSelector);
     // const showFilters = [PRODUCTS].includes(paginationType);
     // const hideEntries: boolean = [CATEGORIES, INVESTMENT].includes(paginationType);
     // const hideEntries = false;
-    const showIds: boolean = [PRODUCTS].includes(paginationType);
+    const showIds: boolean = [PRODUCTS, CHATBOT].includes(paginationType);
     // const hideSearch: boolean = [INVESTMENT].includes(paginationType);
     // const hideSearch = false;
     const headers = TableHeaders[paginationType];
@@ -168,7 +168,7 @@ const DataTable: React.FC<Props> = ({
             <>
                 <tr role="row">
                     {showIds && (
-                        <th style={{ width: '30px' }}>
+                        <th style={{ width: '30px' }} className="ids">
                             <input
                                 type="checkbox"
                                 onChange={handleAllChecked}

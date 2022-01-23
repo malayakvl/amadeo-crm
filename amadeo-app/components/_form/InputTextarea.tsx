@@ -1,5 +1,5 @@
 import { useTranslations } from 'next-intl';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 interface Props {
     style: string | null;
@@ -8,24 +8,25 @@ interface Props {
     label: string | null;
     placeholder: string | null;
     props: any;
+    rows?: number;
 }
 
-const InputTextarea: React.FC<Props> = ({ style, icon, name, label, placeholder, props }) => {
+const InputTextarea: React.FC<Props> = ({ style, icon, name, label, placeholder, props, rows }) => {
     const t = useTranslations();
 
-    useEffect(
-        function () {
-            setInputValue(props.values[name]);
-        },
-        [props.values[name]]
-    );
+    // useEffect(
+    //     function () {
+    //         setInputValue(props.values[name]);
+    //     },
+    //     [props.values[name]]
+    // );
 
     const clear = () => {
-        setInputValue('');
+        // setInputValue('');
         props.values[name] = '';
     };
 
-    const [inputValue, setInputValue] = useState(props.values[name]);
+    // const [inputValue, setInputValue] = useState(props.values[name]);
     return (
         <div className={`mb-4 ${style}`}>
             {label && (
@@ -40,8 +41,10 @@ const InputTextarea: React.FC<Props> = ({ style, icon, name, label, placeholder,
                     className={icon ? 'form-control-icon' : 'form-control'}
                     placeholder={placeholder ? t(placeholder) : ''}
                     onChange={props.handleChange}
-                    value={inputValue || ''}
+                    // value={inputValue || ''}
+                    value={props.values[name]}
                     name={name}
+                    rows={rows ? rows : 4}
                 />
                 <i
                     role="presentation"

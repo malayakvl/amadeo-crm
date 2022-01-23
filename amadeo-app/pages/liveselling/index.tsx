@@ -26,7 +26,7 @@ export default function Index({ session }: { session: any }) {
 
             <div className="block-white-8 mr-10 white-shadow-big">
                 <div className="page-title">
-                    <h1>{t('Chatbot')}</h1>
+                    <h1>{t('Live Selling')}</h1>
                 </div>
                 <div className="shadow-border relative mt-5">
                     <i className="info absolute left-3 top-3.5" />

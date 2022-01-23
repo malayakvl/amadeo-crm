@@ -22,10 +22,10 @@ export const TableHeaders: { [key in PaginationType]: Type.DataTableHeader[] } =
     ],
     [PaginationType.NOTIFICATIONS]: [],
     [PaginationType.CHATBOT]: [
-        { titleKey: null, className: '' },
         { titleKey: null, className: 'option-switcher' },
         { sortKey: 'scenario', titleKey: 'Scenario', iconClass: 'scenario' },
         { titleKey: 'Trigger', iconClass: 'message' },
-        { titleKey: null, iconClass: 'eye', className: 'chat-eye' }
+        { titleKey: null, iconClass: 'eye', className: 'chat-eye' },
+        { titleKey: null, className: 'actions' }
     ]
 };

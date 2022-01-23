@@ -7,6 +7,8 @@ declare namespace Chatbot {
         isFetched: boolean;
         loading: boolean;
         isSystemLoaded: boolean;
+        showForm: boolean;
+        showedItems: number[];
     }
 
     interface ChatbotItem {

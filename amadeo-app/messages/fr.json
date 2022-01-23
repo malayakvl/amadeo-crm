@@ -161,5 +161,18 @@
   "upload_csv": "Upload products usins a .csv file",
   "Chatbot": "Chatbot",
   "Product has been imported": "Product has been imported",
-  "how_to_use_cahtbot": "How to use chatbot?<br/> Here we will place clear instructions on how to use the chatbot in case merchant would need to add more scenarios"
+  "how_to_use_cahtbot": "How to use chatbot?<br/> Here we will place clear instructions on how to use the chatbot in case merchant would need to add more scenarios",
+  "System Replies": "System Replies",
+  "Mandatory": "(Mandatory)",
+  "Scenario": "Scenario",
+  "Trigger": "Trigger",
+  "Add a new Reply": "Add a new Reply",
+  "User created Replies": "User created Replies",
+  "Missing Message": "Missing Message",
+  "Create a new reply": "Create a new reply",
+  "Trigger Words": "Trigger Words",
+  "Records has been deleted": "Chatbot messages has been deleted",
+  "Record has been deleted": "Chatbot messages has been deleted",
+  "Record has been updated": "Chatbot has been updated",
+  "Record has been created": "Chatbot has been created"
 }

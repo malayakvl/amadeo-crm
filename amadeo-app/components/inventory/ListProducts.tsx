@@ -213,7 +213,7 @@ const ListProducts: React.FC<any> = () => {
                             </td>
                             <td>
                                 <label
-                                    htmlFor={item.id}
+                                    htmlFor={`switcher_${item.id}`}
                                     className="flex items-center cursor-pointer relative">
                                     <input
                                         type="checkbox"
@@ -230,10 +230,6 @@ const ListProducts: React.FC<any> = () => {
                             </td>
                             <td className="w-[300px]" colSpan={4} style={{ padding: '0' }}>
                                 {renderConfigurationColors(item.configuration, item.id)}
-                                {/*{showMoreConfigs[item.id] &&*/}
-                                {/*    renderConfiguration(item.configuration, item.id)}*/}
-                                {/*{!showMoreConfigs[item.id] &&*/}
-                                {/*    renderConfigurationColors(item.configuration, item.id)}*/}
                             </td>
                             <td className="text-right whitespace-nowrap">
                                 <ButtonTableAction
