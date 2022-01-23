@@ -1,4 +1,4 @@
-import { SidebarCustomer, SidebarBuyer } from '../Sidebar/index';
+import { SidebarCustomer, SidebarBuyer } from '../sidebar/index';
 import SidebarHeader from '../header/SidebarHeader';
 import React from 'react';
 import { useSelector } from 'react-redux';
