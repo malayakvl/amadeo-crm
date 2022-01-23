@@ -38,6 +38,7 @@ const InputTextarea: React.FC<Props> = ({ style, icon, name, label, placeholder,
                 {icon && <i className={`f-icon ${icon}`} />}
 
                 <textarea
+                    style={{ whiteSpace: 'pre-wrap' }}
                     className={icon ? 'form-control-icon' : 'form-control'}
                     placeholder={placeholder ? t(placeholder) : ''}
                     onChange={props.handleChange}

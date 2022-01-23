@@ -12,10 +12,10 @@ import { showLoaderAction } from '../layouts/actions';
 
 export const submitFormAction: any = createAction(
     'chatbot/ADD_UPDATE_DATA',
-    async (data: any, id: number | null | undefined) =>
+    async (data: any) =>
         (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
             const state = getState();
-            const isNew = id;
+            const isNew = data.id;
             dispatch(showLoaderAction(true));
             return axios
                 .post(`${baseUrl}/chatbot`, data, {
@@ -28,6 +28,8 @@ export const submitFormAction: any = createAction(
                         setSuccessToastAction(`Record has been ${isNew ? 'updated' : 'created'}`)
                     );
                     dispatch(fetchDataAction('users'));
+                    dispatch(setEmptyFormAction());
+                    dispatch(showFormAction(false));
                     dispatch(showLoaderAction(false));
                 });
         }
@@ -152,14 +154,14 @@ export const deleteAction: any = createAction(
         }
 );
 export const bulkDeleteAction: any = createAction(
-    'products/BULK_DELETE',
+    'chatbot/BULK_DELETE',
     async () =>
         async (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
             const state = getState();
             dispatch(showLoaderAction(true));
             return axios
                 .post(
-                    `${baseUrl}/products/bulk-delete`,
+                    `${baseUrl}/chatbot/bulk-delete`,
                     { data: JSON.stringify(state.layouts.checkedIds) },
                     {
                         headers: {
@@ -171,6 +173,42 @@ export const bulkDeleteAction: any = createAction(
                     dispatch(showLoaderAction(false));
                     dispatch(setSuccessToastAction('Records has been deleted'));
                     await dispatch(fetchDataAction());
+                });
+        }
+);
+export const changeActiveAction: any = createAction(
+    'chatbot/CHANGE_ACTIVE',
+    async (id: number) =>
+        async (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
+            const state = getState();
+            dispatch(showLoaderAction(true));
+            return axios
+                .get(`${baseUrl}/chatbot/change-active/${id}`, {
+                    headers: {
+                        ...authHeader(state.user.user.email)
+                    }
+                })
+                .then(async () => {
+                    dispatch(showLoaderAction(false));
+                    dispatch(setSuccessToastAction('Records has been updated'));
+                });
+        }
+);
+export const changeActiveAllAction: any = createAction(
+    'chatbot/CHANGE_ACTIVE_FOR_ALL',
+    async (status: boolean) =>
+        async (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
+            const state = getState();
+            dispatch(showLoaderAction(true));
+            return axios
+                .get(`${baseUrl}/chatbot/change-active-all?status=${status}`, {
+                    headers: {
+                        ...authHeader(state.user.user.email)
+                    }
+                })
+                .then(async () => {
+                    dispatch(showLoaderAction(false));
+                    dispatch(setSuccessToastAction('Records has been updated'));
                 });
         }
 );

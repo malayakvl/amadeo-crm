@@ -17,9 +17,9 @@ function ChatbotForm() {
         name: Yup.string()
             .max(140, t('Must be less characters', { charNumber: 140 }))
             .required(t('Required field')),
-        trigger: Yup.string().required(t('Required field')),
-        description_fr: Yup.string().required(t('Required field')),
-        description_en: Yup.string().required(t('Required field'))
+        keywords: Yup.string().required(t('Required field')),
+        message_fr: Yup.string().required(t('Required field')),
+        message_en: Yup.string().required(t('Required field'))
     });
     return (
         <>
@@ -29,11 +29,8 @@ function ChatbotForm() {
                 initialValues={item}
                 validationSchema={SubmitSchema}
                 onSubmit={(values) => {
-                    const formData = new FormData();
-                    Object.keys(values).forEach((key: string) => {
-                        formData.append(key, (values as any)[key]);
-                    });
-                    dispatch(submitFormAction(formData, values.id));
+                    console.log(values.message_fr);
+                    dispatch(submitFormAction(values));
                 }}>
                 {(props) => {
                     return (
@@ -42,7 +39,7 @@ function ChatbotForm() {
                                 <div>
                                     <InputText
                                         icon={null}
-                                        label={'Product Name'}
+                                        label={'Name (unique)'}
                                         name={'name'}
                                         placeholder={'Product Name'}
                                         style={null}
@@ -53,7 +50,7 @@ function ChatbotForm() {
                                     <InputText
                                         icon={null}
                                         label={'Trigger Words'}
-                                        name={'trigger'}
+                                        name={'keywords'}
                                         placeholder={'Trigger Words'}
                                         style={null}
                                         props={props}
@@ -68,7 +65,7 @@ function ChatbotForm() {
                                             <InputTextarea
                                                 icon={null}
                                                 label={null}
-                                                name={'description_fr'}
+                                                name={'message_fr'}
                                                 placeholder={'Missing Message'}
                                                 style={null}
                                                 props={props}
@@ -83,7 +80,7 @@ function ChatbotForm() {
                                             <InputTextarea
                                                 icon={null}
                                                 label={null}
-                                                name={'description_en'}
+                                                name={'message_en'}
                                                 placeholder={'Missing Message'}
                                                 style={null}
                                                 props={props}

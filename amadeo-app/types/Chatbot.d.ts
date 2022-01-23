@@ -14,9 +14,9 @@ declare namespace Chatbot {
     interface ChatbotItem {
         id: number | null;
         name: string;
-        trigger: string;
-        description_fr: string;
-        description_en: string;
+        keywords: string;
+        message_fr: string;
+        message_en: string;
         active: boolean;
         created_at: any;
         updated_at: any;

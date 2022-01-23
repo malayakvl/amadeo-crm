@@ -213,7 +213,7 @@ const ListProducts: React.FC<any> = () => {
                             </td>
                             <td>
                                 <label
-                                    htmlFor={`switcher_${item.id}`}
+                                    htmlFor={item.id}
                                     className="flex items-center cursor-pointer relative">
                                     <input
                                         type="checkbox"
