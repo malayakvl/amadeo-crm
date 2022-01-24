@@ -6,22 +6,26 @@ import reduxThunkFsa from 'redux-thunk-fsa';
 import { createStore, applyMiddleware, combineReducers } from 'redux';
 import logger from 'redux-logger';
 
-import addressReducer from '../redux/address';
+// import addressReducer from '../redux/address';
 import profileReducer from '../redux/profile/index';
 import userReducer from '../redux/user/index';
 import notificationsReducer from '../redux/notifications/index';
 import layoutsReducer from '../redux/layouts/index';
 import productsReducer from '../redux/products/index';
 import chatbotReducer from '../redux/chatbot/index';
+import countriesReducer from '../redux/countries/index';
+import shippingReducer from '../redux/shipping/index';
 
 const reducers = combineReducers({
-    address: addressReducer,
+    // address: addressReducer,
     profile: profileReducer,
     user: userReducer,
     notifications: notificationsReducer,
     layouts: layoutsReducer,
     products: productsReducer,
-    chatbot: chatbotReducer
+    chatbot: chatbotReducer,
+    countries: countriesReducer,
+    shippings: shippingReducer
 });
 
 const initStore = (initialState = {}) => {

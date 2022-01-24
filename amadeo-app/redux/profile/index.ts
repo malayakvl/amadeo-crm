@@ -4,7 +4,8 @@ import {
     updateProfileAction,
     changePasswordAction,
     restorePasswordAction,
-    setValidEmailStatusAction
+    setValidEmailStatusAction,
+    saveAddressAction
 } from './actions';
 
 const initialState: State.Profile = {
@@ -51,7 +52,8 @@ export {
     updateProfileAction,
     changePasswordAction,
     restorePasswordAction,
-    setValidEmailStatusAction
+    setValidEmailStatusAction,
+    saveAddressAction
 };
 
 // ------------------------------------

@@ -20,7 +20,7 @@ export const fetchProfileAction: any = createAction(
                 }
             });
             return {
-                profile: res.data.user
+                profile: res.data
             };
         }
 );
@@ -76,5 +76,27 @@ export const restorePasswordAction: any = createAction(
         }
     }
 );
+
+export const saveAddressAction: any = createAction(
+    'assetModels/ADD_ADDRESS',
+    async (data: any) =>
+        (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
+            const state = getState();
+            const isNew = data.id;
+            return axios
+                .post(`${baseUrl}/address`, data, {
+                    headers: {
+                        ...authHeader(state.user.user.email)
+                    }
+                })
+                .then(async () => {
+                    dispatch(
+                        setSuccessToastAction(`Address has been ${isNew ? 'updated' : 'created'}`)
+                    );
+                });
+        }
+);
+
+export const setAddressAction: any = createAction('addresses/SET_ADDRESS');
 
 export const setValidEmailStatusAction: any = createAction('profile/SET_VALID_STATUS');

@@ -112,3 +112,5 @@ amadeo-app/.env
 /.idea/workspace.xml
 /.idea/eslint.xml
 /.idea/jsLibraryMappings.xml
+
+/.vscode/

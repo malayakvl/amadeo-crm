@@ -22,13 +22,11 @@ interface Props {
     children: React.ReactNode[];
     totalAmount: number;
     sendRequest: () => Promise<void>;
-    sendDeleteRequest?: () => Promise<void>;
-    sendCopyRequest?: () => Promise<void>;
-    hidePaginationBar?: boolean;
+    sendDeleteRequest?: () => Promise<void> | null;
+    sendCopyRequest?: () => Promise<void> | null;
 }
 
 const DataTable: React.FC<Props> = ({
-    hidePaginationBar,
     paginationType,
     children,
     totalAmount,
@@ -36,14 +34,14 @@ const DataTable: React.FC<Props> = ({
     sendDeleteRequest,
     sendCopyRequest
 }) => {
-    const { PRODUCTS, CHATBOT } = PaginationType;
+    const { PRODUCTS, CHATBOT, SHIPPING } = PaginationType;
     const t = useTranslations();
     const checkedIds = useSelector(checkedIdsSelector);
     const switchAllHeader = useSelector(switchHeaderSelector);
     // const showFilters = [PRODUCTS].includes(paginationType);
     // const hideEntries: boolean = [CATEGORIES, INVESTMENT].includes(paginationType);
     // const hideEntries = false;
-    const showIds: boolean = [PRODUCTS, CHATBOT].includes(paginationType);
+    const showIds: boolean = [PRODUCTS, CHATBOT, SHIPPING].includes(paginationType);
     // const hideSearch: boolean = [INVESTMENT].includes(paginationType);
     // const hideSearch = false;
     const headers = TableHeaders[paginationType];
@@ -225,7 +223,7 @@ const DataTable: React.FC<Props> = ({
                 <thead>{renderTableHeader()}</thead>
                 <tbody>{renderTableBody()}</tbody>
             </table>
-            {!loading && !hidePaginationBar && (
+            {!loading && (
                 <div className="flex justify-between w-full mt-5 mb-10">
                     <div>
                         <select value={limit} onChange={setLimit} className="form-control">
