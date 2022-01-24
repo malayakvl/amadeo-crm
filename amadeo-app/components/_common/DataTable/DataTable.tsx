@@ -22,11 +22,13 @@ interface Props {
     children: React.ReactNode[];
     totalAmount: number;
     sendRequest: () => Promise<void>;
-    sendDeleteRequest?: () => Promise<void> | null;
-    sendCopyRequest?: () => Promise<void> | null;
+    sendDeleteRequest?: () => Promise<void>;
+    sendCopyRequest?: () => Promise<void>;
+    hidePaginationBar?: boolean;
 }
 
 const DataTable: React.FC<Props> = ({
+    hidePaginationBar,
     paginationType,
     children,
     totalAmount,
@@ -223,7 +225,7 @@ const DataTable: React.FC<Props> = ({
                 <thead>{renderTableHeader()}</thead>
                 <tbody>{renderTableBody()}</tbody>
             </table>
-            {!loading && (
+            {!loading && !hidePaginationBar && (
                 <div className="flex justify-between w-full mt-5 mb-10">
                     <div>
                         <select value={limit} onChange={setLimit} className="form-control">
