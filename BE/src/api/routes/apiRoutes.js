@@ -6,6 +6,7 @@ import CountryController from '../controllers/CountryController.js';
 import NotificationController from '../controllers/NotificationController.js';
 import ProductController from '../controllers/ProductController.js';
 import TagController from '../controllers/TagController.js';
+import ShippingController from '../controllers/ShippingController.js';
 import userModel from '../models/User.js';
 import ChatbotController from "../controllers/ChatbotController.js";
 
@@ -47,8 +48,7 @@ apiRoutes.route('/profile')
     .post(UserController.updateProfile)
     .get(UserController.getProfile);
 apiRoutes.route('/address')
-    .get(UserController.fetchAddress)
-    .post(UserController.addAddress);
+    .post(UserController.saveAddress);
 apiRoutes.route('/fetch-notifications').get(NotificationController.fetchData);
 apiRoutes.route('/count-notice').get(NotificationController.fetchNew);
 apiRoutes.route('/new-notice').get(NotificationController.fetchLatest);
@@ -77,6 +77,8 @@ apiRoutes.route('/chatbot/change-active/:id').get(ChatbotController.changeActive
 apiRoutes.route('/chatbot/change-active-all').get(ChatbotController.changeAllActive);
 
 
+apiRoutes.route('/shipping/create').post(ShippingController.create)
+apiRoutes.route('/shipping/fetch-all').get(ShippingController.fetchAll)
 apiRoutes.get('/*', defaultHandler);
 
 export default apiRoutes;

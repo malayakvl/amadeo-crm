@@ -17,7 +17,6 @@ function Account({ locale, reqActiveTab }: { locale: string; reqActiveTab: strin
     const dispatch = useDispatch();
 
     const profileData = useSelector(profileSelector);
-
     const user = useSelector(userSelector);
 
     useEffect(() => {
@@ -86,7 +85,7 @@ function Account({ locale, reqActiveTab }: { locale: string; reqActiveTab: strin
                     <div className={`w-full ${activeTab !== 'addressess' ? 'hidden' : ''}`}>
                         {profileData.role_id === 2 && (
                             <Fragment>
-                                <Address locale={locale} />
+                                <Address address={profileData.address} locale={locale} />
                             </Fragment>
                         )}
                     </div>

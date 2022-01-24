@@ -8,6 +8,8 @@ declare namespace State {
         layouts: Layouts;
         products: Products;
         chatbot: Chatbot;
+        countries: Countries;
+        shippings: Shippings;
     }
 
     type Address = Address.Root;
@@ -17,4 +19,6 @@ declare namespace State {
     type Layouts = Layouts.Root;
     type Products = Products.Root;
     type Chatbot = Chatbot.Root;
+    type Countries = any;
+    type Shippings = Array<Shipping>;
 }

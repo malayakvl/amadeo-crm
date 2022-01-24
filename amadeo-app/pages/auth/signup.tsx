@@ -88,7 +88,7 @@ export default function Signup({ providers, locale }: { providers: any; locale: 
                                             name="role_id"
                                             value="1"
                                         />
-                                        <label htmlFor="buyer-radio">Buyer</label>
+                                        <label htmlFor="buyer-radio">Shopper</label>
                                     </div>
                                     <div className="text-gray-180 text-xs">
                                         <Field

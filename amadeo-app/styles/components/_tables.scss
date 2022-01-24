@@ -143,3 +143,30 @@ td.translations {
   padding-bottom: 10px;
   @apply border border-t-0 border-b-0 border-r-0 border-red-500 pt-4 pb-4
 }
+.shipping-dropdown {
+  width: 100px;
+  background-repeat: no-repeat;
+  background-position: left center;
+  background-image: url("../../public/images/action-arrow.svg");
+}
+
+.shipping-number {
+  width: 100px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-image: url("../../public/images/input-company-id.svg");
+}
+
+.shipping-logo {
+  width: 100px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-image: url("../../public/images/icon-shipping.svg");
+}
+
+.shipping-countries {
+  width: 100px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-image: url("../../public/images/lang-icon.svg");
+}

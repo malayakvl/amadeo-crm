@@ -20,7 +20,16 @@ export function prepareAdditionalDropdown(dataArr: any, locale: string) {
             _data.push({ label: parseTranslation(data, 'name', locale), value: data.id });
         });
     }
+    return _data;
+}
 
+export function prepareCountriesDropdown(dataArr: any, locale: string) {
+    const _data: any = [];
+    if (dataArr) {
+        dataArr.forEach((data: any) => {
+            _data.push({ label: parseTranslation(data, 'nicename', locale), value: data.id });
+        });
+    }
     return _data;
 }
 
