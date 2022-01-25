@@ -4,11 +4,12 @@ import { InputText } from '../../components/_form';
 import * as Yup from 'yup';
 import { createShippingAction } from '../../redux/shipping/actions';
 import { useDispatch } from 'react-redux';
+import { useRouter } from 'next/router';
 
-export default function Shipping() {
+export default function AddMethod() {
     const t = useTranslations();
     const dispatch = useDispatch();
-
+    const router = useRouter();
     const submitSchema = Yup.object().shape({
         name: Yup.string()
             .min(3, t('Must be more characters'))
@@ -33,7 +34,7 @@ export default function Shipping() {
                     formData.append('logo', values.logo);
                     formData.append('name', values.name);
                     
-                    dispatch(createShippingAction(formData))
+                    dispatch(createShippingAction(formData)).then(() => router.push('/shipping/list'))
 
                 }}
                 render={(props) => {

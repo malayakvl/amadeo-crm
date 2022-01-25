@@ -7,5 +7,10 @@ const rootSelector = createSelector(
 
 export const shippingsSelector = createSelector(
     rootSelector,
-    (shippings: State.Shippings): any => shippings
+    (shippings: State.Shippings): any => shippings.list
 );
+
+export const shippingSelector = createSelector(
+    rootSelector,
+    (shippings: State.Shippings): any => shippings.shipping
+)

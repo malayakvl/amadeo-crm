@@ -18,5 +18,8 @@ declare namespace State {
     type Layouts = Layouts.Root;
     type Products = Products.Root;
     type Countries = any;
-    type Shippings = Array<Shipping>;
+    type Shippings = {
+        list: Array<Shipping>;
+        shipping: Shipping | null
+    };
 }

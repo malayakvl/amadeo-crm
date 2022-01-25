@@ -19,7 +19,7 @@ const reducers = combineReducers({
     layouts: layoutsReducer,
     products: productsReducer,
     countries: countriesReducer,
-    shippings: shippingReducer
+    shippings: shippingReducer,
 });
 
 const initStore = (initialState = {}) => {

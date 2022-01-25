@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import { DataTable } from "../../components/_common";
+import { ButtonTableAction, DataTable } from "../../components/_common";
 import { PaginationType } from "../../constants";
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchShippingsAction } from "../../redux/shipping/actions";
@@ -7,14 +7,14 @@ import { shippingsSelector } from '../../redux/shipping/selectors'
 import { useTranslations } from "next-intl";
 import Image from 'next/image';
 import { baseApiUrl } from '../../constants';
+import { useRouter } from 'next/router'
 
 export default function List() {
-    const dispatch = useDispatch()
-
+    const dispatch = useDispatch();
+    const router = useRouter();
     const sendRequest = useCallback(() => {
         return dispatch(fetchShippingsAction())
     }, [dispatch]);
-
     const items = useSelector(shippingsSelector);
     const t = useTranslations();
 
@@ -80,13 +80,23 @@ export default function List() {
                             </td>
 
                             <td className="text-right whitespace-nowrap">
-                                <Image
-                                    width={24}
-                                    height={24}
-                                    src="/images/dots.svg"
-                                    layout="fixed"
-                                    alt=""
-                                />
+                                <div
+                                    onClick={(e) => {
+                                        e.preventDefault()
+                                        router.push(`/shipping/edit-method/${item.id}`)
+                                    }}
+                                    className="cursor-pointer"
+                                >
+                                    <Image
+
+                                        width={24}
+                                        height={24}
+                                        src="/images/dots.svg"
+                                        layout="fixed"
+                                        alt=""
+                                    />
+                                </div>
+
                             </td>
                         </tr>
                     ))}
