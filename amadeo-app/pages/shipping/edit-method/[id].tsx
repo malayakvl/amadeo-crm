@@ -41,9 +41,11 @@ export default function EditMethod() {
 
     return (
         <>
-            {shipping &&
-                <div className="page-title">
-                    <h1>{t('Edit Shipping Method')}</h1>
+            <div className="page-title">
+                <h1 >{t('Edit Shipping Method')}</h1>
+            </div>
+            <div className="flex mt-10">
+                {shipping &&
                     <Formik
                         enableReinitialize
                         initialValues={{ name: shipping.name, logo: '' }}
@@ -58,7 +60,7 @@ export default function EditMethod() {
 
                         }}
                         render={(props) =>
-                            <form onSubmit={props.handleSubmit} className="w-1/2 p-4 mt-10 bg-gray-100 rounded-lg shadow-inner mb-6">
+                            <form onSubmit={props.handleSubmit} className="p-4 bg-gray-100 rounded-lg shadow-inner mb-6">
                                 <label className="text-xs text-blue-350 font-bold">
                                     {t('Method name')}
                                     <InputText
@@ -89,16 +91,23 @@ export default function EditMethod() {
 
                                 </label>
 
-                                <button className="mt-8 gradient-btn mr-4" type="submit">{t('Save')}</button>
+                                <button className="mt-8 gradient-btn w-full" type="submit">{t('Save')}</button>
+
+                                <div onClick={deleteCallback} className="cursor-pointer mt-1 gradient-btn">{t('Delete')}</div>
 
                             </form>
                         }
                     />
-                    <button onClick={deleteCallback} className="mt-8 gradient-btn">{t('Delete')}</button>
+                }
+
+                <div className="ml-8 w-full p-4 bg-gray-100 rounded-lg shadow-inner">
+                    <div className="mb-12 font-bold text-gray-350 text-lg py-4 border-b border-gray-200">
+                        {t('Apply Countries')}
+                    </div>
 
                 </div>
+            </div>
 
-            }
 
         </>
     )

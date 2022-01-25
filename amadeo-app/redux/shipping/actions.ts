@@ -53,9 +53,8 @@ export const createShippingAction: any = createAction(
                 ...authHeader(state.user.user.email)
             }
         }).then(result => {
-            dispatch(
-                setSuccessToastAction('Shipping has been created')
-            )
+            dispatch(fetchShippingsAction())
+            dispatch(setSuccessToastAction('Shipping has been created'))
 
         }).catch(error => {
             dispatch(
