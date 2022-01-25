@@ -1,7 +1,7 @@
 import { Formik } from "formik";
 import { useTranslations } from "next-intl";
 import { useRouter } from 'next/router';
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { InputText } from "../../../components/_form";
 import { fetchShippingAction } from "../../../redux/shipping/actions";
@@ -11,6 +11,7 @@ import { deleteShippingAction } from '../../../redux/shipping/actions';
 import * as Yup from 'yup';
 import Image from 'next/image';
 import { baseApiUrl } from '../../../constants';
+import Country from "../../../components/shipping/Country";
 
 export default function EditMethod() {
     //Hooks conts
@@ -18,6 +19,7 @@ export default function EditMethod() {
     const router = useRouter();
     const dispatch = useDispatch();
     const shipping = useSelector(shippingSelector);
+    const [countries, setCountries] = useState([{price: 100}, {price: 50}, {price: 80}, {price: 1230}])
 
     const id = router.query.id;
     const deleteCallback = () => {
@@ -32,7 +34,7 @@ export default function EditMethod() {
         name: Yup.string()
             .min(3, t('Must be more characters'))
             .required(t('Required field')),
-    })
+    });
 
     useEffect(() => {
         dispatch(fetchShippingAction(id))
@@ -101,13 +103,25 @@ export default function EditMethod() {
                 }
 
                 <div className="ml-8 w-full p-4 bg-gray-100 rounded-lg shadow-inner">
-                    <div className="mb-12 font-bold text-gray-350 text-lg py-4 border-b border-gray-200">
+                    <div className="mb-4 font-bold text-gray-350 text-lg py-4 border-b border-gray-200">
                         {t('Apply Countries')}
                     </div>
 
+                    <div className="mb-2">
+                        {countries.map((item, listIndex) =>
+                            <Country
+                                country={item}
+                                deleteCallback={() => {
+                                    const array = countries.filter((item, index) => index !== listIndex )
+                                    setCountries(array)
+                                }}
+                            />)
+                        }
+                    </div>
+
+                    <button onClick={() => setCountries([...countries, {}])} className="gradient-btn">{t('Add')}</button>
                 </div>
             </div>
-
 
         </>
     )
