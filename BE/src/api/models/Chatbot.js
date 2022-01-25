@@ -92,6 +92,9 @@ class Chatbot {
         const client = await pool.connect();
         try {
             const res = await client.query(`SELECT * FROM data.chatbot_scenarios WHERE user_id=${userId} AND id=${itemId}`);
+            if (res.rows[0].product) {
+                res.rows[0].product = JSON.parse(res.rows[0].product);
+            }
             return { item: res.rows[0] };
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
@@ -117,11 +120,13 @@ class Chatbot {
     
     async create (userId, data) {
         const client = await pool.connect();
-        const query =  `INSERT INTO data.chatbot_scenarios (user_id, name, keywords, message_fr, message_en, active)
+        const query =  `INSERT INTO data.chatbot_scenarios (user_id, name, keywords, message_fr, message_en, active, answer_count, product)
                 VALUES (${userId}, '${data.name}', '${data.keywords}',
-                    regexp_replace('${data.message_fr}', '\\\\n+', E'\\n', 'g' ),
-                    regexp_replace('${data.message_en}', '\\\\n+', E'\\n', 'g' ),
-                    true
+                    regexp_replace($$${data.message_fr}$$, '\\\\n+', E'\\n', 'g' ),
+                    regexp_replace($$${data.message_en}$$, '\\\\n+', E'\\n', 'g' ),
+                    true,
+                    '${data.answer_count}',
+                    '${data.product ? JSON.stringify(data.product) : ''}'
                 );`;
         try {
             await client.query(query);
@@ -147,7 +152,6 @@ class Chatbot {
         } finally {
             client.release();
         }
-    
     }
     
     async update (userId, data) {
@@ -155,11 +159,22 @@ class Chatbot {
         try {
             const itemId = data.id;
             delete data.id;
-            await client.query(`SELECT * FROM common__tools._update_table_by_where(
-                'data',
-                'chatbot_scenarios',
-                '${JSON.stringify(data)}',
-                'user_id = ''${userId}'' AND id = ''${itemId}''')`);
+            const query =  `UPDATE data.chatbot_scenarios SET
+                                name = $$${data.name}$$,
+                                keywords = $$${data.keywords}$$,
+                                answer_count='${data.answer_count}',
+                                product='${data.product ? JSON.stringify(data.product) : ''}',
+                                message_fr = regexp_replace($$${data.message_fr}$$, '\\\\n+', E'\\n', 'g' ),
+                                message_en = regexp_replace($$${data.message_en}$$, '\\\\n+', E'\\n', 'g' )
+                            WHERE id=${itemId} AND user_id=${userId}
+                `;
+            console.log(query);
+            await client.query(query);
+            // await client.query(`SELECT * FROM common__tools._update_table_by_where(
+            //     'data',
+            //     'chatbot_scenarios',
+            //     '${JSON.stringify(data)}',
+            //     'user_id = ''${userId}'' AND id = ''${itemId}''')`);
             return { success: true };
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {

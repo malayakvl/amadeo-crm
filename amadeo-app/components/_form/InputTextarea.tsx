@@ -14,19 +14,10 @@ interface Props {
 const InputTextarea: React.FC<Props> = ({ style, icon, name, label, placeholder, props, rows }) => {
     const t = useTranslations();
 
-    // useEffect(
-    //     function () {
-    //         setInputValue(props.values[name]);
-    //     },
-    //     [props.values[name]]
-    // );
-
     const clear = () => {
-        // setInputValue('');
-        props.values[name] = '';
+        props.setFieldValue(name, '');
     };
 
-    // const [inputValue, setInputValue] = useState(props.values[name]);
     return (
         <div className={`mb-4 ${style}`}>
             {label && (

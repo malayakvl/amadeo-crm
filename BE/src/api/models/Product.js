@@ -167,7 +167,6 @@ class Product {
                 }
             }
         }
-        console.log(dataProduct);
         try {
             await client.query(`SELECT * FROM data.import_products('${JSON.stringify(dataProduct)}')`);
         } catch (e) {
@@ -185,7 +184,27 @@ class Product {
             }
         }
     }
+
     
+    async find(searchStr, userId) {
+        const client = await pool.connect();
+        try {
+            const query = `SELECT * FROM data.find_product_by_name(${userId}, '${searchStr}');`;
+            const res = await client.query(query);
+            return res.rows[0].find_product_by_name ? res.rows[0].find_product_by_name : [];
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model Tag error:',
+                    { message: e.message }
+                );
+            }
+            return { success: false, error: { code: 404, message: 'Tags Not found' } };
+        } finally {
+            client.release();
+        }
+    }
     
     
     async prepareTags(tags) {

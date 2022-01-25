@@ -1,23 +1,62 @@
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import * as Yup from 'yup';
 import { useTranslations } from 'next-intl';
 import { Formik } from 'formik';
+import ReactTags from 'react-tag-autocomplete';
 import { InputText, InputTextarea } from '../_form';
 import { useDispatch, useSelector } from 'react-redux';
 import { itemSelector } from '../../redux/chatbot/selectors';
 import { setEmptyFormAction, showFormAction } from '../../redux/chatbot';
 import { submitFormAction } from '../../redux/chatbot/actions';
+import { findProductsAction } from '../../redux/products';
+import { tagSuggestionsSelector } from '../../redux/products/selectors';
 
 function ChatbotForm() {
     const t = useTranslations();
     const dispatch = useDispatch();
     const item = useSelector(itemSelector);
+    const searchTagSuggestions = useSelector(tagSuggestionsSelector);
+
+    const [tags, setTags] = useState<any[]>([]);
+    const [suggestions, setSuggestions] = useState([]);
+    const [isBusy, setIsBusy] = useState(false);
+
+    const onDelete = useCallback(
+        (tagIndex: number) => {
+            setTags(tags.filter((_, i) => i !== tagIndex));
+        },
+        [tags]
+    );
+    const onAddition = useCallback(
+        (newTag) => {
+            setTags([newTag]);
+        },
+        [tags]
+    );
+    const onInput = (query: string) => {
+        if (!isBusy) {
+            setIsBusy(true);
+            dispatch(findProductsAction(query));
+        }
+    };
+    useEffect(() => {
+        setSuggestions(searchTagSuggestions);
+        setIsBusy(false);
+    }, [searchTagSuggestions]);
+
+    useEffect(() => {
+        if (item.product) {
+            setTags(item.product);
+        }
+    }, [item]);
 
     const SubmitSchema = Yup.object().shape({
         name: Yup.string()
             .max(140, t('Must be less characters', { charNumber: 140 }))
             .required(t('Required field')),
-        keywords: Yup.string().required(t('Required field')),
+        keywords: Yup.string()
+            .max(255, t('Must be less characters', { charNumber: 255 }))
+            .required(t('Required field')),
         message_fr: Yup.string().required(t('Required field')),
         message_en: Yup.string().required(t('Required field'))
     });
@@ -29,7 +68,9 @@ function ChatbotForm() {
                 initialValues={item}
                 validationSchema={SubmitSchema}
                 onSubmit={(values) => {
-                    console.log(values.message_fr);
+                    if (tags.length) {
+                        values.product = tags;
+                    }
                     dispatch(submitFormAction(values));
                 }}>
                 {(props) => {
@@ -54,8 +95,36 @@ function ChatbotForm() {
                                         placeholder={'Trigger Words'}
                                         style={null}
                                         props={props}
-                                        tips={t('count_characters', { charNumber: 140 })}
+                                        tips={t('count_characters', { charNumber: 255 })}
                                     />
+
+                                    <InputText
+                                        icon={null}
+                                        label={'Max Answer Count'}
+                                        name={'answer_count'}
+                                        placeholder={'Max Answer Count'}
+                                        style={'max-w-[300px]'}
+                                        props={props}
+                                        tips={null}
+                                    />
+
+                                    <div className="mb-4">
+                                        <label className="control-label">
+                                            {t('Select Product')}
+                                        </label>
+                                        <div className="relative">
+                                            <em className="input-tips">{t('Select one')}</em>
+                                            <ReactTags
+                                                placeholderText={t('Select Product')}
+                                                tags={tags}
+                                                allowNew={false}
+                                                suggestions={suggestions}
+                                                onDelete={onDelete}
+                                                onAddition={onAddition}
+                                                onInput={onInput}
+                                            />
+                                        </div>
+                                    </div>
 
                                     <div className="clear-both mt-7">
                                         <i className="trans-fr" />

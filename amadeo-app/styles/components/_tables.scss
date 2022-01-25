@@ -112,7 +112,9 @@
 }
 
 //CHATBOT TABLE
-.system-message .option-switcher label, .system-message .actions, .system-message .ids{
+.system-message .option-switcher label, .system-message .actions, .system-message .ids, .system-message .product,
+.system-message td:nth-child(5), .system-message th:nth-child(5),
+.system-message td:nth-child(6), .system-message th:nth-child(6){
   @apply hidden;
 }
 

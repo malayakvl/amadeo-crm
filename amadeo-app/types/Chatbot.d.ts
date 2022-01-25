@@ -18,6 +18,8 @@ declare namespace Chatbot {
         message_fr: string;
         message_en: string;
         active: boolean;
+        answer_count: any;
+        product: any;
         created_at: any;
         updated_at: any;
     }
