@@ -30,6 +30,8 @@ const initialState: {
         message_fr: '',
         message_en: '',
         active: true,
+        answer_count: '',
+        product: null,
         created_at: null,
         updated_at: null
     },
@@ -96,6 +98,8 @@ const ACTION_HANDLERS: any = {
                 message_fr: '',
                 message_en: '',
                 active: true,
+                product: null,
+                answer_count: null,
                 created_at: null,
                 updated_at: null
             }

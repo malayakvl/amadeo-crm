@@ -18,6 +18,14 @@ const Row: React.FC<any> = ({
     const showedItems = useSelector(showedItemsSelector);
     const checkedIds = useSelector(checkedIdsSelector);
 
+    const parseProduct = (data: any) => {
+        let product;
+        if (data) {
+            product = JSON.parse(data);
+        }
+        return <>{data ? product[0].name : ''}</>;
+    };
+
     return (
         <>
             <tr>
@@ -55,7 +63,9 @@ const Row: React.FC<any> = ({
                     )}
                 </td>
                 <td style={{ width: '20%' }}>{item.name}</td>
-                <td>{item.keywords}</td>
+                <td style={{ width: '60%' }}>{item.keywords}</td>
+                <td>{parseProduct(item.product)}</td>
+                <td>{item.answer_count}</td>
                 <td
                     className="chat-eye cursor-pointer"
                     role="presentation"

@@ -26,6 +26,8 @@ export const TableHeaders: { [key in PaginationType]: Type.DataTableHeader[] } =
         { titleKey: null, className: 'option-switcher' },
         { sortKey: 'scenario', titleKey: 'Scenario', iconClass: 'scenario' },
         { titleKey: 'Trigger', iconClass: 'message' },
+        { titleKey: 'Product' },
+        { titleKey: 'Answers' },
         { titleKey: null, iconClass: 'eye', className: 'chat-eye' },
         { titleKey: null, className: 'actions' }
     ],
