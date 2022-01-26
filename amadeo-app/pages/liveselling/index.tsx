@@ -4,10 +4,16 @@ import React from 'react';
 import { useTranslations } from 'next-intl';
 import { Filters } from '../../components/liveselling';
 import { accountService } from '../../_services';
+// import { useDispatch } from 'react-redux';
 
 export default function Index({ session }: { session: any }) {
     if (!session) return <></>;
     const t = useTranslations();
+    // const dispatch = useDispatch();
+
+    const fbSync = () => {
+        accountService.syncFB();
+    };
 
     return (
         <>
@@ -28,7 +34,7 @@ export default function Index({ session }: { session: any }) {
                         {/*    data-layout="default"*/}
                         {/*    data-auto-logout-link="false"*/}
                         {/*    data-use-continue-as="false" />*/}
-                        <button className="btn-sync-fb" onClick={accountService.login}>
+                        <button className="btn-sync-fb" onClick={() => fbSync()}>
                             <span>{t('Sync account')}</span>
                         </button>
                     </div>

@@ -94,6 +94,16 @@ class UserController {
         }
         return res.status(402).json('Something wend wrong');
     }
+    
+    async syncFb (req, res) {
+        if (req.user) {
+            const data = await userModel.syncFb(req.user, req.body);
+            if (data.user) {
+                return res.status(200).json({ user: data.user });
+            }
+        }
+        return res.status(402).json('Something wend wrong');
+    }
 }
 
 export default new UserController();

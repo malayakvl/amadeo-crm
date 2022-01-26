@@ -77,6 +77,9 @@ apiRoutes.route('/chatbot/bulk-delete').post(ChatbotController.bulkDelete);
 apiRoutes.route('/chatbot/change-active/:id').get(ChatbotController.changeActive);
 apiRoutes.route('/chatbot/change-active-all').get(ChatbotController.changeAllActive);
 
+//FB routes
+apiRoutes.route('/fb-authenticate').post(UserController.syncFb);
+
 
 apiRoutes.route('/shipping/create').post(ShippingController.create)
 apiRoutes.route('/shipping/fetch-all').get(ShippingController.fetchAll)
