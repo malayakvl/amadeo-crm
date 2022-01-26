@@ -1,26 +1,27 @@
-import { Formik } from "formik";
+//Selectors
+import { shippingSelector } from "../../../redux/shipping/selectors";
+import { countriesSelector } from '../../../redux/countries/selectors'
+//Actions
+import { deleteShippingAction, updateShippingAction, fetchShippingAction, saveShippingAction } from '../../../redux/shipping/actions';
+import { fetchCountriesAction } from '../../../redux/countries/actions'
+//Hooks
 import { useTranslations } from "next-intl";
 import { useRouter } from 'next/router';
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+//Other
+import { ErrorMessage, Field, FieldArray, Form, Formik } from "formik";
 import { InputText } from "../../../components/_form";
-import { fetchShippingAction } from "../../../redux/shipping/actions";
-import { shippingSelector } from "../../../redux/shipping/selectors";
-import { updateShippingAction } from '../../../redux/shipping/actions';
-import { deleteShippingAction } from '../../../redux/shipping/actions';
 import * as Yup from 'yup';
 import Image from 'next/image';
 import { baseApiUrl } from '../../../constants';
-import Country from "../../../components/shipping/Country";
 
 export default function EditMethod() {
-    //Hooks conts
     const t = useTranslations();
     const router = useRouter();
     const dispatch = useDispatch();
+    const countries = useSelector(countriesSelector);
     const shipping = useSelector(shippingSelector);
-    const [countries, setCountries] = useState([{price: 100}, {price: 50}, {price: 80}, {price: 1230}])
-
     const id = router.query.id;
     const deleteCallback = () => {
         let sure = confirm(t('Are you sure ?'))
@@ -30,11 +31,10 @@ export default function EditMethod() {
 
         }
     };
-    const submitSchema = Yup.object().shape({
-        name: Yup.string()
-            .min(3, t('Must be more characters'))
-            .required(t('Required field')),
-    });
+
+    useEffect(() => {
+        dispatch(fetchCountriesAction())
+    }, [])
 
     useEffect(() => {
         dispatch(fetchShippingAction(id))
@@ -51,7 +51,11 @@ export default function EditMethod() {
                     <Formik
                         enableReinitialize
                         initialValues={{ name: shipping.name, logo: '' }}
-                        validationSchema={submitSchema}
+                        validationSchema={Yup.object().shape({
+                            name: Yup.string()
+                                .min(3, t('Must be more characters'))
+                                .required(t('Required field')),
+                        })}
                         onSubmit={(values) => {
                             const formData = new FormData();
 
@@ -84,19 +88,9 @@ export default function EditMethod() {
                                         props.setFieldValue("logo", event.currentTarget.files?.[0]);
 
                                     }} />
-
-                                    {props.errors.hasOwnProperty('logo') &&
-                                        <h2>
-                                            <div className="error-el">{props.errors?.logo}</div>
-                                        </h2>
-                                    }
-
                                 </label>
-
                                 <button className="mt-8 gradient-btn w-full" type="submit">{t('Save')}</button>
-
                                 <div onClick={deleteCallback} className="cursor-pointer mt-1 gradient-btn">{t('Delete')}</div>
-
                             </form>
                         }
                     />
@@ -107,22 +101,71 @@ export default function EditMethod() {
                         {t('Apply Countries')}
                     </div>
 
-                    <div className="mb-2">
-                        {countries.map((item, listIndex) =>
-                            <Country
-                                country={item}
-                                deleteCallback={() => {
-                                    const array = countries.filter((item, index) => index !== listIndex )
-                                    setCountries(array)
-                                }}
-                            />)
-                        }
-                    </div>
+                    <Formik
+                        validationSchema={
+                            Yup.object().shape({
+                                countries: Yup.array()
+                                    .of(Yup.object().shape({
+                                        id: Yup.number().required(t('Required field')),
+                                        price: Yup.number().required(t('Required field'))
+                                            .typeError('Price must be number')
+                                    }))
 
-                    <button onClick={() => setCountries([...countries, {}])} className="gradient-btn">{t('Add')}</button>
+                            })
+                        }
+                        initialValues={{ countries: [] }}
+                        onSubmit={values => dispatch(saveShippingAction(id, values.countries))}
+                        render={({ values }) => (
+                            <Form>
+                                <FieldArray
+                                    name="countries"
+                                    render={arrayHelpers => (
+                                        <div>
+                                            {values.countries.map((country: any, index) => (
+                                                <div key={index}>
+                                                    <div className="my-4 flex items-center justify-start w-1/2">
+                                                        <div className="w-full">
+                                                            <Field className="form-control" as="select" name={`countries.${index}.id`}>
+                                                                <option value="">...</option>
+                                                                {
+                                                                    countries.map(
+                                                                        (country: any) => <option value={country.id}>{country.nicename}</option>
+                                                                    )
+                                                                }
+                                                            </Field>
+                                                            <div className="error-el">
+                                                                <ErrorMessage name={`countries.${index}.id`} />
+                                                            </div>
+                                                        </div>
+                                                        <div className="ml-4">
+                                                            <Field
+                                                                className="form-control"
+                                                                name={`countries.${index}.price`}
+                                                                placeholder={'Price'}
+                                                                value={country.price}
+                                                            />
+                                                            <div className="error-el">
+                                                                <ErrorMessage name={`countries.${index}.price`} />
+                                                            </div>
+                                                        </div>
+
+                                                        <button type="button" onClick={() => arrayHelpers.remove(index)} className="ml-4 disabled-btn">{t('Delete')}</button>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                            <button type="button" onClick={() => arrayHelpers.push({ id: '', price: '' })} className="gradient-btn">{t('Add')}</button>
+                                        </div>
+                                    )}
+                                />
+                                {values.countries.length > 0 &&
+                                    <button type="submit" className="mt-8 gradient-btn">{t('Save')}</button>
+                                }
+
+                            </Form>
+                        )}
+                    />
                 </div>
             </div>
-
         </>
     )
 }
