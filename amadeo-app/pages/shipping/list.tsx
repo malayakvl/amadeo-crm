@@ -31,7 +31,7 @@ export default function List() {
 
     return (
         <div className="flex">
-            <div className="w-64 p-4 bg-gray-100 rounded-lg shadow-inner">
+            <div className="w-64 p-4 bg-white rounded-lg">
                 <div className="font-bold text-gray-350 text-lg pb-4 border-b border-gray-200">
                     {t('Free shipping')}
                 </div>
@@ -46,32 +46,22 @@ export default function List() {
                 />
                 <button className="gradient-btn">{t('Save changes')}</button>
             </div>
-            <div className="ml-4 flex-1">
-                <div className="mb-12 font-bold text-gray-350 text-lg py-4 border-b border-gray-200">
+            <div className="block-white-8  ml-4 flex-1">
+                <div className="mb-8 font-bold text-gray-350 text-lg py-4 border-b border-gray-200">
                     {t('Shipping methods')}
                 </div>
                 <DataTable
                     paginationType={PaginationType.SHIPPING}
                     totalAmount={10}
                     sendRequest={sendRequest}
-                    sendDeleteRequest={() => new Promise((resolve, reject) => {})}
-                    sendCopyRequest={() => new Promise((resolve, reject) => {})}>
+                    sendDeleteRequest={() => new Promise((resolve, reject) => { })}
+                    sendCopyRequest={() => new Promise((resolve, reject) => { })}>
                     {items?.map((item: Shipping) => (
-                        <tr key={item.id}>
-                            <td>
-                                <Image
-                                    width={12}
-                                    height={12}
-                                    src="/images/action-arrow.svg"
-                                    layout="fixed"
-                                    alt=""
-                                />
-                            </td>
-                            <td className="text-center">{item.id}</td>
+                        <tr className="" key={item.id}>
+                            <td>{item.name}</td>
                             <td className="text-center">
                                 <Image src={`${baseApiUrl}/${item.image}`} width={50} height={50} />
                             </td>
-                            <td>{item.name}</td>
                             <td>
                                 <label className="flex items-center cursor-pointer relative">
                                     <input
@@ -89,7 +79,7 @@ export default function List() {
                             </td>
                             <td className="text-center">
                                 {item.countries.map((country) => (
-                                    <div>
+                                    <div className="bg-gray-400 text-white rounded-md p-1 m-1">
                                         {
                                             countries.find((item: any) => item.id === country.id)
                                                 .nicename

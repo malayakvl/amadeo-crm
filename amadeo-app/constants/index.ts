@@ -24,10 +24,8 @@ export const TableHeaders: { [key in PaginationType]: Type.DataTableHeader[] } =
     ],
     [PaginationType.NOTIFICATIONS]: [],
     [PaginationType.SHIPPING]: [
-        { className: 'shipping-dropdown' },
-        { className: 'shipping-number' },
-        { className: 'shipping-logo' },
         { titleKey: 'Shipping Method' },
+        { className: 'shipping-logo' },
         { className: 'option-switcher' },
         { className: 'shipping-countries' },
         {}
