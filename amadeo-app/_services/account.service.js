@@ -42,36 +42,6 @@ function logout() {
     history.push('/login');
 }
 
-// function getAll() {
-//     return axios.get(baseUrl)
-//         .then(response => response.data);
-// }
-//
-// function getById(id) {
-//     return axios.get(`${baseUrl}/${id}`)
-//         .then(response => response.data);
-// }
-//
-// async function update(id, params) {
-//     const response = await axios.put(`${baseUrl}/${id}`, params);
-//     let account = response.data;
-//     // update the current account if it was updated
-//     if (account.id === accountSubject.value?.id) {
-//         // publish updated account to subscribers
-//         account = { ...accountSubject.value, ...account };
-//         accountSubject.next(account);
-//     }
-//     return account;
-// }
-//
-// async function _delete(id) {
-//     await axios.delete(`${baseUrl}/${id}`);
-//     if (id === accountSubject.value?.id) {
-//         // auto logout if the logged in account was deleted
-//         logout();
-//     }
-// }
-
 // helper methods
 
 let authenticateTimeout;
@@ -79,7 +49,6 @@ let authenticateTimeout;
 function startAuthenticateTimer() {
     // parse json object from base64 encoded jwt token
     const jwtToken = JSON.parse(atob(accountSubject.value.token.split('.')[1]));
-
     // set a timeout to re-authenticate with the api one minute before the token expires
     const expires = new Date(jwtToken.exp * 1000);
     const timeout = expires.getTime() - Date.now() - 60 * 1000;

@@ -120,13 +120,14 @@ class Chatbot {
     
     async create (userId, data) {
         const client = await pool.connect();
-        const query =  `INSERT INTO data.chatbot_scenarios (user_id, name, keywords, message_fr, message_en, active, answer_count, product)
+        const query =  `INSERT INTO data.chatbot_scenarios (user_id, name, keywords, message_fr, message_en, active, answer_count, product, discount)
                 VALUES (${userId}, '${data.name}', '${data.keywords}',
                     regexp_replace($$${data.message_fr}$$, '\\\\n+', E'\\n', 'g' ),
                     regexp_replace($$${data.message_en}$$, '\\\\n+', E'\\n', 'g' ),
                     true,
                     '${data.answer_count}',
-                    '${data.product ? JSON.stringify(data.product) : ''}'
+                    '${data.product ? JSON.stringify(data.product) : ''}',
+                    ${data.discount}
                 );`;
         try {
             await client.query(query);
@@ -164,6 +165,7 @@ class Chatbot {
                                 keywords = $$${data.keywords}$$,
                                 answer_count='${data.answer_count}',
                                 product='${data.product ? JSON.stringify(data.product) : ''}',
+                                discount=${data.discount},
                                 message_fr = regexp_replace($$${data.message_fr}$$, '\\\\n+', E'\\n', 'g' ),
                                 message_en = regexp_replace($$${data.message_en}$$, '\\\\n+', E'\\n', 'g' )
                             WHERE id=${itemId} AND user_id=${userId}

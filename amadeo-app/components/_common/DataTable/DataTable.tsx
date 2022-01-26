@@ -221,7 +221,7 @@ const DataTable: React.FC<Props> = ({
 
     return (
         <>
-            <table className="min-w-full float-table">
+            <table className="w-full float-table">
                 <thead>{renderTableHeader()}</thead>
                 <tbody>{renderTableBody()}</tbody>
             </table>

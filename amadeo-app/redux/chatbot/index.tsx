@@ -32,6 +32,7 @@ const initialState: {
         active: true,
         answer_count: '',
         product: null,
+        discount: '',
         created_at: null,
         updated_at: null
     },
@@ -99,7 +100,8 @@ const ACTION_HANDLERS: any = {
                 message_en: '',
                 active: true,
                 product: null,
-                answer_count: null,
+                discount: '',
+                answer_count: '',
                 created_at: null,
                 updated_at: null
             }

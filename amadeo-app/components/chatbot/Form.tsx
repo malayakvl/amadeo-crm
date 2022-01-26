@@ -58,7 +58,9 @@ function ChatbotForm() {
             .max(255, t('Must be less characters', { charNumber: 255 }))
             .required(t('Required field')),
         message_fr: Yup.string().required(t('Required field')),
-        message_en: Yup.string().required(t('Required field'))
+        message_en: Yup.string().required(t('Required field')),
+        discount: Yup.number(),
+        answer_count: Yup.number()
     });
     return (
         <>
@@ -125,6 +127,15 @@ function ChatbotForm() {
                                             />
                                         </div>
                                     </div>
+                                    <InputText
+                                        icon={null}
+                                        label={'Discount (%)'}
+                                        name={'discount'}
+                                        placeholder={'Discount (%)'}
+                                        style={'max-w-[300px]'}
+                                        props={props}
+                                        tips={null}
+                                    />
 
                                     <div className="clear-both mt-7">
                                         <i className="trans-fr" />
