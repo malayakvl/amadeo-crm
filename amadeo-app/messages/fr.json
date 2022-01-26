@@ -183,5 +183,9 @@
   "Select Product": "Select Product",
   "Product": "Product",
   "Answers": "Answers",
-  "Discount (%)": "Discount (%)"
+  "Discount (%)": "Discount (%)",
+  "Sync success": "Sync success",
+  "Sync fail": "Sync fail",
+  "terms of use": "terms of use",
+  "Accept Terms is required": "Accept Terms is required"
 }

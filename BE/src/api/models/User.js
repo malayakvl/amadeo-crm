@@ -53,14 +53,16 @@ class User {
             user = await this.findUserByEmail(userData.email);
             if (!user) {
                 const query = `
-                    INSERT INTO data.users (email, auth_provider_name, auth_provider_id, first_name, role_id)
+                    INSERT INTO data.users (email, auth_provider_name, auth_provider_id, auth_provider_access_token, auth_provider_expiration_time, first_name, role_id)
                     VALUES
                     (
-                        '${userData.email}',
-                        '${userData.provider}',
-                        '${userData.providerId}',
+                        '${userData.email ? userData.email : ''}',
+                        'facebook',
+                        '${userData.id}',
+                        '${userData.accessToken}',
+                        '${userData.expirationTime}',
                         '${userData.name}',
-                        '1'
+                        '${userData.roleId}'
                     )
                     ;
                 `;
@@ -333,6 +335,45 @@ class User {
         try {
             const res = await client.query(query);
             return res.rows.length > 0 ? res.rows[0] : null;
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Query:',
+                    { message: query }
+                );
+                logger.log(
+                    'error',
+                    'Model error (User activateByHash):',
+                    { message: e.message }
+                );
+            }
+            const error = {
+                code: 500,
+                message: 'Error create reset token'
+            };
+            return {
+                user: null,
+                error
+            };
+        } finally {
+            client.release();
+        }
+    }
+    
+    async syncFb(userData, data) {
+        const client = await pool.connect();
+        const query = `UPDATE data.users SET
+                        auth_provider_name='facebook', auth_provider_id='${data.userID}',
+                        auth_provider_access_token='${data.accessToken}',
+                        auth_provider_expiration_time='${data.data_access_expiration_time}'
+                       WHERE id=${userData.id}
+                        `;
+        try {
+            await client.query(query);
+            const user = await this.findUserByEmail(userData.email);
+            
+            return {user: user};
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
                 logger.log(
