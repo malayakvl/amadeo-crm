@@ -126,7 +126,6 @@ export const saveShippingAction: any = createAction(
                 setSuccessToastAction('Counties of the shipping has been saved')
             );
 
-
         })
 
     }

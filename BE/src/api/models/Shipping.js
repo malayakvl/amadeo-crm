@@ -130,10 +130,32 @@ class Shipping {
         }
     }
 
+    async findCountriesById(id) {
+        const client = await pool.connect();
+        try {
+            const res = await client.query(
+                'SELECT country_id AS id, price FROM data.shipping_to_country WHERE shipping_id = $1', [id]
+            );
+
+            return res.rows;
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model Shipping error:',
+                    { message: e.message }
+                );
+            }
+            return { success: false, error: { code: 404, message: 'Tags Not found' } };
+        } finally {
+            client.release();
+        }
+    }
+
     async saveCountries(userId, shippingId, countries) {
         const client = await pool.connect();
         try {
-            await client.query('DELETE FROM data.shipping_to_country WHERE user_id = $1', [userId]);
+            await client.query('DELETE FROM data.shipping_to_country WHERE user_id = $1 AND shipping_id = $2', [userId, shippingId]);
             countries.forEach((country) => {
                 client.query(
                     'INSERT INTO data.shipping_to_country (user_id, shipping_id, country_id, price) VALUES ($1, $2, $3, $4)',

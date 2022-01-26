@@ -107,9 +107,10 @@ export default new class ShippingController {
     }
 
     async fetch(req, res) {
-        const shipping = await shippingModel.findById(req.params.id);
+        const shipping = await shippingModel.findById(req.params.id)
+        const countries = await shippingModel.findCountriesById(req.params.id)
 
-        return res.status(200).json({ ...shipping })
+        return res.status(200).json({ ...shipping, countries })
 
     }
 }
