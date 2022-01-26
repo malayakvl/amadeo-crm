@@ -111,3 +111,24 @@ export const deleteShippingAction: any = createAction(
     }
 
 )
+
+export const saveShippingAction: any = createAction(
+    'SHIPPING/SAVE_SHIPPING_COUNTRIES',
+    async (id: number, data: any) => (dispatch: Type.Dispatch, getState: () => State.Root) => {
+        const state = getState();
+
+        axios.post(`${url}/save-countries/${id}`, data, {
+            headers: {
+                ...authHeader(state.user.user.email)
+            }
+        }).then(result => {
+            dispatch(
+                setSuccessToastAction('Counties of the shipping has been saved')
+            );
+
+
+        })
+
+    }
+
+)

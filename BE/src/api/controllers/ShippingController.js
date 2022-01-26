@@ -94,6 +94,11 @@ export default new class ShippingController {
 
     }
 
+    saveCountries(req, res) {
+        shippingModel.saveCountries(req.user.id, req.params.id, req.body)
+        return res.status(200).json({})
+    }
+
     async fetchAll(req, res) {
         const shippings = await shippingModel.getAll()
 
