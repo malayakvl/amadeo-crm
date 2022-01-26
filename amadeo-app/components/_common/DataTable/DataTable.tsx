@@ -235,10 +235,10 @@ const DataTable: React.FC<Props> = ({
                             <option value={100}>100</option>
                         </select>
                     </div>
-                    {totalAmount / limit > 1 && (
+                    {Math.ceil(totalAmount / limit) > 1 && (
                         <RawPagination
                             forcePage={offset && offset / limit}
-                            pageCount={totalAmount / limit}
+                            pageCount={Math.ceil(totalAmount / limit)}
                             onPageChange={setPage}
                         />
                     )}
