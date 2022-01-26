@@ -62,9 +62,18 @@ const Row: React.FC<any> = ({
                         </label>
                     )}
                 </td>
-                <td style={{ width: '20%' }}>{item.name}</td>
-                <td style={{ width: '60%' }}>{item.keywords}</td>
+                <td>
+                    <span className="overflow-hidden max-w-[500px] block text-ellipsis">
+                        {item.name}
+                    </span>
+                </td>
+                <td>
+                    <span className="overflow-hidden max-w-[500px] block text-ellipsis">
+                        {item.keywords}
+                    </span>
+                </td>
                 <td>{parseProduct(item.product)}</td>
+                <td>{parseProduct(item.discount)}</td>
                 <td>{item.answer_count}</td>
                 <td
                     className="chat-eye cursor-pointer"
@@ -72,7 +81,7 @@ const Row: React.FC<any> = ({
                     onClick={() => dispatch(showItemAction(item.id))}>
                     <i className={showedItems.includes(item.id) ? 'eye' : 'eye-cross'} />
                 </td>
-                <td className="actions">
+                <td className="actions" style={{ width: '150px' }}>
                     <ButtonTableAction
                         dataId={String(item.id)}
                         localeKey="Edit"
@@ -89,7 +98,7 @@ const Row: React.FC<any> = ({
             </tr>
             <tr className={showedItems.includes(item.id) ? '' : 'hidden'}>
                 <td />
-                <td colSpan={5} className="translations">
+                <td colSpan={6} className="translations">
                     <i className="trans-fr" />
                     <div className="shadow-border float-left ml-5 mb-5 translations-msg">
                         <div
@@ -105,7 +114,7 @@ const Row: React.FC<any> = ({
                         <div
                             className="pl-5 inline-block"
                             dangerouslySetInnerHTML={{
-                                __html: item.message_fr
+                                __html: item.message_en
                             }}
                         />
                     </div>

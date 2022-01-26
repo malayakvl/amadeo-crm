@@ -1,9 +1,7 @@
-import React, { useCallback } from 'react';
+import React, { useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { useDispatch, useSelector } from 'react-redux';
-import { itemsCountSelector, itemsSystemSelector } from '../../redux/chatbot/selectors';
-import { PaginationType } from '../../constants';
-import { DataTable } from '../_common';
+import { itemsSystemSelector } from '../../redux/chatbot/selectors';
 import { Row } from './index';
 import { fetchDataSystemAction } from '../../redux/chatbot';
 
@@ -11,11 +9,10 @@ const DefaultMessages: React.FC = () => {
     const t = useTranslations();
     const dispatch = useDispatch();
     const items = useSelector(itemsSystemSelector);
-    const count = useSelector(itemsCountSelector);
 
-    const sendRequest = useCallback(() => {
-        return dispatch(fetchDataSystemAction('system'));
-    }, [dispatch]);
+    useEffect(() => {
+        dispatch(fetchDataSystemAction('system'));
+    }, []);
 
     return (
         <>
@@ -26,15 +23,32 @@ const DefaultMessages: React.FC = () => {
                 </h2>
             </div>
             <div className="system-message">
-                <DataTable
-                    hidePaginationBar={true}
-                    paginationType={PaginationType.CHATBOT}
-                    totalAmount={count}
-                    sendRequest={sendRequest}>
-                    {items?.map((item: any) => (
-                        <Row key={item.id} item={item} disableChecker={true} />
-                    ))}
-                </DataTable>
+                <table className="w-full float-table">
+                    <thead>
+                        <tr>
+                            <th />
+                            <th />
+                            <th>
+                                <i className="scenario" />
+                                {t('Scenario')}
+                            </th>
+                            <th className="text-left">
+                                <i className="message" />
+                                {t('Trigger')}
+                            </th>
+                            <th />
+                            <th />
+                            <th className="chat-eye sorting_disabled">
+                                <i className="eye" />
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {items?.map((item: any) => (
+                            <Row key={item.id} item={item} disableChecker={true} />
+                        ))}
+                    </tbody>
+                </table>
             </div>
         </>
     );
