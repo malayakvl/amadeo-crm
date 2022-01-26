@@ -45,6 +45,14 @@ class AuthController {
         }
         res.status(200).json({ user: user });
     }
+    
+    async authProviderLogin(req, res) {
+        const { user, error } = await userModel.providerLogin(req.body);
+        if (error) {
+            return res.status(error.code).json(error);
+        }
+        res.status(200).json({ user: user });
+    }
 
     /**
      * Register new user via form data

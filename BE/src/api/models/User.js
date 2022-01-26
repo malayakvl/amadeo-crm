@@ -39,6 +39,39 @@ class User {
             client.release();
         }
     }
+    
+    /**
+     * Find user by email
+     *
+     * @param providerId - string
+     * @param isDeleted - boolean
+     * @returns {Promise<any|null>}
+     */
+    async findUserByProviderId(providerId, isDeleted = false) {
+        const client = await pool.connect();
+        try {
+            const res = await client.query(`SELECT * FROM data.users WHERE auth_provider_id = '${providerId}'`);
+            if (res.rows.length) {
+                delete res.rows[0].auth_provider_name;
+                delete res.rows[0].auth_provider_id;
+                return res.rows[0];
+            } else {
+                return null;
+            }
+            // return res.rows.length > 0 ? res.rows[0] : null;
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error:',
+                    { message: e.message }
+                );
+            }
+            throw new Error(e);
+        } finally {
+            client.release();
+        }
+    }
 
     /**
      * Login or Register user via provider Facebook, Google, etc
@@ -88,6 +121,37 @@ class User {
         } finally {
             client.release();
         }
+    }
+    
+    /**
+     * Login or Register user via provider Facebook, Google, etc
+     *
+     * @param userData - object
+     * @returns {Promise<{error: {code: number, message: string}, user: null}|{error: null, user: *}>}
+     */
+    async providerLogin(userData) {
+        const client = await pool.connect();
+        try {
+            let user;
+            user = await this.findUserByProviderId(userData.userID);
+            if (!user) {
+                return { user: null, error: { code: 404, message: 'User Not found' } };
+            } else {
+                return { user: user, error: null };
+            }
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error:',
+                    { message: e.message }
+                );
+            }
+            return { user: null, error: { code: 404, message: 'User Not found' } };
+        } finally {
+            client.release();
+        }
+    
     }
 
     /**

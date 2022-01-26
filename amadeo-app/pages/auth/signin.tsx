@@ -2,14 +2,19 @@ import { providers, getSession } from 'next-auth/client';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import * as Yup from 'yup';
-import ProviderBtns from '../../components/auth/ProviderBtns';
+import { useRouter } from 'next/router';
+// import ProviderBtns from '../../components/auth/ProviderBtns';
 import { InputText, InputPassword } from '../../components/_form';
 import { signIn } from 'next-auth/client';
 import FullLayout from '../../components/layout/FullLayout';
 import { Formik, Field } from 'formik';
+import Image from 'next/image';
+import { accountService } from '../../_services';
 
-function Signin({ locale, providers }: { locale: string; providers: any }) {
+function Signin({ locale }: { locale: string }) {
     const t = useTranslations();
+    const { query } = useRouter();
+    console.log(query.message);
 
     const SubmitSchema = Yup.object().shape({
         email: Yup.string().email(t('Must be a valid email')).required(t('Required field')),
@@ -19,9 +24,9 @@ function Signin({ locale, providers }: { locale: string; providers: any }) {
     return (
         <div className="flex justify-center">
             <div className="mt-10 rounded-lg bg-white w-96 p-10 pb-24">
-                <div className="mb-2 font-sm">Welcome back!</div>
+                <div className="mb-2 font-sm">{t('Welcome back!')}</div>
                 <div className="mb-8 font-bold text-3xl line-height-105percent">
-                    Please sign into your account.
+                    {t('Please sign into your account')}
                 </div>
                 <Formik
                     enableReinitialize
@@ -64,10 +69,10 @@ function Signin({ locale, providers }: { locale: string; providers: any }) {
                                     className="text-green-250 w-5 h-5 border-2 rounded mr-2.5"
                                     type="checkbox"
                                 />
-                                <div className="text-xs">Remember me</div>
+                                <div className="text-xs">{t('Remember me')}</div>
                                 <Link href={'/auth/restore'}>
                                     <a className="ml-auto text-xs text-orange-450">
-                                        Forgot password?
+                                        {t('Forgot password?')}
                                     </a>
                                 </Link>
                             </div>
@@ -77,7 +82,7 @@ function Signin({ locale, providers }: { locale: string; providers: any }) {
                                     className="gradient-btn w-full px-3 py-4 text-white bg-indigo-500 rounded-md
                                     hover:bg-indigo-600
                                     focus:outline-none duration-100 ease-in-out">
-                                    Login
+                                    {t('Login')}
                                 </button>
                             </div>
 
@@ -85,23 +90,39 @@ function Signin({ locale, providers }: { locale: string; providers: any }) {
                                 <div
                                     style={{ lineHeight: '0.1em' }}
                                     className="text-center border-b my-5">
-                                    <span className="bg-white px-6">or</span>
+                                    <span className="bg-white px-6">{t('or')}</span>
                                 </div>
                             </div>
                         </form>
                     )}
                 </Formik>
 
-                <ProviderBtns Providers={providers} locale={locale} />
+                {/*<ProviderBtns Providers={providers} locale={locale} />*/}
+                <button
+                    className="image-btn bg-social-facebook text-white"
+                    onClick={() => accountService.loginFB()}>
+                    <Image
+                        width={24}
+                        height={24}
+                        src="/images/social/facebook-solid.svg"
+                        layout="fixed"
+                        alt=""
+                    />
+                    <div className="text-sm ml-2.5">{t('Continue with Facebook')}</div>
+                </button>
+                <div className="error-el">{query.message}</div>
 
                 <div className="mt-6 border-t text-center text-sm">
                     <div className="mb-2 pt-1">
-                        Don’t have an account?{' '}
+                        {t('Don’t have an account?')}
                         <Link href={'/auth/signup'}>
-                            <a className="text-orange-450 font-bold">Sign up here!</a>
+                            <a className="text-orange-450 font-bold">{t('Sign up here!')}</a>
                         </Link>
                     </div>
-                    <div className="text-gray-450">By signing in, you accept the terms of use</div>
+                    <div className="text-gray-450">
+                        {t('By signing in, you accept the')}{' '}
+                        <Link href={'/'}>{t('terms of use')}</Link>
+                    </div>
                 </div>
             </div>
         </div>
