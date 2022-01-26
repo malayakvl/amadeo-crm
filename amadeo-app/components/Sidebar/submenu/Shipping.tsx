@@ -1,10 +1,10 @@
-import { useTranslations } from "next-intl";
-import Link from "next/link";
-import { useDispatch } from "react-redux";
-import { setActivePageAction } from "../../../redux/layouts/actions";
+import { useTranslations } from 'next-intl';
+import Link from 'next/link';
+import { useDispatch } from 'react-redux';
+import { setActivePageAction } from '../../../redux/layouts/actions';
 
 const SidebarShipping = function () {
-    const t = useTranslations()
+    const t = useTranslations();
     const dispatch = useDispatch();
 
     return (

@@ -1,17 +1,21 @@
 //Selectors
-import { shippingSelector } from "../../../redux/shipping/selectors";
-import { countriesSelector } from '../../../redux/countries/selectors'
+import { shippingSelector } from '../../../redux/shipping/selectors';
+import { countriesSelector } from '../../../redux/countries/selectors';
 //Actions
-import { deleteShippingAction, updateShippingAction, fetchShippingAction, saveShippingAction } from '../../../redux/shipping/actions';
-import { fetchCountriesAction } from '../../../redux/countries/actions'
+import {
+    deleteShippingAction,
+    updateShippingAction,
+    fetchShippingAction,
+    saveShippingAction
+} from '../../../redux/shipping/actions';
 //Hooks
-import { useTranslations } from "next-intl";
+import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/router';
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 //Other
-import { ErrorMessage, Field, FieldArray, Form, Formik } from "formik";
-import { InputText } from "../../../components/_form";
+import { ErrorMessage, Field, FieldArray, Form, Formik } from 'formik';
+import { InputText } from '../../../components/_form';
 import * as Yup from 'yup';
 import Image from 'next/image';
 import { baseApiUrl } from '../../../constants';
@@ -24,32 +28,26 @@ export default function EditMethod() {
     const shipping = useSelector(shippingSelector);
     const id = router.query.id;
     const deleteCallback = () => {
-        let sure = confirm(t('Are you sure ?'))
+        const sure = confirm(t('Are you sure ?'));
 
         if (sure) {
-            dispatch(deleteShippingAction(id)).then(router.push('/shipping/list'))
-
+            dispatch(deleteShippingAction(id)).then(router.push('/shipping/list'));
         }
     };
 
     useEffect(() => {
-        dispatch(fetchCountriesAction())
-    }, [])
-
-    useEffect(() => {
-        if (!id) return
-        dispatch(fetchShippingAction(id))
-
+        if (!id) return;
+        dispatch(fetchShippingAction(id));
     }, [id]);
 
     if (!shipping) {
-        return 'Loading'
+        return 'Loading';
     }
 
     return (
         <>
             <div className="page-title">
-                <h1 >{t('Edit Shipping Method')}</h1>
+                <h1>{t('Edit Shipping Method')}</h1>
             </div>
             <div className="flex mt-10">
                 <Formik
@@ -58,7 +56,7 @@ export default function EditMethod() {
                     validationSchema={Yup.object().shape({
                         name: Yup.string()
                             .min(3, t('Must be more characters'))
-                            .required(t('Required field')),
+                            .required(t('Required field'))
                     })}
                     onSubmit={(values) => {
                         const formData = new FormData();
@@ -66,11 +64,12 @@ export default function EditMethod() {
                         formData.append('logo', values.logo);
                         formData.append('name', values.name);
 
-                        dispatch(updateShippingAction(id, formData))
-
+                        dispatch(updateShippingAction(id, formData));
                     }}
-                    render={(props) =>
-                        <form onSubmit={props.handleSubmit} className="p-4 bg-gray-100 rounded-lg shadow-inner mb-6">
+                    render={(props) => (
+                        <form
+                            onSubmit={props.handleSubmit}
+                            className="p-4 bg-gray-100 rounded-lg shadow-inner mb-6">
                             <label className="text-xs text-blue-350 font-bold">
                                 {t('Method name')}
                                 <InputText
@@ -86,17 +85,31 @@ export default function EditMethod() {
                             <label className="block text-xs text-blue-350 font-bold">
                                 <div>{t('Method image')}</div>
                                 <div className="mt-4">
-                                    <Image src={`${baseApiUrl}/${shipping.image}`} width={60} height={60} />
+                                    <Image
+                                        src={`${baseApiUrl}/${shipping.image}`}
+                                        width={60}
+                                        height={60}
+                                    />
                                 </div>
-                                <input className="mt-4 w-52" name="logo" type="file" onChange={(event) => {
-                                    props.setFieldValue("logo", event.currentTarget.files?.[0]);
-
-                                }} />
+                                <input
+                                    className="mt-4 w-52"
+                                    name="logo"
+                                    type="file"
+                                    onChange={(event) => {
+                                        props.setFieldValue('logo', event.currentTarget.files?.[0]);
+                                    }}
+                                />
                             </label>
-                            <button className="mt-8 gradient-btn w-full" type="submit">{t('Save')}</button>
-                            <div onClick={deleteCallback} className="cursor-pointer mt-1 gradient-btn">{t('Delete')}</div>
+                            <button className="mt-8 gradient-btn w-full" type="submit">
+                                {t('Save')}
+                            </button>
+                            <div
+                                onClick={deleteCallback}
+                                className="cursor-pointer mt-1 gradient-btn">
+                                {t('Delete')}
+                            </div>
                         </form>
-                    }
+                    )}
                 />
                 <div className="ml-8 w-full p-4 bg-gray-100 rounded-lg shadow-inner">
                     <div className="mb-4 font-bold text-gray-350 text-lg py-4 border-b border-gray-200">
@@ -104,39 +117,43 @@ export default function EditMethod() {
                     </div>
 
                     <Formik
-                        validationSchema={
-                            Yup.object().shape({
-                                countries: Yup.array()
-                                    .of(Yup.object().shape({
-                                        id: Yup.number().required(t('Required field')),
-                                        price: Yup.number().required(t('Required field'))
-                                            .typeError('Price must be number')
-                                    }))
-
-                            })
-                        }
+                        validationSchema={Yup.object().shape({
+                            countries: Yup.array().of(
+                                Yup.object().shape({
+                                    id: Yup.number().required(t('Required field')),
+                                    price: Yup.number()
+                                        .required(t('Required field'))
+                                        .typeError('Price must be number')
+                                })
+                            )
+                        })}
                         initialValues={{ countries: shipping.countries }}
-                        onSubmit={values => dispatch(saveShippingAction(id, values.countries))}
+                        onSubmit={(values) => dispatch(saveShippingAction(id, values.countries))}
                         render={({ values }) => (
                             <Form>
                                 <FieldArray
                                     name="countries"
-                                    render={arrayHelpers => (
+                                    render={(arrayHelpers) => (
                                         <div>
                                             {values.countries.map((country: any, index: number) => (
                                                 <div key={index}>
                                                     <div className="my-4 flex items-center justify-start w-1/2">
                                                         <div className="w-full">
-                                                            <Field className="form-control" as="select" name={`countries.${index}.id`}>
+                                                            <Field
+                                                                className="form-control"
+                                                                as="select"
+                                                                name={`countries.${index}.id`}>
                                                                 <option value="">...</option>
-                                                                {
-                                                                    countries.map(
-                                                                        (country: any) => <option value={country.id}>{country.nicename}</option>
-                                                                    )
-                                                                }
+                                                                {countries.map((country: any) => (
+                                                                    <option value={country.id}>
+                                                                        {country.nicename}
+                                                                    </option>
+                                                                ))}
                                                             </Field>
                                                             <div className="error-el">
-                                                                <ErrorMessage name={`countries.${index}.id`} />
+                                                                <ErrorMessage
+                                                                    name={`countries.${index}.id`}
+                                                                />
                                                             </div>
                                                         </div>
                                                         <div className="ml-4">
@@ -147,28 +164,44 @@ export default function EditMethod() {
                                                                 value={country.price}
                                                             />
                                                             <div className="error-el">
-                                                                <ErrorMessage name={`countries.${index}.price`} />
+                                                                <ErrorMessage
+                                                                    name={`countries.${index}.price`}
+                                                                />
                                                             </div>
                                                         </div>
 
-                                                        <button type="button" onClick={() => arrayHelpers.remove(index)} className="ml-4 disabled-btn">{t('Delete')}</button>
+                                                        <button
+                                                            type="button"
+                                                            onClick={() =>
+                                                                arrayHelpers.remove(index)
+                                                            }
+                                                            className="ml-4 disabled-btn">
+                                                            {t('Delete')}
+                                                        </button>
                                                     </div>
                                                 </div>
                                             ))}
-                                            <button type="button" onClick={() => arrayHelpers.push({ id: '', price: '' })} className="gradient-btn">{t('Add')}</button>
+                                            <button
+                                                type="button"
+                                                onClick={() =>
+                                                    arrayHelpers.push({ id: '', price: '' })
+                                                }
+                                                className="gradient-btn">
+                                                {t('Add')}
+                                            </button>
                                         </div>
                                     )}
                                 />
-                                {
-                                    values.countries.length > 0 &&
-                                    <button type="submit" className="mt-8 gradient-btn">{t('Save')}</button>
-                                }
-
+                                {values.countries.length > 0 && (
+                                    <button type="submit" className="mt-8 gradient-btn">
+                                        {t('Save')}
+                                    </button>
+                                )}
                             </Form>
                         )}
                     />
                 </div>
             </div>
         </>
-    )
+    );
 }

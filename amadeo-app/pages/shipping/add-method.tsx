@@ -1,5 +1,5 @@
-import { Formik } from "formik";
-import { useTranslations } from "next-intl";
+import { Formik } from 'formik';
+import { useTranslations } from 'next-intl';
 import { InputText } from '../../components/_form';
 import * as Yup from 'yup';
 import { createShippingAction } from '../../redux/shipping/actions';
@@ -11,12 +11,9 @@ export default function AddMethod() {
     const dispatch = useDispatch();
     const router = useRouter();
     const submitSchema = Yup.object().shape({
-        name: Yup.string()
-            .min(3, t('Must be more characters'))
-            .required(t('Required field')),
-        logo: Yup.mixed()
-            .required(t('Required field'))
-    })
+        name: Yup.string().min(3, t('Must be more characters')).required(t('Required field')),
+        logo: Yup.mixed().required(t('Required field'))
+    });
 
     return (
         <>
@@ -33,13 +30,16 @@ export default function AddMethod() {
 
                     formData.append('logo', values.logo);
                     formData.append('name', values.name);
-                    
-                    dispatch(createShippingAction(formData)).then(() => router.push('/shipping/list'))
 
+                    dispatch(createShippingAction(formData)).then(() =>
+                        router.push('/shipping/list')
+                    );
                 }}
                 render={(props) => {
                     return (
-                        <form onSubmit={props.handleSubmit} className="w-1/2 p-4 mt-10 bg-gray-100 rounded-lg shadow-inner mb-6">
+                        <form
+                            onSubmit={props.handleSubmit}
+                            className="w-1/2 p-4 mt-10 bg-gray-100 rounded-lg shadow-inner mb-6">
                             <label className="text-xs text-blue-350 font-bold">
                                 {t('Method name')}
                                 <InputText
@@ -54,24 +54,29 @@ export default function AddMethod() {
                             </label>
                             <label className="block text-xs text-blue-350 font-bold">
                                 <div>{t('Method image')}</div>
-                                <input className="mt-4 w-52" name="logo" type="file" onChange={(event) => {
-                                    props.setFieldValue("logo", event.currentTarget.files?.[0]);
+                                <input
+                                    className="mt-4 w-52"
+                                    name="logo"
+                                    type="file"
+                                    onChange={(event) => {
+                                        props.setFieldValue('logo', event.currentTarget.files?.[0]);
+                                    }}
+                                />
 
-                                }} />
-
-                                {props.errors.hasOwnProperty('logo') &&
+                                {props.errors.hasOwnProperty('logo') && (
                                     <h2>
                                         <div className="error-el">{props.errors?.logo}</div>
                                     </h2>
-                                }
+                                )}
                             </label>
 
-                            <button className="mt-8 gradient-btn" type="submit">Create</button>
+                            <button className="mt-8 gradient-btn" type="submit">
+                                Create
+                            </button>
                         </form>
-                    )
+                    );
                 }}
             />
-
         </>
-    )
+    );
 }

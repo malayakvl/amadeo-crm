@@ -102,6 +102,13 @@ export default new class ShippingController {
     async fetchAll(req, res) {
         const shippings = await shippingModel.getAll()
 
+        const promises = shippings.map(async shipping => {
+            shipping.countries = await shippingModel.findCountriesById(shipping.id)
+
+        })
+
+        await Promise.all(promises)
+
         return res.status(200).json({ shippings })
 
     }

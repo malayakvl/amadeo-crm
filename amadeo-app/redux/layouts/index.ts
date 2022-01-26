@@ -26,7 +26,7 @@ const initialState: State.Layouts = {
             ...initPagination,
             filters: { product_name: '', color_id: [], size_id: [], price: [], quantity: [] }
         },
-        shipping: {...initPagination}
+        shipping: { ...initPagination }
     },
     isSidebarOpen: true,
     isDataLoading: false,

@@ -1,22 +1,33 @@
-import { useCallback } from "react";
-import { ButtonTableAction, DataTable } from "../../components/_common";
-import { PaginationType } from "../../constants";
+import { useCallback, useEffect } from 'react';
+import { ButtonTableAction, DataTable } from '../../components/_common';
+import { PaginationType } from '../../constants';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchShippingsAction } from "../../redux/shipping/actions";
-import { shippingsSelector } from '../../redux/shipping/selectors'
-import { useTranslations } from "next-intl";
+import { fetchShippingsAction } from '../../redux/shipping/actions';
+import { shippingsSelector } from '../../redux/shipping/selectors';
+import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { baseApiUrl } from '../../constants';
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/router';
+import { fetchCountriesAction } from '../../redux/countries/actions';
+import { countriesSelector } from '../../redux/countries/selectors';
 
 export default function List() {
     const dispatch = useDispatch();
     const router = useRouter();
     const sendRequest = useCallback(() => {
-        return dispatch(fetchShippingsAction())
+        return dispatch(fetchShippingsAction());
     }, [dispatch]);
     const items = useSelector(shippingsSelector);
     const t = useTranslations();
+    const countries = useSelector(countriesSelector);
+
+    useEffect(() => {
+        dispatch(fetchCountriesAction());
+    }, []);
+
+    if (!countries.length) {
+        return 'Loading';
+    }
 
     return (
         <div className="flex">
@@ -25,9 +36,14 @@ export default function List() {
                     {t('Free shipping')}
                 </div>
                 <div className="text-sm text-gray-500 mt-12">
-                    {t('Set a shipping threshold. In case order has reacted this amount, the shipping is free for this buyer.')}
+                    {t(
+                        'Set a shipping threshold. In case order has reacted this amount, the shipping is free for this buyer.'
+                    )}
                 </div>
-                <input className="w-full p-2.5 shadow-inner rounded-lg border-2 text-gray-350 font-bold mb-8 mt-6" value="999.99$" />
+                <input
+                    className="w-full p-2.5 shadow-inner rounded-lg border-2 text-gray-350 font-bold mb-8 mt-6"
+                    value="999.99$"
+                />
                 <button className="gradient-btn">{t('Save changes')}</button>
             </div>
             <div className="ml-4 flex-1">
@@ -38,8 +54,8 @@ export default function List() {
                     paginationType={PaginationType.SHIPPING}
                     totalAmount={10}
                     sendRequest={sendRequest}
-                    sendDeleteRequest={() => new Promise((resolve, reject) => { })}
-                    sendCopyRequest={() => new Promise((resolve, reject) => { })}>
+                    sendDeleteRequest={() => new Promise((resolve, reject) => {})}
+                    sendCopyRequest={() => new Promise((resolve, reject) => {})}>
                     {items?.map((item: Shipping) => (
                         <tr key={item.id}>
                             <td>
@@ -51,15 +67,11 @@ export default function List() {
                                     alt=""
                                 />
                             </td>
-                            <td className="text-center">
-                                {item.id}
-                            </td>
+                            <td className="text-center">{item.id}</td>
                             <td className="text-center">
                                 <Image src={`${baseApiUrl}/${item.image}`} width={50} height={50} />
                             </td>
-                            <td>
-                                {item.name}
-                            </td>
+                            <td>{item.name}</td>
                             <td>
                                 <label className="flex items-center cursor-pointer relative">
                                     <input
@@ -76,19 +88,24 @@ export default function List() {
                                 </label>
                             </td>
                             <td className="text-center">
-                                countries
+                                {item.countries.map((country) => (
+                                    <div>
+                                        {
+                                            countries.find((item: any) => item.id === country.id)
+                                                .nicename
+                                        }
+                                    </div>
+                                ))}
                             </td>
 
                             <td className="text-right whitespace-nowrap">
                                 <div
                                     onClick={(e) => {
-                                        e.preventDefault()
-                                        router.push(`/shipping/edit-method/${item.id}`)
+                                        e.preventDefault();
+                                        router.push(`/shipping/edit-method/${item.id}`);
                                     }}
-                                    className="cursor-pointer"
-                                >
+                                    className="cursor-pointer">
                                     <Image
-
                                         width={24}
                                         height={24}
                                         src="/images/dots.svg"
@@ -96,14 +113,11 @@ export default function List() {
                                         alt=""
                                     />
                                 </div>
-
                             </td>
                         </tr>
                     ))}
                 </DataTable>
             </div>
-
         </div>
-    )
-
+    );
 }

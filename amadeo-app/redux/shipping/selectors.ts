@@ -13,4 +13,4 @@ export const shippingsSelector = createSelector(
 export const shippingSelector = createSelector(
     rootSelector,
     (shippings: State.Shippings): any => shippings.shipping
-)
+);

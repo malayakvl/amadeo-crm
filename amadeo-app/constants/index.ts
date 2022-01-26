@@ -30,6 +30,6 @@ export const TableHeaders: { [key in PaginationType]: Type.DataTableHeader[] } =
         { titleKey: 'Shipping Method' },
         { className: 'option-switcher' },
         { className: 'shipping-countries' },
-        {},
+        {}
     ]
 };

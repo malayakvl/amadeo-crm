@@ -2,23 +2,21 @@ import React from 'react';
 import Brand from './Brand';
 import Pages from './Pages';
 import { useRouter } from 'next/router';
-import SidebarShipping from './submenu/Shipping'
+import SidebarShipping from './submenu/Shipping';
 import SidebarInventory from './submenu/Inventory';
 import SidebarFull from './SidebarFull';
 
 const SidebarCustomer: React.FC = () => {
     const router = useRouter();
 
-    let CurrentSidebar = SidebarFull
+    let CurrentSidebar = SidebarFull;
 
     if (router.route.startsWith('/shipping')) {
-        CurrentSidebar = SidebarShipping
-        
+        CurrentSidebar = SidebarShipping;
     }
 
     if (router.route.startsWith('/inventory')) {
-        CurrentSidebar = SidebarInventory
-
+        CurrentSidebar = SidebarInventory;
     }
 
     return (
