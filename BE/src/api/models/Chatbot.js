@@ -95,6 +95,8 @@ class Chatbot {
             if (res.rows[0].product) {
                 res.rows[0].product = JSON.parse(res.rows[0].product);
             }
+            res.rows[0].answer_count = !res.rows[0].answer_count ? '' : res.rows[0].answer_count;
+            res.rows[0].discount = !res.rows[0].discount ? '' : res.rows[0].discount;
             return { item: res.rows[0] };
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
@@ -125,9 +127,9 @@ class Chatbot {
                     regexp_replace($$${data.message_fr}$$, '\\\\n+', E'\\n', 'g' ),
                     regexp_replace($$${data.message_en}$$, '\\\\n+', E'\\n', 'g' ),
                     true,
-                    '${data.answer_count}',
+                    ${data.answer_count ? data.answer_count : null},
                     '${data.product ? JSON.stringify(data.product) : ''}',
-                    ${data.discount}
+                    ${data.discount ? data.discount : null}
                 );`;
         try {
             await client.query(query);
@@ -159,18 +161,17 @@ class Chatbot {
         const client = await pool.connect();
         try {
             const itemId = data.id;
-            delete data.id;
+            // delete data.id;
             const query =  `UPDATE data.chatbot_scenarios SET
                                 name = $$${data.name}$$,
                                 keywords = $$${data.keywords}$$,
-                                answer_count='${data.answer_count}',
+                                answer_count=${data.answer_count ? data.answer_count : null},
                                 product='${data.product ? JSON.stringify(data.product) : ''}',
-                                discount=${data.discount},
+                                discount=${data.discount ? data.discount : null},
                                 message_fr = regexp_replace($$${data.message_fr}$$, '\\\\n+', E'\\n', 'g' ),
                                 message_en = regexp_replace($$${data.message_en}$$, '\\\\n+', E'\\n', 'g' )
                             WHERE id=${itemId} AND user_id=${userId}
                 `;
-            console.log(query);
             await client.query(query);
             // await client.query(`SELECT * FROM common__tools._update_table_by_where(
             //     'data',

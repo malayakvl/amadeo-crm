@@ -60,7 +60,7 @@ const ACTION_HANDLERS: any = {
     [fetchDataSystemAction]: {
         next: (
             state: State.Chatbot,
-            action: Type.ReduxAction<Pick<State.Chatbot, 'itemsSystem' | 'count'>>
+            action: Type.ReduxAction<Pick<State.Chatbot, 'itemsSystem'>>
         ): State.Chatbot => ({
             ...state,
             ...action.payload,
