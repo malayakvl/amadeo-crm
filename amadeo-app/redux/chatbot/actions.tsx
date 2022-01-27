@@ -75,10 +75,7 @@ export const fetchDataAction: any = createAction(
 export const fetchDataSystemAction: any = createAction(
     'chatbot/FETCH_SYSTEM_ITEMS',
     async () =>
-        (
-            dispatch: Type.Dispatch,
-            getState: () => State.Root
-        ): Promise<{ count: number; itemsSystem: any }> => {
+        (dispatch: Type.Dispatch, getState: () => State.Root): Promise<{ itemsSystem: any }> => {
             const state = getState();
             const { limit, offset, sort, column, query } = paginationSelectorFactory(
                 PaginationType.CHATBOT
@@ -104,8 +101,7 @@ export const fetchDataSystemAction: any = createAction(
                 .then((res: any) => {
                     dispatch(showLoaderAction(false));
                     return {
-                        itemsSystem: res.data.items,
-                        count: res.data.count
+                        itemsSystem: res.data.items
                     };
                 });
         }

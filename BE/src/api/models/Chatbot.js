@@ -123,7 +123,7 @@ class Chatbot {
     async create (userId, data) {
         const client = await pool.connect();
         const query =  `INSERT INTO data.chatbot_scenarios (user_id, name, keywords, message_fr, message_en, active, answer_count, product, discount)
-                VALUES (${userId}, '${data.name}', '${data.keywords}',
+                VALUES (${userId}, $$${data.name}$$, $$${data.keywords}$$,
                     regexp_replace($$${data.message_fr}$$, '\\\\n+', E'\\n', 'g' ),
                     regexp_replace($$${data.message_en}$$, '\\\\n+', E'\\n', 'g' ),
                     true,

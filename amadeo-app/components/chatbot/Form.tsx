@@ -59,7 +59,7 @@ function ChatbotForm() {
             .required(t('Required field')),
         message_fr: Yup.string().required(t('Required field')),
         message_en: Yup.string().required(t('Required field')),
-        discount: Yup.number(),
+        discount: Yup.number().max(100),
         answer_count: Yup.number()
     });
     return (
