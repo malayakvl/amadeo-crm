@@ -83,13 +83,14 @@ class User {
         const client = await pool.connect();
         try {
             let user;
-            user = await this.findUserByEmail(userData.email);
+            // user = await this.findUserByEmail(userData.email);
+            user = await this.findUserByProviderId(userData.id);
             if (!user) {
                 const query = `
                     INSERT INTO data.users (email, auth_provider_name, auth_provider_id, auth_provider_access_token, auth_provider_expiration_time, first_name, role_id)
                     VALUES
                     (
-                        '${userData.email ? userData.email : ''}',
+                        '${userData.email ? userData.email : userData.id}',
                         'facebook',
                         '${userData.id}',
                         '${userData.accessToken}',
@@ -100,7 +101,8 @@ class User {
                     ;
                 `;
                 const res = await client.query(query);
-                user = res ? await this.findUserByEmail(userData.email) : null;
+                // user = res ? await this.findUserByEmail(userData.email) : null;
+                user = res ? await this.findUserByProviderId(userData.id) : null;
                 if (user) {
                     return { user: user, error: null };
                 } else {

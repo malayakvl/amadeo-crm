@@ -26,14 +26,6 @@ export default function Index({ session }: { session: any }) {
                 <div className="page-title">
                     <h1>{t('Live Selling')}</h1>
                     <div className="float-right text-right">
-                        {/*<div*/}
-                        {/*    className="fb-login-button"*/}
-                        {/*    data-width=""*/}
-                        {/*    data-size="large"*/}
-                        {/*    data-button-type="continue_with"*/}
-                        {/*    data-layout="default"*/}
-                        {/*    data-auto-logout-link="false"*/}
-                        {/*    data-use-continue-as="false" />*/}
                         <button className="btn-sync-fb" onClick={() => fbSync()}>
                             <span>{t('Sync account')}</span>
                         </button>
