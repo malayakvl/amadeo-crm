@@ -19,6 +19,7 @@ import { InputText } from '../../../components/_form';
 import * as Yup from 'yup';
 import Image from 'next/image';
 import { baseApiUrl } from '../../../constants';
+import { fetchCountriesAction } from '../../../redux/countries/actions';
 
 export default function EditMethod() {
     const t = useTranslations();
@@ -34,6 +35,10 @@ export default function EditMethod() {
             dispatch(deleteShippingAction(id)).then(router.push('/shipping/list'));
         }
     };
+
+    useEffect(() => {
+        dispatch(fetchCountriesAction());
+    }, []);
 
     useEffect(() => {
         if (!id) return;
@@ -103,11 +108,9 @@ export default function EditMethod() {
                             <button className="mt-8 gradient-btn w-full" type="submit">
                                 {t('Save')}
                             </button>
-                            <div
-                                onClick={deleteCallback}
-                                className="cursor-pointer mt-1 gradient-btn">
+                            <button onClick={deleteCallback} className="mt-1 gradient-btn">
                                 {t('Delete')}
-                            </div>
+                            </button>
                         </form>
                     )}
                 />
@@ -145,7 +148,9 @@ export default function EditMethod() {
                                                                 name={`countries.${index}.id`}>
                                                                 <option value="">...</option>
                                                                 {countries.map((country: any) => (
-                                                                    <option value={country.id}>
+                                                                    <option
+                                                                        key={country.id}
+                                                                        value={country.id}>
                                                                         {country.nicename}
                                                                     </option>
                                                                 ))}

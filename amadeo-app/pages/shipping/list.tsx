@@ -2,7 +2,11 @@ import { useCallback, useEffect } from 'react';
 import { DataTable } from '../../components/_common';
 import { PaginationType } from '../../constants';
 import { useDispatch, useSelector } from 'react-redux';
-import { changeShippingStatus, changeShippingStatuses, fetchShippingsAction } from '../../redux/shipping/actions';
+import {
+    changeShippingStatus,
+    changeShippingStatuses,
+    fetchShippingsAction
+} from '../../redux/shipping/actions';
 import { shippingsSelector } from '../../redux/shipping/selectors';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
@@ -10,7 +14,13 @@ import { baseApiUrl } from '../../constants';
 import { useRouter } from 'next/router';
 import { fetchCountriesAction } from '../../redux/countries/actions';
 import { countriesSelector } from '../../redux/countries/selectors';
-import { checkAllIdsAction, checkIdsAction, initIdsAction, setSuccessToastAction, uncheckAllIdsAction } from '../../redux/layouts';
+import {
+    checkAllIdsAction,
+    checkIdsAction,
+    initIdsAction,
+    setSuccessToastAction,
+    uncheckAllIdsAction
+} from '../../redux/layouts';
 import { checkedIdsSelector } from '../../redux/layouts/selectors';
 
 export default function List() {
@@ -66,25 +76,23 @@ export default function List() {
                 </div>
                 <DataTable
                     paginationType={PaginationType.SHIPPING}
-                    totalAmount={10}
-                    switcherOnClick={
-                        (status: boolean) => {
-                            if (status) {
-                                dispatch(changeShippingStatuses(true))
-                                dispatch(checkAllIdsAction(items))
-
-                            } else {
-                                dispatch(changeShippingStatuses(false))
-                                dispatch(uncheckAllIdsAction(items))
-
-                            }
-
-                            dispatch(setSuccessToastAction(t(`Statuses have been changed for all shippings`)))
+                    totalAmount={items?.length}
+                    switcherOnClick={(status: boolean) => {
+                        if (status) {
+                            dispatch(changeShippingStatuses(true));
+                            dispatch(checkAllIdsAction(items));
+                        } else {
+                            dispatch(changeShippingStatuses(false));
+                            dispatch(uncheckAllIdsAction(items));
                         }
-                    }
+
+                        dispatch(
+                            setSuccessToastAction(t(`Statuses have been changed for all shippings`))
+                        );
+                    }}
                     sendRequest={sendRequest}
-                    sendDeleteRequest={() => new Promise((resolve, reject) => { })}
-                    sendCopyRequest={() => new Promise((resolve, reject) => { })}>
+                    sendDeleteRequest={() => new Promise(() => null)}
+                    sendCopyRequest={() => new Promise(() => null)}>
                     {items?.map((item: Shipping, index: number) => (
                         <tr className="" key={item.id}>
                             <td>{item.name}</td>
@@ -103,19 +111,26 @@ export default function List() {
                                         }
                                         onChange={() => {
                                             dispatch(checkIdsAction(item.id));
-                                            const status = !item.status
-                                            items[index].status = status
-                                            dispatch(changeShippingStatus(item.id, status))
-                                            dispatch(setSuccessToastAction(t(`Status of the shipping '${item.name}' is changed`)))
+                                            const status = !item.status;
+                                            items[index].status = status;
+                                            dispatch(changeShippingStatus(item.id, status));
+                                            dispatch(
+                                                setSuccessToastAction(
+                                                    t(
+                                                        `Status of the shipping '${item.name}' is changed`
+                                                    )
+                                                )
+                                            );
                                         }}
-
                                     />
                                     <div className="toggle-bg bg-gray-200 border border-gray-200 rounded-full dark:bg-gray-700 dark:border-gray-600" />
                                 </label>
                             </td>
                             <td className="text-center">
                                 {item.countries.map((country) => (
-                                    <div className="bg-gray-400 text-white rounded-md p-1 m-1">
+                                    <div
+                                        key={country.id}
+                                        className="bg-gray-400 text-white rounded-md p-1 m-1">
                                         {
                                             countries.find((item: any) => item.id === country.id)
                                                 .nicename
@@ -125,7 +140,7 @@ export default function List() {
                             </td>
 
                             <td className="text-right whitespace-nowrap">
-                                <div
+                                <button
                                     onClick={(e) => {
                                         e.preventDefault();
                                         router.push(`/shipping/edit-method/${item.id}`);
@@ -138,7 +153,7 @@ export default function List() {
                                         layout="fixed"
                                         alt=""
                                     />
-                                </div>
+                                </button>
                             </td>
                         </tr>
                     ))}

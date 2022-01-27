@@ -1,5 +1,4 @@
 // Each table pagination and controls meta stored to redux separately
-import classNames from 'classnames';
 import getConfig from 'next/config';
 const { publicRuntimeConfig } = getConfig();
 export const baseApiUrl = publicRuntimeConfig.apiUrl;

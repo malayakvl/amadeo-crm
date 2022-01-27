@@ -34,7 +34,7 @@ const DataTable: React.FC<Props> = ({
     sendRequest,
     sendDeleteRequest,
     sendCopyRequest,
-    switcherOnClick,
+    switcherOnClick
 }) => {
     const { PRODUCTS } = PaginationType;
     const t = useTranslations();
@@ -52,7 +52,7 @@ const DataTable: React.FC<Props> = ({
     );
     const [loading, setLoading] = useState(true);
     const [allChecked, setAllChecked] = useState(false);
-    const [selectBulkAction, setSelectBulkAction] = useState(null);
+    const [setSelectBulkAction] = useState(null);
 
     useEffect(() => {
         sendRequest().finally(() => setLoading(false));
@@ -131,16 +131,13 @@ const DataTable: React.FC<Props> = ({
                             id="switchAll"
                             className="sr-only"
                             checked={switchAllHeader}
-                            onChange={
-                                (e: any) => {
-                                    handleSwitchAction(e.target.checked)
+                            onChange={(e: any) => {
+                                handleSwitchAction(e.target.checked);
 
-                                    if (switcherOnClick) {
-                                        switcherOnClick(e.target.checked)
-
-                                    }
+                                if (switcherOnClick) {
+                                    switcherOnClick(e.target.checked);
                                 }
-                            }
+                            }}
                         />
                         <div className="toggle-bg bg-gray-200 border border-gray-200 rounded-full dark:bg-gray-700 dark:border-gray-600" />
                     </label>

@@ -9,39 +9,37 @@ const url = `${publicRuntimeConfig.apiUrl}/api/shipping`;
 
 export const changeShippingStatuses: any = createAction(
     'SHIPPING/CHANGE_STATUSES',
-    (status: boolean) =>
-        async (
-            dispatch: Type.Dispatch,
-            getState: () => State.Root
-        ) => {
-            const state = getState();
+    (status: boolean) => async (dispatch: Type.Dispatch, getState: () => State.Root) => {
+        const state = getState();
 
-            await axios.put(`${url}/change-statuses`, { status }, {
+        await axios.put(
+            `${url}/change-statuses`,
+            { status },
+            {
                 headers: {
                     ...authHeader(state.user.user.email)
                 }
-            });
-
-        }
-)
+            }
+        );
+    }
+);
 
 export const changeShippingStatus: any = createAction(
     'SHIPPING/CHANGE_STATUS',
-    (id: number, status: boolean) =>
-        async (
-            dispatch: Type.Dispatch,
-            getState: () => State.Root
-        ) => {
-            const state = getState();
+    (id: number, status: boolean) => async (dispatch: Type.Dispatch, getState: () => State.Root) => {
+        const state = getState();
 
-            await axios.put(`${url}/change-status/${id}`, { status }, {
+        await axios.put(
+            `${url}/change-status/${id}`,
+            { status },
+            {
                 headers: {
                     ...authHeader(state.user.user.email)
                 }
-            });
-
-        }
-)
+            }
+        );
+    }
+);
 
 export const fetchShippingAction: any = createAction(
     'SHIPPING/FETCH_SHIPPING',
@@ -96,11 +94,11 @@ export const createShippingAction: any = createAction(
                     ...authHeader(state.user.user.email)
                 }
             })
-            .then((result) => {
+            .then(() => {
                 dispatch(fetchShippingsAction());
                 dispatch(setSuccessToastAction('Shipping has been created'));
             })
-            .catch((error) => {
+            .catch(() => {
                 dispatch(setErrorToastAction('Shipping already exists'));
             });
     }
@@ -117,11 +115,11 @@ export const updateShippingAction: any = createAction(
                     ...authHeader(state.user.user.email)
                 }
             })
-            .then((result) => {
+            .then(() => {
                 dispatch(setSuccessToastAction('Shipping has been updated'));
                 dispatch(fetchShippingAction(id));
             })
-            .catch((error) => {
+            .catch(() => {
                 dispatch(setErrorToastAction('Shipping already exists'));
             });
     }
@@ -138,7 +136,7 @@ export const deleteShippingAction: any = createAction(
                     ...authHeader(state.user.user.email)
                 }
             })
-            .then((result) => {
+            .then(() => {
                 dispatch(setSuccessToastAction('Shipping has been deleted'));
             });
     }
@@ -155,7 +153,7 @@ export const saveShippingAction: any = createAction(
                     ...authHeader(state.user.user.email)
                 }
             })
-            .then((result) => {
+            .then(() => {
                 dispatch(setSuccessToastAction('Counties of the shipping has been saved'));
             });
     }
