@@ -120,4 +120,16 @@ export default new class ShippingController {
         return res.status(200).json({ ...shipping, countries })
 
     }
+
+    changeStatuses(req, res) {
+        shippingModel.changeStatuses(req.body.status)
+        res.status(200).json({})
+
+    }
+
+    changeStatus(req, res) {
+        shippingModel.changeStatus(req.body.status, req.params.id)
+        res.status(200).json({})
+
+    }
 }

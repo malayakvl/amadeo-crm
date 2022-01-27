@@ -7,6 +7,42 @@ import { setSuccessToastAction, setErrorToastAction } from '../layouts/actions';
 const { publicRuntimeConfig } = getConfig();
 const url = `${publicRuntimeConfig.apiUrl}/api/shipping`;
 
+export const changeShippingStatuses: any = createAction(
+    'SHIPPING/CHANGE_STATUSES',
+    (status: boolean) =>
+        async (
+            dispatch: Type.Dispatch,
+            getState: () => State.Root
+        ) => {
+            const state = getState();
+
+            await axios.put(`${url}/change-statuses`, { status }, {
+                headers: {
+                    ...authHeader(state.user.user.email)
+                }
+            });
+
+        }
+)
+
+export const changeShippingStatus: any = createAction(
+    'SHIPPING/CHANGE_STATUS',
+    (id: number, status: boolean) =>
+        async (
+            dispatch: Type.Dispatch,
+            getState: () => State.Root
+        ) => {
+            const state = getState();
+
+            await axios.put(`${url}/change-status/${id}`, { status }, {
+                headers: {
+                    ...authHeader(state.user.user.email)
+                }
+            });
+
+        }
+)
+
 export const fetchShippingAction: any = createAction(
     'SHIPPING/FETCH_SHIPPING',
     (id: number) =>

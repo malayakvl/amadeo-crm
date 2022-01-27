@@ -5,7 +5,7 @@ class Shipping {
     async getAll() {
         const client = await pool.connect();
         try {
-            const query = `SELECT * FROM data.shipping`
+            const query = `SELECT * FROM data.shipping ORDER BY id`
             const res = await client.query(query);
             return res.rows.length ? res.rows : null;
         } catch (e) {
@@ -164,6 +164,53 @@ class Shipping {
             })
 
             return true;
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model Shipping error:',
+                    { message: e.message }
+                );
+            }
+            return { success: false, error: { code: 404, message: 'Tags Not found' } };
+        } finally {
+            client.release();
+        }
+
+    }
+
+    async changeStatuses(status) {
+        console.log(status)
+        const client = await pool.connect();
+        try {
+            const queryInsert =
+                `UPDATE data.shipping SET status = $1 RETURNING id`;
+            const res = await client.query(queryInsert, [status]);
+
+            return res.rows[0].id;
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model Shipping error:',
+                    { message: e.message }
+                );
+            }
+            return { success: false, error: { code: 404, message: 'Tags Not found' } };
+        } finally {
+            client.release();
+        }
+
+    }
+
+    async changeStatus(status, shippingId) {
+        const client = await pool.connect();
+        try {
+            const queryInsert =
+                `UPDATE data.shipping SET status = $1 WHERE id = $2 RETURNING id`;
+            const res = await client.query(queryInsert, [status, shippingId]);
+
+            return res.rows[0].id;
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
                 logger.log(

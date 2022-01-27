@@ -32,7 +32,7 @@ const initialState: State.Layouts = {
     isDataLoading: false,
     toasts: [],
     checkedIds: [],
-    switchHeader: false,
+    switchHeader: null,
     modalConfirmationMeta: null,
     activeTab: {
         inventory: { tab: 'products' }

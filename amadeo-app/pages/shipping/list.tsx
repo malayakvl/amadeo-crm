@@ -1,8 +1,8 @@
 import { useCallback, useEffect } from 'react';
-import { ButtonTableAction, DataTable } from '../../components/_common';
+import { DataTable } from '../../components/_common';
 import { PaginationType } from '../../constants';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchShippingsAction } from '../../redux/shipping/actions';
+import { changeShippingStatus, changeShippingStatuses, fetchShippingsAction } from '../../redux/shipping/actions';
 import { shippingsSelector } from '../../redux/shipping/selectors';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
@@ -10,8 +10,8 @@ import { baseApiUrl } from '../../constants';
 import { useRouter } from 'next/router';
 import { fetchCountriesAction } from '../../redux/countries/actions';
 import { countriesSelector } from '../../redux/countries/selectors';
-import { checkAllIdsAction, checkIdsAction, initIdsAction, uncheckAllIdsAction } from '../../redux/layouts';
-import { checkedIdsSelector, switchHeaderSelector } from '../../redux/layouts/selectors';
+import { checkAllIdsAction, checkIdsAction, initIdsAction, setSuccessToastAction, uncheckAllIdsAction } from '../../redux/layouts';
+import { checkedIdsSelector } from '../../redux/layouts/selectors';
 
 export default function List() {
     const dispatch = useDispatch();
@@ -23,18 +23,6 @@ export default function List() {
     const checkedIds = useSelector(checkedIdsSelector);
     const t = useTranslations();
     const countries = useSelector(countriesSelector);
-    const switchAllHeader = useSelector(switchHeaderSelector);
-
-    useEffect(() => {
-        if (switchAllHeader) {
-            dispatch(checkAllIdsAction(items))
-
-        } else {
-            dispatch(uncheckAllIdsAction(items))
-
-        }
-
-    }, [switchAllHeader]);
 
     useEffect(() => {
         if (!items) {
@@ -79,6 +67,21 @@ export default function List() {
                 <DataTable
                     paginationType={PaginationType.SHIPPING}
                     totalAmount={10}
+                    switcherOnClick={
+                        (status: boolean) => {
+                            if (status) {
+                                dispatch(changeShippingStatuses(true))
+                                dispatch(checkAllIdsAction(items))
+
+                            } else {
+                                dispatch(changeShippingStatuses(false))
+                                dispatch(uncheckAllIdsAction(items))
+
+                            }
+
+                            dispatch(setSuccessToastAction(t(`Statuses have been changed for all shippings`)))
+                        }
+                    }
                     sendRequest={sendRequest}
                     sendDeleteRequest={() => new Promise((resolve, reject) => { })}
                     sendCopyRequest={() => new Promise((resolve, reject) => { })}>
@@ -100,8 +103,10 @@ export default function List() {
                                         }
                                         onChange={() => {
                                             dispatch(checkIdsAction(item.id));
-                                            items[index].status = !item.status
-                                            console.log(item.status)
+                                            const status = !item.status
+                                            items[index].status = status
+                                            dispatch(changeShippingStatus(item.id, status))
+                                            dispatch(setSuccessToastAction(t(`Status of the shipping '${item.name}' is changed`)))
                                         }}
 
                                     />

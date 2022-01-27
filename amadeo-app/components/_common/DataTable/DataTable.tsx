@@ -24,6 +24,7 @@ interface Props {
     sendRequest: () => Promise<void>;
     sendDeleteRequest: () => Promise<void> | null;
     sendCopyRequest: () => Promise<void> | null;
+    switcherOnClick?: any;
 }
 
 const DataTable: React.FC<Props> = ({
@@ -32,9 +33,10 @@ const DataTable: React.FC<Props> = ({
     totalAmount,
     sendRequest,
     sendDeleteRequest,
-    sendCopyRequest
+    sendCopyRequest,
+    switcherOnClick,
 }) => {
-    const { PRODUCTS, SHIPPING } = PaginationType;
+    const { PRODUCTS } = PaginationType;
     const t = useTranslations();
     const checkedIds = useSelector(checkedIdsSelector);
     const switchAllHeader = useSelector(switchHeaderSelector);
@@ -129,7 +131,16 @@ const DataTable: React.FC<Props> = ({
                             id="switchAll"
                             className="sr-only"
                             checked={switchAllHeader}
-                            onChange={(e: any) => handleSwitchAction(e.target.checked)}
+                            onChange={
+                                (e: any) => {
+                                    handleSwitchAction(e.target.checked)
+
+                                    if (switcherOnClick) {
+                                        switcherOnClick(e.target.checked)
+
+                                    }
+                                }
+                            }
                         />
                         <div className="toggle-bg bg-gray-200 border border-gray-200 rounded-full dark:bg-gray-700 dark:border-gray-600" />
                     </label>
