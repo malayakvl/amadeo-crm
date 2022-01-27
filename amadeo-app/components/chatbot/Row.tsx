@@ -73,7 +73,7 @@ const Row: React.FC<any> = ({
                     </span>
                 </td>
                 <td>{parseProduct(item.product)}</td>
-                <td>{parseProduct(item.discount)}</td>
+                <td>{item.discount}</td>
                 <td>{item.answer_count}</td>
                 <td
                     className="chat-eye cursor-pointer"
