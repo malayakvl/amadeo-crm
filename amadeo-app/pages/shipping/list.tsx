@@ -10,6 +10,8 @@ import { baseApiUrl } from '../../constants';
 import { useRouter } from 'next/router';
 import { fetchCountriesAction } from '../../redux/countries/actions';
 import { countriesSelector } from '../../redux/countries/selectors';
+import { checkAllIdsAction, checkIdsAction, initIdsAction, uncheckAllIdsAction } from '../../redux/layouts';
+import { checkedIdsSelector, switchHeaderSelector } from '../../redux/layouts/selectors';
 
 export default function List() {
     const dispatch = useDispatch();
@@ -18,8 +20,32 @@ export default function List() {
         return dispatch(fetchShippingsAction());
     }, [dispatch]);
     const items = useSelector(shippingsSelector);
+    const checkedIds = useSelector(checkedIdsSelector);
     const t = useTranslations();
     const countries = useSelector(countriesSelector);
+    const switchAllHeader = useSelector(switchHeaderSelector);
+
+    useEffect(() => {
+        if (switchAllHeader) {
+            dispatch(checkAllIdsAction(items))
+
+        } else {
+            dispatch(uncheckAllIdsAction(items))
+
+        }
+
+    }, [switchAllHeader]);
+
+    useEffect(() => {
+        if (!items) {
+            return;
+        }
+        const setupChecked: any = [];
+        items.forEach((item: Shipping) => {
+            setupChecked.push({ id: item.id, checked: item.status });
+        });
+        dispatch(initIdsAction(setupChecked));
+    }, [items]);
 
     useEffect(() => {
         dispatch(fetchCountriesAction());
@@ -56,7 +82,7 @@ export default function List() {
                     sendRequest={sendRequest}
                     sendDeleteRequest={() => new Promise((resolve, reject) => { })}
                     sendCopyRequest={() => new Promise((resolve, reject) => { })}>
-                    {items?.map((item: Shipping) => (
+                    {items?.map((item: Shipping, index: number) => (
                         <tr className="" key={item.id}>
                             <td>{item.name}</td>
                             <td className="text-center">
@@ -68,11 +94,16 @@ export default function List() {
                                         type="checkbox"
                                         className="sr-only"
                                         value={`switcher_${item.id}`}
-                                        checked={item.status}
+                                        checked={
+                                            checkedIds.find((data: any) => data.id === item.id)
+                                                ?.checked || false
+                                        }
                                         onChange={() => {
-                                            // setSwitcherValue(e.target.value);
-                                            // handleShowMore(item.id);
+                                            dispatch(checkIdsAction(item.id));
+                                            items[index].status = !item.status
+                                            console.log(item.status)
                                         }}
+
                                     />
                                     <div className="toggle-bg bg-gray-200 border border-gray-200 rounded-full dark:bg-gray-700 dark:border-gray-600" />
                                 </label>

@@ -8,7 +8,7 @@ const { publicRuntimeConfig } = getConfig();
 const url = `${publicRuntimeConfig.apiUrl}/api/shipping`;
 
 export const fetchShippingAction: any = createAction(
-    'SHIPMENT/FETCH_SHIPPING',
+    'SHIPPING/FETCH_SHIPPING',
     (id: number) =>
         async (
             dispatch: Type.Dispatch,
@@ -29,7 +29,7 @@ export const fetchShippingAction: any = createAction(
 );
 
 export const fetchShippingsAction: any = createAction(
-    'SHIPMENT/FETCH_SHIPPING_LIST',
+    'SHIPPING/FETCH_SHIPPING_LIST',
     () =>
         async (
             dispatch: Type.Dispatch,
