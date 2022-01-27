@@ -201,5 +201,18 @@
   "Login": "Login",
   "Sign up here!": "Sign up here!",
   "Don’t have an account?": "Don’t have an account?",
-  "By signing in, you accept the": "By signing in, you accept the"
+  "By signing in, you accept the": "By signing in, you accept the",
+  "Schedule Session": "Schedule Session",
+  "New Live Session": "New Live Session",
+  "Time Start": "Time Start",
+  "Date": "Date",
+  "Session Duration": "Session Duration",
+  "Cart Duration": "Cart Duration",
+  "Maximum": "Maximum",
+  "Minimum": "Minimum",
+  "0 min": "0 min",
+  "24 hours": "24 hours",
+  "Duration session": "Duration",
+  "Duration cart": "Duration",
+  "Participants": "Participants"
 }

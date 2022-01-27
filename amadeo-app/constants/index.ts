@@ -7,7 +7,8 @@ export enum PaginationType {
     NOTIFICATIONS = 'notifications',
     PRODUCTS = 'products',
     CHATBOT = 'chatbot',
-    SHIPPING = 'shipping'
+    SHIPPING = 'shipping',
+    LIVESESSIONS = 'livesessions'
 }
 
 export const TableHeaders: { [key in PaginationType]: Type.DataTableHeader[] } = {
@@ -40,5 +41,13 @@ export const TableHeaders: { [key in PaginationType]: Type.DataTableHeader[] } =
         { className: 'option-switcher' },
         { className: 'shipping-countries' },
         {}
+    ],
+    [PaginationType.LIVESESSIONS]: [
+        { titleKey: null, iconClass: 'icon-tbl-date' },
+        { titleKey: 'Duration session', iconClass: 'icon-tbl-time' },
+        { titleKey: 'Duration cart', iconClass: 'icon-tbl-cart' },
+        { titleKey: null, iconClass: 'icon-tbl-status' },
+        { titleKey: 'Participants', iconClass: 'icon-tbl-users' },
+        { titleKey: 'Products' }
     ]
 };

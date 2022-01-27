@@ -10,6 +10,7 @@ declare namespace State {
         chatbot: Chatbot;
         countries: Countries;
         shippings: Shippings;
+        livesessions: Livesessions;
     }
 
     type Address = Address.Root;
@@ -21,4 +22,5 @@ declare namespace State {
     type Chatbot = Chatbot.Root;
     type Countries = any;
     type Shippings = Array<Shipping>;
+    type Livesessions = Livesessions.Root;
 }

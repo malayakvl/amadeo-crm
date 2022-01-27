@@ -59,3 +59,10 @@ export const toggleModalConfirmation = () => {
     (modal as any).classList.toggle('pointer-events-none');
     (modal as any).classList.toggle('modal-active');
 };
+export const toggleModalPopup = (element: any) => {
+    // const body = document.querySelector('body');
+    const modal = document.querySelector(element);
+    (modal as any).classList.toggle('opacity-0');
+    (modal as any).classList.toggle('pointer-events-none');
+    (modal as any).classList.toggle('modal-active');
+};

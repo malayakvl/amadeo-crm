@@ -1,15 +1,56 @@
 import pool from './connect.js';
 import { logger } from '../../common/logger.js';
 
-class Chatbot {
-    async getAllSystem() {
+class Livesession {
+    async getUserScenarios (userId) {
+        const client = await pool.connect();
+        try {
+            const productQuery = `SELECT id, name FROM data.chatbot_scenarios WHERE user_id='${userId}' AND active=true ORDER BY created_at DESC`;
+            const res = await client.query(productQuery);
+            const items = res.rows.length > 0 ? res.rows : [];
+            const error = null;
+    
+            return {
+                items,
+                error
+            };
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error (Chatbot getAll active):',
+                    { message: e.message }
+                );
+            }
+            const products = null;
+            const error = {
+                code: 500,
+                message: 'Error get list of users'
+            };
+            return {
+                products,
+                error
+            };
+        } finally {
+            client.release();
+        }
+    }
+    
+    async getAll (page, perPage = 20, userId, reqOffset = null) {
         const client = await pool.connect();
         try {
             const _total = await client.query(
-                `SELECT * FROM common__tools._select_total_from_table_by_where('data', 'system_chatbot_scenarios', 'id');`
+                `SELECT * FROM common__tools._select_total_from_table_by_where('data', 'live_sessions', 'id', 'user_id = ''${userId}''');`
             );
             const size = _total.rows[0].total;
-            const productQuery = `SELECT * FROM data.system_chatbot_scenarios`;
+            let offset;
+            if (reqOffset) {
+                offset = reqOffset;
+            } else {
+                offset = (Number(page) - 1) * Number(perPage);
+            }
+            
+            const productQuery = `SELECT * FROM data.live_sessions WHERE user_id='${userId}' ORDER BY event_date DESC limit ${perPage} OFFSET ${offset}`;
             const res = await client.query(productQuery);
             const items = res.rows.length > 0 ? res.rows : [];
             const error = null;
@@ -24,52 +65,6 @@ class Chatbot {
                 logger.log(
                     'error',
                     'Model error (Products getAll):',
-                    { message: e.message }
-                );
-            }
-            const items = null;
-            const error = {
-                code: 500,
-                message: 'Error get list of users'
-            };
-            return {
-                items,
-                error
-            };
-        } finally {
-            client.release();
-        }
-    }
-    
-    async getAll (page, perPage = 20, userId, reqOffset = null) {
-        const client = await pool.connect();
-        try {
-            const _total = await client.query(
-                `SELECT * FROM common__tools._select_total_from_table_by_where('data', 'chatbot_scenarios', 'id', 'user_id = ''${userId}''');`
-            );
-            const size = _total.rows[0].total;
-            let offset;
-            if (reqOffset) {
-                offset = reqOffset;
-            } else {
-                offset = (Number(page) - 1) * Number(perPage);
-            }
-            
-            const productQuery = `SELECT * FROM data.chatbot_scenarios WHERE user_id='${userId}' ORDER BY created_at DESC limit ${perPage} OFFSET ${offset}`;
-            const res = await client.query(productQuery);
-            const items = res.rows.length > 0 ? res.rows : [];
-            const error = null;
-        
-            return {
-                items,
-                size,
-                error
-            };
-        } catch (e) {
-            if (process.env.NODE_ENV === 'development') {
-                logger.log(
-                    'error',
-                    'Model error (Chatbot getAll):',
                     { message: e.message }
                 );
             }
@@ -91,7 +86,7 @@ class Chatbot {
     async fetchOne(userId, itemId) {
         const client = await pool.connect();
         try {
-            const res = await client.query(`SELECT * FROM data.chatbot_scenarios WHERE user_id=${userId} AND id=${itemId}`);
+            const res = await client.query(`SELECT * FROM data.live_sessions WHERE user_id=${userId} AND id=${itemId}`);
             if (res.rows[0].product) {
                 res.rows[0].product = JSON.parse(res.rows[0].product);
             }
@@ -260,4 +255,4 @@ class Chatbot {
     }
 }
 
-export default new Chatbot();
+export default new Livesession();

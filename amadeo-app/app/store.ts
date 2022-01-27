@@ -13,6 +13,7 @@ import notificationsReducer from '../redux/notifications/index';
 import layoutsReducer from '../redux/layouts/index';
 import productsReducer from '../redux/products/index';
 import chatbotReducer from '../redux/chatbot/index';
+import livesessionsReducer from '../redux/livesessions/index';
 import countriesReducer from '../redux/countries/index';
 import shippingReducer from '../redux/shipping/index';
 
@@ -24,6 +25,7 @@ const reducers = combineReducers({
     layouts: layoutsReducer,
     products: productsReducer,
     chatbot: chatbotReducer,
+    livesessions: livesessionsReducer,
     countries: countriesReducer,
     shippings: shippingReducer
 });
