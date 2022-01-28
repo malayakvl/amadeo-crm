@@ -71,7 +71,7 @@ export default function AddMethod() {
                             </label>
 
                             <button className="mt-8 gradient-btn" type="submit">
-                                Create
+                                {t('Create')}
                             </button>
                         </form>
                     );

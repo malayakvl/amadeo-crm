@@ -108,7 +108,7 @@ export default function EditMethod() {
                             <button className="mt-8 gradient-btn w-full" type="submit">
                                 {t('Save')}
                             </button>
-                            <button onClick={deleteCallback} className="mt-1 gradient-btn">
+                            <button onClick={deleteCallback} type="button" className="mt-1 gradient-btn">
                                 {t('Delete')}
                             </button>
                         </form>

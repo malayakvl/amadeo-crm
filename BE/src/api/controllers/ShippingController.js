@@ -102,6 +102,10 @@ export default new class ShippingController {
     async fetchAll(req, res) {
         const shippings = await shippingModel.getAll()
 
+        if (!shippings) {
+            return res.status(200).json({ shippings: [] })
+        }
+
         const promises = shippings.map(async shipping => {
             shipping.countries = await shippingModel.findCountriesById(shipping.id)
 
@@ -130,6 +134,22 @@ export default new class ShippingController {
     changeStatus(req, res) {
         shippingModel.changeStatus(req.body.status, req.params.id)
         res.status(200).json({})
+
+    }
+
+    setThreshold(req, res) {
+        shippingModel.setThreshold(req.user.id, req.body.threshold)
+        res.status(200).json({})
+    }
+
+    async fetchThreshold(req, res) {
+        const result = await shippingModel.fetchThreshold(req.user.id)
+        
+        if (!result) {
+            return res.status(200).json({ threshold: '' })
+        }
+
+        return res.status(200).json({ threshold: result.threshold })
 
     }
 }

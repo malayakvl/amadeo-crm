@@ -225,6 +225,58 @@ class Shipping {
         }
 
     }
+
+    async setThreshold(userId, threshold) {
+        const client = await pool.connect();
+        console.log(userId)
+        try {
+            await client.query('DELETE FROM data.free_order_threshold WHERE user_id = $1', [userId]);
+            client.query(
+                'INSERT INTO data.free_order_threshold (user_id, threshold) VALUES ($1, $2)',
+                [userId, threshold]
+            )
+
+            return true;
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model Shipping error:',
+                    { message: e.message }
+                );
+            }
+            return { success: false, error: { code: 404, message: 'Tags Not found' } };
+        } finally {
+            client.release();
+        }
+    }
+
+    async fetchThreshold(userId) {
+        const client = await pool.connect();
+        try {
+            const res = await client.query(
+                'SELECT threshold FROM data.free_order_threshold WHERE user_id = $1', [userId]
+            );
+
+            if (res.rows.length) {
+                return res.rows[0];
+            }
+
+            return false;
+            
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model Shipping error:',
+                    { message: e.message }
+                );
+            }
+            return { success: false, error: { code: 404, message: 'Tags Not found' } };
+        } finally {
+            client.release();
+        }
+    }
 }
 
 export default new Shipping();

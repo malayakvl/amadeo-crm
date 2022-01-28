@@ -73,11 +73,13 @@ apiRoutes.route('/shipping/delete/:id').delete(ShippingController.delete)
 apiRoutes.route('/shipping/save-countries/:id').post(ShippingController.saveCountries)
 apiRoutes.route('/shipping/change-statuses').put(ShippingController.changeStatuses)
 apiRoutes.route('/shipping/change-status/:id').put(ShippingController.changeStatus)
+apiRoutes.route('/shipping/threshold').post(ShippingController.setThreshold)
+apiRoutes.route('/shipping/threshold').get(ShippingController.fetchThreshold)
 apiRoutes.get('/*', defaultHandler);
 
 export default apiRoutes;
 
 // Default handler for unknown routes
-function defaultHandler (req, res) {
+function defaultHandler(req, res) {
     res.status(404).send('Unknown API endpoint');
 }

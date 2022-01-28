@@ -1,11 +1,12 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { DataTable } from '../../components/_common';
 import { PaginationType } from '../../constants';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     changeShippingStatus,
     changeShippingStatuses,
-    fetchShippingsAction
+    fetchShippingsAction,
+    setThresholdAction
 } from '../../redux/shipping/actions';
 import { shippingsSelector } from '../../redux/shipping/selectors';
 import { useTranslations } from 'next-intl';
@@ -22,6 +23,15 @@ import {
     uncheckAllIdsAction
 } from '../../redux/layouts';
 import { checkedIdsSelector } from '../../redux/layouts/selectors';
+import { Field, Formik } from 'formik';
+import { Form } from 'react-bootstrap';
+import { userSelector } from '../../redux/user/selectors';
+import axios from 'axios';
+import { authHeader } from '../../lib/functions';
+import getConfig from 'next/config';
+
+const { publicRuntimeConfig } = getConfig();
+const url = `${publicRuntimeConfig.apiUrl}/api/shipping`;
 
 export default function List() {
     const dispatch = useDispatch();
@@ -33,6 +43,8 @@ export default function List() {
     const checkedIds = useSelector(checkedIdsSelector);
     const t = useTranslations();
     const countries = useSelector(countriesSelector);
+    const user = useSelector(userSelector)
+    const [threshold, setThreshold] = useState('');
 
     useEffect(() => {
         if (!items) {
@@ -49,10 +61,23 @@ export default function List() {
         dispatch(fetchCountriesAction());
     }, []);
 
-    if (!countries.length) {
+    useEffect(() => {
+        if (user.hasOwnProperty('email')) {
+            axios.get(`${url}/threshold`, {
+                headers: {
+                    ...authHeader(user.email)
+                }
+            }).then(result => {
+                setThreshold(result.data.threshold)
+            })
+        }
+
+    }, [user])
+
+    if (!countries.length || !threshold) {
         return 'Loading';
     }
-
+    
     return (
         <div className="flex">
             <div className="w-64 p-4 bg-white rounded-lg">
@@ -64,11 +89,18 @@ export default function List() {
                         'Set a shipping threshold. In case order has reacted this amount, the shipping is free for this buyer.'
                     )}
                 </div>
-                <input
-                    className="w-full p-2.5 shadow-inner rounded-lg border-2 text-gray-350 font-bold mb-8 mt-6"
-                    value="999.99$"
+                <Formik
+                    onSubmit={(values) => dispatch(setThresholdAction(values))}
+                    initialValues={{ threshold }}
+                    render={(props) =>
+                        <Form onSubmit={props.handleSubmit}>
+                            <Field name="threshold" className="w-full p-2.5 shadow-inner rounded-lg border-2 text-gray-350 font-bold mb-8 mt-6" />
+                            <button className="gradient-btn">{t('Save changes')}</button>
+                        </Form>
+                    }
                 />
-                <button className="gradient-btn">{t('Save changes')}</button>
+
+
             </div>
             <div className="block-white-8  ml-4 flex-1">
                 <div className="mb-8 font-bold text-gray-350 text-lg py-4 border-b border-gray-200">
@@ -94,7 +126,7 @@ export default function List() {
                     sendDeleteRequest={() => new Promise(() => null)}
                     sendCopyRequest={() => new Promise(() => null)}>
                     {items?.map((item: Shipping, index: number) => (
-                        <tr className="" key={item.id}>
+                        <tr key={item.id}>
                             <td>{item.name}</td>
                             <td className="text-center">
                                 <Image src={`${baseApiUrl}/${item.image}`} width={50} height={50} />
