@@ -23,12 +23,13 @@ import {
     uncheckAllIdsAction
 } from '../../redux/layouts';
 import { checkedIdsSelector } from '../../redux/layouts/selectors';
-import { Field, Formik } from 'formik';
+import { ErrorMessage, Field, Formik } from 'formik';
 import { Form } from 'react-bootstrap';
 import { userSelector } from '../../redux/user/selectors';
 import axios from 'axios';
 import { authHeader } from '../../lib/functions';
 import getConfig from 'next/config';
+import * as Yup from 'yup';
 
 const { publicRuntimeConfig } = getConfig();
 const url = `${publicRuntimeConfig.apiUrl}/api/shipping`;
@@ -77,7 +78,7 @@ export default function List() {
     if (!countries.length || !threshold) {
         return 'Loading';
     }
-    
+
     return (
         <div className="flex">
             <div className="w-64 p-4 bg-white rounded-lg">
@@ -90,12 +91,20 @@ export default function List() {
                     )}
                 </div>
                 <Formik
-                    onSubmit={(values) => dispatch(setThresholdAction(values))}
+                    onSubmit={(values) => {
+                        dispatch(setThresholdAction(values))
+                        dispatch(setSuccessToastAction(t(`Threshold has been saved: ${values.threshold}`)))
+
+                    }}
                     initialValues={{ threshold }}
+                    validationSchema={Yup.object().shape({
+                        threshold: Yup.number().typeError('Must be number')
+                    })}
                     render={(props) =>
                         <Form onSubmit={props.handleSubmit}>
-                            <Field name="threshold" className="w-full p-2.5 shadow-inner rounded-lg border-2 text-gray-350 font-bold mb-8 mt-6" />
-                            <button className="gradient-btn">{t('Save changes')}</button>
+                            <Field name="threshold" className="w-full p-2.5 shadow-inner rounded-lg border-2 text-gray-350 font-bold mt-6" />
+                            <div className="error-el"><ErrorMessage name="threshold" /></div>
+                            <button type="submit" className="mt-8 gradient-btn">{t('Save changes')}</button>
                         </Form>
                     }
                 />
