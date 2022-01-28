@@ -7,8 +7,10 @@ declare namespace State {
         notifications: Notifications;
         layouts: Layouts;
         products: Products;
+        chatbot: Chatbot;
         countries: Countries;
         shippings: Shippings;
+        livesessions: Livesessions;
     }
 
     type Address = Address.Root;
@@ -17,9 +19,12 @@ declare namespace State {
     type Notifications = User.Notifications;
     type Layouts = Layouts.Root;
     type Products = Products.Root;
+    type Chatbot = Chatbot.Root;
     type Countries = any;
     type Shippings = {
         list: Array<Shipping>;
         shipping: Shipping | null;
     };
+    type Shippings = Array<Shipping>;
+    type Livesessions = Livesessions.Root;
 }

@@ -12,8 +12,7 @@
 }
 
 .input-tips {
-  font-size: 10px;
-  @apply absolute text-gray-180 font-bold not-italic -top-4 right-0;
+  @apply absolute text-xs text-gray-180 font-bold not-italic -top-5 right-0;
 }
 
 .form-control-disabled {
@@ -113,8 +112,7 @@
   }
 }
 .control-label {
-  font-size: 10px;
-  @apply text-blue-350 font-bold;
+  @apply text-blue-350 text-xs font-bold block mb-2;
 }
 
 .input-close {

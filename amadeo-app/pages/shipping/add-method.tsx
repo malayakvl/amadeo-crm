@@ -27,7 +27,6 @@ export default function AddMethod() {
                 validationSchema={submitSchema}
                 onSubmit={(values) => {
                     const formData = new FormData();
-
                     formData.append('logo', values.logo);
                     formData.append('name', values.name);
 

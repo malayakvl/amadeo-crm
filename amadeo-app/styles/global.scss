@@ -41,6 +41,10 @@
   .loader {
     @apply w-full h-full bg-black fixed z-50 opacity-75;
   }
+  .shadow-border {
+    box-shadow: inset 0 4px 4px rgba(0, 0, 0, 0.1);
+    @apply bg-gray-100 rounded-lg border border-gray-200 p-2.5 text-muted-400 font-bold text-sm;
+  }
 }
 
 @layer components {
@@ -77,3 +81,4 @@
 @import "components/input-tags";
 @import "components/filters";
 @import "components/dropdown";
+@import "components/popup";

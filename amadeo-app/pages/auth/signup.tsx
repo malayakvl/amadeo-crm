@@ -1,18 +1,17 @@
 import FullLayout from '../../components/layout/FullLayout';
-import { InputText } from '../../components/_form';
 import { useTranslations } from 'next-intl';
-import ProviderBtns from '../../components/auth/ProviderBtns';
-import React from 'react';
+import React, { useState } from 'react';
 import { providers, getSession } from 'next-auth/client';
 import Link from 'next/link';
 import { Field, Formik, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import getConfig from 'next/config';
+import { useDispatch } from 'react-redux';
+import { inviteUserAction } from '../../redux/user/actions';
+import Image from 'next/image';
+import { accountService } from '../../_services';
 
-const { publicRuntimeConfig } = getConfig();
-const baseUrl = `${publicRuntimeConfig.apiUrl}/auth`;
-
-export default function Signup({ providers, locale }: { providers: any; locale: string }) {
+export default function Signup() {
+    const dispatch = useDispatch();
     type FormData = {
         email: string;
         acceptTerms: boolean;
@@ -20,24 +19,23 @@ export default function Signup({ providers, locale }: { providers: any; locale: 
     };
 
     const t = useTranslations();
-    const validationSchema = Yup.object().shape({
-        email: Yup.string().email(t('Must be a valid email')).required(t('Required field')),
-        acceptTerms: Yup.bool().oneOf([true], 'Accept Terms is required')
-    });
-    const onSubmit = (values: FormData, actions: any) => {
-        fetch(`${baseUrl}/invite`, {
-            method: 'POST',
-            body: JSON.stringify(values),
-            headers: { 'Content-Type': 'application/json' }
-        }).then((r) => {
-            if (!r.ok) {
-                r.json().then((json) => alert(json.message));
-                return;
-            }
+    const [roleId, setRoleId] = useState(1);
+    const [isFbClicked, setIsFbClicked] = useState(false);
 
-            alert('Check your email box and follow found instructions there');
+    const validationSchema = Yup.object().shape({
+        email: !isFbClicked
+            ? Yup.string().email(t('Must be a valid email')).required(t('Required field'))
+            : Yup.string(),
+        acceptTerms: Yup.bool().oneOf([true], t('Accept Terms is required'))
+    });
+
+    const onSubmit = (values: FormData, actions: any) => {
+        if (isFbClicked) {
+            accountService.registerFB(roleId);
+        } else {
+            dispatch(inviteUserAction(values));
             actions.resetForm();
-        });
+        }
     };
 
     return (
@@ -78,27 +76,29 @@ export default function Signup({ providers, locale }: { providers: any; locale: 
                                 </div>
                                 <div>
                                     <div className="font-bold mb-2.5">
-                                        How would you like to Sign up as? :
+                                        {t('How would you like to Sign up as?')} :
                                     </div>
                                     <div className="text-gray-180 text-xs mb-4">
                                         <Field
+                                            onClick={() => setRoleId(2)}
                                             id="buyer-radio"
                                             type="radio"
                                             className="radio mr-2.5"
                                             name="role_id"
                                             value="1"
                                         />
-                                        <label htmlFor="buyer-radio">Shopper</label>
+                                        <label htmlFor="buyer-radio">{t('Shopper')}</label>
                                     </div>
                                     <div className="text-gray-180 text-xs">
                                         <Field
+                                            onClick={() => setRoleId(2)}
                                             id="seller-radio"
                                             type="radio"
                                             className="radio mr-2.5"
                                             name="role_id"
                                             value="2"
                                         />
-                                        <label htmlFor="seller-radio">Seller</label>
+                                        <label htmlFor="seller-radio">{t('Seller')}</label>
                                     </div>
                                 </div>
                             </div>
@@ -107,24 +107,49 @@ export default function Signup({ providers, locale }: { providers: any; locale: 
                                     2.
                                 </div>
                                 <div className="flex flex-col">
-                                    <ProviderBtns Providers={providers} locale={locale} />
-
+                                    <button
+                                        onClick={() => {
+                                            setIsFbClicked(true);
+                                        }}
+                                        className="image-btn bg-social-facebook text-white">
+                                        <Image
+                                            width={24}
+                                            height={24}
+                                            src="/images/social/facebook-solid.svg"
+                                            layout="fixed"
+                                            alt=""
+                                        />
+                                        <div className="text-sm  ml-2.5">
+                                            {t('Continue with Facebook')}
+                                        </div>
+                                    </button>
                                     <div
                                         style={{ lineHeight: '0.1em' }}
                                         className="text-center border-b my-5">
-                                        <span className="bg-white px-6">or</span>
+                                        <span className="bg-white px-6">{t('or')}</span>
                                     </div>
+                                    <div className="relative">
+                                        <i className="f-icon f-email" />
 
-                                    <InputText
-                                        icon={'f-email'}
-                                        style={null}
-                                        label={null}
-                                        name={'email'}
-                                        placeholder={'Email'}
-                                        props={props}
-                                        tips={null}
-                                    />
-
+                                        <input
+                                            className="form-control-icon"
+                                            placeholder={t('Email')}
+                                            type="text"
+                                            onClick={() => setIsFbClicked(false)}
+                                            onChange={props.handleChange}
+                                            // value={inputValue || ''}
+                                            value={props.values['email']}
+                                            name="email"
+                                        />
+                                        <i
+                                            role="presentation"
+                                            className="input-close cursor-pointer"
+                                            onClick={() => props.setFieldValue('email', '')}
+                                        />
+                                        {props.errors.email && (
+                                            <div className="error-el">{props.errors.email}</div>
+                                        )}
+                                    </div>
                                     <div>
                                         <Field
                                             id="acceptTerms"
@@ -135,8 +160,10 @@ export default function Signup({ providers, locale }: { providers: any; locale: 
                                         <label
                                             htmlFor="acceptTerms"
                                             className="text-xs font-medium">
-                                            I have read and acept the{' '}
-                                            <span className="text-orange-450">terms of use</span>
+                                            {t('I have read and acept the')}
+                                            <span className="text-orange-450">
+                                                <Link href={'/'}>{t('terms of use')}</Link>
+                                            </span>
                                         </label>
                                     </div>
 
@@ -147,7 +174,7 @@ export default function Signup({ providers, locale }: { providers: any; locale: 
                                     />
 
                                     <button type="submit" className="gradient-btn w-full mt-4">
-                                        Sign up
+                                        {t('Sign up')}
                                     </button>
                                 </div>
                             </div>

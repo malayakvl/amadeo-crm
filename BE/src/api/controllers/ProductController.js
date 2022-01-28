@@ -153,7 +153,6 @@ class ProductController {
         }
         const ids = [];
         JSON.parse(req.body.data).filter(id => id.checked).forEach(data => ids.push(data.id));
-        console.log(ids);
         await productModel.bulkDelete(ids, req.user.id);
         
         return res.status(200).json({ success: true });
@@ -168,6 +167,17 @@ class ProductController {
         const data = await productModel.copyProducts(ids, req.user.id);
         
         return res.status(200).json({ success: true, productIds: data.productId });
+    }
+    
+    async find (req, res) {
+        if (!req.user) {
+            return res.status(401).json('Access deny');
+        }
+        // console.log(req.query.searchStr);
+        // console.log(re)
+        const data = await productModel.find(req.query.searchStr, req.user.id);
+    
+        return res.status(200).json({ result: data});
     }
 }
 

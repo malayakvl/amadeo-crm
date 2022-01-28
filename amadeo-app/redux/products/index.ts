@@ -13,7 +13,8 @@ import {
     setSelectedAdditionalAction,
     findTagAction,
     setIdentAction,
-    copyIdsAction
+    copyIdsAction,
+    findProductsAction
 } from './actions';
 
 const initialState: {
@@ -123,6 +124,12 @@ const ACTION_HANDLERS: any = {
         })
     },
     [findTagAction]: {
+        next: (state: State.Products, action: Action<any>): State.Products => ({
+            ...state,
+            tagSuggestions: action.payload
+        })
+    },
+    [findProductsAction]: {
         next: (state: State.Products, action: Action<any>): State.Products => ({
             ...state,
             tagSuggestions: action.payload
@@ -247,7 +254,8 @@ export {
     setSelectedColorsAction,
     setSelectedAdditionalAction,
     findTagAction,
-    setIdentAction
+    setIdentAction,
+    findProductsAction
 };
 
 // ------------------------------------

@@ -6,7 +6,9 @@ export const baseApiUrl = publicRuntimeConfig.apiUrl;
 export enum PaginationType {
     NOTIFICATIONS = 'notifications',
     PRODUCTS = 'products',
-    SHIPPING = 'shipping'
+    CHATBOT = 'chatbot',
+    SHIPPING = 'shipping',
+    LIVESESSIONS = 'livesessions'
 }
 
 export const TableHeaders: { [key in PaginationType]: Type.DataTableHeader[] } = {
@@ -18,15 +20,32 @@ export const TableHeaders: { [key in PaginationType]: Type.DataTableHeader[] } =
         { titleKey: null, className: 'inventory-size' },
         { titleKey: null, className: 'inventory-qty' },
         { titleKey: 'Price', className: 'inventory-price' },
-        // { titleKey: 'Options' },
         { titleKey: 'Actions', className: 'Actions' }
     ],
     [PaginationType.NOTIFICATIONS]: [],
+    [PaginationType.CHATBOT]: [
+        { titleKey: null, className: 'option-switcher' },
+        { sortKey: 'scenario', titleKey: 'Scenario', iconClass: 'scenario' },
+        { titleKey: 'Trigger', iconClass: 'message' },
+        { titleKey: 'Product' },
+        { titleKey: 'Discount (%)' },
+        { titleKey: 'Answers' },
+        { titleKey: null, iconClass: 'eye', className: 'chat-eye' },
+        { titleKey: null, className: 'actions' }
+    ],
     [PaginationType.SHIPPING]: [
         { titleKey: 'Shipping Method' },
         { className: 'shipping-logo' },
         { className: 'option-switcher' },
         { className: 'shipping-countries' },
         {}
+    ],
+    [PaginationType.LIVESESSIONS]: [
+        { titleKey: null, iconClass: 'icon-tbl-date' },
+        { titleKey: 'Duration session', iconClass: 'icon-tbl-time' },
+        { titleKey: 'Duration cart', iconClass: 'icon-tbl-cart' },
+        { titleKey: null, iconClass: 'icon-tbl-status' },
+        { titleKey: 'Participants', iconClass: 'icon-tbl-users' },
+        { titleKey: 'Products' }
     ]
 };

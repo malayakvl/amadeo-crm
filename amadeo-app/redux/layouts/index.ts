@@ -26,13 +26,18 @@ const initialState: State.Layouts = {
             ...initPagination,
             filters: { product_name: '', color_id: [], size_id: [], price: [], quantity: [] }
         },
-        shipping: { ...initPagination }
+        chatbot: { ...initPagination },
+        shipping: { ...initPagination },
+        livesessions: {
+            ...initPagination,
+            filters: { status: [], duration: [], cart_duration: [], event_date: '' }
+        }
     },
     isSidebarOpen: true,
     isDataLoading: false,
     toasts: [],
     checkedIds: [],
-    switchHeader: null,
+    switchHeader: false,
     modalConfirmationMeta: null,
     activeTab: {
         inventory: { tab: 'products' }

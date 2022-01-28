@@ -137,6 +137,20 @@ export const fetchProductAction: any = createAction(
             };
         }
 );
+export const findProductsAction: any = createAction(
+    'products/FIND_PRODUCT_AUTOSUGGEST',
+    async (query: string) =>
+        (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
+            const state = getState();
+            return axios
+                .get(`${baseUrl}/products/find?searchStr=${query}`, {
+                    headers: {
+                        ...authHeader(state.user.user.email)
+                    }
+                })
+                .then((res: any) => res.data.result);
+        }
+);
 export const findTagAction: any = createAction(
     'products/FIND_TAG',
     async (query: string) =>

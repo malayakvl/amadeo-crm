@@ -23,12 +23,14 @@ interface Props {
     children: React.ReactNode[];
     totalAmount: number;
     sendRequest: () => Promise<void>;
-    sendDeleteRequest: () => Promise<void> | null;
-    sendCopyRequest: () => Promise<void> | null;
     switcherOnClick?: any;
+    sendDeleteRequest?: () => Promise<void>;
+    sendCopyRequest?: () => Promise<void>;
+    hidePaginationBar?: boolean;
 }
 
 const DataTable: React.FC<Props> = ({
+    hidePaginationBar,
     paginationType,
     children,
     totalAmount,
@@ -37,14 +39,15 @@ const DataTable: React.FC<Props> = ({
     sendCopyRequest,
     switcherOnClick
 }) => {
-    const { PRODUCTS } = PaginationType;
+    const { PRODUCTS, CHATBOT, SHIPPING } = PaginationType;
     const t = useTranslations();
     const checkedIds = useSelector(checkedIdsSelector);
     const switchAllHeader = useSelector(switchHeaderSelector);
     const user = useSelector(userSelector)
     // const showFilters = [PRODUCTS].includes(paginationType);
     // const hideEntries: boolean = [CATEGORIES, INVESTMENT].includes(paginationType);
-    const showIds: boolean = [PRODUCTS].includes(paginationType);
+    // const hideEntries = false;
+    const showIds: boolean = [PRODUCTS, CHATBOT, SHIPPING].includes(paginationType);
     // const hideSearch: boolean = [INVESTMENT].includes(paginationType);
     // const hideSearch = false;
     const headers = TableHeaders[paginationType];
@@ -66,7 +69,7 @@ const DataTable: React.FC<Props> = ({
     );
     const [loading, setLoading] = useState(true);
     const [allChecked, setAllChecked] = useState(false);
-    const [setSelectBulkAction] = useState(null);
+    // const [selectBulkAction, setSelectBulkAction] = useState(null);
 
     useEffect(() => {
         sendRequest().finally(() => setLoading(false));
@@ -104,12 +107,12 @@ const DataTable: React.FC<Props> = ({
 
     const bulkActionDropdown = useCallback(
         (action: any): void => {
-            if (action === 'delete') {
+            if (action === 'delete' && sendDeleteRequest) {
                 sendDeleteRequest();
-            } else if (action === 'copy') {
+            } else if (action === 'copy' && sendCopyRequest) {
                 sendCopyRequest();
             }
-            setSelectBulkAction(null);
+            // setSelectBulkAction(null);
         },
         [paginationType, dispatch]
     );
@@ -156,6 +159,7 @@ const DataTable: React.FC<Props> = ({
                         <div className="toggle-bg bg-gray-200 border border-gray-200 rounded-full dark:bg-gray-700 dark:border-gray-600" />
                     </label>
                 )}
+                {item.iconClass && <i className={item.iconClass} />}
                 {item.titleKey ? t(item.titleKey) : ''}
                 {item.sortKey && (
                     <>
@@ -186,7 +190,7 @@ const DataTable: React.FC<Props> = ({
             <>
                 <tr role="row">
                     {showIds && (
-                        <th style={{ width: '30px' }}>
+                        <th style={{ width: '30px' }} className="ids">
                             <input
                                 type="checkbox"
                                 onChange={handleAllChecked}
@@ -197,7 +201,7 @@ const DataTable: React.FC<Props> = ({
                                 onChange={(v: any) => {
                                     if (checkedIds.find((d: any) => d.checked === true)) {
                                         bulkActionDropdown(v);
-                                        setSelectBulkAction(v);
+                                        // setSelectBulkAction(v);
                                     } else {
                                         dispatch(setErrorToastAction('Select at least one item'));
                                     }
@@ -237,36 +241,13 @@ const DataTable: React.FC<Props> = ({
         return <EmptyTable colSpan={length}>{t('Table is empty')}</EmptyTable>;
     };
 
-    // const [vegetagle, setVegetable] = useState(undefined);
     return (
         <>
-            {/*{(!hideEntries || showFilters || !hideSearch) && (*/}
-            {/*    <div className="mt-3 mb-3">*/}
-            {/*        {!hideEntries && (*/}
-            {/*            <div className="flex md:w-1/12">*/}
-            {/*                <label className="control-label mt-3 mr-3">{t('Action')} </label>*/}
-            {/*                <Dropdown*/}
-            {/*                    placeholder={t('Select Action')}*/}
-            {/*                    value={selectBulkAction}*/}
-            {/*                    onChange={(v: any) => {*/}
-            {/*                        if (checkedIds.find((d: any) => d.checked === true)) {*/}
-            {/*                            bulkActionDropdown(v);*/}
-            {/*                            setSelectBulkAction(v);*/}
-            {/*                        } else {*/}
-            {/*                            dispatch(setErrorToastAction('Select at least one item'));*/}
-            {/*                        }*/}
-            {/*                    }}*/}
-            {/*                    options={['copy', 'delete']}*/}
-            {/*                />*/}
-            {/*            </div>*/}
-            {/*        )}*/}
-            {/*    </div>*/}
-            {/*)}*/}
-            <table className="min-w-full float-table">
+            <table className="w-full float-table">
                 <thead>{renderTableHeader()}</thead>
                 <tbody>{renderTableBody()}</tbody>
             </table>
-            {!loading && (
+            {!loading && !hidePaginationBar && (
                 <div className="flex justify-between w-full mt-5 mb-10">
                     <div>
                         <select value={limit} onChange={setLimit} className="form-control">
@@ -276,10 +257,10 @@ const DataTable: React.FC<Props> = ({
                             <option value={100}>100</option>
                         </select>
                     </div>
-                    {totalAmount / limit > 1 && (
+                    {Math.ceil(totalAmount / limit) > 1 && (
                         <RawPagination
                             forcePage={offset && offset / limit}
-                            pageCount={totalAmount / limit}
+                            pageCount={Math.ceil(totalAmount / limit)}
                             onPageChange={setPage}
                         />
                     )}

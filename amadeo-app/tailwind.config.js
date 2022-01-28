@@ -55,6 +55,7 @@ module.exports = {
                 },
                 gray: {
                     100: '#F8F8F8',
+                    200: '#C5CAD3',
                     150: '#ECEFF1',
                     180: '#CFD8DC',
                     250: '#FAFAFA',
@@ -70,6 +71,9 @@ module.exports = {
                 },
                 green: {
                     250: '#00C868'
+                },
+                muted: {
+                    400: '#869FAC'
                 }
             }
         }

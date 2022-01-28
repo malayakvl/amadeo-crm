@@ -7,7 +7,6 @@ import { setActivePageAction } from '../../../redux/layouts/actions';
 const SidebarInventory: React.FC = () => {
     const t = useTranslations();
     const dispatch = useDispatch();
-
     return (
         <Fragment>
             <li

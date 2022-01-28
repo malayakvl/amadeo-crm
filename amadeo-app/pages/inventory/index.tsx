@@ -2,7 +2,6 @@ import Head from 'next/head';
 import { getSession } from 'next-auth/client';
 import React, { useEffect } from 'react';
 import { useTranslations } from 'next-intl';
-// import { userSelector } from '../../redux/user/selectors';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     AddProduct,
@@ -17,11 +16,9 @@ import { activeTabSelectorFactory } from '../../redux/layouts/selectors';
 export default function Index({ session, locale }: { session: any; locale: string }) {
     if (!session) return <></>;
     const t = useTranslations();
-    // const user = useSelector(userSelector);
     const dispatch = useDispatch();
     const activeTabLayout = useSelector(activeTabSelectorFactory('inventory'));
     const hiddenFileInput = React.useRef(null);
-    console.log('ACTIVE TAB LAYOUT', activeTabLayout.tab);
     useEffect(() => {
         dispatch(fetchAdditionalAction());
     }, []);
@@ -66,36 +63,6 @@ export default function Index({ session, locale }: { session: any; locale: strin
                     <div className="clear-both" />
                 </div>
                 <div className="block">
-                    {/*{user.role_id === 2 && (*/}
-                    {/*    <nav className="float-tabs">*/}
-                    {/*        <button*/}
-                    {/*            id="products"*/}
-                    {/*            onClick={() => {*/}
-                    {/*                dispatch(setActiveTabAction('products'));*/}
-                    {/*            }}*/}
-                    {/*            className={`tabs ${activeTab === 'products' ? 'active' : ''}`}>*/}
-                    {/*            {t('Products')}*/}
-                    {/*        </button>*/}
-                    {/*        <button*/}
-                    {/*            id="add"*/}
-                    {/*            onClick={() => {*/}
-                    {/*                dispatch(setActiveTabAction('add'));*/}
-                    {/*            }}*/}
-                    {/*            className={`tabs ${*/}
-                    {/*                ['add', 'edit'].includes(activeTab) ? 'active' : ''*/}
-                    {/*            }`}>*/}
-                    {/*            {t(`${activeTab === 'edit' ? 'Edit' : 'Add'} Product`)}*/}
-                    {/*        </button>*/}
-                    {/*        <button*/}
-                    {/*            id="password"*/}
-                    {/*            onClick={() => {*/}
-                    {/*                dispatch(setActiveTabAction('sync'));*/}
-                    {/*            }}*/}
-                    {/*            className={`tabs ${activeTab === 'sync' ? 'active' : ''}`}>*/}
-                    {/*            {t('Sync Products')}*/}
-                    {/*        </button>*/}
-                    {/*    </nav>*/}
-                    {/*)}*/}
                     {activeTabLayout.tab === 'products' && <InventoryFilters locale={locale} />}
                 </div>
             </div>

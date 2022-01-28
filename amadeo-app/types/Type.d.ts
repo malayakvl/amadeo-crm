@@ -14,6 +14,7 @@ declare namespace Type {
         sortKey?: string;
         titleKey?: string | null;
         className?: string;
+        iconClass?: string;
         subTitles?: DataTableHeader[];
     }
 }

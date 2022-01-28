@@ -8,6 +8,8 @@ import ProductController from '../controllers/ProductController.js';
 import TagController from '../controllers/TagController.js';
 import ShippingController from '../controllers/ShippingController.js';
 import userModel from '../models/User.js';
+import ChatbotController from "../controllers/ChatbotController.js";
+import LivesessionController from "../controllers/LivesessionController.js";
 
 const apiRoutes = express.Router();
 
@@ -62,8 +64,26 @@ apiRoutes.route('/products/photo-delete/:id').post(ProductController.deletePhoto
 apiRoutes.route('/products/bulk-delete').post(ProductController.bulkDelete);
 apiRoutes.route('/products/bulk-copy').post(ProductController.bulkCopy);
 apiRoutes.route('/products/import').post(ProductController.import);
+apiRoutes.route('/products/find').get(ProductController.find);
 
 apiRoutes.route('/tags/find').get(TagController.fetchTags);
+
+apiRoutes.route('/chatbot').post(ChatbotController.storeItem);
+apiRoutes.route('/chatbot/delete/:id').delete(ChatbotController.deleteRow);
+apiRoutes.route('/fetch-chatbot-messages').get(ChatbotController.fetchItems);
+apiRoutes.route('/fetch-chatbot-default-messages').get(ChatbotController.fetchItemsSystem);
+apiRoutes.route('/fetch-chatbot-message/:id').get(ChatbotController.fetchItem);
+apiRoutes.route('/chatbot/bulk-delete').post(ChatbotController.bulkDelete);
+apiRoutes.route('/chatbot/change-active/:id').get(ChatbotController.changeActive);
+apiRoutes.route('/chatbot/change-active-all').get(ChatbotController.changeAllActive);
+
+apiRoutes.route('/livesession').post(LivesessionController.storeItem);
+apiRoutes.route('/livesession/fetch-items').get(LivesessionController.fetchItems);
+apiRoutes.route('/livesession/fetch-scenarios').get(LivesessionController.fetchScenarios);
+
+//FB routes
+apiRoutes.route('/fb-authenticate').post(UserController.syncFb);
+
 
 apiRoutes.route('/shipping/create').post(ShippingController.create)
 apiRoutes.route('/shipping/fetch-all').get(ShippingController.fetchAll)

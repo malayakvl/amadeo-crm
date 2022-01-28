@@ -1,4 +1,5 @@
 import '../styles/global.scss';
+import Head from 'next/head';
 import type { ReactElement, ReactNode } from 'react';
 import type { NextPage } from 'next';
 import { NextIntlProvider } from 'next-intl';
@@ -10,6 +11,7 @@ import MainLayout from '../components/layout/MainLayout';
 import SidebarLayout from '../components/layout/SidebarLayout';
 import { Toasts } from '../components/_common';
 import { ConfirmationModal } from '../components/_common';
+import React from 'react';
 
 type NextPageWithLayout = NextPage & {
     getLayout?: (page: ReactElement) => ReactNode;
@@ -65,6 +67,46 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
                     // in a different time zone.
                     timeZone="Europe/Paris">
                     <MainLayout>
+                        <div id="fb-root" />
+                        <Head>
+                            <title>Amadeo CRM</title>
+                            <script
+                                async
+                                defer
+                                crossOrigin="anonymous"
+                                src="https://connect.facebook.net/fr_FR/sdk.js#xfbml=1&version=v12.0&appId=3046697902325160&autoLogAppEvents=1"
+                                nonce="qpTXeSyr"
+                            />
+                            {/*<script*/}
+                            {/*    dangerouslySetInnerHTML={{*/}
+                            {/*        __html: `*/}
+                            {/*          window.fbAsyncInit = function() {*/}
+                            {/*            FB.init({*/}
+                            {/*                appId      : '3046697902325160',*/}
+                            {/*                cookie     : true,*/}
+                            {/*                xfbml      : true,*/}
+                            {/*                version    : 'v12.0'*/}
+                            {/*            });*/}
+                            {/*            FB.AppEvents.logPageView();*/}
+                            {/*        };*/}
+
+                            {/*        function statusChangeCallback(response) {*/}
+                            {/*            console.log(response)*/}
+                            {/*        }*/}
+
+                            {/*        FB.getLoginStatus(function(response) {*/}
+                            {/*            statusChangeCallback(response);*/}
+                            {/*        });*/}
+
+                            {/*        function checkLoginState() {*/}
+                            {/*            FB.getLoginStatus(function(response) {*/}
+                            {/*                statusChangeCallback(response);*/}
+                            {/*            });*/}
+                            {/*        }*/}
+                            {/*      `*/}
+                            {/*    }}*/}
+                            {/*/>*/}
+                        </Head>
                         <Layout>
                             <Toasts />
                             <Component {...pageProps} />

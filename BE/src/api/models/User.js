@@ -39,6 +39,39 @@ class User {
             client.release();
         }
     }
+    
+    /**
+     * Find user by email
+     *
+     * @param providerId - string
+     * @param isDeleted - boolean
+     * @returns {Promise<any|null>}
+     */
+    async findUserByProviderId(providerId, isDeleted = false) {
+        const client = await pool.connect();
+        try {
+            const res = await client.query(`SELECT * FROM data.users WHERE auth_provider_id = '${providerId}'`);
+            if (res.rows.length) {
+                delete res.rows[0].auth_provider_name;
+                delete res.rows[0].auth_provider_id;
+                return res.rows[0];
+            } else {
+                return null;
+            }
+            // return res.rows.length > 0 ? res.rows[0] : null;
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error:',
+                    { message: e.message }
+                );
+            }
+            throw new Error(e);
+        } finally {
+            client.release();
+        }
+    }
 
     /**
      * Login or Register user via provider Facebook, Google, etc
@@ -50,22 +83,26 @@ class User {
         const client = await pool.connect();
         try {
             let user;
-            user = await this.findUserByEmail(userData.email);
+            // user = await this.findUserByEmail(userData.email);
+            user = await this.findUserByProviderId(userData.id);
             if (!user) {
                 const query = `
-                    INSERT INTO data.users (email, auth_provider_name, auth_provider_id, first_name, role_id)
+                    INSERT INTO data.users (email, auth_provider_name, auth_provider_id, auth_provider_access_token, auth_provider_expiration_time, first_name, role_id)
                     VALUES
                     (
-                        '${userData.email}',
-                        '${userData.provider}',
-                        '${userData.providerId}',
+                        '${userData.email ? userData.email : userData.id}',
+                        'facebook',
+                        '${userData.id}',
+                        '${userData.accessToken}',
+                        '${userData.expirationTime}',
                         '${userData.name}',
-                        '1'
+                        '${userData.roleId}'
                     )
                     ;
                 `;
                 const res = await client.query(query);
-                user = res ? await this.findUserByEmail(userData.email) : null;
+                // user = res ? await this.findUserByEmail(userData.email) : null;
+                user = res ? await this.findUserByProviderId(userData.id) : null;
                 if (user) {
                     return { user: user, error: null };
                 } else {
@@ -86,6 +123,37 @@ class User {
         } finally {
             client.release();
         }
+    }
+    
+    /**
+     * Login or Register user via provider Facebook, Google, etc
+     *
+     * @param userData - object
+     * @returns {Promise<{error: {code: number, message: string}, user: null}|{error: null, user: *}>}
+     */
+    async providerLogin(userData) {
+        const client = await pool.connect();
+        try {
+            let user;
+            user = await this.findUserByProviderId(userData.userID);
+            if (!user) {
+                return { user: null, error: { code: 404, message: 'User Not found' } };
+            } else {
+                return { user: user, error: null };
+            }
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error:',
+                    { message: e.message }
+                );
+            }
+            return { user: null, error: { code: 404, message: 'User Not found' } };
+        } finally {
+            client.release();
+        }
+    
     }
 
     /**
@@ -190,7 +258,6 @@ class User {
     /**
      *
      * @param userId integer
-     * @param addressId integer
      * @returns {Promise<{addresses: null, error: {code: number, message: string}}|any|null>}
      */
     async findUserAddress(userId) {
@@ -334,6 +401,45 @@ class User {
         try {
             const res = await client.query(query);
             return res.rows.length > 0 ? res.rows[0] : null;
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Query:',
+                    { message: query }
+                );
+                logger.log(
+                    'error',
+                    'Model error (User activateByHash):',
+                    { message: e.message }
+                );
+            }
+            const error = {
+                code: 500,
+                message: 'Error create reset token'
+            };
+            return {
+                user: null,
+                error
+            };
+        } finally {
+            client.release();
+        }
+    }
+    
+    async syncFb(userData, data) {
+        const client = await pool.connect();
+        const query = `UPDATE data.users SET
+                        auth_provider_name='facebook', auth_provider_id='${data.userID}',
+                        auth_provider_access_token='${data.accessToken}',
+                        auth_provider_expiration_time='${data.data_access_expiration_time}'
+                       WHERE id=${userData.id}
+                        `;
+        try {
+            await client.query(query);
+            const user = await this.findUserByEmail(userData.email);
+            
+            return {user: user};
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
                 logger.log(

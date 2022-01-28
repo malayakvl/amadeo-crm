@@ -60,7 +60,7 @@ const DataPagination: React.FC<Props> = ({ paginationType, totalAmount, sendRequ
                     {totalAmount / limit > 1 && (
                         <RawPagination
                             forcePage={offset && offset / limit}
-                            pageCount={totalAmount / limit}
+                            pageCount={Math.ceil(totalAmount / limit)}
                             onPageChange={setPage}
                         />
                     )}

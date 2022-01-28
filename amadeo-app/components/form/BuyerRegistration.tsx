@@ -2,7 +2,7 @@ import { Formik } from 'formik';
 import Image from 'next/image';
 import * as Yup from 'yup';
 import { useTranslations } from 'next-intl';
-import { TogglePassword } from '../_form/TogglePassword';
+import { TogglePassword } from '../_form';
 import InputTextDisabled from '../_form/InputTextDisabled';
 import getConfig from 'next/config';
 import { signIn } from 'next-auth/client';
