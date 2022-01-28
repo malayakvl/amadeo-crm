@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl';
 import { ChatbotForm, DefaultMessages, ListMessages } from '../../components/chatbot/index';
 import { useSelector, useDispatch } from 'react-redux';
 import { showFormSelector } from '../../redux/chatbot/selectors';
-import { showFormAction } from '../../redux/chatbot';
+import { setEmptyFormAction, showFormAction } from '../../redux/chatbot';
 
 export default function Index({ session }: { session: any }) {
     if (!session) return <></>;
@@ -14,6 +14,7 @@ export default function Index({ session }: { session: any }) {
     const showForm = useSelector(showFormSelector);
 
     const handleShowForm = () => {
+        dispatch(setEmptyFormAction());
         dispatch(showFormAction(!showForm));
     };
 

@@ -9,6 +9,7 @@ import TagController from '../controllers/TagController.js';
 import ShippingController from '../controllers/ShippingController.js';
 import userModel from '../models/User.js';
 import ChatbotController from "../controllers/ChatbotController.js";
+import LivesessionController from "../controllers/LivesessionController.js";
 
 const apiRoutes = express.Router();
 
@@ -76,6 +77,10 @@ apiRoutes.route('/fetch-chatbot-message/:id').get(ChatbotController.fetchItem);
 apiRoutes.route('/chatbot/bulk-delete').post(ChatbotController.bulkDelete);
 apiRoutes.route('/chatbot/change-active/:id').get(ChatbotController.changeActive);
 apiRoutes.route('/chatbot/change-active-all').get(ChatbotController.changeAllActive);
+
+apiRoutes.route('/livesession').post(LivesessionController.storeItem);
+apiRoutes.route('/livesession/fetch-items').get(LivesessionController.fetchItems);
+apiRoutes.route('/livesession/fetch-scenarios').get(LivesessionController.fetchScenarios);
 
 //FB routes
 apiRoutes.route('/fb-authenticate').post(UserController.syncFb);
