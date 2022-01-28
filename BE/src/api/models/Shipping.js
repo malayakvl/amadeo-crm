@@ -180,7 +180,6 @@ class Shipping {
     }
 
     async changeStatuses(status) {
-        console.log(status)
         const client = await pool.connect();
         try {
             const queryInsert =
@@ -228,7 +227,6 @@ class Shipping {
 
     async setThreshold(userId, threshold) {
         const client = await pool.connect();
-        console.log(userId)
         try {
             await client.query('DELETE FROM data.free_order_threshold WHERE user_id = $1', [userId]);
             client.query(

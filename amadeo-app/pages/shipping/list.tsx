@@ -45,7 +45,7 @@ export default function List() {
     const t = useTranslations();
     const countries = useSelector(countriesSelector);
     const user = useSelector(userSelector)
-    const [threshold, setThreshold] = useState('');
+    const [threshold, setThreshold] = useState(false);
 
     useEffect(() => {
         if (!items) {
@@ -75,42 +75,44 @@ export default function List() {
 
     }, [user])
 
-    if (!countries.length || !threshold) {
+    if (!countries.length || threshold === false) {
         return 'Loading';
     }
 
     return (
         <div className="flex">
-            <div className="w-64 p-4 bg-white rounded-lg">
-                <div className="font-bold text-gray-350 text-lg pb-4 border-b border-gray-200">
-                    {t('Free shipping')}
+            {user.role_id !== 3 &&
+                <div className="w-64 p-4 bg-white rounded-lg">
+                    <div className="font-bold text-gray-350 text-lg pb-4 border-b border-gray-200">
+                        {t('Free shipping')}
+                    </div>
+                    <div className="text-sm text-gray-500 mt-12">
+                        {t(
+                            'Set a shipping threshold. In case order has reacted this amount, the shipping is free for this buyer.'
+                        )}
+                    </div>
+                    <Formik
+                        onSubmit={(values) => {
+                            dispatch(setThresholdAction(values))
+                            dispatch(setSuccessToastAction(t(`Threshold has been saved: ${values.threshold}`)))
+
+                        }}
+                        initialValues={{ threshold }}
+                        validationSchema={Yup.object().shape({
+                            threshold: Yup.number().typeError('Must be number')
+                        })}
+                        render={(props) =>
+                            <Form onSubmit={props.handleSubmit}>
+                                <Field name="threshold" className="w-full p-2.5 shadow-inner rounded-lg border-2 text-gray-350 font-bold mt-6" />
+                                <div className="error-el"><ErrorMessage name="threshold" /></div>
+                                <button type="submit" className="mt-8 gradient-btn">{t('Save changes')}</button>
+                            </Form>
+                        }
+                    />
+
                 </div>
-                <div className="text-sm text-gray-500 mt-12">
-                    {t(
-                        'Set a shipping threshold. In case order has reacted this amount, the shipping is free for this buyer.'
-                    )}
-                </div>
-                <Formik
-                    onSubmit={(values) => {
-                        dispatch(setThresholdAction(values))
-                        dispatch(setSuccessToastAction(t(`Threshold has been saved: ${values.threshold}`)))
+            }
 
-                    }}
-                    initialValues={{ threshold }}
-                    validationSchema={Yup.object().shape({
-                        threshold: Yup.number().typeError('Must be number')
-                    })}
-                    render={(props) =>
-                        <Form onSubmit={props.handleSubmit}>
-                            <Field name="threshold" className="w-full p-2.5 shadow-inner rounded-lg border-2 text-gray-350 font-bold mt-6" />
-                            <div className="error-el"><ErrorMessage name="threshold" /></div>
-                            <button type="submit" className="mt-8 gradient-btn">{t('Save changes')}</button>
-                        </Form>
-                    }
-                />
-
-
-            </div>
             <div className="block-white-8  ml-4 flex-1">
                 <div className="mb-8 font-bold text-gray-350 text-lg py-4 border-b border-gray-200">
                     {t('Shipping methods')}
@@ -140,45 +142,49 @@ export default function List() {
                             <td className="text-center">
                                 <Image src={`${baseApiUrl}/${item.image}`} width={50} height={50} />
                             </td>
-                            <td>
-                                <label className="flex items-center cursor-pointer relative">
-                                    <input
-                                        type="checkbox"
-                                        className="sr-only"
-                                        value={`switcher_${item.id}`}
-                                        checked={
-                                            checkedIds.find((data: any) => data.id === item.id)
-                                                ?.checked || false
-                                        }
-                                        onChange={() => {
-                                            dispatch(checkIdsAction(item.id));
-                                            const status = !item.status;
-                                            items[index].status = status;
-                                            dispatch(changeShippingStatus(item.id, status));
-                                            dispatch(
-                                                setSuccessToastAction(
-                                                    t(
-                                                        `Status of the shipping '${item.name}' is changed`
+                            {user.role_id === 3 &&
+                                <td>
+                                    <label className="flex items-center cursor-pointer relative">
+                                        <input
+                                            type="checkbox"
+                                            className="sr-only"
+                                            value={`switcher_${item.id}`}
+                                            checked={
+                                                checkedIds.find((data: any) => data.id === item.id)
+                                                    ?.checked || false
+                                            }
+                                            onChange={() => {
+                                                dispatch(checkIdsAction(item.id));
+                                                const status = !item.status;
+                                                items[index].status = status;
+                                                dispatch(changeShippingStatus(item.id, status));
+                                                dispatch(
+                                                    setSuccessToastAction(
+                                                        t(
+                                                            `Status of the shipping '${item.name}' is changed`
+                                                        )
                                                     )
-                                                )
-                                            );
-                                        }}
-                                    />
-                                    <div className="toggle-bg bg-gray-200 border border-gray-200 rounded-full dark:bg-gray-700 dark:border-gray-600" />
-                                </label>
-                            </td>
-                            <td className="text-center">
-                                {item.countries.map((country) => (
-                                    <div
-                                        key={country.id}
-                                        className="bg-gray-400 text-white rounded-md p-1 m-1">
-                                        {
-                                            countries.find((item: any) => item.id === country.id)
-                                                .nicename
-                                        }
-                                    </div>
-                                ))}
-                            </td>
+                                                );
+                                            }}
+                                        />
+                                        <div className="toggle-bg bg-gray-200 border border-gray-200 rounded-full dark:bg-gray-700 dark:border-gray-600" />
+                                    </label>
+                                </td>
+                            }
+                            {user.role_id !== 3 &&
+                                <td className="text-center">
+                                    {item.countries.map((country) => (
+                                        <div
+                                            key={country.id}
+                                            className="bg-gray-400 text-white rounded-md p-1 m-1">
+                                            {
+                                                countries.find((item: any) => item.id === country.id)
+                                                    .nicename + `- ${country.price}`
+                                            }
+                                        </div>
+                                    ))}
+                                </td>
+                            }
 
                             <td className="text-right whitespace-nowrap">
                                 <button

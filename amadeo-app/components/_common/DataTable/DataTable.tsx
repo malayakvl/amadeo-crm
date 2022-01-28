@@ -16,6 +16,7 @@ import {
 import { RawPagination, EmptyTable, DropdownAction } from '../../_common/index';
 import { TableHeaders, PaginationType } from '../../../constants';
 import { setSwitchHeaderAction } from '../../../redux/layouts/actions';
+import { userSelector } from '../../../redux/user/selectors';
 
 interface Props {
     paginationType: Type.PaginationType;
@@ -40,12 +41,25 @@ const DataTable: React.FC<Props> = ({
     const t = useTranslations();
     const checkedIds = useSelector(checkedIdsSelector);
     const switchAllHeader = useSelector(switchHeaderSelector);
+    const user = useSelector(userSelector)
     // const showFilters = [PRODUCTS].includes(paginationType);
     // const hideEntries: boolean = [CATEGORIES, INVESTMENT].includes(paginationType);
     const showIds: boolean = [PRODUCTS].includes(paginationType);
     // const hideSearch: boolean = [INVESTMENT].includes(paginationType);
     // const hideSearch = false;
     const headers = TableHeaders[paginationType];
+
+    if (paginationType === PaginationType.SHIPPING) {
+        if (user.role_id === 3) {
+            delete(headers[3]);
+
+        } else {
+            delete(headers[2])
+
+        }
+        
+    }
+
     const dispatch = useDispatch();
     const { limit, sort, column, offset, query, filters }: Layouts.Pagination = useSelector(
         paginationSelectorFactory(paginationType)
