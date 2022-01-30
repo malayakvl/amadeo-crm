@@ -9,6 +9,7 @@ declare namespace Chatbot {
         isSystemLoaded: boolean;
         showForm: boolean;
         showedItems: number[];
+        changeActiveStatus: boolean | null;
     }
 
     interface ChatbotItem {

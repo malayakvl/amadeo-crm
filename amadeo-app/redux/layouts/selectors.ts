@@ -29,6 +29,11 @@ export const switchHeaderSelector = createSelector(
     (layouts: State.Layouts): boolean => layouts.switchHeader
 );
 
+export const switchToggledSelector = createSelector(
+    rootSelector,
+    (layouts: State.Layouts): boolean => layouts.switchToggled
+);
+
 export const checkedIdsSelector = createSelector(
     rootSelector,
     (layouts: State.Layouts): Layouts.CheckedIds[] => layouts.checkedIds

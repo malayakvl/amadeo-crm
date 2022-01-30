@@ -23,6 +23,11 @@ class PageController {
                     params: {
                         slug: 'price'
                     }
+                },
+                {
+                    params: {
+                        slug: 'privacy'
+                    }
                 }
             ]
         ;
