@@ -51,20 +51,20 @@ export default function Signup() {
                         className="rounded-lg border shadow-xl mt-10 flex w-[1000px] bg-white px-20 py-14">
                         <div className="font-bold mt-8 pr-12 w-2/4">
                             <div className="text-5xl line-height-105percent mb-9 w-48">
-                                Sing up today!
+                                {t('Sing up today!')}
                             </div>
 
                             <div className="mb-4 text-2xl line-height-105percent w-72">
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                                {t('Lorem ipsum dolor sit amet, consectetur adipiscing elit.')}
                             </div>
 
                             <div className="font-normal mb-10 text-blue-350 w-60">
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                                {t('Lorem ipsum dolor sit amet, consectetur adipiscing elit.')}
                             </div>
 
                             <Link href={'/auth/signin'}>
                                 <a className="font-bold text-orange-450">
-                                    Already have an account? Sign in here!
+                                    {t('Already have an account? Sign in here!')}
                                 </a>
                             </Link>
                         </div>
