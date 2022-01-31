@@ -97,7 +97,7 @@ class Livesession {
             if (process.env.NODE_ENV === 'development') {
                 logger.log(
                     'error',
-                    'Model error (Chatbot fetch one):',
+                    'Model error (Session fetch one):',
                     { message: e.message }
                 );
             }
@@ -117,14 +117,9 @@ class Livesession {
     
     async create (userId, data) {
         const client = await pool.connect();
-        const query =  `INSERT INTO data.chatbot_scenarios (user_id, name, keywords, message_fr, message_en, active, answer_count, product, discount)
-                VALUES (${userId}, $$${data.name}$$, $$${data.keywords}$$,
-                    regexp_replace($$${data.message_fr}$$, '\\\\n+', E'\\n', 'g' ),
-                    regexp_replace($$${data.message_en}$$, '\\\\n+', E'\\n', 'g' ),
-                    true,
-                    ${data.answer_count ? data.answer_count : null},
-                    '${data.product ? JSON.stringify(data.product) : ''}',
-                    ${data.discount ? data.discount : null}
+        const query =  `INSERT INTO data.live_sessions (user_id, event_date, event_time, scenarios, status)
+                VALUES (${userId}, '${data.event_date}', '${data.event_time}',
+                    '{${data.scenarios}}', 'scheduled'
                 );`;
         try {
             await client.query(query);

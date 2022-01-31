@@ -1,5 +1,5 @@
 import { createAction } from 'redux-actions';
-import { authHeader } from '../../lib/functions';
+import { authHeader, toggleModalPopup } from '../../lib/functions';
 import axios from 'axios';
 import getConfig from 'next/config';
 const { publicRuntimeConfig } = getConfig();
@@ -18,7 +18,7 @@ export const submitFormAction: any = createAction(
             const isNew = data.id;
             dispatch(showLoaderAction(true));
             return axios
-                .post(`${baseUrl}/chatbot`, data, {
+                .post(`${baseUrl}/livesession`, data, {
                     headers: {
                         ...authHeader(state.user.user.email)
                     }
@@ -28,8 +28,10 @@ export const submitFormAction: any = createAction(
                         setSuccessToastAction(`Record has been ${isNew ? 'updated' : 'created'}`)
                     );
                     dispatch(setEmptyFormAction());
-                    // dispatch(showFormAction(false));
+                    dispatch(fetchItemsAction());
+                    dispatch(showPopupAction(false));
                     dispatch(showLoaderAction(false));
+                    toggleModalPopup('.modal-schedule');
                 });
         }
 );
@@ -58,7 +60,7 @@ export const fetchScenariosAction: any = createAction(
 );
 export const fetchItemsAction: any = createAction(
     'livesession/FETCH_ITEMS',
-    async (type: string) =>
+    async () =>
         (
             dispatch: Type.Dispatch,
             getState: () => State.Root
@@ -71,7 +73,7 @@ export const fetchItemsAction: any = createAction(
             dispatch(showLoaderAction(true));
             return axios
                 .get(
-                    `${baseUrl}/livesession/fetch-items?type=${type}&${queryString.stringify({
+                    `${baseUrl}/livesession/fetch-items?${queryString.stringify({
                         limit,
                         offset,
                         sort,
@@ -100,7 +102,7 @@ export const fetchItemAction: any = createAction(
         async (
             dispatch: Type.Dispatch,
             getState: () => State.Root
-        ): Promise<{ item: Products.Product }> => {
+        ): Promise<{ item: Livesessions.DataItem }> => {
             const state = getState();
             dispatch(showLoaderAction(true));
             const res = await axios.get(`${baseUrl}/livesession/${id}`, {

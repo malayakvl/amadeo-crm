@@ -12,6 +12,7 @@ import 'rc-slider/assets/index.css';
 import moment from 'moment';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
+import { submitFormAction } from '../../redux/livesessions/actions';
 
 const SchedulePopup: React.FC<any> = () => {
     const t = useTranslations();
@@ -20,7 +21,7 @@ const SchedulePopup: React.FC<any> = () => {
     const scenarios = useSelector(scenariosSelector);
     const [startDate, setStartDate] = useState(new Date());
     const [startTime, setStartTime] = useState(moment());
-    // const [selectedScenarios, setSelectedScenarios] = useState<number[]>([]);
+    const [selectedScenarios, setSelectedScenarios] = useState<number[]>([]);
     // const [timeRange, setTimeRange] = useState([0, 0]);
     // const [cartRange, setCartRange] = useState([0, 0]);
 
@@ -34,7 +35,16 @@ const SchedulePopup: React.FC<any> = () => {
         setStartTime(value);
     };
     const updateScenarios = (id: number) => {
-        console.log(id);
+        const _scenarios = selectedScenarios;
+        if (_scenarios.includes(id)) {
+            const index = _scenarios.findIndex((v: any) => v === id);
+            if (index >= 0) {
+                _scenarios.splice(index, 1);
+            }
+        } else {
+            _scenarios.push(id);
+        }
+        setSelectedScenarios(_scenarios);
     };
     const SubmitSchema = Yup.object().shape({});
 
@@ -70,7 +80,14 @@ const SchedulePopup: React.FC<any> = () => {
                                 initialValues={{ min_time: 0 }}
                                 validationSchema={SubmitSchema}
                                 onSubmit={(values) => {
-                                    console.log(values);
+                                    const sessionData: any = {};
+                                    sessionData.event_date = moment(startDate).format('YYYY-MM-DD');
+                                    sessionData.event_time = moment(startTime).format('HH:mm');
+                                    sessionData.scenarios = selectedScenarios;
+                                    if ((values as any).id) {
+                                        sessionData.id = (values as any).id;
+                                    }
+                                    dispatch(submitFormAction(sessionData));
                                 }}>
                                 {(props) => {
                                     // const { handleChange } = props;
@@ -240,7 +257,10 @@ const SchedulePopup: React.FC<any> = () => {
                                                 <button
                                                     type="button"
                                                     className="cancel mr-2.5"
-                                                    onClick={() => alert('clear')}>
+                                                    onClick={() => {
+                                                        dispatch(showPopupAction(false));
+                                                        toggleModalPopup('.modal-schedule');
+                                                    }}>
                                                     {t('Cancel')}
                                                 </button>
                                                 <button className="gradient-btn">
