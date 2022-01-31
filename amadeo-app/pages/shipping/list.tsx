@@ -118,6 +118,8 @@ export default function List() {
                     {t('Shipping methods')}
                 </div>
                 <DataTable
+                    hidePaginationBar={true}
+                    hideBulk={true}
                     paginationType={PaginationType.SHIPPING}
                     totalAmount={items?.length}
                     switcherOnClick={(status: boolean) => {
@@ -139,7 +141,7 @@ export default function List() {
                     {items?.map((item: Shipping, index: number) => (
                         <tr key={item.id}>
                             <td>{item.name}</td>
-                            <td className="text-center">
+                            <td className="flex justify-center">
                                 <Image src={`${baseApiUrl}/${item.image}`} width={50} height={50} />
                             </td>
                             {user.role_id === 3 &&

@@ -27,6 +27,7 @@ interface Props {
     sendDeleteRequest?: () => Promise<void>;
     sendCopyRequest?: () => Promise<void>;
     hidePaginationBar?: boolean;
+    hideBulk?: boolean;
 }
 
 const DataTable: React.FC<Props> = ({
@@ -37,7 +38,8 @@ const DataTable: React.FC<Props> = ({
     sendRequest,
     sendDeleteRequest,
     sendCopyRequest,
-    switcherOnClick
+    switcherOnClick,
+    hideBulk
 }) => {
     const { PRODUCTS, CHATBOT, SHIPPING } = PaginationType;
     const t = useTranslations();
@@ -189,7 +191,7 @@ const DataTable: React.FC<Props> = ({
         return (
             <>
                 <tr role="row">
-                    {showIds && (
+                    {showIds && !hideBulk && (
                         <th style={{ width: '30px' }} className="ids">
                             <input
                                 type="checkbox"
