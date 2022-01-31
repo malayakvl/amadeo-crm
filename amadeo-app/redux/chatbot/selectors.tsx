@@ -32,3 +32,7 @@ export const showedItemsSelector = createSelector(
     rootSelector,
     (chatbot: State.Chatbot): any => chatbot.showedItems
 );
+export const switcherStatusChangeSelector = createSelector(
+    rootSelector,
+    (chatbot: State.Chatbot): any => chatbot.changeActiveStatus
+);

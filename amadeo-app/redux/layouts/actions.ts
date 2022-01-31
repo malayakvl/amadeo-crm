@@ -3,6 +3,8 @@ import { createAction } from 'redux-actions';
 // ------------------------------------
 // Actions
 // ------------------------------------
+export const setSwitchToggleAction: any = createAction('layouts/SWITCH_HEADER_TOGGLE');
+
 export const setSwitchHeaderAction: any = createAction('layouts/SWITCH_HEADER_ACTION');
 
 export const setCheckedAction: any = createAction('layouts/SET_CHECKED');

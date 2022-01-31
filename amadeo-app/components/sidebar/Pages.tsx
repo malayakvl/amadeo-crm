@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import moment from 'moment';
 
 export default function Pages() {
     return (
@@ -16,7 +17,7 @@ export default function Pages() {
                     </Link>
                 </li>
                 <li>
-                    <Link href={'/pages/price'}>
+                    <Link href={'/pages/privacy'}>
                         <a>Privacy</a>
                     </Link>
                 </li>
@@ -26,7 +27,7 @@ export default function Pages() {
                     </Link>
                 </li>
             </ul>
-            <span className="copyright">@ 2021 Liveproshop</span>
+            <span className="copyright">@ {moment().format('YYYY')} Liveproshop</span>
         </div>
     );
 }

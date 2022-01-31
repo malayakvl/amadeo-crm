@@ -13,6 +13,7 @@ declare namespace Layouts {
         checkedIds: CheckedIds[];
         modalConfirmationMeta: ModalConfirmationMeta | null;
         switchHeader: boolean;
+        switchToggled: boolean;
         activeTab: {
             inventory: TabTypes;
         };

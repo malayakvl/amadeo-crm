@@ -1,7 +1,11 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { itemsCountSelector, paginatedItemsSelector } from '../../redux/chatbot/selectors';
-import { fetchDataAction } from '../../redux/chatbot';
+import {
+    itemsCountSelector,
+    paginatedItemsSelector,
+    switcherStatusChangeSelector
+} from '../../redux/chatbot/selectors';
+import { fetchDataAction, switchChangeStatusAction } from '../../redux/chatbot';
 import { PaginationType } from '../../constants';
 import { DataTable } from '../_common';
 import { Row } from './index';
@@ -20,6 +24,7 @@ const ListMessages: React.FC = () => {
     const items = useSelector(paginatedItemsSelector);
     const count = useSelector(itemsCountSelector);
     const switchAllHeader = useSelector(switchHeaderSelector);
+    const switchToggled = useSelector(switcherStatusChangeSelector);
     const [itemActiveChecked, setItemActiveChecked] = useState<any>({});
 
     const sendRequest = useCallback(() => {
@@ -28,6 +33,10 @@ const ListMessages: React.FC = () => {
 
     const sendDeleteRequest = useCallback(() => {
         return dispatch(bulkDeleteAction());
+    }, [dispatch]);
+
+    const switcherRequest = useCallback(() => {
+        return dispatch(changeActiveAllAction(switchAllHeader));
     }, [dispatch]);
 
     const handleDeleteBtnClick = useCallback(
@@ -67,15 +76,15 @@ const ListMessages: React.FC = () => {
     }, [items]);
 
     useEffect(() => {
-        if (items.length) {
+        if (items.length > 0 && switchToggled !== null) {
             const nextCheckedItems: any = {};
             items.forEach((item: any) => {
                 nextCheckedItems[item.id] = switchAllHeader;
             });
-            dispatch(changeActiveAllAction(switchAllHeader));
             setItemActiveChecked(nextCheckedItems);
+            dispatch(switchChangeStatusAction(null));
         }
-    }, [switchAllHeader]);
+    }, [switchToggled]);
 
     return (
         <div className="mt-7">
@@ -83,6 +92,7 @@ const ListMessages: React.FC = () => {
                 paginationType={PaginationType.CHATBOT}
                 totalAmount={count}
                 sendDeleteRequest={sendDeleteRequest}
+                switcherRequest={switcherRequest}
                 sendRequest={sendRequest}>
                 {items?.map((item: any) => (
                     <Row

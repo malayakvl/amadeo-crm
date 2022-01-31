@@ -14,7 +14,8 @@ import {
     setModalConfirmationMetaAction,
     setSwitchHeaderAction,
     showLoaderAction,
-    setActivePageAction
+    setActivePageAction,
+    setSwitchToggleAction
 } from './actions';
 
 const initPagination = { limit: 25, offset: 0, sort: 'DESC', column: 'created_at', query: '' };
@@ -38,6 +39,7 @@ const initialState: State.Layouts = {
     toasts: [],
     checkedIds: [],
     switchHeader: false,
+    switchToggled: false,
     modalConfirmationMeta: null,
     activeTab: {
         inventory: { tab: 'products' }
@@ -131,6 +133,12 @@ const ACTION_HANDLERS: any = {
             switchHeader: action.payload
         })
     },
+    [setSwitchToggleAction]: {
+        next: (state: State.Layouts, action: Action<boolean>): State.Layouts => ({
+            ...state,
+            switchToggled: action.payload
+        })
+    },
     [closeSidebarAction]: (state: State.Layouts): State.Layouts => ({
         ...state,
         isSidebarOpen: false
@@ -189,7 +197,8 @@ export {
     setSuccessToastAction,
     setInfoToastAction,
     deleteToastAction,
-    setModalConfirmationMetaAction
+    setModalConfirmationMetaAction,
+    setSwitchToggleAction
 };
 
 // ------------------------------------

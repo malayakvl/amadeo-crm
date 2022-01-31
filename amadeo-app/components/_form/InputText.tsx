@@ -9,9 +9,19 @@ interface Props {
     placeholder: string | null;
     props: any;
     tips: string | null;
+    onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const InputText: React.FC<Props> = ({ style, icon, name, label, placeholder, tips, props }) => {
+const InputText: React.FC<Props> = ({
+    style,
+    icon,
+    name,
+    label,
+    placeholder,
+    tips,
+    props,
+    onChange
+}) => {
     const t = useTranslations();
 
     const clear = () => {
@@ -33,7 +43,7 @@ const InputText: React.FC<Props> = ({ style, icon, name, label, placeholder, tip
                     className={icon ? 'form-control-icon' : 'form-control'}
                     placeholder={placeholder ? t(placeholder) : ''}
                     type="text"
-                    onChange={props.handleChange}
+                    onChange={onChange ? onChange : props.handleChange}
                     // value={inputValue || ''}
                     value={props.values[name]}
                     name={name}
