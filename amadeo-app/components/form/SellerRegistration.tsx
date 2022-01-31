@@ -56,7 +56,7 @@ export default function SellerRegistration({ email }: { email: any }) {
                         <div className="pt-5 pr-20 border-r">
                             <div className="flex mb-4 items-center">
                                 <div className="mr-2.5 font-bold text-3xl line-height-105percent w-60">
-                                    Your email has been verified!
+                                    {t('Your email has been verified!')}
                                 </div>
                                 <Image
                                     src="/images/tick.svg"
@@ -69,10 +69,10 @@ export default function SellerRegistration({ email }: { email: any }) {
                             <InputTextDisabled name="email" icon="f-email" props={props} />
 
                             <div className="mb-3 mt-9 text-blue-350 text-sm">
-                                Almost there, please
+                                {t('Almost there, please')}
                             </div>
                             <div className="w-60 text-5xl line-height-105percent font-bold">
-                                Complete your profile
+                                {t('Complete your profile')}
                             </div>
                         </div>
                         <div className="ml-8 w-full">
@@ -159,7 +159,7 @@ export default function SellerRegistration({ email }: { email: any }) {
                                 <button
                                     type="submit"
                                     className="uppercase pt-9 gradient-btn w-full">
-                                    continue
+                                    {t('Continue')}
                                 </button>
                             </div>
                         </div>
