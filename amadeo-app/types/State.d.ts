@@ -21,6 +21,10 @@ declare namespace State {
     type Products = Products.Root;
     type Chatbot = Chatbot.Root;
     type Countries = any;
+    type Shippings = {
+        list: Array<Shipping>;
+        shipping: Shipping | null;
+    };
     type Shippings = Array<Shipping>;
     type Livesessions = Livesessions.Root;
 }

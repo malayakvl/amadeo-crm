@@ -1,89 +1,217 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { DataTable } from '../../components/_common';
 import { PaginationType } from '../../constants';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchShippingsAction } from '../../redux/shipping/actions';
+import {
+    changeShippingStatus,
+    changeShippingStatuses,
+    fetchShippingsAction,
+    setThresholdAction
+} from '../../redux/shipping/actions';
 import { shippingsSelector } from '../../redux/shipping/selectors';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { baseApiUrl } from '../../constants';
+import { useRouter } from 'next/router';
+import { fetchCountriesAction } from '../../redux/countries/actions';
+import { countriesSelector } from '../../redux/countries/selectors';
+import {
+    checkAllIdsAction,
+    checkIdsAction,
+    initIdsAction,
+    setSuccessToastAction,
+    uncheckAllIdsAction
+} from '../../redux/layouts';
+import { checkedIdsSelector } from '../../redux/layouts/selectors';
+import { ErrorMessage, Field, Formik } from 'formik';
+import { Form } from 'react-bootstrap';
+import { userSelector } from '../../redux/user/selectors';
+import axios from 'axios';
+import { authHeader } from '../../lib/functions';
+import getConfig from 'next/config';
+import * as Yup from 'yup';
+import { getSession } from 'next-auth/client';
+
+const { publicRuntimeConfig } = getConfig();
+const url = `${publicRuntimeConfig.apiUrl}/api/shipping`;
 
 export default function List() {
     const dispatch = useDispatch();
-
+    const router = useRouter();
     const sendRequest = useCallback(() => {
         return dispatch(fetchShippingsAction());
     }, [dispatch]);
-
     const items = useSelector(shippingsSelector);
+    const checkedIds = useSelector(checkedIdsSelector);
     const t = useTranslations();
+    const countries = useSelector(countriesSelector);
+    const user = useSelector(userSelector);
+    const [threshold, setThreshold] = useState(false);
+
+    useEffect(() => {
+        if (!items) {
+            return;
+        }
+        const setupChecked: any = [];
+        items.forEach((item: Shipping) => {
+            setupChecked.push({ id: item.id, checked: item.status });
+        });
+        dispatch(initIdsAction(setupChecked));
+    }, [items]);
+
+    useEffect(() => {
+        dispatch(fetchCountriesAction());
+    }, []);
+
+    useEffect(() => {
+        if (user.hasOwnProperty('email')) {
+            axios
+                .get(`${url}/threshold`, {
+                    headers: {
+                        ...authHeader(user.email)
+                    }
+                })
+                .then((result) => {
+                    setThreshold(result.data.threshold);
+                });
+        }
+    }, [user]);
+
+    if (!countries.length || threshold === false) {
+        return 'Loading';
+    }
 
     return (
         <div className="flex">
-            <div className="w-64 p-4 bg-gray-100 rounded-lg shadow-inner">
-                <div className="font-bold text-gray-350 text-lg pb-4 border-b border-gray-200">
-                    {t('Free shipping')}
+            {user.role_id !== 3 && (
+                <div className="w-64 p-4 bg-white rounded-lg">
+                    <div className="font-bold text-gray-350 text-lg pb-4 border-b border-gray-200">
+                        {t('Free shipping')}
+                    </div>
+                    <div className="text-sm text-gray-500 mt-12">
+                        {t(
+                            'Set a shipping threshold. In case order has reacted this amount, the shipping is free for this buyer.'
+                        )}
+                    </div>
+                    <Formik
+                        onSubmit={(values) => {
+                            dispatch(setThresholdAction(values));
+                            dispatch(
+                                setSuccessToastAction(
+                                    t(`Threshold has been saved: ${values.threshold}`)
+                                )
+                            );
+                        }}
+                        initialValues={{ threshold }}
+                        validationSchema={Yup.object().shape({
+                            threshold: Yup.number().typeError('Must be number')
+                        })}
+                        render={(props) => (
+                            <Form onSubmit={props.handleSubmit}>
+                                <Field
+                                    name="threshold"
+                                    className="w-full p-2.5 shadow-inner rounded-lg border-2 text-gray-350 font-bold mt-6"
+                                />
+                                <div className="error-el">
+                                    <ErrorMessage name="threshold" />
+                                </div>
+                                <button type="submit" className="mt-8 gradient-btn">
+                                    {t('Save changes')}
+                                </button>
+                            </Form>
+                        )}
+                    />
                 </div>
-                <div className="text-sm text-gray-500 mt-12">
-                    {t(
-                        'Set a shipping threshold. In case order has reacted this amount, the shipping is free for this buyer.'
-                    )}
-                </div>
-                <input
-                    className="w-full p-2.5 shadow-inner rounded-lg border-2 text-gray-350 font-bold mb-8 mt-6"
-                    value="999.99$"
-                />
-                <button className="gradient-btn">{t('Save changes')}</button>
-            </div>
-            <div className="ml-4 flex-1">
-                <div className="mb-12 font-bold text-gray-350 text-lg py-4 border-b border-gray-200">
+            )}
+
+            <div className="block-white-8  ml-4 flex-1">
+                <div className="mb-8 font-bold text-gray-350 text-lg py-4 border-b border-gray-200">
                     {t('Shipping methods')}
                 </div>
                 <DataTable
+                    hidePaginationBar={true}
+                    hideBulk={true}
                     paginationType={PaginationType.SHIPPING}
-                    totalAmount={10}
-                    sendRequest={sendRequest}>
-                    {items?.map((item: Shipping) => (
+                    totalAmount={items?.length}
+                    switcherOnClick={(status: boolean) => {
+                        if (status) {
+                            dispatch(changeShippingStatuses(true));
+                            dispatch(checkAllIdsAction(items));
+                        } else {
+                            dispatch(changeShippingStatuses(false));
+                            dispatch(uncheckAllIdsAction(items));
+                        }
+
+                        dispatch(
+                            setSuccessToastAction(t(`Statuses have been changed for all shippings`))
+                        );
+                    }}
+                    sendRequest={sendRequest}
+                    sendDeleteRequest={() => new Promise(() => null)}
+                    sendCopyRequest={() => new Promise(() => null)}>
+                    {items?.map((item: Shipping, index: number) => (
                         <tr key={item.id}>
-                            <td>
-                                <Image
-                                    width={12}
-                                    height={12}
-                                    src="/images/action-arrow.svg"
-                                    layout="fixed"
-                                    alt=""
-                                />
-                            </td>
-                            <td className="text-center">{item.id}</td>
-                            <td className="text-center">
+                            <td>{item.name}</td>
+                            <td className="flex justify-center">
                                 <Image src={`${baseApiUrl}/${item.image}`} width={50} height={50} />
                             </td>
-                            <td>{item.name}</td>
-                            <td>
-                                <label className="flex items-center cursor-pointer relative">
-                                    <input
-                                        type="checkbox"
-                                        className="sr-only"
-                                        value={`switcher_${item.id}`}
-                                        checked={item.status}
-                                        onChange={() => {
-                                            // setSwitcherValue(e.target.value);
-                                            // handleShowMore(item.id);
-                                        }}
-                                    />
-                                    <div className="toggle-bg bg-gray-200 border border-gray-200 rounded-full dark:bg-gray-700 dark:border-gray-600" />
-                                </label>
-                            </td>
-                            <td className="text-center">countries</td>
+                            {user.role_id === 3 && (
+                                <td>
+                                    <label className="flex items-center cursor-pointer relative">
+                                        <input
+                                            type="checkbox"
+                                            className="sr-only"
+                                            value={`switcher_${item.id}`}
+                                            checked={
+                                                checkedIds.find((data: any) => data.id === item.id)
+                                                    ?.checked || false
+                                            }
+                                            onChange={() => {
+                                                dispatch(checkIdsAction(item.id));
+                                                const status = !item.status;
+                                                items[index].status = status;
+                                                dispatch(changeShippingStatus(item.id, status));
+                                                dispatch(
+                                                    setSuccessToastAction(
+                                                        t(
+                                                            `Status of the shipping '${item.name}' is changed`
+                                                        )
+                                                    )
+                                                );
+                                            }}
+                                        />
+                                        <div className="toggle-bg bg-gray-200 border border-gray-200 rounded-full dark:bg-gray-700 dark:border-gray-600" />
+                                    </label>
+                                </td>
+                            )}
+                            {user.role_id !== 3 && (
+                                <td className="text-center">
+                                    {item.countries.map((country) => (
+                                        <div
+                                            key={country.id}
+                                            className="bg-gray-400 text-white rounded-md p-1 m-1">
+                                            {countries.find((item: any) => item.id === country.id)
+                                                .nicename + `- ${country.price}`}
+                                        </div>
+                                    ))}
+                                </td>
+                            )}
 
                             <td className="text-right whitespace-nowrap">
-                                <Image
-                                    width={24}
-                                    height={24}
-                                    src="/images/dots.svg"
-                                    layout="fixed"
-                                    alt=""
-                                />
+                                <button
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        router.push(`/shipping/edit-method/${item.id}`);
+                                    }}
+                                    className="cursor-pointer">
+                                    <Image
+                                        width={24}
+                                        height={24}
+                                        src="/images/dots.svg"
+                                        layout="fixed"
+                                        alt=""
+                                    />
+                                </button>
                             </td>
                         </tr>
                     ))}
@@ -91,4 +219,25 @@ export default function List() {
             </div>
         </div>
     );
+}
+
+export async function getServerSideProps(context: any) {
+    const { locale } = context;
+    const session = await getSession(context);
+
+    if (!session) {
+        return {
+            redirect: { destination: `/${locale === 'fr' ? '' : `${locale}/`}auth/signin` }
+        };
+    }
+
+    return {
+        props: {
+            session,
+            locale,
+            messages: {
+                ...require(`../../messages/${locale}.json`)
+            }
+        }
+    };
 }

@@ -4,11 +4,13 @@ import { InputText } from '../../components/_form';
 import * as Yup from 'yup';
 import { createShippingAction } from '../../redux/shipping/actions';
 import { useDispatch } from 'react-redux';
+import { useRouter } from 'next/router';
+import { getSession } from 'next-auth/client';
 
-export default function Shipping() {
+export default function AddMethod() {
     const t = useTranslations();
     const dispatch = useDispatch();
-
+    const router = useRouter();
     const submitSchema = Yup.object().shape({
         name: Yup.string().min(3, t('Must be more characters')).required(t('Required field')),
         logo: Yup.mixed().required(t('Required field'))
@@ -28,7 +30,10 @@ export default function Shipping() {
                     const formData = new FormData();
                     formData.append('logo', values.logo);
                     formData.append('name', values.name);
-                    dispatch(createShippingAction(formData));
+
+                    dispatch(createShippingAction(formData)).then(() =>
+                        router.push('/shipping/list')
+                    );
                 }}
                 render={(props) => {
                     return (
@@ -66,7 +71,7 @@ export default function Shipping() {
                             </label>
 
                             <button className="mt-8 gradient-btn" type="submit">
-                                Create
+                                {t('Create')}
                             </button>
                         </form>
                     );
@@ -74,4 +79,25 @@ export default function Shipping() {
             />
         </>
     );
+}
+
+export async function getServerSideProps(context: any) {
+    const { locale } = context;
+    const session = await getSession(context);
+
+    if (!session) {
+        return {
+            redirect: { destination: `/${locale === 'fr' ? '' : `${locale}/`}auth/signin` }
+        };
+    }
+
+    return {
+        props: {
+            session,
+            locale,
+            messages: {
+                ...require(`../../messages/${locale}.json`)
+            }
+        }
+    };
 }

@@ -54,8 +54,7 @@ apiRoutes.route('/fetch-notifications').get(NotificationController.fetchData);
 apiRoutes.route('/count-notice').get(NotificationController.fetchNew);
 apiRoutes.route('/new-notice').get(NotificationController.fetchLatest);
 
-apiRoutes.route('/product')
-    .post(ProductController.addProduct);
+apiRoutes.route('/product').post(ProductController.addProduct);
 apiRoutes.route('/products/fetch-additional').get(ProductController.fetchAdditional);
 apiRoutes.route('/fetch-product/:id').get(ProductController.fetchProduct);
 apiRoutes.route('/fetch-products').get(ProductController.fetchData);
@@ -88,11 +87,19 @@ apiRoutes.route('/fb-authenticate').post(UserController.syncFb);
 
 apiRoutes.route('/shipping/create').post(ShippingController.create)
 apiRoutes.route('/shipping/fetch-all').get(ShippingController.fetchAll)
+apiRoutes.route('/shipping/fetch/:id').get(ShippingController.fetch)
+apiRoutes.route('/shipping/update/:id').post(ShippingController.update)
+apiRoutes.route('/shipping/delete/:id').delete(ShippingController.delete)
+apiRoutes.route('/shipping/save-countries/:id').post(ShippingController.saveCountries)
+apiRoutes.route('/shipping/change-statuses').put(ShippingController.changeStatuses)
+apiRoutes.route('/shipping/change-status/:id').put(ShippingController.changeStatus)
+apiRoutes.route('/shipping/threshold').post(ShippingController.setThreshold)
+apiRoutes.route('/shipping/threshold').get(ShippingController.fetchThreshold)
 apiRoutes.get('/*', defaultHandler);
 
 export default apiRoutes;
 
 // Default handler for unknown routes
-function defaultHandler (req, res) {
+function defaultHandler(req, res) {
     res.status(404).send('Unknown API endpoint');
 }

@@ -15,6 +15,7 @@ import {
 } from '../../../redux/layouts/selectors';
 import { RawPagination, EmptyTable, DropdownAction } from '../../_common/index';
 import { TableHeaders, PaginationType } from '../../../constants';
+import { userSelector } from '../../../redux/user/selectors';
 import { setSwitchHeaderAction, setSwitchToggleAction } from '../../../redux/layouts/actions';
 
 interface Props {
@@ -22,6 +23,8 @@ interface Props {
     children: React.ReactNode[];
     totalAmount: number;
     sendRequest: () => Promise<void>;
+    switcherOnClick?: any;
+    hideBulk?: boolean;
     sendDeleteRequest?: () => Promise<void>;
     sendCopyRequest?: () => Promise<void>;
     switcherRequest?: () => Promise<void>;
@@ -36,12 +39,15 @@ const DataTable: React.FC<Props> = ({
     sendRequest,
     switcherRequest,
     sendDeleteRequest,
-    sendCopyRequest
+    sendCopyRequest,
+    switcherOnClick,
+    hideBulk
 }) => {
     const { PRODUCTS, CHATBOT, SHIPPING } = PaginationType;
     const t = useTranslations();
     const checkedIds = useSelector(checkedIdsSelector);
     const switchAllHeader = useSelector(switchHeaderSelector);
+    const user = useSelector(userSelector);
     // const showFilters = [PRODUCTS].includes(paginationType);
     // const hideEntries: boolean = [CATEGORIES, INVESTMENT].includes(paginationType);
     // const hideEntries = false;
@@ -49,6 +55,15 @@ const DataTable: React.FC<Props> = ({
     // const hideSearch: boolean = [INVESTMENT].includes(paginationType);
     // const hideSearch = false;
     const headers = TableHeaders[paginationType];
+
+    if (paginationType === PaginationType.SHIPPING) {
+        if (user.role_id === 3) {
+            delete headers[3];
+        } else {
+            delete headers[2];
+        }
+    }
+
     const dispatch = useDispatch();
     const { limit, sort, column, offset, query, filters }: Layouts.Pagination = useSelector(
         paginationSelectorFactory(paginationType)
@@ -146,7 +161,13 @@ const DataTable: React.FC<Props> = ({
                             id="switchAll"
                             className="sr-only"
                             checked={switchAllHeader}
-                            onChange={(e: any) => handleSwitchAction(e.target.checked)}
+                            onChange={(e: any) => {
+                                handleSwitchAction(e.target.checked);
+
+                                if (switcherOnClick) {
+                                    switcherOnClick(e.target.checked);
+                                }
+                            }}
                         />
                         <div className="toggle-bg bg-gray-200 border border-gray-200 rounded-full dark:bg-gray-700 dark:border-gray-600" />
                     </label>
@@ -181,7 +202,7 @@ const DataTable: React.FC<Props> = ({
         return (
             <>
                 <tr role="row">
-                    {showIds && (
+                    {showIds && !hideBulk && (
                         <th style={{ width: '30px' }} className="ids">
                             <input
                                 type="checkbox"
