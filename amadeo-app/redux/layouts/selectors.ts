@@ -26,7 +26,7 @@ export const isDataLoadingSelector = createSelector(
 
 export const switchHeaderSelector = createSelector(
     rootSelector,
-    (layouts: State.Layouts): boolean  => layouts.switchHeader
+    (layouts: State.Layouts): boolean => layouts.switchHeader
 );
 
 export const checkedIdsSelector = createSelector(

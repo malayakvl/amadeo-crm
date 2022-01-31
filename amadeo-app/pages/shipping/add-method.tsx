@@ -5,6 +5,7 @@ import * as Yup from 'yup';
 import { createShippingAction } from '../../redux/shipping/actions';
 import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
+import { getSession } from 'next-auth/client';
 
 export default function AddMethod() {
     const t = useTranslations();
@@ -78,4 +79,25 @@ export default function AddMethod() {
             />
         </>
     );
+}
+
+export async function getServerSideProps(context: any) {
+    const { locale } = context;
+    const session = await getSession(context);
+
+    if (!session) {
+        return {
+            redirect: { destination: `/${locale === 'fr' ? '' : `${locale}/`}auth/signin` }
+        };
+    }
+
+    return {
+        props: {
+            session,
+            locale,
+            messages: {
+                ...require(`../../messages/${locale}.json`)
+            }
+        }
+    };
 }

@@ -30,6 +30,7 @@ import axios from 'axios';
 import { authHeader } from '../../lib/functions';
 import getConfig from 'next/config';
 import * as Yup from 'yup';
+import { getSession } from 'next-auth/client';
 
 const { publicRuntimeConfig } = getConfig();
 const url = `${publicRuntimeConfig.apiUrl}/api/shipping`;
@@ -44,7 +45,7 @@ export default function List() {
     const checkedIds = useSelector(checkedIdsSelector);
     const t = useTranslations();
     const countries = useSelector(countriesSelector);
-    const user = useSelector(userSelector)
+    const user = useSelector(userSelector);
     const [threshold, setThreshold] = useState(false);
 
     useEffect(() => {
@@ -64,16 +65,17 @@ export default function List() {
 
     useEffect(() => {
         if (user.hasOwnProperty('email')) {
-            axios.get(`${url}/threshold`, {
-                headers: {
-                    ...authHeader(user.email)
-                }
-            }).then(result => {
-                setThreshold(result.data.threshold)
-            })
+            axios
+                .get(`${url}/threshold`, {
+                    headers: {
+                        ...authHeader(user.email)
+                    }
+                })
+                .then((result) => {
+                    setThreshold(result.data.threshold);
+                });
         }
-
-    }, [user])
+    }, [user]);
 
     if (!countries.length || threshold === false) {
         return 'Loading';
@@ -81,7 +83,7 @@ export default function List() {
 
     return (
         <div className="flex">
-            {user.role_id !== 3 &&
+            {user.role_id !== 3 && (
                 <div className="w-64 p-4 bg-white rounded-lg">
                     <div className="font-bold text-gray-350 text-lg pb-4 border-b border-gray-200">
                         {t('Free shipping')}
@@ -93,25 +95,34 @@ export default function List() {
                     </div>
                     <Formik
                         onSubmit={(values) => {
-                            dispatch(setThresholdAction(values))
-                            dispatch(setSuccessToastAction(t(`Threshold has been saved: ${values.threshold}`)))
-
+                            dispatch(setThresholdAction(values));
+                            dispatch(
+                                setSuccessToastAction(
+                                    t(`Threshold has been saved: ${values.threshold}`)
+                                )
+                            );
                         }}
                         initialValues={{ threshold }}
                         validationSchema={Yup.object().shape({
                             threshold: Yup.number().typeError('Must be number')
                         })}
-                        render={(props) =>
+                        render={(props) => (
                             <Form onSubmit={props.handleSubmit}>
-                                <Field name="threshold" className="w-full p-2.5 shadow-inner rounded-lg border-2 text-gray-350 font-bold mt-6" />
-                                <div className="error-el"><ErrorMessage name="threshold" /></div>
-                                <button type="submit" className="mt-8 gradient-btn">{t('Save changes')}</button>
+                                <Field
+                                    name="threshold"
+                                    className="w-full p-2.5 shadow-inner rounded-lg border-2 text-gray-350 font-bold mt-6"
+                                />
+                                <div className="error-el">
+                                    <ErrorMessage name="threshold" />
+                                </div>
+                                <button type="submit" className="mt-8 gradient-btn">
+                                    {t('Save changes')}
+                                </button>
                             </Form>
-                        }
+                        )}
                     />
-
                 </div>
-            }
+            )}
 
             <div className="block-white-8  ml-4 flex-1">
                 <div className="mb-8 font-bold text-gray-350 text-lg py-4 border-b border-gray-200">
@@ -144,7 +155,7 @@ export default function List() {
                             <td className="flex justify-center">
                                 <Image src={`${baseApiUrl}/${item.image}`} width={50} height={50} />
                             </td>
-                            {user.role_id === 3 &&
+                            {user.role_id === 3 && (
                                 <td>
                                     <label className="flex items-center cursor-pointer relative">
                                         <input
@@ -172,21 +183,19 @@ export default function List() {
                                         <div className="toggle-bg bg-gray-200 border border-gray-200 rounded-full dark:bg-gray-700 dark:border-gray-600" />
                                     </label>
                                 </td>
-                            }
-                            {user.role_id !== 3 &&
+                            )}
+                            {user.role_id !== 3 && (
                                 <td className="text-center">
                                     {item.countries.map((country) => (
                                         <div
                                             key={country.id}
                                             className="bg-gray-400 text-white rounded-md p-1 m-1">
-                                            {
-                                                countries.find((item: any) => item.id === country.id)
-                                                    .nicename + `- ${country.price}`
-                                            }
+                                            {countries.find((item: any) => item.id === country.id)
+                                                .nicename + `- ${country.price}`}
                                         </div>
                                     ))}
                                 </td>
-                            }
+                            )}
 
                             <td className="text-right whitespace-nowrap">
                                 <button
@@ -210,4 +219,25 @@ export default function List() {
             </div>
         </div>
     );
+}
+
+export async function getServerSideProps(context: any) {
+    const { locale } = context;
+    const session = await getSession(context);
+
+    if (!session) {
+        return {
+            redirect: { destination: `/${locale === 'fr' ? '' : `${locale}/`}auth/signin` }
+        };
+    }
+
+    return {
+        props: {
+            session,
+            locale,
+            messages: {
+                ...require(`../../messages/${locale}.json`)
+            }
+        }
+    };
 }

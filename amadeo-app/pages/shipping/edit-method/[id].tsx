@@ -21,6 +21,7 @@ import Image from 'next/image';
 import { baseApiUrl } from '../../../constants';
 import { fetchCountriesAction } from '../../../redux/countries/actions';
 import { userSelector } from '../../../redux/user/selectors';
+import { getSession } from 'next-auth/client';
 
 export default function EditMethod() {
     const t = useTranslations();
@@ -29,7 +30,7 @@ export default function EditMethod() {
     const countries = useSelector(countriesSelector);
     const shipping = useSelector(shippingSelector);
     const id = router.query.id;
-    const user = useSelector(userSelector)
+    const user = useSelector(userSelector);
     const deleteCallback = () => {
         const sure = confirm(t('Are you sure ?'));
 
@@ -57,7 +58,7 @@ export default function EditMethod() {
                 <h1>{t('Edit Shipping Method')}</h1>
             </div>
             <div className="flex mt-10">
-                {user.role_id === 3 ?
+                {user.role_id === 3 ? (
                     <Formik
                         enableReinitialize
                         initialValues={{ name: shipping.name, logo: '' }}
@@ -104,19 +105,27 @@ export default function EditMethod() {
                                         name="logo"
                                         type="file"
                                         onChange={(event) => {
-                                            props.setFieldValue('logo', event.currentTarget.files?.[0]);
+                                            props.setFieldValue(
+                                                'logo',
+                                                event.currentTarget.files?.[0]
+                                            );
                                         }}
                                     />
                                 </label>
                                 <button className="mt-8 gradient-btn w-full" type="submit">
                                     {t('Save')}
                                 </button>
-                                <button onClick={deleteCallback} type="button" className="mt-1 gradient-btn">
+                                <button
+                                    onClick={deleteCallback}
+                                    type="button"
+                                    className="mt-1 gradient-btn">
                                     {t('Delete')}
                                 </button>
                             </form>
                         )}
-                    /> : <div className="ml-8 w-full p-4 bg-gray-100 rounded-lg shadow-inner">
+                    />
+                ) : (
+                    <div className="ml-8 w-full p-4 bg-gray-100 rounded-lg shadow-inner">
                         <div className="mb-4 font-bold text-gray-350 text-lg py-4 border-b border-gray-200">
                             {t('Apply Countries')}
                         </div>
@@ -133,61 +142,73 @@ export default function EditMethod() {
                                 )
                             })}
                             initialValues={{ countries: shipping.countries }}
-                            onSubmit={(values) => dispatch(saveShippingAction(id, values.countries))}
+                            onSubmit={(values) =>
+                                dispatch(saveShippingAction(id, values.countries))
+                            }
                             render={({ values }) => (
                                 <Form>
                                     <FieldArray
                                         name="countries"
                                         render={(arrayHelpers) => (
                                             <div>
-                                                {values.countries.map((country: any, index: number) => (
-                                                    <div key={index}>
-                                                        <div className="my-4 flex items-center justify-start w-1/2">
-                                                            <div className="w-full">
-                                                                <Field
-                                                                    className="form-control"
-                                                                    as="select"
-                                                                    name={`countries.${index}.id`}>
-                                                                    <option value="">...</option>
-                                                                    {countries.map((country: any) => (
-                                                                        <option
-                                                                            key={country.id}
-                                                                            value={country.id}>
-                                                                            {country.nicename}
+                                                {values.countries.map(
+                                                    (country: any, index: number) => (
+                                                        <div key={index}>
+                                                            <div className="my-4 flex items-center justify-start w-1/2">
+                                                                <div className="w-full">
+                                                                    <Field
+                                                                        className="form-control"
+                                                                        as="select"
+                                                                        name={`countries.${index}.id`}>
+                                                                        <option value="">
+                                                                            ...
                                                                         </option>
-                                                                    ))}
-                                                                </Field>
-                                                                <div className="error-el">
-                                                                    <ErrorMessage
-                                                                        name={`countries.${index}.id`}
-                                                                    />
+                                                                        {countries.map(
+                                                                            (country: any) => (
+                                                                                <option
+                                                                                    key={country.id}
+                                                                                    value={
+                                                                                        country.id
+                                                                                    }>
+                                                                                    {
+                                                                                        country.nicename
+                                                                                    }
+                                                                                </option>
+                                                                            )
+                                                                        )}
+                                                                    </Field>
+                                                                    <div className="error-el">
+                                                                        <ErrorMessage
+                                                                            name={`countries.${index}.id`}
+                                                                        />
+                                                                    </div>
                                                                 </div>
-                                                            </div>
-                                                            <div className="ml-4">
-                                                                <Field
-                                                                    className="form-control"
-                                                                    name={`countries.${index}.price`}
-                                                                    placeholder={'Price'}
-                                                                    value={country.price}
-                                                                />
-                                                                <div className="error-el">
-                                                                    <ErrorMessage
+                                                                <div className="ml-4">
+                                                                    <Field
+                                                                        className="form-control"
                                                                         name={`countries.${index}.price`}
+                                                                        placeholder={'Price'}
+                                                                        value={country.price}
                                                                     />
+                                                                    <div className="error-el">
+                                                                        <ErrorMessage
+                                                                            name={`countries.${index}.price`}
+                                                                        />
+                                                                    </div>
                                                                 </div>
-                                                            </div>
 
-                                                            <button
-                                                                type="button"
-                                                                onClick={() =>
-                                                                    arrayHelpers.remove(index)
-                                                                }
-                                                                className="ml-4 disabled-btn">
-                                                                {t('Delete')}
-                                                            </button>
+                                                                <button
+                                                                    type="button"
+                                                                    onClick={() =>
+                                                                        arrayHelpers.remove(index)
+                                                                    }
+                                                                    className="ml-4 disabled-btn">
+                                                                    {t('Delete')}
+                                                                </button>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                ))}
+                                                    )
+                                                )}
                                                 <button
                                                     type="button"
                                                     onClick={() =>
@@ -208,8 +229,29 @@ export default function EditMethod() {
                             )}
                         />
                     </div>
-                }
+                )}
             </div>
         </>
     );
+}
+
+export async function getServerSideProps(context: any) {
+    const { locale } = context;
+    const session = await getSession(context);
+
+    if (!session) {
+        return {
+            redirect: { destination: `/${locale === 'fr' ? '' : `${locale}/`}auth/signin` }
+        };
+    }
+
+    return {
+        props: {
+            session,
+            locale,
+            messages: {
+                ...require(`../../../messages/${locale}.json`)
+            }
+        }
+    };
 }

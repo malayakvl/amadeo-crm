@@ -45,7 +45,7 @@ const DataTable: React.FC<Props> = ({
     const t = useTranslations();
     const checkedIds = useSelector(checkedIdsSelector);
     const switchAllHeader = useSelector(switchHeaderSelector);
-    const user = useSelector(userSelector)
+    const user = useSelector(userSelector);
     // const showFilters = [PRODUCTS].includes(paginationType);
     // const hideEntries: boolean = [CATEGORIES, INVESTMENT].includes(paginationType);
     // const hideEntries = false;
@@ -56,13 +56,10 @@ const DataTable: React.FC<Props> = ({
 
     if (paginationType === PaginationType.SHIPPING) {
         if (user.role_id === 3) {
-            delete(headers[3]);
-
+            delete headers[3];
         } else {
-            delete(headers[2])
-
+            delete headers[2];
         }
-        
     }
 
     const dispatch = useDispatch();

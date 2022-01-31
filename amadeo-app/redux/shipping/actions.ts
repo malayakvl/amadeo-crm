@@ -56,7 +56,7 @@ export const fetchShippingAction: any = createAction(
                 }
             });
 
-            const shippingsState = state.shippings
+            const shippingsState = state.shippings;
             const shipping: State.Shippings = response.data;
 
             return { ...shippingsState, shipping };
@@ -78,7 +78,7 @@ export const fetchShippingsAction: any = createAction(
                 }
             });
 
-            const shippingsState = state.shippings
+            const shippingsState = state.shippings;
 
             const shippings: State.Shippings = response.data.shippings;
 
@@ -167,11 +167,10 @@ export const setThresholdAction: any = createAction(
     async (values: any) => (dispatch: Type.Dispatch, getState: () => State.Root) => {
         const state = getState();
 
-        axios
-            .post(`${url}/threshold`, values, {
-                headers: {
-                    ...authHeader(state.user.user.email)
-                }
-            })
+        axios.post(`${url}/threshold`, values, {
+            headers: {
+                ...authHeader(state.user.user.email)
+            }
+        });
     }
 );
