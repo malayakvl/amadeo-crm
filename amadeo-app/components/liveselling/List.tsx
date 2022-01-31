@@ -1,9 +1,10 @@
 import React, { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { itemsCountSelector, paginatedItemsSelector } from '../../redux/chatbot/selectors';
+import { itemsCountSelector, paginatedItemsSelector } from '../../redux/livesessions/selectors';
 import { PaginationType } from '../../constants';
 import { DataTable } from '../_common';
 import { fetchItemsAction } from '../../redux/livesessions';
+import moment from 'moment';
 
 const ListMessages: React.FC = () => {
     const dispatch = useDispatch();
@@ -22,11 +23,11 @@ const ListMessages: React.FC = () => {
                 sendRequest={sendRequest}>
                 {items?.map((item: any) => (
                     <tr key={item.id}>
-                        <td />
-                        <td />
-                        <td />
-                        <td />
-                        <td />
+                        <td>{moment(item.event_date).format('DD.MM.YYYY')}</td>
+                        <td>{item.event_time}</td>
+                        <td>{item.status}</td>
+                        <td>{item.product_cnt ? item.product_cnt : '-'}</td>
+                        <td>{item.user_cnt ? item.user_cnt : '-'}</td>
                     </tr>
                 ))}
             </DataTable>

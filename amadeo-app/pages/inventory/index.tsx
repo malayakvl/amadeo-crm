@@ -12,6 +12,7 @@ import {
 } from '../../components/inventory';
 import { fetchAdditionalAction, importProductAction } from '../../redux/products/actions';
 import { activeTabSelectorFactory } from '../../redux/layouts/selectors';
+import { setSwitchHeaderAction } from '../../redux/layouts/actions';
 
 export default function Index({ session, locale }: { session: any; locale: string }) {
     if (!session) return <></>;
@@ -21,6 +22,7 @@ export default function Index({ session, locale }: { session: any; locale: strin
     const hiddenFileInput = React.useRef(null);
     useEffect(() => {
         dispatch(fetchAdditionalAction());
+        dispatch(setSwitchHeaderAction(null));
     }, []);
 
     const handleClick = () => {

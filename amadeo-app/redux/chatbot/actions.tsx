@@ -204,11 +204,13 @@ export const changeActiveAllAction: any = createAction(
                 })
                 .then(async () => {
                     dispatch(showLoaderAction(false));
+                    dispatch(switchChangeStatusAction(true));
                     dispatch(setSuccessToastAction('Records has been updated'));
                 });
         }
 );
 
+export const switchChangeStatusAction: any = createAction('chatbot/CHATBOT_CHANGE_SWITCHER');
 export const showFormAction: any = createAction('chatbot/CHATBOT_SHOWFORM');
 export const setEmptyFormAction: any = createAction('chatbot/EMPTY_FORM');
 export const showItemAction: any = createAction('chatbot/CHATBOT_SHOWITEM');

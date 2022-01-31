@@ -5,7 +5,8 @@ import {
     fetchDataSystemAction,
     showFormAction,
     showItemAction,
-    setEmptyFormAction
+    setEmptyFormAction,
+    switchChangeStatusAction
 } from './actions';
 
 const initialState: {
@@ -17,6 +18,7 @@ const initialState: {
     item: Chatbot.ChatbotItem;
     showForm: boolean;
     showedItems: number[];
+    changeActiveStatus: boolean | null;
 } = {
     loading: false,
     isFetched: false,
@@ -37,7 +39,8 @@ const initialState: {
         updated_at: null
     },
     showForm: false,
-    showedItems: []
+    showedItems: [],
+    changeActiveStatus: null
 };
 
 const ACTION_HANDLERS: any = {
@@ -113,6 +116,12 @@ const ACTION_HANDLERS: any = {
             showForm: action.payload
         })
     },
+    [switchChangeStatusAction]: {
+        next: (state: State.Chatbot, action: Action<boolean>): State.Chatbot => ({
+            ...state,
+            changeActiveStatus: action.payload
+        })
+    },
     [showItemAction]: {
         next: (state: State.Chatbot, action: Action<number>): State.Chatbot => ({
             ...state,
@@ -129,7 +138,8 @@ export {
     fetchDataSystemAction,
     showFormAction,
     showItemAction,
-    setEmptyFormAction
+    setEmptyFormAction,
+    switchChangeStatusAction
 };
 
 // ------------------------------------

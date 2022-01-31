@@ -15,8 +15,8 @@ import {
 } from '../../../redux/layouts/selectors';
 import { RawPagination, EmptyTable, DropdownAction } from '../../_common/index';
 import { TableHeaders, PaginationType } from '../../../constants';
-import { setSwitchHeaderAction } from '../../../redux/layouts/actions';
 import { userSelector } from '../../../redux/user/selectors';
+import { setSwitchHeaderAction, setSwitchToggleAction } from '../../../redux/layouts/actions';
 
 interface Props {
     paginationType: Type.PaginationType;
@@ -24,10 +24,11 @@ interface Props {
     totalAmount: number;
     sendRequest: () => Promise<void>;
     switcherOnClick?: any;
+    hideBulk?: boolean;
     sendDeleteRequest?: () => Promise<void>;
     sendCopyRequest?: () => Promise<void>;
+    switcherRequest?: () => Promise<void>;
     hidePaginationBar?: boolean;
-    hideBulk?: boolean;
 }
 
 const DataTable: React.FC<Props> = ({
@@ -36,6 +37,7 @@ const DataTable: React.FC<Props> = ({
     children,
     totalAmount,
     sendRequest,
+    switcherRequest,
     sendDeleteRequest,
     sendCopyRequest,
     switcherOnClick,
@@ -71,7 +73,10 @@ const DataTable: React.FC<Props> = ({
     // const [selectBulkAction, setSelectBulkAction] = useState(null);
 
     useEffect(() => {
-        sendRequest().finally(() => setLoading(false));
+        sendRequest().finally(() => {
+            dispatch(setSwitchToggleAction(null));
+            setLoading(false);
+        });
         // return cancelDebouncedQuery;
     }, [limit, offset, sort, column, query, filters]);
 
@@ -83,6 +88,7 @@ const DataTable: React.FC<Props> = ({
                     modifier: { offset: limit * currentPage.selected }
                 })
             );
+            dispatch(setSwitchToggleAction(null));
         },
         [paginationType, limit, dispatch]
     );
@@ -92,6 +98,7 @@ const DataTable: React.FC<Props> = ({
             const column = event.currentTarget.getAttribute('data-name') as string;
             const sort = event.currentTarget.getAttribute('data-direction') as string;
             dispatch(setPaginationAction({ type: paginationType, modifier: { sort, column } }));
+            dispatch(setSwitchToggleAction(null));
         },
         [paginationType, dispatch]
     );
@@ -100,6 +107,7 @@ const DataTable: React.FC<Props> = ({
         (event: React.SyntheticEvent): void => {
             const limit = Number((event.target as HTMLSelectElement).value);
             dispatch(setPaginationAction({ type: paginationType, modifier: { limit, offset: 0 } }));
+            dispatch(setSwitchToggleAction(null));
         },
         [paginationType, dispatch]
     );
@@ -124,8 +132,14 @@ const DataTable: React.FC<Props> = ({
         }
         setAllChecked(!allChecked);
     };
+
     const handleSwitchAction = (checked: boolean) => {
+        dispatch(setSwitchToggleAction(true));
         dispatch(setSwitchHeaderAction(checked));
+        // dispatch(setSwitchToggleAction(null));
+        if (switcherRequest) {
+            switcherRequest();
+        }
     };
 
     const isTwoRowsHeader = useMemo(() => headers.some((i) => i.subTitles?.length), [headers]);

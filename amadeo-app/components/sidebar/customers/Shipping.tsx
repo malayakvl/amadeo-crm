@@ -1,15 +1,25 @@
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
-import { useSelector } from 'react-redux';
-import { userSelector } from '../../../redux/user/selectors';
+import { useDispatch } from 'react-redux';
+import { setActivePageAction } from '../../../redux/layouts/actions';
 
 const SidebarShipping = function () {
     const t = useTranslations();
-    const user = useSelector(userSelector);
+    const dispatch = useDispatch();
 
     return (
         <>
-            <li className="go-back" role="presentation">
+            <li
+                className="go-back"
+                role="presentation"
+                onClick={() => {
+                    dispatch(
+                        setActivePageAction({
+                            type: 'inventory',
+                            modifier: 'products'
+                        })
+                    );
+                }}>
                 <Link href={'/dashboard'}>
                     <a>
                         <span>Go Back</span>
@@ -25,14 +35,12 @@ const SidebarShipping = function () {
                 </Link>
             </li>
             <li className="submenu">
-                {user.role_id === 3 && (
-                    <Link href={'/shipping/add-method'}>
-                        <a>
-                            <i className="text-blue-350 text-base font-bold tracking-wide truncate cursor-pointer" />
-                            <span className="s-caption">{t('Add Method')}</span>
-                        </a>
-                    </Link>
-                )}
+                <Link href={'/shipping/add-method'}>
+                    <a>
+                        <i className="text-blue-350 text-base font-bold tracking-wide truncate cursor-pointer" />
+                        <span className="s-caption">{t('Add Method')}</span>
+                    </a>
+                </Link>
             </li>
         </>
     );
