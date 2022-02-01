@@ -3,10 +3,10 @@
     appearance: none;
     margin: 0;
     font: inherit;
-    color: #00C868;
+    color: #00c868;
     width: 1.5em;
     height: 1.5em;
-    border: 0.15em solid #00C868;
+    border: 0.15em solid #00c868;
     border-radius: 4px;
     transform: translateY(-0.075em);
   }
@@ -34,8 +34,8 @@
     .check-all {
       width: 13px;
       height: 13px;
-      border: 0.15em solid #99ABCE;
-      color: #99ABCE;
+      border: 0.15em solid #99abce;
+      color: #99abce;
       border-radius: 4px;
     }
   }
@@ -89,7 +89,7 @@
 .table-configuration td {
   font-size: 16px !important;
   font-weight: bold !important;
-  color: #4F5B84 !important;
+  color: #4f5b84 !important;
 }
 
 .inventory-color {
@@ -111,11 +111,15 @@
   background-image: url("../../public/images/inventory-qty.svg");
 }
 
-
 //CHATBOT TABLE
-.system-message .option-switcher label, .system-message .actions, .system-message .ids, .system-message .product,
-.system-message td:nth-child(5), .system-message th:nth-child(5),
-.system-message td:nth-child(6), .system-message th:nth-child(6){
+.system-message .option-switcher label,
+.system-message .actions,
+.system-message .ids,
+.system-message .product,
+.system-message td:nth-child(5),
+.system-message th:nth-child(5),
+.system-message td:nth-child(6),
+.system-message th:nth-child(6) {
   @apply hidden;
 }
 
@@ -144,10 +148,10 @@ td.chat-eye {
 td.translations {
   padding-top: 10px;
   padding-bottom: 10px;
-  @apply border border-t-0 border-b-0 border-r-0 border-red-500 pt-4 pb-4
+  @apply border border-t-0 border-b-0 border-r-0 border-red-500 pt-4 pb-4;
 }
 .shipping-dropdown {
-  width: 100px;
+  width: 50px;
   background-repeat: no-repeat;
   background-position: left center;
   background-image: url("../../public/images/action-arrow.svg");
@@ -173,3 +177,9 @@ td.translations {
   background-image: url("../../public/images/lang-icon.svg");
 }
 
+.shipping-number {
+  width: 100px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-image: url("../../public/images/input-company-id.svg");
+}

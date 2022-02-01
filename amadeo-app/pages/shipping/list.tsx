@@ -151,39 +151,43 @@ export default function List() {
                     sendCopyRequest={() => new Promise(() => null)}>
                     {items?.map((item: Shipping, index: number) => (
                         <tr key={item.id}>
+                            <td>
+                                <Image width="9" height="14" src={'/images/action-arrow.svg'} />
+                            </td>
+                            <td><div className="text-center">{index + 1}</div></td>
                             <td>{item.name}</td>
+
                             <td className="flex justify-center">
                                 <Image src={`${baseApiUrl}/${item.image}`} width={50} height={50} />
                             </td>
-                            {user.role_id === 3 && (
-                                <td>
-                                    <label className="flex items-center cursor-pointer relative">
-                                        <input
-                                            type="checkbox"
-                                            className="sr-only"
-                                            value={`switcher_${item.id}`}
-                                            checked={
-                                                checkedIds.find((data: any) => data.id === item.id)
-                                                    ?.checked || false
-                                            }
-                                            onChange={() => {
-                                                dispatch(checkIdsAction(item.id));
-                                                const status = !item.status;
-                                                items[index].status = status;
-                                                dispatch(changeShippingStatus(item.id, status));
-                                                dispatch(
-                                                    setSuccessToastAction(
-                                                        t(
-                                                            `Status of the shipping '${item.name}' is changed`
-                                                        )
+
+                            <td>
+                                <label className="flex items-center cursor-pointer relative">
+                                    <input
+                                        type="checkbox"
+                                        className="sr-only"
+                                        value={`switcher_${item.id}`}
+                                        checked={
+                                            checkedIds.find((data: any) => data.id === item.id)
+                                                ?.checked || false
+                                        }
+                                        onChange={() => {
+                                            dispatch(checkIdsAction(item.id));
+                                            const status = !item.status;
+                                            items[index].status = status;
+                                            dispatch(changeShippingStatus(item.id, status));
+                                            dispatch(
+                                                setSuccessToastAction(
+                                                    t(
+                                                        `Status of the shipping '${item.name}' is changed`
                                                     )
-                                                );
-                                            }}
-                                        />
-                                        <div className="toggle-bg bg-gray-200 border border-gray-200 rounded-full dark:bg-gray-700 dark:border-gray-600" />
-                                    </label>
-                                </td>
-                            )}
+                                                )
+                                            );
+                                        }}
+                                    />
+                                    <div className="toggle-bg bg-gray-200 border border-gray-200 rounded-full dark:bg-gray-700 dark:border-gray-600" />
+                                </label>
+                            </td>
                             {user.role_id !== 3 && (
                                 <td className="text-center">
                                     {item.countries.map((country) => (
@@ -197,13 +201,13 @@ export default function List() {
                                 </td>
                             )}
 
-                            <td className="text-right whitespace-nowrap">
+                            <td>
                                 <button
                                     onClick={(e) => {
                                         e.preventDefault();
                                         router.push(`/shipping/edit-method/${item.id}`);
                                     }}
-                                    className="cursor-pointer">
+                                    className="ml-auto block">
                                     <Image
                                         width={24}
                                         height={24}
