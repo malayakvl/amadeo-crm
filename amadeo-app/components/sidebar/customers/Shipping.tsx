@@ -8,7 +8,7 @@ import { userSelector } from '../../../redux/user/selectors';
 const SidebarShipping = function () {
     const t = useTranslations();
     const dispatch = useDispatch();
-    const user = useSelector(userSelector)
+    const user = useSelector(userSelector);
 
     return (
         <>
@@ -37,7 +37,7 @@ const SidebarShipping = function () {
                     </a>
                 </Link>
             </li>
-            {user.role_id === 3 &&
+            {user.role_id === 3 && (
                 <li className="submenu">
                     <Link href={'/shipping/add-method'}>
                         <a>
@@ -46,7 +46,7 @@ const SidebarShipping = function () {
                         </a>
                     </Link>
                 </li>
-            }
+            )}
         </>
     );
 };

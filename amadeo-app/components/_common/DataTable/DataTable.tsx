@@ -58,7 +58,6 @@ const DataTable: React.FC<Props> = ({
 
     if (paginationType === PaginationType.SHIPPING && user.role_id === 3) {
         delete headers[5];
-
     }
 
     const dispatch = useDispatch();

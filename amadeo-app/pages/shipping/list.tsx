@@ -47,7 +47,7 @@ export default function List() {
     const countries = useSelector(countriesSelector);
     const user = useSelector(userSelector);
     const [threshold, setThreshold] = useState(false);
-    const [dropDowns, setDropDowns] = useState<Array<boolean>>([])
+    const [dropDowns, setDropDowns] = useState<Array<boolean>>([]);
 
     useEffect(() => {
         if (!items) {
@@ -59,7 +59,6 @@ export default function List() {
         });
         dispatch(initIdsAction(setupChecked));
         setDropDowns(items.map(() => false));
-
     }, [items]);
 
     useEffect(() => {
@@ -91,7 +90,9 @@ export default function List() {
                     <h1>{t('Shipping')}</h1>
                 </div>
                 <div className="text-gray-400">
-                    {t('Shipping section allows merchant to manage shipping methods and prices for his buyers')}
+                    {t(
+                        'Shipping section allows merchant to manage shipping methods and prices for his buyers'
+                    )}
                 </div>
             </div>
 
@@ -156,7 +157,9 @@ export default function List() {
                             }
 
                             dispatch(
-                                setSuccessToastAction(t(`Statuses have been changed for all shippings`))
+                                setSuccessToastAction(
+                                    t(`Statuses have been changed for all shippings`)
+                                )
                             );
                         }}
                         sendRequest={sendRequest}
@@ -164,27 +167,43 @@ export default function List() {
                         sendCopyRequest={() => new Promise(() => null)}>
                         {items?.map((item: Shipping, index: number) => (
                             <tr key={item.id}>
-                                <td onClick={() => {
-                                    dropDowns[index] = !dropDowns[index]
-                                    setDropDowns([...dropDowns])
-
-                                }}>
-                                    {dropDowns[index]
-                                        ?
-                                        <>
-                                            <Image className='rotate-90 transform' width="12" height="14" src={`/images/action-arrow-orange.svg`} />
-                                            {/* <div className="border-l-2 h-4 relative left-[5px]" /> */}
-                                        </>
-                                        :
-                                        <Image width="12" height="14" src={`/images/action-arrow.svg`} />
-                                    }
-
+                                <td>
+                                    <button
+                                        onClick={() => {
+                                            dropDowns[index] = !dropDowns[index];
+                                            setDropDowns([...dropDowns]);
+                                        }}>
+                                        {dropDowns[index] ? (
+                                            <>
+                                                <Image
+                                                    className="rotate-90 transform"
+                                                    width="12"
+                                                    height="14"
+                                                    src={`/images/action-arrow-orange.svg`}
+                                                />
+                                                {/* <div className="border-l-2 h-4 relative left-[5px]" /> */}
+                                            </>
+                                        ) : (
+                                            <Image
+                                                width="12"
+                                                height="14"
+                                                src={`/images/action-arrow.svg`}
+                                            />
+                                        )}
+                                    </button>
                                 </td>
-                                <td><div className="text-center">{index + 1}</div></td>
+
+                                <td>
+                                    <div className="text-center">{index + 1}</div>
+                                </td>
                                 <td>{item.name}</td>
 
                                 <td className="flex justify-center">
-                                    <Image src={`${baseApiUrl}/${item.image}`} width={50} height={50} />
+                                    <Image
+                                        src={`${baseApiUrl}/${item.image}`}
+                                        width={50}
+                                        height={50}
+                                    />
                                 </td>
 
                                 <td>
@@ -216,18 +235,39 @@ export default function List() {
                                 </td>
                                 {user.role_id !== 3 && (
                                     <td className="text-center">
-                                        {dropDowns[index]
-                                            ? item.countries.map((country) =>
-                                                <div className="flex mb-1">
-                                                    <Image width="34" height="24" src={'/images/en-flag.svg'} />
-                                                    <div className="ml-auto">{country.price}</div>
-                                                </div>
-                                            ) :
-                                            <div className="flex mb-1">
-                                                <Image width="34" height="24" src={'/images/en-flag.svg'} />
-                                                <div className="ml-auto">{item.countries[0].price}</div>
+                                        {item.countries.length > 0 ? (
+                                            <>
+                                                {dropDowns[index] ? (
+                                                    item.countries.map((country) => (
+                                                        <div key={country.id} className="flex mb-1">
+                                                            <Image
+                                                                width="34"
+                                                                height="24"
+                                                                src={'/images/en-flag.svg'}
+                                                            />
+                                                            <div className="ml-auto">
+                                                                {country.price}
+                                                            </div>
+                                                        </div>
+                                                    ))
+                                                ) : (
+                                                    <div className="flex mb-1">
+                                                        <Image
+                                                            width="34"
+                                                            height="24"
+                                                            src={'/images/en-flag.svg'}
+                                                        />
+                                                        <div className="ml-auto">
+                                                            {item.countries[0].price}
+                                                        </div>
+                                                    </div>
+                                                )}
+                                            </>
+                                        ) : (
+                                            <div className="text-gray-400 text-sm">
+                                                {t('Empty')}
                                             </div>
-                                        }
+                                        )}
 
                                         {/* {item.countries.map((country) => (
                                         <div
