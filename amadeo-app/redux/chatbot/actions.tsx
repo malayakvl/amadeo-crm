@@ -36,7 +36,7 @@ export const submitFormAction: any = createAction(
                 })
                 .catch((e) => {
                     dispatch(setErrorToastAction(e.response.data.error));
-                    dispatch(showFormAction(false));
+                    dispatch(showLoaderAction(false));
                 });
         }
 );
