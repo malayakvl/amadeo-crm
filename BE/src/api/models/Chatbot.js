@@ -135,6 +135,7 @@ class Chatbot {
             await client.query(query);
             return { success: true };
         } catch (e) {
+            console.log(e.message);
             if (process.env.NODE_ENV === 'development') {
                 logger.log(
                     'error',
@@ -145,7 +146,7 @@ class Chatbot {
             const item = null;
             const error = {
                 code: 500,
-                message: 'Error update chatbot_scenarios'
+                message: e.message
             };
             return {
                 success: false,

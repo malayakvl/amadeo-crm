@@ -52,9 +52,9 @@ export default function Index({ session }: { session: any }) {
                             </div>
                             <div className="md:justify-end">
                                 <button
-                                    className="btn-schedule"
+                                    className="btn-big"
                                     onClick={() => dispatch(showPopupAction(true))}>
-                                    <span>{t('Schedule Session')}</span>
+                                    {t('Go live now!')}
                                 </button>
                             </div>
                         </div>

@@ -214,5 +214,8 @@
   "24 hours": "24 hours",
   "Duration session": "Duration",
   "Duration cart": "Duration",
-  "Participants": "Participants"
+  "Participants": "Participants",
+  "Start Time": "Start Time",
+  "Scenario has been update": "Scenario has been successfully added to live session list!",
+  "Go live now!": "Go live now!"
 }

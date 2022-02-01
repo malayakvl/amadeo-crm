@@ -4,7 +4,7 @@ import axios from 'axios';
 import getConfig from 'next/config';
 const { publicRuntimeConfig } = getConfig();
 const baseUrl = `${publicRuntimeConfig.apiUrl}/api`;
-import { setSuccessToastAction } from '../layouts';
+import { setErrorToastAction, setSuccessToastAction } from '../layouts';
 import { paginationSelectorFactory } from '../layouts/selectors';
 import { PaginationType } from '../../constants';
 import queryString from 'query-string';
@@ -25,12 +25,17 @@ export const submitFormAction: any = createAction(
                 })
                 .then(async () => {
                     dispatch(
-                        setSuccessToastAction(`Record has been ${isNew ? 'updated' : 'created'}`)
+                        setSuccessToastAction(
+                            isNew ? 'Scenario has been update' : 'Record has been created'
+                        )
                     );
                     dispatch(fetchDataAction('users'));
                     dispatch(setEmptyFormAction());
                     dispatch(showFormAction(false));
                     dispatch(showLoaderAction(false));
+                })
+                .catch((e) => {
+                    dispatch(setErrorToastAction(e.response.data.error));
                 });
         }
 );
@@ -205,7 +210,11 @@ export const changeActiveAllAction: any = createAction(
                 .then(async () => {
                     dispatch(showLoaderAction(false));
                     dispatch(switchChangeStatusAction(true));
-                    dispatch(setSuccessToastAction('Records has been updated'));
+                    dispatch(
+                        setSuccessToastAction(
+                            status ? 'Scenario has been update' : 'Records has been updated'
+                        )
+                    );
                 });
         }
 );
