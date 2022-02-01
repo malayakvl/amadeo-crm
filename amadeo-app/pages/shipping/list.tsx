@@ -85,141 +85,151 @@ export default function List() {
     }
 
     return (
-        <div className="flex">
-            {user.role_id !== 3 && (
-                <div className="w-64 p-4 bg-white rounded-lg">
-                    <div className="font-bold text-gray-350 text-lg pb-4 border-b border-gray-200">
-                        {t('Free shipping')}
+        <>
+            <div className="block-white-8 mr-10 white-shadow-big">
+                <div className="page-title">
+                    <h1>{t('Shipping')}</h1>
+                </div>
+                <div className="text-gray-400">
+                    {t('Shipping section allows merchant to manage shipping methods and prices for his buyers')}
+                </div>
+            </div>
+
+            <div className="flex mt-10 block-white-8">
+                {user.role_id !== 3 && (
+                    <div className="w-64 p-4 bg-gray-100 rounded-lg shadow-inner">
+                        <div className="font-bold text-gray-350 text-lg pb-4 border-b border-gray-200">
+                            {t('Free shipping')}
+                        </div>
+                        <div className="text-sm text-gray-500 mt-12">
+                            {t(
+                                'Set a shipping threshold. In case order has reacted this amount, the shipping is free for this buyer.'
+                            )}
+                        </div>
+                        <Formik
+                            onSubmit={(values) => {
+                                dispatch(setThresholdAction(values));
+                                dispatch(
+                                    setSuccessToastAction(
+                                        t(`Threshold has been saved: ${values.threshold}`)
+                                    )
+                                );
+                            }}
+                            initialValues={{ threshold }}
+                            validationSchema={Yup.object().shape({
+                                threshold: Yup.number().typeError('Must be number')
+                            })}
+                            render={(props) => (
+                                <Form onSubmit={props.handleSubmit}>
+                                    <Field
+                                        name="threshold"
+                                        className="w-full p-2.5 shadow-inner rounded-lg border-2 text-gray-350 font-bold mt-6"
+                                    />
+                                    <div className="error-el">
+                                        <ErrorMessage name="threshold" />
+                                    </div>
+                                    <button type="submit" className="w-full mt-8 gradient-btn">
+                                        {t('Save changes')}
+                                    </button>
+                                </Form>
+                            )}
+                        />
                     </div>
-                    <div className="text-sm text-gray-500 mt-12">
-                        {t(
-                            'Set a shipping threshold. In case order has reacted this amount, the shipping is free for this buyer.'
-                        )}
+                )}
+
+                <div className="ml-8 flex-1">
+                    <div className="mb-8 font-bold text-gray-350 text-lg py-4 border-b border-gray-200">
+                        {t('Shipping methods')}
                     </div>
-                    <Formik
-                        onSubmit={(values) => {
-                            dispatch(setThresholdAction(values));
+                    <DataTable
+                        hidePaginationBar={true}
+                        hideBulk={true}
+                        paginationType={PaginationType.SHIPPING}
+                        totalAmount={items?.length}
+                        switcherOnClick={(status: boolean) => {
+                            if (status) {
+                                dispatch(changeShippingStatuses(true));
+                                dispatch(checkAllIdsAction(items));
+                            } else {
+                                dispatch(changeShippingStatuses(false));
+                                dispatch(uncheckAllIdsAction(items));
+                            }
+
                             dispatch(
-                                setSuccessToastAction(
-                                    t(`Threshold has been saved: ${values.threshold}`)
-                                )
+                                setSuccessToastAction(t(`Statuses have been changed for all shippings`))
                             );
                         }}
-                        initialValues={{ threshold }}
-                        validationSchema={Yup.object().shape({
-                            threshold: Yup.number().typeError('Must be number')
-                        })}
-                        render={(props) => (
-                            <Form onSubmit={props.handleSubmit}>
-                                <Field
-                                    name="threshold"
-                                    className="w-full p-2.5 shadow-inner rounded-lg border-2 text-gray-350 font-bold mt-6"
-                                />
-                                <div className="error-el">
-                                    <ErrorMessage name="threshold" />
-                                </div>
-                                <button type="submit" className="mt-8 gradient-btn">
-                                    {t('Save changes')}
-                                </button>
-                            </Form>
-                        )}
-                    />
-                </div>
-            )}
+                        sendRequest={sendRequest}
+                        sendDeleteRequest={() => new Promise(() => null)}
+                        sendCopyRequest={() => new Promise(() => null)}>
+                        {items?.map((item: Shipping, index: number) => (
+                            <tr key={item.id}>
+                                <td onClick={() => {
+                                    dropDowns[index] = !dropDowns[index]
+                                    setDropDowns([...dropDowns])
 
-            <div className="block-white-8  ml-4 flex-1">
-                <div className="mb-8 font-bold text-gray-350 text-lg py-4 border-b border-gray-200">
-                    {t('Shipping methods')}
-                </div>
-                <DataTable
-                    hidePaginationBar={true}
-                    hideBulk={true}
-                    paginationType={PaginationType.SHIPPING}
-                    totalAmount={items?.length}
-                    switcherOnClick={(status: boolean) => {
-                        if (status) {
-                            dispatch(changeShippingStatuses(true));
-                            dispatch(checkAllIdsAction(items));
-                        } else {
-                            dispatch(changeShippingStatuses(false));
-                            dispatch(uncheckAllIdsAction(items));
-                        }
-
-                        dispatch(
-                            setSuccessToastAction(t(`Statuses have been changed for all shippings`))
-                        );
-                    }}
-                    sendRequest={sendRequest}
-                    sendDeleteRequest={() => new Promise(() => null)}
-                    sendCopyRequest={() => new Promise(() => null)}>
-                    {items?.map((item: Shipping, index: number) => (
-                        <tr key={item.id}>
-                            <td onClick={() => {
-                                dropDowns[index] = !dropDowns[index]
-                                setDropDowns([...dropDowns])
-
-                            }}>
-                                {dropDowns[index]
-                                    ?
-                                    <>
-                                        <Image className='rotate-90 transform' width="12" height="14" src={`/images/action-arrow-orange.svg`} />
-                                        {/* <div className="border-l-2 h-4 relative left-[5px]" /> */}
-                                    </>
-                                    :
-                                    <Image width="12" height="14" src={`/images/action-arrow.svg`} />
-                                }
-
-                            </td>
-                            <td><div className="text-center">{index + 1}</div></td>
-                            <td>{item.name}</td>
-
-                            <td className="flex justify-center">
-                                <Image src={`${baseApiUrl}/${item.image}`} width={50} height={50} />
-                            </td>
-
-                            <td>
-                                <label className="flex items-center cursor-pointer relative">
-                                    <input
-                                        type="checkbox"
-                                        className="sr-only"
-                                        value={`switcher_${item.id}`}
-                                        checked={
-                                            checkedIds.find((data: any) => data.id === item.id)
-                                                ?.checked || false
-                                        }
-                                        onChange={() => {
-                                            dispatch(checkIdsAction(item.id));
-                                            const status = !item.status;
-                                            items[index].status = status;
-                                            dispatch(changeShippingStatus(item.id, status));
-                                            dispatch(
-                                                setSuccessToastAction(
-                                                    t(
-                                                        `Status of the shipping '${item.name}' is changed`
-                                                    )
-                                                )
-                                            );
-                                        }}
-                                    />
-                                    <div className="toggle-bg bg-gray-200 border border-gray-200 rounded-full dark:bg-gray-700 dark:border-gray-600" />
-                                </label>
-                            </td>
-                            {user.role_id !== 3 && (
-                                <td className="text-center">
+                                }}>
                                     {dropDowns[index]
-                                        ? item.countries.map((country) =>
-                                            <div className="flex mb-1">
-                                                <Image width="34" height="24" src={'/images/en-flag.svg'} />
-                                                <div className="ml-auto">{country.price}</div>
-                                            </div>
-                                        ) :
-                                        <div className="flex mb-1">
-                                            <Image width="34" height="24" src={'/images/en-flag.svg'} />
-                                            <div className="ml-auto">{item.countries[0].price}</div>
-                                        </div>
+                                        ?
+                                        <>
+                                            <Image className='rotate-90 transform' width="12" height="14" src={`/images/action-arrow-orange.svg`} />
+                                            {/* <div className="border-l-2 h-4 relative left-[5px]" /> */}
+                                        </>
+                                        :
+                                        <Image width="12" height="14" src={`/images/action-arrow.svg`} />
                                     }
 
-                                    {/* {item.countries.map((country) => (
+                                </td>
+                                <td><div className="text-center">{index + 1}</div></td>
+                                <td>{item.name}</td>
+
+                                <td className="flex justify-center">
+                                    <Image src={`${baseApiUrl}/${item.image}`} width={50} height={50} />
+                                </td>
+
+                                <td>
+                                    <label className="flex items-center cursor-pointer relative">
+                                        <input
+                                            type="checkbox"
+                                            className="sr-only"
+                                            value={`switcher_${item.id}`}
+                                            checked={
+                                                checkedIds.find((data: any) => data.id === item.id)
+                                                    ?.checked || false
+                                            }
+                                            onChange={() => {
+                                                dispatch(checkIdsAction(item.id));
+                                                const status = !item.status;
+                                                items[index].status = status;
+                                                dispatch(changeShippingStatus(item.id, status));
+                                                dispatch(
+                                                    setSuccessToastAction(
+                                                        t(
+                                                            `Status of the shipping '${item.name}' is changed`
+                                                        )
+                                                    )
+                                                );
+                                            }}
+                                        />
+                                        <div className="toggle-bg bg-gray-200 border border-gray-200 rounded-full dark:bg-gray-700 dark:border-gray-600" />
+                                    </label>
+                                </td>
+                                {user.role_id !== 3 && (
+                                    <td className="text-center">
+                                        {dropDowns[index]
+                                            ? item.countries.map((country) =>
+                                                <div className="flex mb-1">
+                                                    <Image width="34" height="24" src={'/images/en-flag.svg'} />
+                                                    <div className="ml-auto">{country.price}</div>
+                                                </div>
+                                            ) :
+                                            <div className="flex mb-1">
+                                                <Image width="34" height="24" src={'/images/en-flag.svg'} />
+                                                <div className="ml-auto">{item.countries[0].price}</div>
+                                            </div>
+                                        }
+
+                                        {/* {item.countries.map((country) => (
                                         <div
                                             key={country.id}
                                             className="bg-gray-400 text-white rounded-md p-1 m-1">
@@ -227,30 +237,31 @@ export default function List() {
                                                 .nicename + `- ${country.price}`}
                                         </div>
                                     ))} */}
-                                </td>
-                            )}
+                                    </td>
+                                )}
 
-                            <td>
-                                <button
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        router.push(`/shipping/edit-method/${item.id}`);
-                                    }}
-                                    className="ml-auto block">
-                                    <Image
-                                        width={24}
-                                        height={24}
-                                        src="/images/dots.svg"
-                                        layout="fixed"
-                                        alt=""
-                                    />
-                                </button>
-                            </td>
-                        </tr>
-                    ))}
-                </DataTable>
+                                <td>
+                                    <button
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            router.push(`/shipping/edit-method/${item.id}`);
+                                        }}
+                                        className="ml-auto block">
+                                        <Image
+                                            width={24}
+                                            height={24}
+                                            src="/images/dots.svg"
+                                            layout="fixed"
+                                            alt=""
+                                        />
+                                    </button>
+                                </td>
+                            </tr>
+                        ))}
+                    </DataTable>
+                </div>
             </div>
-        </div>
+        </>
     );
 }
 
