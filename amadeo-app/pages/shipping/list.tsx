@@ -190,14 +190,22 @@ export default function List() {
                             </td>
                             {user.role_id !== 3 && (
                                 <td className="text-center">
-                                    {item.countries.map((country) => (
+                                    {
+                                        item.countries.map((country) =>
+                                            <div className="flex mb-1">
+                                                <Image width="34" height="24" src={'/images/en-flag.svg'} />
+                                                <div className="ml-auto">{country.price}</div>
+                                            </div>
+                                        )
+                                    }
+                                    {/* {item.countries.map((country) => (
                                         <div
                                             key={country.id}
                                             className="bg-gray-400 text-white rounded-md p-1 m-1">
                                             {countries.find((item: any) => item.id === country.id)
                                                 .nicename + `- ${country.price}`}
                                         </div>
-                                    ))}
+                                    ))} */}
                                 </td>
                             )}
 
