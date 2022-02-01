@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { itemsSystemSelector } from '../../redux/chatbot/selectors';
-import { Row } from './index';
+import { RowDefault } from './index';
 import { fetchDataSystemAction } from '../../redux/chatbot';
 
 const DefaultMessages: React.FC = () => {
@@ -26,18 +26,18 @@ const DefaultMessages: React.FC = () => {
                 <table className="w-full float-table">
                     <thead>
                         <tr>
-                            <th />
-                            <th />
+                            {/*<th />*/}
+                            {/*<th />*/}
                             <th>
                                 <i className="scenario" />
                                 {t('Scenario')}
                             </th>
-                            <th className="text-left">
-                                <i className="message" />
-                                {t('Trigger')}
-                            </th>
-                            <th />
-                            <th />
+                            {/*<th className="text-left">*/}
+                            {/*    <i className="message" />*/}
+                            {/*    {t('Trigger')}*/}
+                            {/*</th>*/}
+                            {/*<th />*/}
+                            {/*<th />*/}
                             <th className="chat-eye sorting_disabled">
                                 <i className="eye" />
                             </th>
@@ -45,7 +45,7 @@ const DefaultMessages: React.FC = () => {
                     </thead>
                     <tbody>
                         {items?.map((item: any) => (
-                            <Row key={item.id} item={item} disableChecker={true} />
+                            <RowDefault key={item.id} item={item} />
                         ))}
                     </tbody>
                 </table>

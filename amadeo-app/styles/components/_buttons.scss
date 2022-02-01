@@ -8,7 +8,7 @@
 }
 
 .btn-big {
-  @apply red-yellow-gradient text-white text-2xl font-bold px-7 py-3 rounded-lg;
+  @apply red-yellow-gradient text-white text-2xl font-bold px-7 py-3 rounded-lg whitespace-nowrap;
 }
 .view-all {
   @apply red-yellow-gradient-text text-xs font-bold relative;

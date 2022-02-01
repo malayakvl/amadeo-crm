@@ -17,6 +17,6 @@ appRoute.get('/', (req, res) => {
 });
 // appRoute.get('/user', (req, res) => {
 //     res.render('pages/user', { title: 'Profile', userProfile: { nickname: 'Auth0' } });
-// });
+// })
 
 export default appRoute;

@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { scenariosSelector, showPopupSelector } from '../../redux/livesessions/selectors';
 import { showPopupAction } from '../../redux/livesessions';
 import DatePicker from 'react-datepicker';
-import TimePicker from 'rc-time-picker';
 import 'rc-time-picker/assets/index.css';
 import 'react-datepicker/dist/react-datepicker.css';
 import 'rc-slider/assets/index.css';
@@ -13,6 +12,7 @@ import moment from 'moment';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { submitFormAction } from '../../redux/livesessions/actions';
+import InputMask from 'react-input-mask';
 
 const SchedulePopup: React.FC<any> = () => {
     const t = useTranslations();
@@ -20,10 +20,8 @@ const SchedulePopup: React.FC<any> = () => {
     const showModal = useSelector(showPopupSelector);
     const scenarios = useSelector(scenariosSelector);
     const [startDate, setStartDate] = useState(new Date());
-    const [startTime, setStartTime] = useState(moment());
+    const [startTime, setStartTime] = useState(moment().format('HH:mm'));
     const [selectedScenarios, setSelectedScenarios] = useState<number[]>([]);
-    // const [timeRange, setTimeRange] = useState([0, 0]);
-    // const [cartRange, setCartRange] = useState([0, 0]);
 
     useEffect(() => {
         if (showModal) {
@@ -31,9 +29,6 @@ const SchedulePopup: React.FC<any> = () => {
         }
     }, [dispatch, showModal]);
 
-    const setupTime = (value: any) => {
-        setStartTime(value);
-    };
     const updateScenarios = (id: number) => {
         const _scenarios = selectedScenarios;
         if (_scenarios.includes(id)) {
@@ -82,7 +77,8 @@ const SchedulePopup: React.FC<any> = () => {
                                 onSubmit={(values) => {
                                     const sessionData: any = {};
                                     sessionData.event_date = moment(startDate).format('YYYY-MM-DD');
-                                    sessionData.event_time = moment(startTime).format('HH:mm');
+                                    // sessionData.event_time = moment(startTime).format('HH:mm');
+                                    sessionData.event_time = startTime;
                                     sessionData.scenarios = selectedScenarios;
                                     if ((values as any).id) {
                                         sessionData.id = (values as any).id;
@@ -90,13 +86,6 @@ const SchedulePopup: React.FC<any> = () => {
                                     dispatch(submitFormAction(sessionData));
                                 }}>
                                 {(props) => {
-                                    // const { handleChange } = props;
-                                    // const onChangeMinTime = (e: any) => {
-                                    //     const _timeRange = timeRange;
-                                    //     _timeRange[0] = e.target.value;
-                                    //     setTimeRange([0, e.target.value]);
-                                    //     return handleChange(e);
-                                    // };
                                     return (
                                         <form onSubmit={props.handleSubmit}>
                                             <div className="grid grid-cols-2 gap-4">
@@ -104,116 +93,38 @@ const SchedulePopup: React.FC<any> = () => {
                                                     <span className="block text-gray-350 text-[18px] font-bold mb-5">
                                                         Choose a date
                                                     </span>
-                                                    <div className="mb-4">
-                                                        <label className="control-label">
-                                                            {t('Date')}
-                                                        </label>
-                                                        <DatePicker
-                                                            className={'form-control'}
-                                                            selected={startDate}
-                                                            onChange={(date: any) => {
-                                                                setStartDate(date);
-                                                                // dispatch(
-                                                                //     updateFormEventAction({
-                                                                //         type: 'date_event',
-                                                                //         modifier: moment(date).format('YYYY-MM-DD')
-                                                                //     })
-                                                                // );
-                                                            }}
-                                                        />
-                                                    </div>
-                                                    <div className="mb-4">
-                                                        <label className="control-label">
-                                                            {t('Time Start')}
-                                                        </label>
-                                                        <div>
-                                                            <TimePicker
-                                                                className="mr-5"
-                                                                value={startTime}
-                                                                defaultValue={startTime}
-                                                                showSecond={false}
-                                                                inputReadOnly={true}
-                                                                onChange={(v) => setupTime(v)}
+                                                    <div className="flex">
+                                                        <div className="mb-4">
+                                                            <label className="control-label">
+                                                                {t('Date')}
+                                                            </label>
+                                                            <DatePicker
+                                                                className="form-control date-input"
+                                                                selected={startDate}
+                                                                onChange={(date: any) => {
+                                                                    setStartDate(date);
+                                                                }}
                                                             />
+                                                        </div>
+                                                        <div className="mb-4 ml-5">
+                                                            <label className="control-label">
+                                                                {t('Time Start')}
+                                                            </label>
+                                                            <div>
+                                                                <InputMask
+                                                                    style={{ width: '100px' }}
+                                                                    className="form-control"
+                                                                    mask="99:99"
+                                                                    maskPlaceholder="HH:ii"
+                                                                    onChange={(e) =>
+                                                                        setStartTime(e.target.value)
+                                                                    }
+                                                                    value={startTime}
+                                                                />
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                {/*<div>*/}
-                                                {/*    <span className="block text-gray-350 text-[18px] font-bold mb-5">*/}
-                                                {/*        Session settings*/}
-                                                {/*    </span>*/}
-                                                {/*    <div className="relative mb-10">*/}
-                                                {/*        <div className="block">*/}
-                                                {/*            <span className="control-label">*/}
-                                                {/*                {t('Session Duration')}*/}
-                                                {/*            </span>*/}
-                                                {/*            <Range*/}
-                                                {/*                allowCross={false}*/}
-                                                {/*                step={1}*/}
-                                                {/*                min={0}*/}
-                                                {/*                max={24}*/}
-                                                {/*                onChange={onSliderTimeChange}*/}
-                                                {/*                value={timeRange}*/}
-                                                {/*            />*/}
-                                                {/*        </div>*/}
-                                                {/*    </div>*/}
-                                                {/*    <div className="flex">*/}
-                                                {/*        <InputText*/}
-                                                {/*            icon={null}*/}
-                                                {/*            label={'Minimum'}*/}
-                                                {/*            name={'min_time'}*/}
-                                                {/*            placeholder={'0 min'}*/}
-                                                {/*            style={'max-w-[100px] mr-4'}*/}
-                                                {/*            props={props}*/}
-                                                {/*            onChange={onChangeMinTime}*/}
-                                                {/*            tips={null}*/}
-                                                {/*        />*/}
-                                                {/*        <InputText*/}
-                                                {/*            icon={null}*/}
-                                                {/*            label={'Maximum'}*/}
-                                                {/*            name={'max_time'}*/}
-                                                {/*            placeholder={'24 hours'}*/}
-                                                {/*            style={'max-w-[100px]'}*/}
-                                                {/*            props={props}*/}
-                                                {/*            tips={null}*/}
-                                                {/*        />*/}
-                                                {/*    </div>*/}
-                                                {/*    <div className="relative mb-10">*/}
-                                                {/*        <div className="block">*/}
-                                                {/*            <span className="control-label">*/}
-                                                {/*                {t('Cart Duration')}*/}
-                                                {/*            </span>*/}
-                                                {/*            <Range*/}
-                                                {/*                allowCross={false}*/}
-                                                {/*                step={1}*/}
-                                                {/*                min={0}*/}
-                                                {/*                max={24}*/}
-                                                {/*                onChange={onSliderCartChange}*/}
-                                                {/*                value={cartRange}*/}
-                                                {/*            />*/}
-                                                {/*        </div>*/}
-                                                {/*    </div>*/}
-                                                {/*    <div className="flex">*/}
-                                                {/*        <InputText*/}
-                                                {/*            icon={null}*/}
-                                                {/*            label={'Minimum'}*/}
-                                                {/*            name={'min'}*/}
-                                                {/*            placeholder={'0 min'}*/}
-                                                {/*            style={'max-w-[100px] mr-4'}*/}
-                                                {/*            props={props}*/}
-                                                {/*            tips={null}*/}
-                                                {/*        />*/}
-                                                {/*        <InputText*/}
-                                                {/*            icon={null}*/}
-                                                {/*            label={'Maximum'}*/}
-                                                {/*            name={'max'}*/}
-                                                {/*            placeholder={'24 hours'}*/}
-                                                {/*            style={'max-w-[100px]'}*/}
-                                                {/*            props={props}*/}
-                                                {/*            tips={null}*/}
-                                                {/*        />*/}
-                                                {/*    </div>*/}
-                                                {/*</div>*/}
                                                 <div>
                                                     <span className="block text-gray-350 text-[18px] font-bold mb-5">
                                                         Available scenarios

@@ -3,72 +3,19 @@ import { useDispatch, useSelector } from 'react-redux';
 import { showedItemsSelector } from '../../redux/chatbot/selectors';
 import { showItemAction } from '../../redux/chatbot';
 import { ButtonTableAction } from '../_common';
-import { checkIdsAction } from '../../redux/layouts';
-import { checkedIdsSelector } from '../../redux/layouts/selectors';
 
-const Row: React.FC<any> = ({
-    item,
-    handleEditBtnClick,
-    handleDeleteBtnClick,
-    handleActiveBtnClick,
-    itemActive
-}) => {
+const Row: React.FC<any> = ({ item, handleEditBtnClick, handleDeleteBtnClick }) => {
     const dispatch = useDispatch();
     const showedItems = useSelector(showedItemsSelector);
-    const checkedIds = useSelector(checkedIdsSelector);
-
-    const parseProduct = (data: any) => {
-        let product;
-        if (data) {
-            product = JSON.parse(data);
-        }
-        return <>{data ? product[0].name : ''}</>;
-    };
 
     return (
         <>
             <tr>
-                <td className="ids">
-                    <input
-                        className="float-checkbox"
-                        type="checkbox"
-                        onChange={() => dispatch(checkIdsAction(item.id))}
-                        value={item.id}
-                        checked={
-                            checkedIds.find((data: any) => data.id === item.id)?.checked || false
-                        }
-                    />
-                </td>
-                <td>
-                    <label
-                        htmlFor={item.id}
-                        className="flex items-center cursor-pointer relative mt-1">
-                        <input
-                            type="checkbox"
-                            id={item.id}
-                            className="sr-only"
-                            value={`switcher_${item.id}`}
-                            checked={itemActive}
-                            onChange={() => {
-                                handleActiveBtnClick(item.id);
-                            }}
-                        />
-                        <div className="toggle-bg bg-gray-200 border border-gray-200 rounded-full dark:bg-gray-700 dark:border-gray-600" />
-                    </label>
-                </td>
-                <td>
-                    <span className="overflow-hidden max-w-[500px] block text-ellipsis">
-                        {item.name}
-                    </span>
-                </td>
                 <td>
                     <span className="overflow-hidden max-w-[500px] block text-ellipsis">
                         {item.keywords}
                     </span>
                 </td>
-                <td>{parseProduct(item.product)}</td>
-                <td>{item.discount}</td>
-                <td>{item.answer_count}</td>
                 <td
                     className="chat-eye cursor-pointer"
                     role="presentation"
@@ -91,8 +38,7 @@ const Row: React.FC<any> = ({
                 </td>
             </tr>
             <tr className={showedItems.includes(item.id) ? '' : 'hidden'}>
-                <td />
-                <td colSpan={6} className="translations">
+                <td colSpan={2} className="translations" style={{ paddingLeft: '16px' }}>
                     <i className="trans-fr" />
                     <div className="shadow-border float-left ml-5 mb-5 translations-msg">
                         <div
