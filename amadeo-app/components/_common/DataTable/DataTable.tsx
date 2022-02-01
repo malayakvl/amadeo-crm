@@ -56,12 +56,8 @@ const DataTable: React.FC<Props> = ({
     // const hideSearch = false;
     const headers = TableHeaders[paginationType];
 
-    if (paginationType === PaginationType.SHIPPING) {
-        if (user.role_id === 3) {
-            delete headers[3];
-        } else {
-            delete headers[2];
-        }
+    if (paginationType === PaginationType.SHIPPING && user.role_id === 3) {
+        delete headers[5];
     }
 
     const dispatch = useDispatch();
