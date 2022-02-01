@@ -108,7 +108,7 @@ BE/.env
 BE/public/uploads
 amadeo-app/node_modules
 amadeo-app/.env
-
+.idea
 /.idea/workspace.xml
 /.idea/eslint.xml
 /.idea/jsLibraryMappings.xml
