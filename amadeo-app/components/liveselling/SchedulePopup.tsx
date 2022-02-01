@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { scenariosSelector, showPopupSelector } from '../../redux/livesessions/selectors';
 import { showPopupAction } from '../../redux/livesessions';
 import DatePicker from 'react-datepicker';
-import 'rc-time-picker/assets/index.css';
 import 'react-datepicker/dist/react-datepicker.css';
 import 'rc-slider/assets/index.css';
 import moment from 'moment';
