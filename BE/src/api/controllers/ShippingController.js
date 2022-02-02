@@ -99,9 +99,17 @@ export default new class ShippingController {
     }
 
     async fetchAll(req, res) {
-        const shippings = await shippingModel.getAll()
+        let shippings = []
 
-        if (!shippings) {
+        if (req.user.role_id !== 3) {
+            shippings = await shippingModel.fetchCustomerAll(req.user.id)
+
+        } else {
+            shippings = await shippingModel.fetchAll()
+
+        }
+
+        if (!shippings || !shippings.length) {
             return res.status(200).json({ shippings: [] })
         }
 
@@ -125,14 +133,31 @@ export default new class ShippingController {
     }
 
     changeStatuses(req, res) {
-        shippingModel.changeStatuses(req.body.status)
-        res.status(200).json({})
+        const user = req.user
+        const status = req.body.status
+
+        if (user.role_id !== 3) {
+            shippingModel.changeCustomerStatuses(status, user.id)
+            return res.status(200).json({})
+        }
+
+        shippingModel.changeStatuses(status)
+        return res.status(200).json({})
 
     }
 
     changeStatus(req, res) {
-        shippingModel.changeStatus(req.body.status, req.params.id)
-        res.status(200).json({})
+        const user = req.user
+        const status = req.body.status
+        const shippingId = req.params.id
+
+        if (user.role_id !== 3) {
+            shippingModel.changeCustomerStatus(status, user.id, shippingId)
+            return res.status(200).json({})
+        }
+
+        shippingModel.changeStatus(status, shippingId)
+        return res.status(200).json({})
 
     }
 
@@ -143,7 +168,7 @@ export default new class ShippingController {
 
     async fetchThreshold(req, res) {
         const result = await shippingModel.fetchThreshold(req.user.id)
-        
+
         if (!result) {
             return res.status(200).json({ threshold: '' })
         }
