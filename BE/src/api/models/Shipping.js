@@ -2,7 +2,7 @@ import pool from './connect.js';
 import { logger } from '../../common/logger.js';
 
 class Shipping {
-    async getAll() {
+    async fetchAll() {
         const client = await pool.connect();
         try {
             const query = `SELECT * FROM data.shipping ORDER BY id`
@@ -25,24 +25,30 @@ class Shipping {
     async fetchCustomerAll(userId) {
         const client = await pool.connect();
         try {
-            const query = `SELECT * FROM data.shipping WHERE status = true ORDER BY id`
+            const query = `            
+                SELECT
+                s.id,
+                s.name,
+                s.image,
+                (
+                    s.status
+                    AND
+                    NOT EXISTS (
+                        SELECT
+                            cds.id
+                        FROM data.customer_disabled_shipping cds
+                        WHERE TRUE
+                            AND (cds.user_id = ${userId})
+                            AND (cds.shipping_id = s.id)
+                    )
+                ) AS status,
+                s.created_at
+                FROM data.shipping s WHERE s.status = true ORDER BY id
+
+            `
             const res = await client.query(query);
 
-            if (!res.rows.length) {
-                return null
-
-            }
-
-            const promises = res.rows.map(async (row) => {
-                const status = !(await this.isDisabledByCustomer(userId, row.id))
-
-                return {...row, status}
-
-            })
-
-            const rows = await Promise.all(promises)
-
-            return rows
+            return res.rows
 
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
@@ -53,29 +59,6 @@ class Shipping {
                 );
             }
             return { success: false, error: { code: 404, message: 'Shippings Not found' } };
-        } finally {
-            client.release();
-        }
-
-    }
-
-    async isDisabledByCustomer(userId, shippingId) {
-        const client = await pool.connect();
-        try {
-            const query = 'SELECT * FROM data.customer_disabled_shipping WHERE user_id = $1 AND shipping_id = $2';
-            const res = await client.query(query, [userId, shippingId]);
-            
-            return res.rowCount !== 0
-
-        } catch (e) {
-            if (process.env.NODE_ENV === 'development') {
-                logger.log(
-                    'error',
-                    'Model error:',
-                    { message: e.message }
-                );
-            }
-            return { success: false, error: { code: 404, message: 'Shipping Not found' } };
         } finally {
             client.release();
         }
@@ -263,7 +246,7 @@ class Shipping {
     }
 
     async changeCustomerStatuses(status, userId) {
-        const shippings = await this.fetchCustomerAll()
+        const shippings = await this.fetchCustomerAll(userId)
 
         for (const shipping of shippings) {
             await this.changeCustomerStatus(status, userId, shipping.id)
