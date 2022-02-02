@@ -22,6 +22,66 @@ class Shipping {
         }
     }
 
+    async fetchCustomerAll(userId) {
+        const client = await pool.connect();
+        try {
+            const query = `SELECT * FROM data.shipping WHERE status = true ORDER BY id`
+            const res = await client.query(query);
+
+            if (!res.rows.length) {
+                return null
+
+            }
+
+            const promises = res.rows.map(async (row) => {
+                const status = !(await this.isDisabledByCustomer(userId, row.id))
+
+                return {...row, status}
+
+            })
+
+            const rows = await Promise.all(promises)
+
+            return rows
+
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error:',
+                    { message: e.message }
+                );
+            }
+            return { success: false, error: { code: 404, message: 'Shippings Not found' } };
+        } finally {
+            client.release();
+        }
+
+    }
+
+    async isDisabledByCustomer(userId, shippingId) {
+        const client = await pool.connect();
+        try {
+            const query = 'SELECT * FROM data.customer_disabled_shipping WHERE user_id = $1 AND shipping_id = $2';
+            const res = await client.query(query, [userId, shippingId]);
+            
+            return res.rowCount !== 0
+
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error:',
+                    { message: e.message }
+                );
+            }
+            return { success: false, error: { code: 404, message: 'Shipping Not found' } };
+        } finally {
+            client.release();
+        }
+
+    }
+
     async create(name, image) {
         const client = await pool.connect();
         try {
@@ -200,6 +260,44 @@ class Shipping {
             client.release();
         }
 
+    }
+
+    async changeCustomerStatuses(status, userId) {
+        const shippings = await this.fetchCustomerAll()
+
+        for (const shipping of shippings) {
+            await this.changeCustomerStatus(status, userId, shipping.id)
+
+        }
+
+    }
+
+    async changeCustomerStatus(status, customerId, shippingId) {
+        const client = await pool.connect();
+        try {
+            let query =
+                `DELETE FROM data.customer_disabled_shipping WHERE user_id = $1 AND shipping_id = $2`;
+
+            if (!status) {
+                query =
+                `INSERT INTO data.customer_disabled_shipping (user_id, shipping_id) VALUES($1, $2)`;
+            }
+
+            await client.query(query, [customerId, shippingId]);
+
+            return true
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model Shipping error:',
+                    { message: e.message }
+                );
+            }
+            return { success: false, error: { code: 404, message: 'Tags Not found' } };
+        } finally {
+            client.release();
+        }
     }
 
     async changeStatus(status, shippingId) {
