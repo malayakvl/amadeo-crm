@@ -48,7 +48,7 @@ export default function EditMethod() {
         dispatch(fetchShippingAction(id));
     }, [id]);
 
-    if (!shipping) {
+    if (!shipping || shipping.id != id) {
         return 'Loading';
     }
 
