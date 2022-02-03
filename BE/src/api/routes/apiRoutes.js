@@ -27,6 +27,7 @@ apiRoutes.route('/countries').get(CountryController.getAll);
 
 apiRoutes.route('/pages/all').get(PageController.getAll);
 apiRoutes.route('/pages').get(PageController.getPage);
+apiRoutes.route('/fetch-active-sessions').get(LivesessionController.getActiveSessions);
 
 /** ===================================================================== */
 /** ================== AUTHENTIFICATED ROUTES =========================== */

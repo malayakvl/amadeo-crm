@@ -22,6 +22,11 @@ class LivesessionController {
         }
     }
     
+    async getActiveSessions (req, res) {
+        const data = await livesessionModel.getAllActive();
+        return res.status(200).json({ items: data.result });
+    }
+    
     async fetchScenarios (req, res) {
         if (!req.user) {
             return res.status(401).json('Access deny');

@@ -1,6 +1,6 @@
 .sidebar {
   background: #141A3C;
-  border-radius: 0 24px 24px 0;
+  border-radius: 0 24px 0 0;
   @apply max-w-[240px] xl:min-w-[240px] h-screen
     hidden md:fixed md:flex flex-col top-0 left-0 h-full text-white transition-all duration-300 border-none;
 

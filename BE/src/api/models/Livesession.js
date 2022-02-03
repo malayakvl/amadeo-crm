@@ -36,6 +36,38 @@ class Livesession {
         }
     }
     
+    async getAllActive () {
+        const client = await pool.connect();
+        try {
+            const query = await client.query(
+                `SELECT data.live_sessions.*, u.auth_provider_access_token FROM data.live_sessions LEFT JOIN data.users u ON u.id = user_id WHERE video_id IS NULL`
+            );
+            const result = query.rows.length > 0 ? query.rows : [];
+            return {
+                result
+            };
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error (Products getAll):',
+                    { message: e.message }
+                );
+            }
+            const products = null;
+            const error = {
+                code: 500,
+                message: 'Error get list of users'
+            };
+            return {
+                products,
+                error
+            };
+        } finally {
+            client.release();
+        }
+    }
+    
     async getAll (page, perPage = 20, userId, reqOffset = null) {
         const client = await pool.connect();
         try {
