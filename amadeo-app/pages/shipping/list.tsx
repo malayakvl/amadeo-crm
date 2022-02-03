@@ -196,7 +196,7 @@ export default function List() {
                                 <td>
                                     <div className="text-center">{index + 1}</div>
                                 </td>
-                                <td>{item.name}</td>
+                                <td className="break-all">{item.name}</td>
 
                                 <td className="flex justify-center">
                                     <Image
