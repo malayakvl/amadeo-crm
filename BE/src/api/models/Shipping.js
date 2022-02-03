@@ -69,8 +69,8 @@ class Shipping {
         const client = await pool.connect();
         try {
             const queryInsert =
-                `INSERT INTO data.shipping (name, image, status) VALUES ('${name}', '${image}', ${true}) RETURNING id;`;
-            const res = await client.query(queryInsert);
+                `INSERT INTO data.shipping (name, image, status) VALUES ($1, $2, $3) RETURNING id;`;
+            const res = await client.query(queryInsert, [name, image, true]);
             return res.rows[0].id;
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
