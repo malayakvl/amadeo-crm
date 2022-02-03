@@ -6,18 +6,24 @@ import { SidebarInventory, SidebarFull, SidebarShipping } from './customers/inde
 
 const SidebarCustomers: React.FC = () => {
     const router = useRouter();
+
+    let CurrentSidebar = SidebarFull;
+
+    if (router.route.startsWith('/shipping')) {
+        CurrentSidebar = SidebarShipping;
+    }
+
+    if (router.route.startsWith('/inventory')) {
+        CurrentSidebar = SidebarInventory;
+    }
+
     return (
         <>
             <div className="sidebar">
                 <div className="overflow-y-auto overflow-x-hidden flex flex-col justify-between flex-grow">
                     <ul>
                         <Brand />
-                        {router.route === '/inventory' && <SidebarInventory />}
-                        {router.route === '/shipping/list' && <SidebarShipping />}
-                        {router.route === '/shipping/add-method' && <SidebarShipping />}
-                        {!['/inventory', '/shipping/list', '/shipping/add-method'].includes(
-                            router.route
-                        ) && <SidebarFull />}
+                        <CurrentSidebar />
                     </ul>
                     <Pages />
                 </div>

@@ -2,7 +2,7 @@ import pool from './connect.js';
 import { logger } from '../../common/logger.js';
 
 class Shipping {
-    async getAll() {
+    async fetchAll() {
         const client = await pool.connect();
         try {
             const query = `SELECT * FROM data.shipping ORDER BY id`
@@ -22,12 +22,55 @@ class Shipping {
         }
     }
 
+    async fetchCustomerAll(userId) {
+        const client = await pool.connect();
+        try {
+            const query = `            
+                SELECT
+                s.id,
+                s.name,
+                s.image,
+                (
+                    s.status
+                    AND
+                    NOT EXISTS (
+                        SELECT
+                            cds.id
+                        FROM data.customer_disabled_shipping cds
+                        WHERE TRUE
+                            AND (cds.user_id = ${userId})
+                            AND (cds.shipping_id = s.id)
+                    )
+                ) AS status,
+                s.created_at
+                FROM data.shipping s WHERE s.status = true ORDER BY id
+
+            `
+            const res = await client.query(query);
+
+            return res.rows
+
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error:',
+                    { message: e.message }
+                );
+            }
+            return { success: false, error: { code: 404, message: 'Shippings Not found' } };
+        } finally {
+            client.release();
+        }
+
+    }
+
     async create(name, image) {
         const client = await pool.connect();
         try {
             const queryInsert =
-                `INSERT INTO data.shipping (name, image, status) VALUES ('${name}', '${image}', ${true}) RETURNING id;`;
-            const res = await client.query(queryInsert);
+                `INSERT INTO data.shipping (name, image, status) VALUES ($1, $2, $3) RETURNING id;`;
+            const res = await client.query(queryInsert, [name, image, true]);
             return res.rows[0].id;
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
@@ -200,6 +243,44 @@ class Shipping {
             client.release();
         }
 
+    }
+
+    async changeCustomerStatuses(status, userId) {
+        const shippings = await this.fetchCustomerAll(userId)
+
+        for (const shipping of shippings) {
+            await this.changeCustomerStatus(status, userId, shipping.id)
+
+        }
+
+    }
+
+    async changeCustomerStatus(status, customerId, shippingId) {
+        const client = await pool.connect();
+        try {
+            let query =
+                `DELETE FROM data.customer_disabled_shipping WHERE user_id = $1 AND shipping_id = $2`;
+
+            if (!status) {
+                query =
+                `INSERT INTO data.customer_disabled_shipping (user_id, shipping_id) VALUES($1, $2)`;
+            }
+
+            await client.query(query, [customerId, shippingId]);
+
+            return true
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model Shipping error:',
+                    { message: e.message }
+                );
+            }
+            return { success: false, error: { code: 404, message: 'Tags Not found' } };
+        } finally {
+            client.release();
+        }
     }
 
     async changeStatus(status, shippingId) {
