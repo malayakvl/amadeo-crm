@@ -63,9 +63,8 @@ export default function EditMethod() {
                         enableReinitialize
                         initialValues={{ name: shipping.name, logo: '' }}
                         validationSchema={Yup.object().shape({
-                            name: Yup.string()
-                                .min(3, t('Must be more characters'))
-                                .required(t('Required field'))
+                            name: Yup.string().matches(/^[a-zA-Z0-9_.-]*$/, t('Only numbers and latters are available')).min(3, t('Must be more characters')).required(t('Required field')),
+
                         })}
                         onSubmit={(values) => {
                             const formData = new FormData();
