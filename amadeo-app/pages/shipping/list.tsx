@@ -184,12 +184,12 @@ export default function List() {
                                                 {/* <div className="border-l-2 h-4 relative left-[5px]" /> */}
                                             </>
                                         ) : (
-                                            <Image
-                                                width="12"
-                                                height="14"
-                                                src={`/images/action-arrow.svg`}
-                                            />
-                                        )}
+                                                <Image
+                                                    width="12"
+                                                    height="14"
+                                                    src={`/images/action-arrow.svg`}
+                                                />
+                                            )}
                                     </button>
                                 </td>
 
@@ -251,32 +251,23 @@ export default function List() {
                                                         </div>
                                                     ))
                                                 ) : (
-                                                    <div className="flex mb-1">
-                                                        <Image
-                                                            width="34"
-                                                            height="24"
-                                                            src={'/images/en-flag.svg'}
-                                                        />
-                                                        <div className="ml-auto">
-                                                            {item.countries[0].price}
+                                                        <div className="flex mb-1">
+                                                            <Image
+                                                                width="34"
+                                                                height="24"
+                                                                src={'/images/en-flag.svg'}
+                                                            />
+                                                            <div className="ml-auto">
+                                                                {item.countries[0].price}
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                )}
+                                                    )}
                                             </>
                                         ) : (
-                                            <div className="text-gray-400 text-sm">
-                                                {t('Empty')}
-                                            </div>
-                                        )}
-
-                                        {/* {item.countries.map((country) => (
-                                        <div
-                                            key={country.id}
-                                            className="bg-gray-400 text-white rounded-md p-1 m-1">
-                                            {countries.find((item: any) => item.id === country.id)
-                                                .nicename + `- ${country.price}`}
-                                        </div>
-                                    ))} */}
+                                                <div className="text-gray-400 text-sm">
+                                                    {t('Empty')}
+                                                </div>
+                                            )}
                                     </td>
                                 )}
 

@@ -16,7 +16,7 @@
   }
 
   th {
-    @apply px-3 py-3 text-xs font-bold leading-4 tracking-wider text-left text-blue-350 align-top;
+    @apply px-3 py-3 text-xs font-bold leading-4 tracking-wider text-blue-350 align-top;
 
     .toggle-bg {
       width: 20px;
@@ -150,14 +150,38 @@ td.translations {
   padding-bottom: 10px;
   @apply border border-t-0 border-b-0 border-r-0 border-red-500 pt-4 pb-4;
 }
-.shipping-dropdown {
+.table-dropdown {
   width: 50px;
   background-repeat: no-repeat;
   background-position: left center;
   background-image: url("../../public/images/action-arrow.svg");
 }
 
-.shipping-number {
+.table-people {
+  width: 150px;
+  background-repeat: no-repeat;
+  background-position: left;
+  text-align: center;
+  background-image: url("../../public/images/icon-buyers.svg");
+}
+
+.table-order {
+  width: 150px;
+  background-repeat: no-repeat;
+  background-position: left;
+  text-align: center;
+  background-image: url("../../public/images/icon-order.svg");
+}
+
+.table-phone {
+  width: 200px;
+  background-repeat: no-repeat;
+  background-position: center;
+  text-align: center;
+  background-image: url("../../public/images/input-phone.svg");
+}
+
+.table-number {
   width: 100px;
   background-repeat: no-repeat;
   background-position: center;

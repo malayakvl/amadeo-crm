@@ -145,7 +145,7 @@ const DataTable: React.FC<Props> = ({
                 rowSpan={isTwoRowsHeader && !item.subTitles?.length ? 2 : 1}
                 colSpan={item.subTitles?.length || 1}
                 key={item.titleKey ? item.titleKey : Math.random().toString(16).slice(2)}
-                className={classNames(item.className || 'text-left', {
+                className={classNames('text-left', item.className, {
                     sorting_disabled: !item.sortKey
                 })}>
                 {item.className === 'option-switcher' && (
