@@ -11,6 +11,10 @@
   }
 }
 
+.date-input {
+  @apply w-[200px];
+}
+
 .input-tips {
   @apply absolute text-xs text-gray-180 font-bold not-italic -top-5 right-0;
 }

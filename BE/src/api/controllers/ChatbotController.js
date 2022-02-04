@@ -53,12 +53,17 @@ class ChatbotController {
         if (!req.user) {
             return res.status(401).json('Access deny');
         }
+        let result;
         if (req.body.id) {
-            await chatbotModel.update(req.user.id, req.body);
+            result = await chatbotModel.update(req.user.id, req.body);
         } else {
-            await chatbotModel.create(req.user.id, req.body);
+            result = await chatbotModel.create(req.user.id, req.body);
         }
-        return res.status(200).json({ success: true });
+        if (!result.error) {
+            return res.status(200).json({ success: true });
+        } else {
+            return res.status(500).json({ success: false, error: result.error.message });
+        }
     }
     
     async bulkDelete (req, res) {
@@ -67,7 +72,6 @@ class ChatbotController {
         }
         const ids = [];
         JSON.parse(req.body.data).filter(id => id.checked).forEach(data => ids.push(data.id));
-        console.log(ids);
         await chatbotModel.bulkDelete(ids, req.user.id);
         
         return res.status(200).json({ success: true });

@@ -145,7 +145,7 @@ class Chatbot {
             const item = null;
             const error = {
                 code: 500,
-                message: 'Error update chatbot_scenarios'
+                message: e.message
             };
             return {
                 success: false,
