@@ -63,14 +63,12 @@ export default function EditMethod() {
                         enableReinitialize
                         initialValues={{ name: shipping.name, logo: '' }}
                         validationSchema={Yup.object().shape({
-                            name:
-                                Yup.string()
-                                    .strict(true)
-                                    .trim('Name cannot include leading and trailing spaces')
-                                    .min(3, t('Must be more characters'))
-                                    .max(20, t('Must be less characters'))
-                                    .required(t('Required field')),
-
+                            name: Yup.string()
+                                .strict(true)
+                                .trim('Name cannot include leading and trailing spaces')
+                                .min(3, t('Must be more characters'))
+                                .max(20, t('Must be less characters'))
+                                .required(t('Required field'))
                         })}
                         onSubmit={(values) => {
                             const formData = new FormData();
@@ -130,118 +128,118 @@ export default function EditMethod() {
                         )}
                     />
                 ) : (
-                        <div className="ml-8 w-full p-4 bg-gray-100 rounded-lg shadow-inner">
-                            <div className="mb-4 font-bold text-gray-350 text-lg py-4 border-b border-gray-200">
-                                {t('Apply Countries')}
-                            </div>
-
-                            <Formik
-                                validationSchema={Yup.object().shape({
-                                    countries: Yup.array().of(
-                                        Yup.object().shape({
-                                            id: Yup.number().required(t('Required field')),
-                                            price: Yup.number()
-                                                .required(t('Required field'))
-                                                .test('len', t('Must be less characters'), (item) => {
-                                                    if (!item) {
-                                                        return true
-                                                    }
-
-                                                    return item?.toString().length < 10
-                                                })
-                                                .typeError('Price must be number')
-                                        })
-                                    )
-                                })}
-                                initialValues={{ countries: shipping.countries }}
-                                onSubmit={(values) =>
-                                    dispatch(saveShippingAction(id, values.countries))
-                                }
-                                render={({ values }) => (
-                                    <Form>
-                                        <FieldArray
-                                            name="countries"
-                                            render={(arrayHelpers) => (
-                                                <div>
-                                                    {values.countries.map(
-                                                        (country: any, index: number) => (
-                                                            <div key={index}>
-                                                                <div className="my-4 flex items-center justify-start w-1/2">
-                                                                    <div className="w-full">
-                                                                        <Field
-                                                                            className="form-control"
-                                                                            as="select"
-                                                                            name={`countries.${index}.id`}>
-                                                                            <option value="">
-                                                                                ...
-                                                                        </option>
-                                                                            {countries.map(
-                                                                                (country: any) => (
-                                                                                    <option
-                                                                                        key={country.id}
-                                                                                        value={
-                                                                                            country.id
-                                                                                        }>
-                                                                                        {
-                                                                                            country.nicename
-                                                                                        }
-                                                                                    </option>
-                                                                                )
-                                                                            )}
-                                                                        </Field>
-                                                                        <div className="error-el">
-                                                                            <ErrorMessage
-                                                                                name={`countries.${index}.id`}
-                                                                            />
-                                                                        </div>
-                                                                    </div>
-                                                                    <div className="ml-4">
-                                                                        <Field
-                                                                            className="form-control"
-                                                                            name={`countries.${index}.price`}
-                                                                            placeholder={'Price'}
-                                                                            value={country.price}
-                                                                        />
-                                                                        <div className="error-el">
-                                                                            <ErrorMessage
-                                                                                name={`countries.${index}.price`}
-                                                                            />
-                                                                        </div>
-                                                                    </div>
-
-                                                                    <button
-                                                                        type="button"
-                                                                        onClick={() =>
-                                                                            arrayHelpers.remove(index)
-                                                                        }
-                                                                        className="ml-4 disabled-btn">
-                                                                        {t('Delete')}
-                                                                    </button>
-                                                                </div>
-                                                            </div>
-                                                        )
-                                                    )}
-                                                    <button
-                                                        type="button"
-                                                        onClick={() =>
-                                                            arrayHelpers.push({ id: '', price: '' })
-                                                        }
-                                                        className="gradient-btn">
-                                                        {t('Add')}
-                                                    </button>
-                                                </div>
-                                            )}
-                                        />
-                                        {values.countries.length > 0 && (
-                                            <button type="submit" className="mt-8 gradient-btn">
-                                                {t('Save')}
-                                            </button>
-                                        )}
-                                    </Form>
-                                )}
-                            />
+                    <div className="ml-8 w-full p-4 bg-gray-100 rounded-lg shadow-inner">
+                        <div className="mb-4 font-bold text-gray-350 text-lg py-4 border-b border-gray-200">
+                            {t('Apply Countries')}
                         </div>
-                    )}
+
+                        <Formik
+                            validationSchema={Yup.object().shape({
+                                countries: Yup.array().of(
+                                    Yup.object().shape({
+                                        id: Yup.number().required(t('Required field')),
+                                        price: Yup.number()
+                                            .required(t('Required field'))
+                                            .test('len', t('Must be less characters'), (item) => {
+                                                if (!item) {
+                                                    return true;
+                                                }
+
+                                                return item?.toString().length < 10;
+                                            })
+                                            .typeError('Price must be number')
+                                    })
+                                )
+                            })}
+                            initialValues={{ countries: shipping.countries }}
+                            onSubmit={(values) =>
+                                dispatch(saveShippingAction(id, values.countries))
+                            }
+                            render={({ values }) => (
+                                <Form>
+                                    <FieldArray
+                                        name="countries"
+                                        render={(arrayHelpers) => (
+                                            <div>
+                                                {values.countries.map(
+                                                    (country: any, index: number) => (
+                                                        <div key={index}>
+                                                            <div className="my-4 flex items-center justify-start w-1/2">
+                                                                <div className="w-full">
+                                                                    <Field
+                                                                        className="form-control"
+                                                                        as="select"
+                                                                        name={`countries.${index}.id`}>
+                                                                        <option value="">
+                                                                            ...
+                                                                        </option>
+                                                                        {countries.map(
+                                                                            (country: any) => (
+                                                                                <option
+                                                                                    key={country.id}
+                                                                                    value={
+                                                                                        country.id
+                                                                                    }>
+                                                                                    {
+                                                                                        country.nicename
+                                                                                    }
+                                                                                </option>
+                                                                            )
+                                                                        )}
+                                                                    </Field>
+                                                                    <div className="error-el">
+                                                                        <ErrorMessage
+                                                                            name={`countries.${index}.id`}
+                                                                        />
+                                                                    </div>
+                                                                </div>
+                                                                <div className="ml-4">
+                                                                    <Field
+                                                                        className="form-control"
+                                                                        name={`countries.${index}.price`}
+                                                                        placeholder={'Price'}
+                                                                        value={country.price}
+                                                                    />
+                                                                    <div className="error-el">
+                                                                        <ErrorMessage
+                                                                            name={`countries.${index}.price`}
+                                                                        />
+                                                                    </div>
+                                                                </div>
+
+                                                                <button
+                                                                    type="button"
+                                                                    onClick={() =>
+                                                                        arrayHelpers.remove(index)
+                                                                    }
+                                                                    className="ml-4 disabled-btn">
+                                                                    {t('Delete')}
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    )
+                                                )}
+                                                <button
+                                                    type="button"
+                                                    onClick={() =>
+                                                        arrayHelpers.push({ id: '', price: '' })
+                                                    }
+                                                    className="gradient-btn">
+                                                    {t('Add')}
+                                                </button>
+                                            </div>
+                                        )}
+                                    />
+                                    {values.countries.length > 0 && (
+                                        <button type="submit" className="mt-8 gradient-btn">
+                                            {t('Save')}
+                                        </button>
+                                    )}
+                                </Form>
+                            )}
+                        />
+                    </div>
+                )}
             </div>
         </>
     );
