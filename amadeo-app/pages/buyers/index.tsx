@@ -54,6 +54,96 @@ export default function Buyers() {
             totalSpent: '9.845.25',
             email: 'email@email.com'
         },
+        {
+            username: 'username',
+            fullName: 'Some Full Name',
+            phone: '(406) 555-0120',
+            address: '3517 W.Gray St.Utica, Pennsylvania 57867',
+            orders: '999',
+            totalSpent: '9.845.25',
+            email: 'email@email.com'
+        },
+        {
+            username: 'username',
+            fullName: 'Some Full Name',
+            phone: '(406) 555-0120',
+            address: '3517 W.Gray St.Utica, Pennsylvania 57867',
+            orders: '999',
+            totalSpent: '9.845.25',
+            email: 'email@email.com'
+        },
+        {
+            username: 'username',
+            fullName: 'Some Full Name',
+            phone: '(406) 555-0120',
+            address: '3517 W.Gray St.Utica, Pennsylvania 57867',
+            orders: '999',
+            totalSpent: '9.845.25',
+            email: 'email@email.com'
+        },
+        {
+            username: 'username',
+            fullName: 'Some Full Name',
+            phone: '(406) 555-0120',
+            address: '3517 W.Gray St.Utica, Pennsylvania 57867',
+            orders: '999',
+            totalSpent: '9.845.25',
+            email: 'email@email.com'
+        },
+        {
+            username: 'username',
+            fullName: 'Some Full Name',
+            phone: '(406) 555-0120',
+            address: '3517 W.Gray St.Utica, Pennsylvania 57867',
+            orders: '999',
+            totalSpent: '9.845.25',
+            email: 'email@email.com'
+        },
+        {
+            username: 'username',
+            fullName: 'Some Full Name',
+            phone: '(406) 555-0120',
+            address: '3517 W.Gray St.Utica, Pennsylvania 57867',
+            orders: '999',
+            totalSpent: '9.845.25',
+            email: 'email@email.com'
+        },
+        {
+            username: 'username',
+            fullName: 'Some Full Name',
+            phone: '(406) 555-0120',
+            address: '3517 W.Gray St.Utica, Pennsylvania 57867',
+            orders: '999',
+            totalSpent: '9.845.25',
+            email: 'email@email.com'
+        },
+        {
+            username: 'username',
+            fullName: 'Some Full Name',
+            phone: '(406) 555-0120',
+            address: '3517 W.Gray St.Utica, Pennsylvania 57867',
+            orders: '999',
+            totalSpent: '9.845.25',
+            email: 'email@email.com'
+        },
+        {
+            username: 'username',
+            fullName: 'Some Full Name',
+            phone: '(406) 555-0120',
+            address: '3517 W.Gray St.Utica, Pennsylvania 57867',
+            orders: '999',
+            totalSpent: '9.845.25',
+            email: 'email@email.com'
+        },
+        {
+            username: 'username',
+            fullName: 'Some Full Name',
+            phone: '(406) 555-0120',
+            address: '3517 W.Gray St.Utica, Pennsylvania 57867',
+            orders: '999',
+            totalSpent: '9.845.25',
+            email: 'email@email.com'
+        },
     ]
 
     return (
@@ -68,7 +158,6 @@ export default function Buyers() {
             </div>
             <div className="block-white-8 white-shadow-big">
                 <DataTable
-                    hidePaginationBar
                     hideBulk
                     paginationType={PaginationType.BUYERS}
                     totalAmount={items.length}
@@ -95,7 +184,7 @@ export default function Buyers() {
                             <td className="">
                                 <div className="flex">
                                     <div className="relative w-7 h-7">
-                                        <Image className="rounded-full" layout="fill" src={userProfileImg}/>
+                                        <Image className="rounded-full" layout="fill" src={userProfileImg} />
                                     </div>
                                     <div className="ml-2">
                                         <div>{item.fullName}</div>
