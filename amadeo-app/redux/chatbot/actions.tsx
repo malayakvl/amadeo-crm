@@ -219,6 +219,39 @@ export const changeActiveAllAction: any = createAction(
                 });
         }
 );
+// for traning section methods
+export const fetchCurrentSessionAction: any = createAction(
+    'chatbot/FETCH_SESSIONS',
+    async () =>
+        (dispatch: Type.Dispatch, getState: () => State.Root): Promise<{ liveSessions: any }> => {
+            const state = getState();
+            dispatch(showLoaderAction(true));
+            return axios
+                .get(`${baseUrl}/fetch-active-sessions`, {
+                    headers: {
+                        ...authHeader(state.user.user.email)
+                    }
+                })
+                .then((res: any) => {
+                    dispatch(showLoaderAction(false));
+                    return {
+                        liveSessions: res.data.items
+                    };
+                });
+        }
+);
+export const saveMessageAction: any = createAction(
+    'livesession_message/SAVE_MESSAGES',
+    async (sessionId: number, data: any) =>
+        (dispatch: Type.Dispatch): Promise<void> => {
+            dispatch(showLoaderAction(true));
+            return axios
+                .post(`${baseUrl}/add-live-messages?sessionId=${sessionId}`, data)
+                .then(() => {
+                    dispatch(showLoaderAction(false));
+                });
+        }
+);
 
 export const switchChangeStatusAction: any = createAction('chatbot/CHATBOT_CHANGE_SWITCHER');
 export const showFormAction: any = createAction('chatbot/CHATBOT_SHOWFORM');

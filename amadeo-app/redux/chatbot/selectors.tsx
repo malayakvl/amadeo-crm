@@ -36,3 +36,7 @@ export const switcherStatusChangeSelector = createSelector(
     rootSelector,
     (chatbot: State.Chatbot): any => chatbot.changeActiveStatus
 );
+export const liveActiveSessionsSelector = createSelector(
+    rootSelector,
+    (chatbot: State.Chatbot): any => chatbot.liveSessions
+);
