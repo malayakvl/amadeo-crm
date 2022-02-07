@@ -53,11 +53,11 @@ export const TableHeaders: { [key in PaginationType]: Type.DataTableHeader[] } =
     ],
     [PaginationType.BUYERS]: [
         { className: 'table-dropdown' },
-        { className: 'table-number' },
-        { className: 'table-people', titleKey: 'Shopper' },
-        { className: 'table-phone' },
-        { titleKey: 'Address' },
-        { className: 'table-order', titleKey: 'Orders' },
+        { className: 'flex justify-center', iconClass: 'icon-tbl-index' },
+        { iconClass: 'icon-tbl-users', titleKey: 'Shopper' },
+        { className: 'flex justify-center', iconClass: 'icon-tbl-phone' },
+        { iconClass: 'icon-tbl-address', titleKey: 'Address' },
+        { className: 'flex justify-center', iconClass: 'icon-tbl-order', titleKey: 'Orders' },
         { className: 'text-right', titleKey: 'Total Spent' }
     ]
 };
