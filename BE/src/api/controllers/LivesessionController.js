@@ -27,6 +27,11 @@ class LivesessionController {
         return res.status(200).json({ items: data.result });
     }
     
+    async getAllInAir (req, res) {
+        const data = await livesessionModel.getAllInAir();
+        return res.status(200).json({ items: data.result });
+    }
+    
     async fetchScenarios (req, res) {
         if (!req.user) {
             return res.status(401).json('Access deny');
