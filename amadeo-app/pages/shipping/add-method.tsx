@@ -12,7 +12,12 @@ export default function AddMethod() {
     const dispatch = useDispatch();
     const router = useRouter();
     const submitSchema = Yup.object().shape({
-        name: Yup.string().matches(/^[a-zA-Z0-9_.-]*$/, t('Only numbers and latters are available')).min(3, t('Must be more characters')).required(t('Required field')),
+        name: Yup.string()
+            .strict(true)
+            .trim('Name cannot include leading and trailing spaces')
+            .min(3, t('Must be more characters'))
+            .max(20, t('Must be less characters'))
+            .required(t('Required field')),
         logo: Yup.mixed().required(t('Required field'))
     });
 

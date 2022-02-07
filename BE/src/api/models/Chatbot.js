@@ -135,7 +135,6 @@ class Chatbot {
             await client.query(query);
             return { success: true };
         } catch (e) {
-            console.log(e.message);
             if (process.env.NODE_ENV === 'development') {
                 logger.log(
                     'error',

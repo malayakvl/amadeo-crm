@@ -31,7 +31,6 @@ class UserController {
                 country
             }
         }
-        console.log(response);
 
         return res.status(200).json(response);
     }

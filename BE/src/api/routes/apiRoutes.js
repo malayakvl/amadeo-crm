@@ -10,6 +10,7 @@ import ShippingController from '../controllers/ShippingController.js';
 import userModel from '../models/User.js';
 import ChatbotController from "../controllers/ChatbotController.js";
 import LivesessionController from "../controllers/LivesessionController.js";
+import ChatbotMessageController from "../controllers/ChatbotMessageController.js";
 
 const apiRoutes = express.Router();
 
@@ -27,6 +28,11 @@ apiRoutes.route('/countries').get(CountryController.getAll);
 
 apiRoutes.route('/pages/all').get(PageController.getAll);
 apiRoutes.route('/pages').get(PageController.getPage);
+apiRoutes.route('/fetch-live-sessions').get(LivesessionController.getAllInAir);
+apiRoutes.route('/fetch-active-sessions').get(LivesessionController.getActiveSessions);
+apiRoutes.route('/add-live-messages').post(ChatbotMessageController.addMessages);
+apiRoutes.route('/parse-live-messages').get(ChatbotMessageController.parseMessages);
+apiRoutes.route('/create-orders').get(ChatbotMessageController.createOrders);
 
 /** ===================================================================== */
 /** ================== AUTHENTIFICATED ROUTES =========================== */

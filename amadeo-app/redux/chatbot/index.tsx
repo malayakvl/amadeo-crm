@@ -6,7 +6,8 @@ import {
     showFormAction,
     showItemAction,
     setEmptyFormAction,
-    switchChangeStatusAction
+    switchChangeStatusAction,
+    fetchCurrentSessionAction
 } from './actions';
 
 const initialState: {
@@ -19,6 +20,7 @@ const initialState: {
     showForm: boolean;
     showedItems: number[];
     changeActiveStatus: boolean | null;
+    liveSessions: any[];
 } = {
     loading: false,
     isFetched: false,
@@ -40,7 +42,8 @@ const initialState: {
     },
     showForm: false,
     showedItems: [],
-    changeActiveStatus: null
+    changeActiveStatus: null,
+    liveSessions: []
 };
 
 const ACTION_HANDLERS: any = {
@@ -129,6 +132,22 @@ const ACTION_HANDLERS: any = {
                 ? state.showedItems.filter((id) => id !== action.payload)
                 : [...state.showedItems, action.payload]
         })
+    },
+    [fetchCurrentSessionAction]: {
+        next: (
+            state: State.Chatbot,
+            action: Type.ReduxAction<Pick<State.Chatbot, 'liveSessions'>>
+        ): State.Chatbot => ({
+            ...state,
+            ...action.payload,
+            loading: false,
+            isFetched: true
+        }),
+        throw: (state: State.Chatbot): State.Chatbot => ({
+            ...state,
+            loading: false,
+            isFetched: false
+        })
     }
 };
 
@@ -139,7 +158,8 @@ export {
     showFormAction,
     showItemAction,
     setEmptyFormAction,
-    switchChangeStatusAction
+    switchChangeStatusAction,
+    fetchCurrentSessionAction
 };
 
 // ------------------------------------
