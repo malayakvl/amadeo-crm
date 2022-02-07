@@ -156,7 +156,13 @@ export default function Buyers() {
                     {t('Buyers section provides merchant information about his buyers')}
                 </div>
             </div>
+
             <div className="block-white-8 white-shadow-big">
+                <button className="ml-auto mb-4 flex items-center text-sm border rounded-lg px-4 py-1">
+                    <Image width={16} height={16} src={'/images/filter.svg'} />
+                    <div className="font-medium text-gray-400 ml-2">{t('Filters')}</div>
+                    <div className="ml-2 font-bold rounded-full p-[2px] bg-gray-400 text-xs h-5 w-5 text-white">9</div>
+                </button>
                 <DataTable
                     hideBulk
                     paginationType={PaginationType.BUYERS}
