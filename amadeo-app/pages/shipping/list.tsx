@@ -268,15 +268,6 @@ export default function List() {
                                                 {t('Empty')}
                                             </div>
                                         )}
-
-                                        {/* {item.countries.map((country) => (
-                                        <div
-                                            key={country.id}
-                                            className="bg-gray-400 text-white rounded-md p-1 m-1">
-                                            {countries.find((item: any) => item.id === country.id)
-                                                .nicename + `- ${country.price}`}
-                                        </div>
-                                    ))} */}
                                     </td>
                                 )}
 
