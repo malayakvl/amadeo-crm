@@ -8,7 +8,8 @@ import { useState } from 'react';
 export default function Buyers() {
     const t = useTranslations();
     // const items = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-    const userProfileImg = 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80';
+    const userProfileImg =
+        'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80';
 
     const items = [
         {
@@ -145,10 +146,10 @@ export default function Buyers() {
             orders: '999',
             totalSpent: '9.845.25',
             email: 'email@email.com'
-        },
-    ]
+        }
+    ];
 
-    const [filterOpen, setFilterOpen] = useState(false)
+    const [filterOpen, setFilterOpen] = useState(false);
 
     return (
         <>
@@ -163,11 +164,12 @@ export default function Buyers() {
 
             <div className="block-white-8 white-shadow-big">
                 <div className="mb-14 relative">
-                    {filterOpen &&
+                    {filterOpen && (
                         <div className="-top-14 bg-white absolute right-36 w-80 p-6 shadow-xl rounded-3xl">
                             <div className="pb-3 border-b flex justify-between">
-                                <div className="text-gray-350 font-bold text-xl">{t('Filters')}</div>
-
+                                <div className="text-gray-350 font-bold text-xl">
+                                    {t('Filters')}
+                                </div>
                             </div>
                             <InputText
                                 style="mt-5 w-full"
@@ -175,39 +177,61 @@ export default function Buyers() {
                                 label={null}
                                 name={'name'}
                                 placeholder={t('Start typing to search')}
-                                props={{ handleChange: () => { }, values: { name: '' }, errors: { name: '' } }}
+                                props={{
+                                    values: { name: '' },
+                                    errors: { name: '' }
+                                }}
                                 tips={null}
                             />
                             <div className="flex justify-between mb-2">
                                 <div className="flex items-center">
                                     <Image width="10" height="10" src={'/images/lang-arrow.svg'} />
-                                    <span className="ml-2 text-xs font-bold text-blue-350">{t('Spent')}</span>
+                                    <span className="ml-2 text-xs font-bold text-blue-350">
+                                        {t('Spent')}
+                                    </span>
                                 </div>
                                 <div className="text-sm font-thin text-gray-450">999,99,9$</div>
                             </div>
-                            <input className="w-full" type="range" min="0" max="100" step="1" value="50" />
+                            <input
+                                className="w-full"
+                                type="range"
+                                min="0"
+                                max="100"
+                                step="1"
+                                value="50"
+                            />
                             <div className="flex mt-1">
                                 <div className="w-1/2 mr-2">
-                                    <div className="mb-3 text-xs font-bold text-blue-350">{t('Minimum')}</div>
+                                    <div className="mb-3 text-xs font-bold text-blue-350">
+                                        {t('Minimum')}
+                                    </div>
                                     <InputText
                                         style="w-full"
                                         icon={''}
                                         label={null}
                                         name={'name'}
                                         placeholder={t('0,00$')}
-                                        props={{ handleChange: () => { }, values: { name: '' }, errors: { name: '' } }}
+                                        props={{
+                                            values: { name: '' },
+                                            errors: { name: '' }
+                                        }}
                                         tips={null}
                                     />
                                 </div>
                                 <div className="w-1/2">
-                                    <div className="mb-3 text-xs font-bold text-blue-350">{t('Maximum')}</div>
+                                    <div className="mb-3 text-xs font-bold text-blue-350">
+                                        {t('Maximum')}
+                                    </div>
                                     <InputText
                                         style="w-full"
                                         icon={''}
                                         label={null}
                                         name={'name'}
                                         placeholder={t('999,999$')}
-                                        props={{ handleChange: () => { }, values: { name: '' }, errors: { name: '' } }}
+                                        props={{
+                                            values: { name: '' },
+                                            errors: { name: '' }
+                                        }}
                                         tips={null}
                                     />
                                 </div>
@@ -215,9 +239,13 @@ export default function Buyers() {
                             <div className="flex justify-between mb-3">
                                 <div className="flex items-center">
                                     <Image width="10" height="10" src={'/images/lang-arrow.svg'} />
-                                    <span className="ml-2 text-xs font-bold text-blue-350">{t('Country')}</span>
+                                    <span className="ml-2 text-xs font-bold text-blue-350">
+                                        {t('Country')}
+                                    </span>
                                 </div>
-                                <div className="font-bold rounded-full text-center p-[2px] bg-green-250 text-xs h-5 w-5 text-white">3</div>
+                                <div className="font-bold rounded-full text-center p-[2px] bg-green-250 text-xs h-5 w-5 text-white">
+                                    3
+                                </div>
                             </div>
                             <InputText
                                 style="w-full pb-4 border-b mb-6"
@@ -225,7 +253,10 @@ export default function Buyers() {
                                 label={null}
                                 name={'name'}
                                 placeholder={t('Type to search for...')}
-                                props={{ handleChange: () => { }, values: { name: '' }, errors: { name: '' } }}
+                                props={{
+                                    values: { name: '' },
+                                    errors: { name: '' }
+                                }}
                                 tips={null}
                             />
                             <div className="flex items-center mb-3">
@@ -236,7 +267,9 @@ export default function Buyers() {
                                     type="checkbox"
                                 />
                                 <Image width="40" height="24" src={'/images/en-flag.svg'} />
-                                <span className="ml-2 text-xs font-bold text-blue-350">{t('America')}</span>
+                                <span className="ml-2 text-xs font-bold text-blue-350">
+                                    {t('America')}
+                                </span>
                             </div>
                             <div className="flex items-center mb-3">
                                 <input
@@ -246,15 +279,20 @@ export default function Buyers() {
                                     type="checkbox"
                                 />
                                 <Image width="40" height="24" src={'/images/fr-glag.svg'} />
-                                <span className="ml-2 text-xs font-bold text-blue-350">{t('France')}</span>
+                                <span className="ml-2 text-xs font-bold text-blue-350">
+                                    {t('France')}
+                                </span>
                             </div>
-
                         </div>
-                    }
-                    <button onClick={() => setFilterOpen(!filterOpen)} className="absolute top-0 right-0 flex items-center text-sm border rounded-lg px-4 py-1">
+                    )}
+                    <button
+                        onClick={() => setFilterOpen(!filterOpen)}
+                        className="absolute top-0 right-0 flex items-center text-sm border rounded-lg px-4 py-1">
                         <Image width={16} height={16} src={'/images/filter.svg'} />
                         <div className="font-medium text-gray-400 ml-2">{t('Filters')}</div>
-                        <div className="ml-2 font-bold rounded-full p-[2px] text-center bg-gray-400 text-xs h-5 w-5 text-white">9</div>
+                        <div className="ml-2 font-bold rounded-full p-[2px] text-center bg-gray-400 text-xs h-5 w-5 text-white">
+                            9
+                        </div>
                     </button>
                 </div>
 
@@ -262,11 +300,12 @@ export default function Buyers() {
                     hideBulk
                     paginationType={PaginationType.BUYERS}
                     totalAmount={items.length}
-                    sendRequest={() => new Promise((resolve, reject) => {
-                        resolve();
-
-                    })}
-                    sendDeleteRequest={() => new Promise(() => { })}
+                    sendRequest={() =>
+                        new Promise((resolve) => {
+                            resolve();
+                        })
+                    }
+                    sendDeleteRequest={() => new Promise(() => null)}
                     sendCopyRequest={() => new Promise(() => null)}>
                     {items.map((item: any, index: number) => (
                         <tr key={index}>
@@ -280,17 +319,25 @@ export default function Buyers() {
                                 </button>
                             </td>
                             <td className="text-center">
-                                <div className="text-center text-orange-450 font-medium">{index + 1}</div>
+                                <div className="text-center text-orange-450 font-medium">
+                                    {index + 1}
+                                </div>
                             </td>
                             <td className="">
                                 <div className="flex">
                                     <div className="relative w-7 h-7">
-                                        <Image className="rounded-full" layout="fill" src={userProfileImg} />
+                                        <Image
+                                            className="rounded-full"
+                                            layout="fill"
+                                            src={userProfileImg}
+                                        />
                                     </div>
                                     <div className="ml-2">
                                         <div>{item.fullName}</div>
                                         <div className="font-normal text-xs">{item.username}</div>
-                                        <div className="font-medium text-xs text-orange-450">{item.email}</div>
+                                        <div className="font-medium text-xs text-orange-450">
+                                            {item.email}
+                                        </div>
                                     </div>
                                 </div>
                             </td>
@@ -311,5 +358,5 @@ export default function Buyers() {
                 </DataTable>
             </div>
         </>
-    )
+    );
 }
