@@ -104,7 +104,7 @@ export default function List() {
                         </div>
                         <div className="text-sm text-gray-500 mt-12">
                             {t(
-                                'Set a shipping threshold. In case order has reacted this amount, the shipping is free for this buyer.'
+                                'Set a shipping threshold. In case order has reacted this amount, the shipping is free for this buyer'
                             )}
                         </div>
                         <Formik

@@ -218,5 +218,12 @@
   "Add": "Add",
   "Start Time": "Start Time",
   "Scenario has been update": "Scenario has been successfully added to live session list!",
-  "Go live now!": "Go live now!"
+  "Go live now!": "Go live now!",
+  "List": "List",
+  "Shipping section allows merchant to manage shipping methods and prices for his buyers": "Shipping section allows merchant to manage shipping methods and prices for his buyers",
+  "Free shipping": "Free shipping",
+  "Shipping methods": "Shipping methods",
+  "Save changes": "Save changes",
+  "Empty": "Empty",
+  "Set a shipping threshold. In case order has reacted this amount, the shipping is free for this buyer": "Set a shipping threshold. In case order has reacted this amount, the shipping is free for this buyer"
 }
