@@ -1,10 +1,13 @@
 .pagination {
-  @apply text-xs font-bold flex text-gray-180 items-center;
+  @apply text-xs font-bold flex items-center;
 
-  .page-item, .page-item-next, .page-item-prev {
-    @apply px-3 py-1.5;
+  .page-item,
+  .page-item-next,
+  .page-item-prev {
+    @apply px-3 py-1.5 font-bold text-gray-350;
 
-    .page-link-prev, .page-link-next {
+    .page-link-prev,
+    .page-link-next {
       background-repeat: no-repeat;
       width: 6px;
       height: 10px;
@@ -13,7 +16,7 @@
   }
 
   .page-item.active {
-    @apply text-white bg-gray-350 rounded-lg;
+    @apply text-white bg-gray-350 rounded-lg py-2 px-4;
   }
 
   .page-item.disabled {
@@ -23,34 +26,35 @@
   }
 
   .page-item-next {
-    background-color: #F8F8F8;
-    @apply px-3 py-2.5 rounded-r-lg;
+    @apply px-3 py-2.5 rounded-r-lg relative;
+    background: url("../../public/images/next-arrow.svg") no-repeat center;
 
     .page-link-next {
-      background-image: url("../../public/images/next-arrow.svg");
+      @apply absolute w-full h-full top-0 left-0;
     }
   }
   .page-item-next.disabled {
-    @apply px-3 py-2.5 rounded-r-lg bg-white;
+    background: url("../../public/images/next-arrow-d.svg") no-repeat center;
 
-    .page-link-next {
-      background-image: url("../../public/images/next-arrow-d.svg");
+    .page-link-prev {
+      @apply absolute w-full h-full top-0 left-0;
     }
   }
 
   .page-item-prev {
-    background-color: #F8F8F8;
-    @apply px-3 py-2.5 rounded-l-lg;
+    @apply px-3 py-2.5 rounded-r-lg relative;
+    background: url("../../public/images/prev-arrow.svg") no-repeat center;
 
-    .page-link-prev {
-      background-image: url("../../public/images/prev-arrow.svg");
+    .page-link-next {
+      @apply absolute w-full h-full top-0 left-0;
     }
   }
+  
   .page-item-prev.disabled {
-    @apply px-3 py-2.5 rounded-l-lg bg-white;
+    background: url("../../public/images/prev-arrow-d.svg") no-repeat center;
 
     .page-link-prev {
-      background-image: url("../../public/images/prev-arrow-d.svg");
+      @apply absolute w-full h-full top-0 left-0;
     }
   }
 }
