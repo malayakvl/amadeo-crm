@@ -107,13 +107,6 @@ export default new class ShippingController {
             return res.status(200).json({ shippings: [] })
         }
 
-        const promises = shippings.map(async shipping => {
-            shipping.countries = await shippingModel.findCountriesById(shipping.id)
-
-        })
-
-        await Promise.all(promises)
-
         return res.status(200).json({ shippings })
 
     }
