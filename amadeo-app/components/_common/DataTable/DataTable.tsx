@@ -129,6 +129,8 @@ const DataTable: React.FC<Props> = ({
         setAllChecked(!allChecked);
     };
 
+    const totalPages = Math.ceil(totalAmount / limit)
+
     const handleSwitchAction = (checked: boolean) => {
         dispatch(setSwitchToggleAction(true));
         dispatch(setSwitchHeaderAction(checked));
@@ -266,10 +268,10 @@ const DataTable: React.FC<Props> = ({
                             <option value={100}>100</option>
                         </select>
                     </div>
-                    {Math.ceil(totalAmount / limit) > 1 && (
+                    {totalPages > 1 && (
                         <RawPagination
                             forcePage={offset && offset / limit}
-                            pageCount={Math.ceil(totalAmount / limit)}
+                            pageCount={totalPages}
                             onPageChange={setPage}
                         />
                     )}
