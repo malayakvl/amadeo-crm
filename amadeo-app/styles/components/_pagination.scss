@@ -17,6 +17,7 @@
 
   .page-item.active {
     @apply text-white bg-gray-350 rounded-lg py-2 px-4;
+    box-shadow: 0 10px 20px rgba(247, 109, 109, 0.2), inset 0px -4px 0px rgba(0, 0, 0, 0.1);
   }
 
   .page-item.disabled {
