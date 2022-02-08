@@ -10,6 +10,7 @@ declare namespace Chatbot {
         showForm: boolean;
         showedItems: number[];
         changeActiveStatus: boolean | null;
+        liveSessions: any[];
     }
 
     interface ChatbotItem {
