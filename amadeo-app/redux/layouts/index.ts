@@ -29,6 +29,7 @@ const initialState: State.Layouts = {
         },
         chatbot: { ...initPagination },
         shipping: { ...initPagination },
+        buyers: { ...initPagination },
         livesessions: {
             ...initPagination,
             filters: { status: [], duration: [], cart_duration: [], event_date: '' }

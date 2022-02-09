@@ -22,6 +22,9 @@
 .f-location {
   background-image: url("../../public/images/input-location.svg");
 }
+.f-search {
+  background-image: url("../../public/images/input-search.svg");
+}
 .f-key {
   background-image: url("../../public/images/input-key.svg");
 }
@@ -82,7 +85,26 @@
   background-repeat: no-repeat;
   @apply inline-block w-[16px] h-[14px] float-left mr-1.5 mt-0;
 }
-
+.icon-tbl-order {
+  background-image: url("../../public/images/icon-tbl-order.svg");
+  background-repeat: no-repeat;
+  @apply inline-block w-[16px] h-[14px] float-left mr-1.5 mt-0;
+}
+.icon-tbl-phone {
+  background-image: url("../../public/images/icon-tbl-phone.svg");
+  background-repeat: no-repeat;
+  @apply inline-block w-[16px] h-[14px] float-left mr-1.5 mt-0;
+}
+.icon-tbl-address {
+  background-image: url("../../public/images/icon-tbl-address.svg");
+  background-repeat: no-repeat;
+  @apply inline-block w-[16px] h-[14px] float-left mr-1.5 mt-0;
+}
+.icon-tbl-index {
+  background-image: url("../../public/images/icon-tbl-index.svg");
+  background-repeat: no-repeat;
+  @apply inline-block w-[16px] h-[14px] float-left mt-0;
+}
 .action-triangle {
   background-image: url("../../public/images/action-arrow.svg");
   background-repeat: no-repeat;
