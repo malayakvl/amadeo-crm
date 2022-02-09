@@ -9,10 +9,6 @@
       content: " ";
       background-image: url("../../public/images/dropdown-arrow.svg");
       background-repeat: no-repeat;
-      //display: inline-block;
-      //width: 14px;
-      //height: 8px;
-      //right: -5px;
       @apply absolute inline-block w-[14px] h-[8px] -right-0.5 top-1.5;
     }
   }
@@ -24,10 +20,6 @@
       background-image: url("../../public/images/action-arrow.svg");
       background-repeat: no-repeat;
       top: -10px;
-      //display: inline-block;
-      //width: 14px;
-      //height: 8px;
-      //right: -5px;
       @apply absolute inline-block w-[10px] h-[11px] -right-0.5;
     }
   }
@@ -51,14 +43,14 @@
 
     &:after {
       content: " ";
-      background-image: url("../../public/images/action-arrow.svg");
-      background-repeat: no-repeat;
       top: 0;
-      //display: inline-block;
-      //width: 14px;
-      //height: 8px;
-      //right: -5px;
-      @apply absolute inline-block w-[10px] h-[11px] -right-0.5;
+      background-image: url("../../public/images/icon-tbl-triangle.svg");
+      background-repeat: no-repeat;
+      @apply absolute inline-block w-[16px] h-[14px] -right-0.5;
+
+      //background-image: url("../../public/images/action-arrow.svg");
+      //background-repeat: no-repeat;
+      //@apply absolute inline-block w-[10px] h-[11px] -right-0.5;
     }
   }
 

@@ -228,5 +228,9 @@
   "Set a shipping threshold. In case order has reacted this amount, the shipping is free for this buyer": "Set a shipping threshold. In case order has reacted this amount, the shipping is free for this buyer",
   "Message": "Message",
   "Send": "Send",
-  "Schedule new session": "Schedule new session"
+  "Schedule new session": "Schedule new session",
+  "orders_descr": "Orders section should provide information for the merchant about his orders and their status. It should be a  table with filters so that merchant could search for needed orders and info. merchant should have bulk selection with checkboxes in order to change statuses of several orders at the same time.",
+  "Orders": "Orders",
+  "order_number": "Order number",
+  "Total": "Total"
 }

@@ -84,10 +84,10 @@ class ChatbotMessage {
             
             const promisesQuery = [];
             items.forEach(item => {
-                promisesQuery.push(this.createMessage(item));
+                promisesQuery.push(this.createOrder(item));
             });
-            await Promise.all(promisesQuery);
-            
+            const dataOrders = await Promise.all(promisesQuery);
+            console.log(dataOrders);
             return {
                 items,
                 error
@@ -114,6 +114,11 @@ class ChatbotMessage {
         }
     }
     
+    
+    async createOrder(item) {
+        return { success: true};
+    }
+    
     async createMessage(item) {
         const client = await pool.connect();
         try {
@@ -129,7 +134,7 @@ class ChatbotMessage {
                     'Create invoice #${moment().valueOf()}: item ${item.parcer_data.item}, qty ${item.parcer_data.quantity} '
                 );`;
             await client.query(messageQuery);
-            await client.query(`UPDATE data.live_sessions_messages SET order_status=true WHERE message_id='${item.message_id}'`);
+            // await client.query(`UPDATE data.live_sessions_messages SET order_status=true WHERE message_id='${item.message_id}'`);
             const items = [];
             const error = null;
             

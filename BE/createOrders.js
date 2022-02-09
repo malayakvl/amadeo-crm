@@ -1,8 +1,13 @@
 import axios from "axios";
+import 'dotenv/config';
+
+const apiUrl = process.env.API_URL;
+
 
 async function getParsedMessages() {
     console.log('here we are');
-    await axios('http://localhost:4000/api/create-orders')
+    
+    await axios(`${apiUrl}/api/create-orders`)
         .then((response) => {
             console.log(response.data);
         });
