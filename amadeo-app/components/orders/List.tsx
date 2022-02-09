@@ -53,7 +53,7 @@ const ListMessages: React.FC = () => {
                             </td>
                         </td>
                         <td>
-                            <i className="icon-tbl-triangle" style={{ marginTop: '5px'}} />
+                            <i className="icon-tbl-triangle" style={{ marginTop: '5px' }} />
                         </td>
                         <td className="order-number">{item.order_number}</td>
                         <td className="order-status">
@@ -97,7 +97,9 @@ const ListMessages: React.FC = () => {
                                 alt={''}
                             />
                         </td>
-                        <td className="order-date">1x <span className="red-yellow-gradient-text ">Some products</span></td>
+                        <td className="order-date">
+                            1x <span className="red-yellow-gradient-text ">Some products</span>
+                        </td>
                         <td>{item.total_amount} &euro;</td>
                         {/*<td>{item.product_cnt ? item.product_cnt : '-'}</td>*/}
                         {/*<td>{item.user_cnt ? item.user_cnt : '-'}</td>*/}
