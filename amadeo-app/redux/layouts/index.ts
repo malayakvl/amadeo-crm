@@ -32,6 +32,10 @@ const initialState: State.Layouts = {
         livesessions: {
             ...initPagination,
             filters: { status: [], duration: [], cart_duration: [], event_date: '' }
+        },
+        orders: {
+            ...initPagination,
+            filters: { product_name: '', color_id: [], size_id: [], price: [], quantity: [] }
         }
     },
     isSidebarOpen: true,

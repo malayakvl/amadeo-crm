@@ -8,7 +8,8 @@ export enum PaginationType {
     PRODUCTS = 'products',
     CHATBOT = 'chatbot',
     SHIPPING = 'shipping',
-    LIVESESSIONS = 'livesessions'
+    LIVESESSIONS = 'livesessions',
+    ORDERS = 'orders'
 }
 
 export const TableHeaders: { [key in PaginationType]: Type.DataTableHeader[] } = {
@@ -49,5 +50,17 @@ export const TableHeaders: { [key in PaginationType]: Type.DataTableHeader[] } =
         { titleKey: null, iconClass: 'icon-tbl-status' }
         // { titleKey: 'Participants', iconClass: 'icon-tbl-users' },
         // { titleKey: 'Products' }
+    ],
+    [PaginationType.ORDERS]: [
+        { iconClass: 'icon-tbl-triangle' },
+        { sortKey: 'order_number', iconClass: 'icon-tbl-order' },
+        { sortKey: 'status', iconClass: 'icon-tbl-status' },
+        { sortKey: 'created_at', iconClass: 'icon-tbl-date' },
+        { sortKey: 'user', titleKey: 'Shopper', iconClass: 'icon-tbl-users' },
+        { sortKey: 'country', iconClass: 'icon-tbl-country' },
+        { sortKey: 'country', iconClass: 'icon-tbl-sh-cart' },
+        { sortKey: 'payment', iconClass: 'icon-tbl-card' },
+        { titleKey: 'Products' },
+        { titleKey: 'Total' }
     ]
 };

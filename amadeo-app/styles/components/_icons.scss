@@ -72,6 +72,32 @@
   background-repeat: no-repeat;
   @apply inline-block w-[16px] h-[14px] float-left mr-1.5 mt-0;
 }
+.icon-tbl-country {
+  background-image: url("../../public/images/icon-tbl-country.svg");
+  background-repeat: no-repeat;
+  @apply inline-block w-[16px] h-[14px] float-left mr-1.5 mt-0;
+}
+.icon-tbl-sh-cart {
+  background-image: url("../../public/images/icon-tbl-sh-cart.svg");
+  background-repeat: no-repeat;
+  @apply inline-block w-[16px] h-[14px] float-left mr-1.5 mt-0;
+}
+.icon-tbl-card {
+  background-image: url("../../public/images/icon-tbl-card.svg");
+  background-repeat: no-repeat;
+  @apply inline-block w-[16px] h-[14px] float-left mr-1.5 mt-0;
+}
+.icon-tbl-order {
+  background-image: url("../../public/images/icon-tbl-order.svg");
+  background-repeat: no-repeat;
+  @apply inline-block w-[16px] h-[14px] float-left mr-1.5 mt-0;
+}
+.icon-tbl-triangle {
+  background-image: url("../../public/images/icon-tbl-triangle.svg");
+  background-repeat: no-repeat;
+  @apply inline-block w-[16px] h-[14px] float-left mr-1.5 mt-0;
+}
+
 .icon-tbl-cart {
   background-image: url("../../public/images/icon-tbl-cart.svg");
   background-repeat: no-repeat;
