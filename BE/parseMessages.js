@@ -1,31 +1,25 @@
 import axios from "axios";
+import 'dotenv/config';
+
+const apiUrl = process.env.API_URL;
+
 
 const getParseComment = (data) => {
     console.log(`parsing comment for live video id ${data.id}`);
-    axios(`http://localhost:4000/api/parse-live-messages?sessionId=${data.id}`)
+    axios(`${apiUrl}/api/parse-live-messages?sessionId=${data.id}`)
         .then((response) => {
             console.log(response.data.message);
-            // response.data.items.forEach(session => {
-            //     getActiveComment(session);
-            // })
         });
 }
 
 
-
 async function getActiveLiveSession() {
-    await axios('http://localhost:4000/api/fetch-live-sessions')
+    console.log(`${apiUrl}/api/fetch-live-sessions`);
+    await axios(`${apiUrl}/api/fetch-live-sessions`)
         .then((response) => {
-            response.data.items.forEach(session => {
+            response.data.items.forEach(async (session) => {
                 getParseComment(session);
             })
         });
-    // await axios('http://localhost:4000/api/parse-live-messages')
-    //     .then((response) => {
-    //         console.log(response.data.message);
-    //         // response.data.items.forEach(session => {
-    //         //     getActiveComment(session);
-    //         // })
-    //     });
 }
 setTimeout(await getActiveLiveSession, 10000);

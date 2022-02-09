@@ -227,5 +227,6 @@
   "Empty": "Empty",
   "Set a shipping threshold. In case order has reacted this amount, the shipping is free for this buyer": "Set a shipping threshold. In case order has reacted this amount, the shipping is free for this buyer",
   "Message": "Message",
-  "Send": "Send"
+  "Send": "Send",
+  "Schedule new session": "Schedule new session"
 }
