@@ -157,6 +157,7 @@ export const saveShippingAction: any = createAction(
                 }
             })
             .then(() => {
+                dispatch(fetchShippingAction(id)).then(() => dispatch(fetchShippingsAction()));
                 dispatch(setSuccessToastAction('Counties of the shipping has been saved'));
             });
     }
