@@ -54,7 +54,7 @@ export default function Index({ session }: { session: any }) {
                                 <button
                                     className="btn-big"
                                     onClick={() => dispatch(showPopupAction(true))}>
-                                    {t('Go live now!')}
+                                    {t('Schedule new session')}
                                 </button>
                             </div>
                         </div>

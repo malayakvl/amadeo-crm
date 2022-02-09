@@ -9,7 +9,8 @@ export enum PaginationType {
     CHATBOT = 'chatbot',
     SHIPPING = 'shipping',
     LIVESESSIONS = 'livesessions',
-    BUYERS = 'buyers'
+    BUYERS = 'buyers',
+    ORDERS = 'orders'
 }
 
 export const TableHeaders: { [key in PaginationType]: Type.DataTableHeader[] } = {
@@ -47,9 +48,9 @@ export const TableHeaders: { [key in PaginationType]: Type.DataTableHeader[] } =
         { titleKey: null, iconClass: 'icon-tbl-date' },
         { titleKey: 'Start Time', iconClass: 'icon-tbl-time' },
         // { titleKey: 'Duration cart', iconClass: 'icon-tbl-cart' },
-        { titleKey: null, iconClass: 'icon-tbl-status' },
-        { titleKey: 'Participants', iconClass: 'icon-tbl-users' },
-        { titleKey: 'Products' }
+        { titleKey: null, iconClass: 'icon-tbl-status' }
+        // { titleKey: 'Participants', iconClass: 'icon-tbl-users' },
+        // { titleKey: 'Products' }
     ],
     [PaginationType.BUYERS]: [
         { className: 'table-dropdown' },
@@ -59,5 +60,17 @@ export const TableHeaders: { [key in PaginationType]: Type.DataTableHeader[] } =
         { iconClass: 'icon-tbl-address', titleKey: 'Address' },
         { className: 'flex justify-center', iconClass: 'icon-tbl-order', titleKey: 'Orders' },
         { className: 'text-right', titleKey: 'Total Spent' }
+    ],
+    [PaginationType.ORDERS]: [
+        { iconClass: 'icon-tbl-triangle' },
+        { sortKey: 'order_number', iconClass: 'icon-tbl-order' },
+        { sortKey: 'status', iconClass: 'icon-tbl-status' },
+        { sortKey: 'created_at', iconClass: 'icon-tbl-date' },
+        { sortKey: 'user', titleKey: 'Shopper', iconClass: 'icon-tbl-users' },
+        { sortKey: 'country', iconClass: 'icon-tbl-country' },
+        { sortKey: 'country', iconClass: 'icon-tbl-sh-cart' },
+        { sortKey: 'payment', iconClass: 'icon-tbl-card' },
+        { titleKey: 'Products' },
+        { titleKey: 'Total' }
     ]
 };

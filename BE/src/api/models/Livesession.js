@@ -181,9 +181,13 @@ class Livesession {
     
     async create (userId, data) {
         const client = await pool.connect();
+        
+        const scenariosRes = await client.query(`SELECT ARRAY_AGG(id) AS ids FROM data.chatbot_scenarios WHERE user_id = ${userId}`);
+        console.log(scenariosRes.rows[0].ids);
+        
         const query =  `INSERT INTO data.live_sessions (user_id, event_date, event_time, scenarios, status)
                 VALUES (${userId}, '${data.event_date}', '${data.event_time}',
-                    '{${data.scenarios}}', 'scheduled'
+                    '{${scenariosRes.rows[0].ids}}', 'scheduled'
                 );`;
         try {
             await client.query(query);

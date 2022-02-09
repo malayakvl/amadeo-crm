@@ -184,3 +184,19 @@ td.translations {
   background-position: center;
   background-image: url("../../public/images/lang-icon.svg");
 }
+
+//table orders
+td.order-number {
+  @apply font-normal red-yellow-gradient-text;
+}
+td.order-date {
+  @apply font-normal;
+}
+td.order-status {
+  @apply font-normal text-[10px];
+
+  .new {
+    @apply rounded-lg p-1.5 text-green-250 bg-green-100 border-green-250;
+  }
+}
+
