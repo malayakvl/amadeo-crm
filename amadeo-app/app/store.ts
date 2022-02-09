@@ -16,6 +16,7 @@ import chatbotReducer from '../redux/chatbot/index';
 import livesessionsReducer from '../redux/livesessions/index';
 import countriesReducer from '../redux/countries/index';
 import shippingReducer from '../redux/shipping/index';
+import ordersReducer from '../redux/orders/index';
 
 const reducers = combineReducers({
     // address: addressReducer,
@@ -27,7 +28,8 @@ const reducers = combineReducers({
     chatbot: chatbotReducer,
     livesessions: livesessionsReducer,
     countries: countriesReducer,
-    shippings: shippingReducer
+    shippings: shippingReducer,
+    orders: ordersReducer
 });
 
 const initStore = (initialState = {}) => {

@@ -104,7 +104,7 @@ export default function List() {
                         </div>
                         <div className="text-sm text-gray-500 mt-12">
                             {t(
-                                'Set a shipping threshold. In case order has reacted this amount, the shipping is free for this buyer.'
+                                'Set a shipping threshold. In case order has reacted this amount, the shipping is free for this buyer'
                             )}
                         </div>
                         <Formik
@@ -184,12 +184,12 @@ export default function List() {
                                                 {/* <div className="border-l-2 h-4 relative left-[5px]" /> */}
                                             </>
                                         ) : (
-                                            <Image
-                                                width="12"
-                                                height="14"
-                                                src={`/images/action-arrow.svg`}
-                                            />
-                                        )}
+                                                <Image
+                                                    width="12"
+                                                    height="14"
+                                                    src={`/images/action-arrow.svg`}
+                                                />
+                                            )}
                                     </button>
                                 </td>
 
@@ -251,23 +251,23 @@ export default function List() {
                                                         </div>
                                                     ))
                                                 ) : (
-                                                    <div className="flex mb-1">
-                                                        <Image
-                                                            width="34"
-                                                            height="24"
-                                                            src={'/images/en-flag.svg'}
-                                                        />
-                                                        <div className="ml-auto">
-                                                            {item.countries[0].price}
+                                                        <div className="flex mb-1">
+                                                            <Image
+                                                                width="34"
+                                                                height="24"
+                                                                src={'/images/en-flag.svg'}
+                                                            />
+                                                            <div className="ml-auto">
+                                                                {item.countries[0].price}
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                )}
+                                                    )}
                                             </>
                                         ) : (
-                                            <div className="text-gray-400 text-sm">
-                                                {t('Empty')}
-                                            </div>
-                                        )}
+                                                <div className="text-gray-400 text-sm">
+                                                    {t('Empty')}
+                                                </div>
+                                            )}
                                     </td>
                                 )}
 

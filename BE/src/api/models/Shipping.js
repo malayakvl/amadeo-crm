@@ -5,7 +5,30 @@ class Shipping {
     async fetchAll() {
         const client = await pool.connect();
         try {
-            const query = `SELECT * FROM data.shipping ORDER BY id`
+            const query = `
+                SELECT
+                    s.id,
+                    s.name,
+                    s.image,
+                    s.status,
+                    s.created_at,
+                    s2c.shipping_to_country__info AS countries
+                    FROM data.shipping s LEFT JOIN LATERAL (
+                        SELECT
+                            s.id AS shipping_id,
+                            json_agg(
+                                json_build_object(
+                                    'country_id', s2c.country_id,
+                                    'price', s2c.price
+                                )
+                            ) AS shipping_to_country__info
+                        FROM data.shipping_to_country s2c
+                        WHERE TRUE
+                            AND (s2c.shipping_id = s.id)
+                        GROUP BY
+                            s.id
+                    ) s2c ON (s.id = s2c.shipping_id)
+            `
             const res = await client.query(query);
             return res.rows.length ? res.rows : null;
         } catch (e) {
@@ -42,9 +65,24 @@ class Shipping {
                             AND (cds.shipping_id = s.id)
                     )
                 ) AS status,
-                s.created_at
-                FROM data.shipping s WHERE s.status = true ORDER BY id
-
+                s.created_at,
+                COALESCE(s2c.shipping_to_country__info, '[]'::json) AS countries
+            FROM data.shipping s LEFT JOIN LATERAL (
+                SELECT
+                    s.id AS shipping_id,
+                    json_agg(
+                        json_build_object(
+                            'country_id', s2c.country_id,
+                            'price', s2c.price
+                        )
+                    ) AS shipping_to_country__info
+                FROM data.shipping_to_country s2c
+                WHERE TRUE
+                    AND (s2c.shipping_id = s.id)
+                GROUP BY
+                    s.id
+            ) s2c ON (s.id = s2c.shipping_id)
+            ;
             `
             const res = await client.query(query);
 
@@ -263,7 +301,7 @@ class Shipping {
 
             if (!status) {
                 query =
-                `INSERT INTO data.customer_disabled_shipping (user_id, shipping_id) VALUES($1, $2)`;
+                    `INSERT INTO data.customer_disabled_shipping (user_id, shipping_id) VALUES($1, $2)`;
             }
 
             await client.query(query, [customerId, shippingId]);
@@ -342,7 +380,7 @@ class Shipping {
             }
 
             return false;
-            
+
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
                 logger.log(

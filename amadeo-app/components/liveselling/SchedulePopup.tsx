@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { toggleModalPopup } from '../../lib/functions';
 import { useTranslations } from 'next-intl';
 import { useDispatch, useSelector } from 'react-redux';
-import { scenariosSelector, showPopupSelector } from '../../redux/livesessions/selectors';
+import { showPopupSelector } from '../../redux/livesessions/selectors';
 import { showPopupAction } from '../../redux/livesessions';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -17,10 +17,10 @@ const SchedulePopup: React.FC<any> = () => {
     const t = useTranslations();
     const dispatch = useDispatch();
     const showModal = useSelector(showPopupSelector);
-    const scenarios = useSelector(scenariosSelector);
+    // const scenarios = useSelector(scenariosSelector);
     const [startDate, setStartDate] = useState(new Date());
     const [startTime, setStartTime] = useState(moment().format('HH:mm'));
-    const [selectedScenarios, setSelectedScenarios] = useState<number[]>([]);
+    // const [selectedScenarios, setSelectedScenarios] = useState<number[]>([]);
 
     useEffect(() => {
         if (showModal) {
@@ -28,18 +28,18 @@ const SchedulePopup: React.FC<any> = () => {
         }
     }, [dispatch, showModal]);
 
-    const updateScenarios = (id: number) => {
-        const _scenarios = selectedScenarios;
-        if (_scenarios.includes(id)) {
-            const index = _scenarios.findIndex((v: any) => v === id);
-            if (index >= 0) {
-                _scenarios.splice(index, 1);
-            }
-        } else {
-            _scenarios.push(id);
-        }
-        setSelectedScenarios(_scenarios);
-    };
+    // const updateScenarios = (id: number) => {
+    //     const _scenarios = selectedScenarios;
+    //     if (_scenarios.includes(id)) {
+    //         const index = _scenarios.findIndex((v: any) => v === id);
+    //         if (index >= 0) {
+    //             _scenarios.splice(index, 1);
+    //         }
+    //     } else {
+    //         _scenarios.push(id);
+    //     }
+    //     setSelectedScenarios(_scenarios);
+    // };
     const SubmitSchema = Yup.object().shape({});
 
     return (
@@ -78,7 +78,7 @@ const SchedulePopup: React.FC<any> = () => {
                                     sessionData.event_date = moment(startDate).format('YYYY-MM-DD');
                                     // sessionData.event_time = moment(startTime).format('HH:mm');
                                     sessionData.event_time = startTime;
-                                    sessionData.scenarios = selectedScenarios;
+                                    // sessionData.scenarios = selectedScenarios;
                                     if ((values as any).id) {
                                         sessionData.id = (values as any).id;
                                     }
@@ -87,7 +87,7 @@ const SchedulePopup: React.FC<any> = () => {
                                 {(props) => {
                                     return (
                                         <form onSubmit={props.handleSubmit}>
-                                            <div className="grid grid-cols-2 gap-4">
+                                            <div className="grid grid-cols-1">
                                                 <div>
                                                     <span className="block text-gray-350 text-[18px] font-bold mb-5">
                                                         Choose a date
@@ -124,44 +124,44 @@ const SchedulePopup: React.FC<any> = () => {
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div>
-                                                    <span className="block text-gray-350 text-[18px] font-bold mb-5">
-                                                        Available scenarios
-                                                    </span>
-                                                    <table className="float-table overflow-auto">
-                                                        <tbody>
-                                                            {scenarios?.map(
-                                                                (
-                                                                    item: Livesessions.DataScenario
-                                                                ) => (
-                                                                    <tr
-                                                                        className="text-xs"
-                                                                        key={item.id}>
-                                                                        <td>
-                                                                            <label
-                                                                                htmlFor={`scen_${item.id}`}
-                                                                                className="flex items-center cursor-pointer relative mt-1">
-                                                                                <input
-                                                                                    type="checkbox"
-                                                                                    id={`scen_${item.id}`}
-                                                                                    className="sr-only"
-                                                                                    value={`switcher_${item.id}`}
-                                                                                    onChange={() =>
-                                                                                        updateScenarios(
-                                                                                            item.id
-                                                                                        )
-                                                                                    }
-                                                                                />
-                                                                                <div className="toggle-bg bg-gray-200 border border-gray-200 rounded-full dark:bg-gray-700 dark:border-gray-600]" />
-                                                                            </label>
-                                                                        </td>
-                                                                        <td>{item.name}</td>
-                                                                    </tr>
-                                                                )
-                                                            )}
-                                                        </tbody>
-                                                    </table>
-                                                </div>
+                                                {/*<div>*/}
+                                                {/*    <span className="block text-gray-350 text-[18px] font-bold mb-5">*/}
+                                                {/*        Available scenarios*/}
+                                                {/*    </span>*/}
+                                                {/*    <table className="float-table overflow-auto">*/}
+                                                {/*        <tbody>*/}
+                                                {/*            {scenarios?.map(*/}
+                                                {/*                (*/}
+                                                {/*                    item: Livesessions.DataScenario*/}
+                                                {/*                ) => (*/}
+                                                {/*                    <tr*/}
+                                                {/*                        className="text-xs"*/}
+                                                {/*                        key={item.id}>*/}
+                                                {/*                        <td>*/}
+                                                {/*                            <label*/}
+                                                {/*                                htmlFor={`scen_${item.id}`}*/}
+                                                {/*                                className="flex items-center cursor-pointer relative mt-1">*/}
+                                                {/*                                <input*/}
+                                                {/*                                    type="checkbox"*/}
+                                                {/*                                    id={`scen_${item.id}`}*/}
+                                                {/*                                    className="sr-only"*/}
+                                                {/*                                    value={`switcher_${item.id}`}*/}
+                                                {/*                                    onChange={() =>*/}
+                                                {/*                                        updateScenarios(*/}
+                                                {/*                                            item.id*/}
+                                                {/*                                        )*/}
+                                                {/*                                    }*/}
+                                                {/*                                />*/}
+                                                {/*                                <div className="toggle-bg bg-gray-200 border border-gray-200 rounded-full dark:bg-gray-700 dark:border-gray-600]" />*/}
+                                                {/*                            </label>*/}
+                                                {/*                        </td>*/}
+                                                {/*                        <td>{item.name}</td>*/}
+                                                {/*                    </tr>*/}
+                                                {/*                )*/}
+                                                {/*            )}*/}
+                                                {/*        </tbody>*/}
+                                                {/*    </table>*/}
+                                                {/*</div>*/}
                                             </div>
                                             <div className="flex justify-center">
                                                 <button

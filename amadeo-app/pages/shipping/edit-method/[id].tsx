@@ -76,7 +76,9 @@ export default function EditMethod() {
                             formData.append('logo', values.logo);
                             formData.append('name', values.name);
 
-                            dispatch(updateShippingAction(id, formData));
+                            dispatch(updateShippingAction(id, formData)).then(() =>
+                                router.push('/shipping/list')
+                            );
                         }}
                         render={(props) => (
                             <form
@@ -153,7 +155,9 @@ export default function EditMethod() {
                             })}
                             initialValues={{ countries: shipping.countries }}
                             onSubmit={(values) =>
-                                dispatch(saveShippingAction(id, values.countries))
+                                dispatch(saveShippingAction(id, values.countries)).then(() =>
+                                    router.push('/shipping/list')
+                                )
                             }
                             render={({ values }) => (
                                 <Form>

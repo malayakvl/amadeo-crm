@@ -68,14 +68,8 @@ export default new class ShippingController {
             let shipping = await shippingModel.findByName(name)
 
             if (!shipping || (shipping && shipping.id == id)) {
-                if (shipping) {
-                    shippingModel.update(id, name, req.file ? `/uploads/shipping/${req.file.filename}` : shipping.image)
-                    return res.status(200).json({});
-
-                }
-
                 shipping = await shippingModel.findById(id)
-                shippingModel.update(id, name, shipping.image)
+                shippingModel.update(id, name, req.file ? `/uploads/shipping/${req.file.filename}` : shipping.image)
                 return res.status(200).json({});
 
             }
@@ -112,13 +106,6 @@ export default new class ShippingController {
         if (!shippings || !shippings.length) {
             return res.status(200).json({ shippings: [] })
         }
-
-        const promises = shippings.map(async shipping => {
-            shipping.countries = await shippingModel.findCountriesById(shipping.id)
-
-        })
-
-        await Promise.all(promises)
 
         return res.status(200).json({ shippings })
 
