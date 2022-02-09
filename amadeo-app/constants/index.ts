@@ -9,6 +9,7 @@ export enum PaginationType {
     CHATBOT = 'chatbot',
     SHIPPING = 'shipping',
     LIVESESSIONS = 'livesessions',
+    BUYERS = 'buyers',
     ORDERS = 'orders'
 }
 
@@ -35,8 +36,8 @@ export const TableHeaders: { [key in PaginationType]: Type.DataTableHeader[] } =
         { titleKey: null, className: 'actions' }
     ],
     [PaginationType.SHIPPING]: [
-        { className: 'shipping-dropdown' },
-        { className: 'shipping-number' },
+        { className: 'table-dropdown' },
+        { className: 'table-number' },
         { titleKey: 'Shipping Method' },
         { className: 'shipping-logo' },
         { className: 'option-switcher' },
@@ -50,6 +51,15 @@ export const TableHeaders: { [key in PaginationType]: Type.DataTableHeader[] } =
         { titleKey: null, iconClass: 'icon-tbl-status' }
         // { titleKey: 'Participants', iconClass: 'icon-tbl-users' },
         // { titleKey: 'Products' }
+    ],
+    [PaginationType.BUYERS]: [
+        { className: 'table-dropdown' },
+        { className: 'flex justify-center', iconClass: 'icon-tbl-index' },
+        { iconClass: 'icon-tbl-users', titleKey: 'Shopper' },
+        { className: 'flex justify-center', iconClass: 'icon-tbl-phone' },
+        { iconClass: 'icon-tbl-address', titleKey: 'Address' },
+        { className: 'flex justify-center', iconClass: 'icon-tbl-order', titleKey: 'Orders' },
+        { className: 'text-right', titleKey: 'Total Spent' }
     ],
     [PaginationType.ORDERS]: [
         { iconClass: 'icon-tbl-triangle' },
