@@ -23,7 +23,11 @@ export const TableHeaders: { [key in PaginationType]: Type.DataTableHeader[] } =
         { titleKey: 'Price', className: 'inventory-price' },
         { titleKey: 'Actions', className: 'Actions' }
     ],
-    [PaginationType.NOTIFICATIONS]: [],
+    [PaginationType.NOTIFICATIONS]: [
+        { iconClass: 'icon-tbl-users', titleKey: 'Shopper' },
+        { iconClass: 'icon-tbl-notification', titleKey: 'Notification'},
+        {}
+    ],
     [PaginationType.CHATBOT]: [
         { titleKey: null, className: 'option-switcher' },
         { sortKey: 'scenario', titleKey: 'Scenario', iconClass: 'scenario' },
