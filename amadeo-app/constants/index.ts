@@ -46,8 +46,8 @@ export const TableHeaders: { [key in PaginationType]: Type.DataTableHeader[] } =
         { titleKey: null, iconClass: 'icon-tbl-date' },
         { titleKey: 'Start Time', iconClass: 'icon-tbl-time' },
         // { titleKey: 'Duration cart', iconClass: 'icon-tbl-cart' },
-        { titleKey: null, iconClass: 'icon-tbl-status' },
-        { titleKey: 'Participants', iconClass: 'icon-tbl-users' },
-        { titleKey: 'Products' }
+        { titleKey: null, iconClass: 'icon-tbl-status' }
+        // { titleKey: 'Participants', iconClass: 'icon-tbl-users' },
+        // { titleKey: 'Products' }
     ]
 };

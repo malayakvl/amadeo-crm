@@ -2,21 +2,21 @@ import Head from 'next/head';
 import { getSession } from 'next-auth/client';
 import React from 'react';
 import { useTranslations } from 'next-intl';
-import { ChatbotForm, DefaultMessages, ListMessages } from '../../components/chatbot/index';
-import { useSelector, useDispatch } from 'react-redux';
-import { showFormSelector } from '../../redux/chatbot/selectors';
-import { setEmptyFormAction, showFormAction } from '../../redux/chatbot';
+import { DefaultMessages } from '../../components/chatbot/index';
+// import { useSelector, useDispatch } from 'react-redux';
+// import { showFormSelector } from '../../redux/chatbot/selectors';
+// import { setEmptyFormAction, showFormAction } from '../../redux/chatbot';
 
 export default function Index({ session }: { session: any }) {
     if (!session) return <></>;
     const t = useTranslations();
-    const dispatch = useDispatch();
-    const showForm = useSelector(showFormSelector);
+    // const dispatch = useDispatch();
+    // const showForm = useSelector(showFormSelector);
 
-    const handleShowForm = () => {
-        dispatch(setEmptyFormAction());
-        dispatch(showFormAction(!showForm));
-    };
+    // const handleShowForm = () => {
+    //     dispatch(setEmptyFormAction());
+    //     dispatch(showFormAction(!showForm));
+    // };
 
     return (
         <>
@@ -42,28 +42,28 @@ export default function Index({ session }: { session: any }) {
             <div className="block-white-8 mr-10 white-shadow-medium mt-10">
                 <DefaultMessages />
 
-                <div className="flex border border-l-0 border-r-0 border-t-0 pb-5 mb-10 mt-10">
-                    <h2 className="dark-blue-header w-full">
-                        {t('User created Replies')}
-                        <span className="text-gray-180 font-normal text-sm">
-                            {' '}
-                            (987,652 Results)
-                        </span>
-                        <div className="float-right text-right">
-                            <button className="gradient-btn" onClick={() => handleShowForm()}>
-                                <span>{t('Add a new Reply')}</span>
-                            </button>
-                        </div>
-                    </h2>
-                </div>
+                {/*<div className="flex border border-l-0 border-r-0 border-t-0 pb-5 mb-10 mt-10">*/}
+                {/*    <h2 className="dark-blue-header w-full">*/}
+                {/*        {t('User created Replies')}*/}
+                {/*        <span className="text-gray-180 font-normal text-sm">*/}
+                {/*            {' '}*/}
+                {/*            (987,652 Results)*/}
+                {/*        </span>*/}
+                {/*        <div className="float-right text-right">*/}
+                {/*            <button className="gradient-btn" onClick={() => handleShowForm()}>*/}
+                {/*                <span>{t('Add a new Reply')}</span>*/}
+                {/*            </button>*/}
+                {/*        </div>*/}
+                {/*    </h2>*/}
+                {/*</div>*/}
 
-                {showForm && (
-                    <div className="shadow-border">
-                        <ChatbotForm />
-                    </div>
-                )}
+                {/*{showForm && (*/}
+                {/*    <div className="shadow-border">*/}
+                {/*        <ChatbotForm />*/}
+                {/*    </div>*/}
+                {/*)}*/}
 
-                <ListMessages />
+                {/*<ListMessages />*/}
             </div>
         </>
     );
