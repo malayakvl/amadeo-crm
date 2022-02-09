@@ -6,6 +6,7 @@ declare namespace Layouts {
             chatbot: Pagination;
             shipping: Pagination;
             livesessions: Pagination;
+            paymentstransactions: Pagination;
         };
         isSidebarOpen: boolean;
         isDataLoading: boolean;

@@ -14,13 +14,13 @@ const PaymentMethods: React.FC = () => {
             id: 123,
             name: 'Method_1_name',
             icon: faAmazon,
-            active: false
+            active: true
         },
         {
             id: 124,
             name: 'Method_2_name',
             icon: faPaypal,
-            active: false
+            active: true
         },
         {
             id: 125,

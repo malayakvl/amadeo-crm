@@ -32,7 +32,8 @@ const initialState: State.Layouts = {
         livesessions: {
             ...initPagination,
             filters: { status: [], duration: [], cart_duration: [], event_date: '' }
-        }
+        },
+        paymentstransactions: { ...initPagination }
     },
     isSidebarOpen: true,
     isDataLoading: false,
