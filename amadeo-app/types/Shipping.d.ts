@@ -1,5 +1,5 @@
 interface Shipping {
-    countries: Array<{ id: number; price: number }>;
+    countries: Array<{ id: number; price: number; iso: string }>;
     id: number;
     name: string;
     image: string;
