@@ -50,7 +50,7 @@ export default function EditMethod() {
     }, [id]);
 
     if (!shipping || shipping.id != id) {
-        return 'Loading';
+        return <></>;
     }
 
     return (

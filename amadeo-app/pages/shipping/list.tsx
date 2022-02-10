@@ -80,7 +80,7 @@ export default function List() {
     }, [user]);
 
     if (!countries.length || !threshold) {
-        return 'Loading';
+        return <></>;
     }
 
     return (
