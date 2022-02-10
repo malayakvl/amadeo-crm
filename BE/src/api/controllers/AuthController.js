@@ -95,6 +95,12 @@ class AuthController {
 
         invitationModel.deactivate(invitation.id)
 
+        sendMail(
+            user.email,
+            'Proshop',
+            `Your email was successfully verified!`
+        );
+
         return res.status(200).json({ user })
 
     }
@@ -122,7 +128,7 @@ class AuthController {
 
         sendMail(
             data.email,
-            'Amadeo CRM - Registration',
+            'Proshop',
             `
             Welcome at Proshop, (${data.email})! \n
             Here’s the verification link - <a href='${link}'>${link}</a> \n
