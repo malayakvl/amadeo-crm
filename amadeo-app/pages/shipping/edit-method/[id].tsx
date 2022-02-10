@@ -150,6 +150,10 @@ export default function EditMethod() {
 
                                                     return item?.toString().length < 10;
                                                 })
+                                                .test(
+                                                    'is_positive',
+                                                    'The number must be positive',
+                                                    (value) => value !== undefined && value > 0)
                                                 .typeError('Price must be number')
                                         })
                                     )
@@ -159,8 +163,8 @@ export default function EditMethod() {
                                     let dublicate = false
                                     values.countries.forEach((country: any, index: number) => {
                                         values.countries.forEach((_country: any, _index: number) => {
-                                            if (_country.id == country.id && _index !== index){
-                                                dublicate = true      
+                                            if (_country.id == country.id && _index !== index) {
+                                                dublicate = true
                                             }
                                         })
                                     })
