@@ -9,8 +9,8 @@ export enum PaginationType {
     CHATBOT = 'chatbot',
     SHIPPING = 'shipping',
     LIVESESSIONS = 'livesessions',
-    // PAYMENTS_TRANSACTIONS = 'chatbot'
     PAYMENTS_TRANSACTIONS = 'paymentstransactions',
+    PAYMENTS_TRANSACTION_DETAILS = 'paymentstransactiondetails',
     BUYERS = 'buyers',
     ORDERS = 'orders'
 }
@@ -55,20 +55,16 @@ export const TableHeaders: { [key in PaginationType]: Type.DataTableHeader[] } =
         // { titleKey: 'Products' }
     ],
     [PaginationType.PAYMENTS_TRANSACTIONS]: [
-        { titleKey: null },
-        { titleKey: null, sortKey: 'id', iconClass: 'icon-tbl-order' }, // 'Id'
+        { titleKey: null, iconClass: 'icon-tbl-order', className: 'flex justify-center' },
         { titleKey: null, iconClass: 'icon-tbl-date' },
-        { titleKey: null, sortKey: 'order', iconClass: 'icon-tbl-order' }, //'Order'
+        { titleKey: null, iconClass: 'icon-tbl-order', className: 'flex justify-center' },
         { titleKey: 'Shopper', iconClass: 'icon-tbl-users' },
-        { titleKey: null, sortKey: 'paymentMethod', iconClass: 'icon-tbl-amount' },
-        { titleKey: 'Total' },
-        { titleKey: null, className: 'w-1' }
-        { titleKey: null, iconClass: 'icon-tbl-status' }
-        // { titleKey: 'Participants', iconClass: 'icon-tbl-users' },
-        // { titleKey: 'Products' }
+        { titleKey: null, iconClass: 'icon-tbl-amount', className: 'flex justify-center' },
+        { titleKey: 'Total', className: 'text-right' },
+        { titleKey: null }
     ],
+    [PaginationType.PAYMENTS_TRANSACTION_DETAILS]: [],
     [PaginationType.BUYERS]: [
-        { className: 'table-dropdown' },
         { className: 'flex justify-center', iconClass: 'icon-tbl-index' },
         { iconClass: 'icon-tbl-users', titleKey: 'Shopper' },
         { className: 'flex justify-center', iconClass: 'icon-tbl-phone' },

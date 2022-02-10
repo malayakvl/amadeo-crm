@@ -2,8 +2,7 @@ import { useTranslations } from 'next-intl';
 import { useState, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { setSuccessToastAction } from '../../redux/layouts';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAmazon, faPaypal, faBitcoin } from '@fortawesome/free-brands-svg-icons';
+import Image from 'next/image';
 
 const PaymentMethods: React.FC = () => {
     const t = useTranslations();
@@ -13,20 +12,32 @@ const PaymentMethods: React.FC = () => {
         {
             id: 123,
             name: 'Method_1_name',
-            icon: faAmazon,
+            icon: '/images/payments/amex.svg',
             active: true
         },
         {
             id: 124,
             name: 'Method_2_name',
-            icon: faPaypal,
+            icon: '/images/payments/amazon.svg',
             active: true
         },
         {
             id: 125,
             name: 'Method_3_name',
-            icon: faBitcoin,
+            icon: '/images/payments/bitcoin.svg',
             active: false
+        },
+        {
+            id: 126,
+            name: 'Method_4_name',
+            icon: '/images/payments/paypal.svg',
+            active: true
+        },
+        {
+            id: 127,
+            name: 'Method_5_name',
+            icon: '/images/payments/visa.svg',
+            active: true
         }
     ]);
 
@@ -40,7 +51,12 @@ const PaymentMethods: React.FC = () => {
             {paymentMethods?.map((paymentMethod) => (
                 <div key={paymentMethod.id} className="flex space-x-2 items-center mb-2">
                     <div className="flex-none w-7 h-auto">
-                        <FontAwesomeIcon icon={paymentMethod.icon} size="2x" />
+                        <Image
+                            width="46"
+                            height="32"
+                            src={paymentMethod.icon}
+                            className="text-orange-450"
+                        />
                     </div>
                     <div className="h-auto flex-grow">{paymentMethod.name}</div>
                     <div className="flex-none text-right">
@@ -54,7 +70,7 @@ const PaymentMethods: React.FC = () => {
                                     setPaymentMethods([...paymentMethods]);
                                 }}
                             />
-                            <div className="toggle-bg bg-gray-200 border border-gray-200 rounded-full dark:bg-gray-700 dark:border-gray-600 w-11 h-6" />
+                            <div className="toggle-bg bg-gray-200 border border-gray-200 rounded-full dark:bg-gray-700 dark:border-gray-600 w-11 h-6 shadow-inner" />
                         </label>
                     </div>
                 </div>
