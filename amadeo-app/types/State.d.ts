@@ -11,6 +11,7 @@ declare namespace State {
         countries: Countries;
         shippings: Shippings;
         livesessions: Livesessions;
+        orders: Orders;
     }
 
     type Address = Address.Root;
@@ -27,4 +28,5 @@ declare namespace State {
     };
     type Shippings = Array<Shipping>;
     type Livesessions = Livesessions.Root;
+    type Orders = Orders.Root;
 }

@@ -29,9 +29,14 @@ const initialState: State.Layouts = {
         },
         chatbot: { ...initPagination },
         shipping: { ...initPagination },
+        buyers: { ...initPagination },
         livesessions: {
             ...initPagination,
             filters: { status: [], duration: [], cart_duration: [], event_date: '' }
+        },
+        orders: {
+            ...initPagination,
+            filters: { product_name: '', color_id: [], size_id: [], price: [], quantity: [] }
         }
     },
     isSidebarOpen: true,

@@ -79,7 +79,7 @@ export default function List() {
         }
     }, [user]);
 
-    if (!countries.length || threshold === false) {
+    if (!countries.length || !threshold) {
         return 'Loading';
     }
 

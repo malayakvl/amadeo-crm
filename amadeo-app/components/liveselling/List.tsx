@@ -26,8 +26,8 @@ const ListMessages: React.FC = () => {
                         <td>{moment(item.event_date).format('DD.MM.YYYY')}</td>
                         <td>{item.event_time}</td>
                         <td>{item.status}</td>
-                        <td>{item.product_cnt ? item.product_cnt : '-'}</td>
-                        <td>{item.user_cnt ? item.user_cnt : '-'}</td>
+                        {/*<td>{item.product_cnt ? item.product_cnt : '-'}</td>*/}
+                        {/*<td>{item.user_cnt ? item.user_cnt : '-'}</td>*/}
                     </tr>
                 ))}
             </DataTable>
