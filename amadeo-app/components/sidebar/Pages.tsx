@@ -26,7 +26,7 @@ export default function Pages() {
                         href="https://www.liveproshop.com/terms-and-conditions"
                         target="_blank"
                         rel="noreferrer">
-                        <a>Terms</a>
+                        Terms
                     </a>
                 </li>
             </ul>

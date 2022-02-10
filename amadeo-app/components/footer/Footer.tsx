@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import moment from 'moment';
 
 export default function Footer() {
     return (
@@ -98,7 +99,7 @@ export default function Footer() {
                                 Terms
                             </a>
                         </div>
-                        <div className="text-white">@ 2021 Liveproshop</div>
+                        <div className="text-white">@ {moment().format('YYYY')} Liveproshop</div>
                     </div>
                 </div>
             </div>
