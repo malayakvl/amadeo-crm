@@ -131,139 +131,143 @@ export default function EditMethod() {
                         )}
                     />
                 ) : (
-                        <div className="ml-8 w-full p-4 bg-gray-100 rounded-lg shadow-inner">
-                            <div className="mb-4 font-bold text-gray-350 text-lg py-4 border-b border-gray-200">
-                                {t('Apply Countries')}
-                            </div>
-
-                            <Formik
-                                validationSchema={Yup.object().shape({
-                                    countries: Yup.array().of(
-                                        Yup.object().shape({
-                                            id: Yup.number().required(t('Required field')),
-                                            price: Yup.number()
-                                                .required(t('Required field'))
-                                                .test('len', t('Must be less characters'), (item) => {
-                                                    if (!item) {
-                                                        return true;
-                                                    }
-
-                                                    return item?.toString().length < 10;
-                                                })
-                                                .test(
-                                                    'is_positive',
-                                                    'The number must be positive',
-                                                    (value) => value !== undefined && value > 0)
-                                                .typeError('Price must be number')
-                                        })
-                                    )
-                                })}
-                                initialValues={{ countries: shipping.countries }}
-                                onSubmit={(values) => {
-                                    let dublicate = false
-                                    values.countries.forEach((country: any, index: number) => {
-                                        values.countries.forEach((_country: any, _index: number) => {
-                                            if (_country.id == country.id && _index !== index) {
-                                                dublicate = true
-                                            }
-                                        })
-                                    })
-
-                                    if (dublicate) {
-                                        dispatch(setErrorToastAction(t(`Please remove dublicates from the list`)))
-                                        return
-
-                                    }
-
-                                    dispatch(saveShippingAction(id, values.countries)).then(() =>
-                                        router.push('/shipping/list')
-                                    )
-                                }}
-                                render={({ values }) => (
-                                    <Form>
-                                        <FieldArray
-                                            name="countries"
-                                            render={(arrayHelpers) => (
-                                                <div>
-                                                    {values.countries.map(
-                                                        (country: any, index: number) => (
-                                                            <div key={index}>
-                                                                <div className="my-4 flex items-center justify-start w-1/2">
-                                                                    <div className="w-full">
-                                                                        <Field
-                                                                            className="form-control"
-                                                                            as="select"
-                                                                            name={`countries.${index}.id`}>
-                                                                            <option value="">
-                                                                                ...
-                                                                        </option>
-                                                                            {countries.map(
-                                                                                (country: any) => (
-                                                                                    <option
-                                                                                        key={country.id}
-                                                                                        value={
-                                                                                            country.id
-                                                                                        }>
-                                                                                        {
-                                                                                            country.nicename
-                                                                                        }
-                                                                                    </option>
-                                                                                )
-                                                                            )}
-                                                                        </Field>
-                                                                        <div className="error-el">
-                                                                            <ErrorMessage
-                                                                                name={`countries.${index}.id`}
-                                                                            />
-                                                                        </div>
-                                                                    </div>
-                                                                    <div className="ml-4">
-                                                                        <Field
-                                                                            className="form-control"
-                                                                            name={`countries.${index}.price`}
-                                                                            placeholder={'Price'}
-                                                                            value={country.price}
-                                                                        />
-                                                                        <div className="error-el">
-                                                                            <ErrorMessage
-                                                                                name={`countries.${index}.price`}
-                                                                            />
-                                                                        </div>
-                                                                    </div>
-
-                                                                    <button
-                                                                        type="button"
-                                                                        onClick={() =>
-                                                                            arrayHelpers.remove(index)
-                                                                        }
-                                                                        className="ml-4 disabled-btn">
-                                                                        {t('Delete')}
-                                                                    </button>
-                                                                </div>
-                                                            </div>
-                                                        )
-                                                    )}
-                                                    <button
-                                                        type="button"
-                                                        onClick={() =>
-                                                            arrayHelpers.push({ id: '', price: '' })
-                                                        }
-                                                        className="gradient-btn">
-                                                        {t('Add')}
-                                                    </button>
-                                                </div>
-                                            )}
-                                        />
-                                        {values.countries.length > 0 && (
-                                            <button type="submit" className="mt-8 gradient-btn">
-                                                {t('Save')}
-                                            </button>
-                                        )}
-                                    </Form>
-                                )}
-                            />
+                    <div className="ml-8 w-full p-4 bg-gray-100 rounded-lg shadow-inner">
+                        <div className="mb-4 font-bold text-gray-350 text-lg py-4 border-b border-gray-200">
+                            {t('Apply Countries')}
                         </div>
-                    )}
+
+                        <Formik
+                            validationSchema={Yup.object().shape({
+                                countries: Yup.array().of(
+                                    Yup.object().shape({
+                                        id: Yup.number().required(t('Required field')),
+                                        price: Yup.number()
+                                            .required(t('Required field'))
+                                            .test('len', t('Must be less characters'), (item) => {
+                                                if (!item) {
+                                                    return true;
+                                                }
+
+                                                return item?.toString().length < 10;
+                                            })
+                                            .test(
+                                                'is_positive',
+                                                'The number must be positive',
+                                                (value) => value !== undefined && value > 0
+                                            )
+                                            .typeError('Price must be number')
+                                    })
+                                )
+                            })}
+                            initialValues={{ countries: shipping.countries }}
+                            onSubmit={(values) => {
+                                let dublicate = false;
+                                values.countries.forEach((country: any, index: number) => {
+                                    values.countries.forEach((_country: any, _index: number) => {
+                                        if (_country.id == country.id && _index !== index) {
+                                            dublicate = true;
+                                        }
+                                    });
+                                });
+
+                                if (dublicate) {
+                                    dispatch(
+                                        setErrorToastAction(
+                                            t(`Please remove dublicates from the list`)
+                                        )
+                                    );
+                                    return;
+                                }
+
+                                dispatch(saveShippingAction(id, values.countries)).then(() =>
+                                    router.push('/shipping/list')
+                                );
+                            }}
+                            render={({ values }) => (
+                                <Form>
+                                    <FieldArray
+                                        name="countries"
+                                        render={(arrayHelpers) => (
+                                            <div>
+                                                {values.countries.map(
+                                                    (country: any, index: number) => (
+                                                        <div key={index}>
+                                                            <div className="my-4 flex items-center justify-start w-1/2">
+                                                                <div className="w-full">
+                                                                    <Field
+                                                                        className="form-control"
+                                                                        as="select"
+                                                                        name={`countries.${index}.id`}>
+                                                                        <option value="">
+                                                                            ...
+                                                                        </option>
+                                                                        {countries.map(
+                                                                            (country: any) => (
+                                                                                <option
+                                                                                    key={country.id}
+                                                                                    value={
+                                                                                        country.id
+                                                                                    }>
+                                                                                    {
+                                                                                        country.nicename
+                                                                                    }
+                                                                                </option>
+                                                                            )
+                                                                        )}
+                                                                    </Field>
+                                                                    <div className="error-el">
+                                                                        <ErrorMessage
+                                                                            name={`countries.${index}.id`}
+                                                                        />
+                                                                    </div>
+                                                                </div>
+                                                                <div className="ml-4">
+                                                                    <Field
+                                                                        className="form-control"
+                                                                        name={`countries.${index}.price`}
+                                                                        placeholder={'Price'}
+                                                                        value={country.price}
+                                                                    />
+                                                                    <div className="error-el">
+                                                                        <ErrorMessage
+                                                                            name={`countries.${index}.price`}
+                                                                        />
+                                                                    </div>
+                                                                </div>
+
+                                                                <button
+                                                                    type="button"
+                                                                    onClick={() =>
+                                                                        arrayHelpers.remove(index)
+                                                                    }
+                                                                    className="ml-4 disabled-btn">
+                                                                    {t('Delete')}
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    )
+                                                )}
+                                                <button
+                                                    type="button"
+                                                    onClick={() =>
+                                                        arrayHelpers.push({ id: '', price: '' })
+                                                    }
+                                                    className="gradient-btn">
+                                                    {t('Add')}
+                                                </button>
+                                            </div>
+                                        )}
+                                    />
+                                    {values.countries.length > 0 && (
+                                        <button type="submit" className="mt-8 gradient-btn">
+                                            {t('Save')}
+                                        </button>
+                                    )}
+                                </Form>
+                            )}
+                        />
+                    </div>
+                )}
             </div>
         </>
     );
