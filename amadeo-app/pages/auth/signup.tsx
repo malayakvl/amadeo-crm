@@ -162,7 +162,12 @@ export default function Signup() {
                                             className="text-xs font-medium">
                                             {t('I have read and acept the')}
                                             <span className="text-orange-450">
-                                                <Link href={'/'}>{t('terms of use')}</Link>
+                                                <a
+                                                    href="https://www.liveproshop.com/terms-and-conditions"
+                                                    target="_blank"
+                                                    rel="noreferrer">
+                                                    {t('terms of use')}
+                                                </a>
                                             </span>
                                         </label>
                                     </div>

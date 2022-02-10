@@ -22,9 +22,12 @@ export default function Pages() {
                     </Link>
                 </li>
                 <li>
-                    <Link href={'/pages/price'}>
+                    <a
+                        href="https://www.liveproshop.com/terms-and-conditions"
+                        target="_blank"
+                        rel="noreferrer">
                         <a>Terms</a>
-                    </Link>
+                    </a>
                 </li>
             </ul>
             <span className="copyright">@ {moment().format('YYYY')} Liveproshop</span>
