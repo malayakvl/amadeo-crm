@@ -34,6 +34,8 @@ const initialState: State.Layouts = {
             ...initPagination,
             filters: { status: [], duration: [], cart_duration: [], event_date: '' }
         },
+        paymentstransactions: { ...initPagination },
+        paymentstransactiondetails: { ...initPagination },
         orders: {
             ...initPagination,
             filters: {
