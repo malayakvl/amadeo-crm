@@ -6,6 +6,7 @@ import { InputText, InputTextarea } from '../../components/_form';
 import { userSelector } from '../../redux/user/selectors';
 import { sendMessage } from '../../redux/support/actions';
 import { setSuccessToastAction } from '../../redux/layouts';
+import { getSession } from 'next-auth/client';
 
 export default function Support() {
     const t = useTranslations();
@@ -84,3 +85,25 @@ export default function Support() {
         </>
     );
 }
+
+export async function getServerSideProps(context: any) {
+    const { locale } = context;
+    const session = await getSession(context);
+
+    if (!session) {
+        return {
+            redirect: { destination: `/${locale === 'fr' ? '' : `${locale}/`}auth/signin` }
+        };
+    }
+
+    return {
+        props: {
+            session,
+            locale,
+            messages: {
+                ...require(`../../messages/${locale}.json`)
+            }
+        }
+    };
+}
+
