@@ -19,7 +19,7 @@ const ListTransactions: React.FC = () => {
     }, [dispatch]);
 
     return (
-        <div className="mt-7">
+        <div className="mt-7 min-w-max">
             <DataTable
                 paginationType={PaginationType.PAYMENTS_TRANSACTION_DETAILS}
                 totalAmount={count}

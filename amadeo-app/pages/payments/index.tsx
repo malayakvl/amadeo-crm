@@ -34,14 +34,11 @@ export default function Payments({ session }: { session: any }) {
 
             <div className="block-white-8 white-shadow-medium mt-8">
                 <div className="flex">
-                    <div className="w-64 p-4 bg-gray-100 rounded-lg shadow-inner">
+                    <div className="w-80 p-4 bg-gray-100 rounded-lg shadow-inner">
                         <div className="font-bold text-gray-350 text-lg pb-4">
                             {t('Payment Methods')}
                         </div>
-
-                        <div className="text-sm text-gray-500 mt-12">
                             <PaymentMethods />
-                        </div>
                     </div>
 
                     <div className="ml-8 flex-1">
