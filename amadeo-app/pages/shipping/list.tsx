@@ -66,6 +66,11 @@ export default function List() {
     }, []);
 
     useEffect(() => {
+        if (user.role_id == 3) {
+            setThreshold(true)
+            return;
+        }
+        
         if (user.hasOwnProperty('email')) {
             axios
                 .get(`${url}/threshold`, {
@@ -80,7 +85,7 @@ export default function List() {
     }, [user]);
 
     if (!countries.length || !threshold) {
-        return 'Loading';
+        return <></>;
     }
 
     return (
@@ -102,11 +107,7 @@ export default function List() {
                         <div className="font-bold text-gray-350 text-lg pb-4 border-b border-gray-200">
                             {t('Free shipping')}
                         </div>
-                        <div className="text-sm text-gray-500 mt-12">
-                            {t(
-                                'Set a shipping threshold. In case order has reacted this amount, the shipping is free for this buyer'
-                            )}
-                        </div>
+                        <div className="text-sm text-gray-500 mt-12">{t('shipping_threshold')}</div>
                         <Formik
                             onSubmit={(values) => {
                                 dispatch(setThresholdAction(values));
@@ -181,7 +182,6 @@ export default function List() {
                                                     height="14"
                                                     src={`/images/action-arrow-orange.svg`}
                                                 />
-                                                {/* <div className="border-l-2 h-4 relative left-[5px]" /> */}
                                             </>
                                         ) : (
                                             <Image
@@ -238,24 +238,28 @@ export default function List() {
                                         {item.countries.length > 0 ? (
                                             <>
                                                 {dropDowns[index] ? (
-                                                    item.countries.map((country) => (
-                                                        <div key={country.id} className="flex mb-1">
-                                                            <Image
-                                                                width="34"
-                                                                height="24"
-                                                                src={'/images/en-flag.svg'}
-                                                            />
-                                                            <div className="ml-auto">
-                                                                {country.price}
+                                                    item.countries.map((country) => {
+                                                        return (
+                                                            <div
+                                                                key={country.id}
+                                                                className="flex mb-1">
+                                                                <Image
+                                                                    width="34"
+                                                                    height="24"
+                                                                    src={`/images/flags/Country=${country.iso}.svg`}
+                                                                />
+                                                                <div className="ml-auto">
+                                                                    {country.price}
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                    ))
+                                                        );
+                                                    })
                                                 ) : (
                                                     <div className="flex mb-1">
                                                         <Image
                                                             width="34"
                                                             height="24"
-                                                            src={'/images/en-flag.svg'}
+                                                            src={`/images/flags/Country=${item.countries[0].iso}.svg`}
                                                         />
                                                         <div className="ml-auto">
                                                             {item.countries[0].price}

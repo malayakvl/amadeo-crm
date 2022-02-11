@@ -22,6 +22,7 @@ import { baseApiUrl } from '../../../constants';
 import { fetchCountriesAction } from '../../../redux/countries/actions';
 import { userSelector } from '../../../redux/user/selectors';
 import { getSession } from 'next-auth/client';
+import { setErrorToastAction } from '../../../redux/layouts';
 
 export default function EditMethod() {
     const t = useTranslations();
@@ -49,7 +50,7 @@ export default function EditMethod() {
     }, [id]);
 
     if (!shipping || shipping.id != id) {
-        return 'Loading';
+        return <></>;
     }
 
     return (
@@ -149,16 +150,39 @@ export default function EditMethod() {
 
                                                 return item?.toString().length < 10;
                                             })
+                                            .test(
+                                                'is_positive',
+                                                'The number must be positive',
+                                                (value) => value !== undefined && value > 0
+                                            )
                                             .typeError('Price must be number')
                                     })
                                 )
                             })}
                             initialValues={{ countries: shipping.countries }}
-                            onSubmit={(values) =>
+                            onSubmit={(values) => {
+                                let dublicate = false;
+                                values.countries.forEach((country: any, index: number) => {
+                                    values.countries.forEach((_country: any, _index: number) => {
+                                        if (_country.id == country.id && _index !== index) {
+                                            dublicate = true;
+                                        }
+                                    });
+                                });
+
+                                if (dublicate) {
+                                    dispatch(
+                                        setErrorToastAction(
+                                            t(`Please remove dublicates from the list`)
+                                        )
+                                    );
+                                    return;
+                                }
+
                                 dispatch(saveShippingAction(id, values.countries)).then(() =>
                                     router.push('/shipping/list')
-                                )
-                            }
+                                );
+                            }}
                             render={({ values }) => (
                                 <Form>
                                     <FieldArray

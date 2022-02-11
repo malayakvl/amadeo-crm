@@ -87,8 +87,8 @@ export default new class ShippingController {
 
     }
 
-    saveCountries(req, res) {
-        shippingModel.saveCountries(req.user.id, req.params.id, req.body)
+    async saveCountries(req, res) {
+        await shippingModel.saveCountries(req.user.id, req.params.id, req.body)
         return res.status(200).json({})
     }
 
