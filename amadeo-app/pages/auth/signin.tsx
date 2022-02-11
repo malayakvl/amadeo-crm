@@ -121,7 +121,12 @@ function Signin({ locale }: { locale: string }) {
                     </div>
                     <div className="text-gray-450">
                         {t('By signing in, you accept the')}{' '}
-                        <Link href={'/'}>{t('terms of use')}</Link>
+                        <a
+                            href="https://www.liveproshop.com/terms-and-conditions"
+                            target="_blank"
+                            rel="noreferrer">
+                            {t('terms of use')}
+                        </a>
                     </div>
                 </div>
             </div>

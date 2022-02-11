@@ -73,10 +73,13 @@ class Shipping {
                     json_agg(
                         json_build_object(
                             'country_id', s2c.country_id,
-                            'price', s2c.price
+                            'price', s2c.price,
+                            'iso', c.iso
                         )
                     ) AS shipping_to_country__info
                 FROM data.shipping_to_country s2c
+                LEFT JOIN data.countries c
+                    ON c.id = s2c.country_id 
                 WHERE TRUE
                     AND (s2c.shipping_id = s.id)
                 GROUP BY

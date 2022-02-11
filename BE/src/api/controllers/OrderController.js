@@ -13,8 +13,7 @@ class OrderController {
         if (!req.user) {
             return res.status(401).json('Access deny');
         } else {
-            const data = await orderModel.fetchItems(1, limit, req.user.id, false, offset, queryFilter);
-            console.log(data);
+            const data = await orderModel.fetchItems(1, limit, req.user, false, offset, queryFilter);
             return res.status(200).json({ count: data.size, items: data.items});
         }
         // const data = await chatbotMessageModel.addMessages(req.query.sessionId, req.body);

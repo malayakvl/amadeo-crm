@@ -8,6 +8,8 @@ declare namespace Layouts {
             buyers: Pagination;
             livesessions: Pagination;
             orders: Pagination;
+            paymentstransactions: Pagination;
+            paymentstransactiondetails: Pagination;
         };
         isSidebarOpen: boolean;
         isDataLoading: boolean;

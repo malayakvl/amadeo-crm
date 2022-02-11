@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import moment from 'moment';
 
 export default function Footer() {
     return (
@@ -88,12 +89,17 @@ export default function Footer() {
                             <Link href={'/'}>Cookies</Link>
                         </div>
                         <div className="mr-5">
-                            <Link href={'/'}>Privacy</Link>
+                            <Link href={'/pages/privacy'}>Privacy</Link>
                         </div>
                         <div className="mr-5">
-                            <Link href={'/'}>Terms</Link>
+                            <a
+                                href="https://www.liveproshop.com/terms-and-conditions"
+                                target="_blank"
+                                rel="noreferrer">
+                                Terms
+                            </a>
                         </div>
-                        <div className="text-white">@ 2021 Liveproshop</div>
+                        <div className="text-white">@ {moment().format('YYYY')} Liveproshop</div>
                     </div>
                 </div>
             </div>

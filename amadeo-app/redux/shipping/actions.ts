@@ -2,7 +2,7 @@ import axios from 'axios';
 import { createAction } from 'redux-actions';
 import { authHeader } from '../../lib/functions';
 import getConfig from 'next/config';
-import { setSuccessToastAction, setErrorToastAction } from '../layouts/actions';
+import { setSuccessToastAction, setErrorToastAction, showLoaderAction } from '../layouts/actions';
 
 const { publicRuntimeConfig } = getConfig();
 const url = `${publicRuntimeConfig.apiUrl}/api/shipping`;
@@ -50,6 +50,7 @@ export const fetchShippingAction: any = createAction(
         ): Promise<{ shipping: Pick<State.Shippings, 'shipping'> }> => {
             const state = getState();
 
+            dispatch(showLoaderAction(true));
             const response = await axios.get(`${url}/fetch/${id}`, {
                 headers: {
                     ...authHeader(state.user.user.email)
@@ -58,7 +59,7 @@ export const fetchShippingAction: any = createAction(
 
             const shippingsState = state.shippings;
             const shipping: State.Shippings = response.data;
-
+            dispatch(showLoaderAction(false));
             return { ...shippingsState, shipping };
         }
 );
@@ -72,6 +73,7 @@ export const fetchShippingsAction: any = createAction(
         ): Promise<{ list: Pick<State.Shippings, 'list'> }> => {
             const state = getState();
 
+            dispatch(showLoaderAction(true));
             const response = await axios.get(`${url}/fetch-all`, {
                 headers: {
                     ...authHeader(state.user.user.email)
@@ -81,7 +83,7 @@ export const fetchShippingsAction: any = createAction(
             const shippingsState = state.shippings;
 
             const shippings: State.Shippings = response.data.shippings;
-
+            dispatch(showLoaderAction(false));
             return { ...shippingsState, list: shippings };
         }
 );
@@ -157,6 +159,7 @@ export const saveShippingAction: any = createAction(
                 }
             })
             .then(() => {
+                dispatch(fetchShippingAction(id)).then(() => dispatch(fetchShippingsAction()));
                 dispatch(setSuccessToastAction('Counties of the shipping has been saved'));
             });
     }
