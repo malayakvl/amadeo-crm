@@ -51,7 +51,9 @@ const DataTable: React.FC<Props> = ({
     // const showFilters = [PRODUCTS].includes(paginationType);
     // const hideEntries: boolean = [CATEGORIES, INVESTMENT].includes(paginationType);
     // const hideEntries = false;
-    const showIds: boolean = [PRODUCTS, CHATBOT, SHIPPING, ORDERS, PAYMENTS_TRANSACTIONS].includes(paginationType);
+    const showIds: boolean = [PRODUCTS, CHATBOT, SHIPPING, ORDERS, PAYMENTS_TRANSACTIONS].includes(
+        paginationType
+    );
     // const hideSearch: boolean = [INVESTMENT].includes(paginationType);
     // const hideSearch = false;
     const headers = TableHeaders[paginationType];

@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 // import { itemsCountSelector, paginatedItemsSelector } from '../../redux/livesessions/selectors';
 import { PaginationType } from '../../constants';
 import { DataTable } from '../_common';
