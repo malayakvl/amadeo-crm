@@ -38,7 +38,7 @@ export default function Payments({ session }: { session: any }) {
                         <div className="font-bold text-gray-350 text-lg pb-4">
                             {t('Payment Methods')}
                         </div>
-                            <PaymentMethods />
+                        <PaymentMethods />
                     </div>
 
                     <div className="ml-8 flex-1">

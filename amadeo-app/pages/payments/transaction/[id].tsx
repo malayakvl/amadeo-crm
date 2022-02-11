@@ -39,8 +39,15 @@ export default function Payments({ session }: { session: any }) {
 
             <div className="block-white-8 white-shadow-medium mt-8 flex">
                 <div className="flex flex-col w-full">
-                    <div className="mb-8 font-bold text-gray-350 text-lg py-4 border-b border-gray-200">
+                    <div className="flex justify-between mb-8 font-bold text-gray-350 text-lg py-4 border-b border-gray-200">
                         {t('Transaction details')}
+
+                        <a
+                            href="/api/getPDF"
+                            className="flex px-5 py-3 rounded-lg text-base min-w-max align-middle border shadow-lg">
+                            <Image width="20" height="18" src={'/images/download.svg'} />
+                            <span className="pl-4 pt-px">{t('Download Invoice from emmisor')}</span>
+                        </a>
                     </div>
 
                     <div className="flex w-full">
@@ -54,9 +61,7 @@ export default function Payments({ session }: { session: any }) {
                         <TransactionDetailsPanel />
                     </div>
 
-                    <div className="mb-1 font-bold text-gray-350 text-lg py-4 border-b border-gray-200">
-                        {t('Products bought')}
-                    </div>
+                    <div className="mb-1 font-bold text-gray-350 text-lg py-4 border-b border-gray-200"></div>
 
                     <ListProductsBought />
                 </div>
