@@ -1,13 +1,16 @@
 import { Formik } from 'formik';
 import { useTranslations } from 'next-intl';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from 'yup';
 import { InputText, InputTextarea } from '../../components/_form';
 import { userSelector } from '../../redux/user/selectors';
+import { sendMessage } from '../../redux/support/actions';
+import { setSuccessToastAction } from '../../redux/layouts';
 
 export default function Support() {
     const t = useTranslations();
     const user = useSelector(userSelector);
+    const dispatch = useDispatch();
     const initialValues = {
         email: user.email,
         message: ''
@@ -34,7 +37,10 @@ export default function Support() {
                 </div>
                 <Formik
                     enableReinitialize
-                    onSubmit={values => console.log(values)}
+                    onSubmit={(values, actions) => dispatch(sendMessage(values))
+                        .then(dispatch(setSuccessToastAction(t('Your message has been sent to support!'))))
+                        .then(actions.resetForm())
+                    }
                     initialValues={initialValues}
                     validationSchema={validationSchema}
                     render={props =>
