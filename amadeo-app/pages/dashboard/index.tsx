@@ -37,7 +37,7 @@ export default function Index({ session }: { session: any }) {
                         </div>
                     </div>
                     <div className="flex flex-col w-full lg:w-1/4 xl:w-1/5 justify-center align-middle pl-4 border border-b-0 border-t-0 border-r-0">
-                        <span className="font-bold text-sm text-blue-350">Invoices</span>
+                        <span className="font-bold text-sm text-blue-350">Pending orders</span>
                         <div className="">
                             <Image src="/images/dashboard-invoices.svg" width={20} height={20} />
                             <span className="ml-3 font-bold text-gray-350 text-2xl">999,999</span>
