@@ -67,10 +67,10 @@ export default function List() {
 
     useEffect(() => {
         if (user.role_id == 3) {
-            setThreshold(true)
+            setThreshold(true);
             return;
         }
-        
+
         if (user.hasOwnProperty('email')) {
             axios
                 .get(`${url}/threshold`, {
