@@ -14,11 +14,13 @@ export default function Support() {
     const initialValues = {
         email: user.email,
         message: ''
-    }
+    };
     const validationSchema = Yup.object({
         email: Yup.string().required(t('Required field')).email(t('Must be a valid email')),
-        message: Yup.string().min(50, t('Your request should have at least 50 characters')).required(t('Required field'))
-    })
+        message: Yup.string()
+            .min(50, t('Your request should have at least 50 characters'))
+            .required(t('Required field'))
+    });
 
     return (
         <>
@@ -27,7 +29,9 @@ export default function Support() {
                     <h1>{t('Support')}</h1>
                 </div>
                 <div className="text-gray-400">
-                    {t('Support section allows merchants contact to Proshop admin in case of issue or questions')}
+                    {t(
+                        'Support section allows merchants contact to Proshop admin in case of issue or questions'
+                    )}
                 </div>
             </div>
 
@@ -37,13 +41,20 @@ export default function Support() {
                 </div>
                 <Formik
                     enableReinitialize
-                    onSubmit={(values, actions) => dispatch(sendMessage(values))
-                        .then(dispatch(setSuccessToastAction(t('Your message has been sent to support!'))))
-                        .then(actions.resetForm())
+                    onSubmit={(values, actions) =>
+                        dispatch(sendMessage(values))
+                            .then(
+                                dispatch(
+                                    setSuccessToastAction(
+                                        t('Your message has been sent to support!')
+                                    )
+                                )
+                            )
+                            .then(actions.resetForm())
                     }
                     initialValues={initialValues}
                     validationSchema={validationSchema}
-                    render={props =>
+                    render={(props) => (
                         <form className="w-1/2" onSubmit={props.handleSubmit}>
                             <InputText
                                 icon={null}
@@ -51,7 +62,7 @@ export default function Support() {
                                 props={props}
                                 label={t('Email to respond')}
                                 tips={null}
-                                name={"email"}
+                                name={'email'}
                                 style=""
                             />
 
@@ -67,9 +78,9 @@ export default function Support() {
                                 {t('Send')}
                             </button>
                         </form>
-                    }
+                    )}
                 />
             </div>
         </>
-    )
+    );
 }

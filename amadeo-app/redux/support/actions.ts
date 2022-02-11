@@ -5,23 +5,22 @@ import getConfig from 'next/config';
 
 const { publicRuntimeConfig } = getConfig();
 const url = `${publicRuntimeConfig.apiUrl}/api/support`;
-const actionName = (name: string) => `SUPPORT/${name}`
+const actionName = (name: string) => `SUPPORT/${name}`;
 
 export const sendMessage: any = createAction(
     actionName('SEND_MESSAGE'),
-    (values: {email: string, message: string}) => async (dispatch: Type.Dispatch, getState: () => State.Root) => {
-        const state = getState();
+    (values: { email: string; message: string }) =>
+        async (dispatch: Type.Dispatch, getState: () => State.Root) => {
+            const state = getState();
 
-        await axios.post(
-            `${url}/send-message`,
-            { ...values },
-            {
-                headers: {
-                    ...authHeader(state.user.user.email)
+            await axios.post(
+                `${url}/send-message`,
+                { ...values },
+                {
+                    headers: {
+                        ...authHeader(state.user.user.email)
+                    }
                 }
-            }
-        );
-
-
-    }
+            );
+        }
 );
