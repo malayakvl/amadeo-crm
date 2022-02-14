@@ -12,7 +12,7 @@ import ChatbotController from "../controllers/ChatbotController.js";
 import LivesessionController from "../controllers/LivesessionController.js";
 import ChatbotMessageController from "../controllers/ChatbotMessageController.js";
 import OrderController from "../controllers/OrderController.js";
-
+import SupportController from '../controllers/SupportController.js';
 const apiRoutes = express.Router();
 
 apiRoutes.use(express.json({
@@ -86,6 +86,7 @@ apiRoutes.route('/chatbot/change-active-all').get(ChatbotController.changeAllAct
 
 apiRoutes.route('/orders/fetch-items').get(OrderController.fetchItems);
 
+apiRoutes.route('/support/send-message').post(SupportController.sendMessage);
 
 apiRoutes.route('/livesession').post(LivesessionController.storeItem);
 apiRoutes.route('/livesession/fetch-items').get(LivesessionController.fetchItems);
@@ -105,6 +106,7 @@ apiRoutes.route('/shipping/change-statuses').put(ShippingController.changeStatus
 apiRoutes.route('/shipping/change-status/:id').put(ShippingController.changeStatus)
 apiRoutes.route('/shipping/threshold').post(ShippingController.setThreshold)
 apiRoutes.route('/shipping/threshold').get(ShippingController.fetchThreshold)
+
 apiRoutes.get('/*', defaultHandler);
 
 export default apiRoutes;
