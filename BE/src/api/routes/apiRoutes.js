@@ -85,6 +85,7 @@ apiRoutes.route('/chatbot/change-active/:id').get(ChatbotController.changeActive
 apiRoutes.route('/chatbot/change-active-all').get(ChatbotController.changeAllActive);
 
 apiRoutes.route('/orders/fetch-items').get(OrderController.fetchItems);
+apiRoutes.route('/orders/fetch-filters').get(OrderController.fetchFilters);
 
 apiRoutes.route('/support/send-message').post(SupportController.sendMessage);
 

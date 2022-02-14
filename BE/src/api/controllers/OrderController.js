@@ -16,12 +16,16 @@ class OrderController {
             const data = await orderModel.fetchItems(1, limit, req.user, false, offset, queryFilter);
             return res.status(200).json({ count: data.size, items: data.items});
         }
-        // const data = await chatbotMessageModel.addMessages(req.query.sessionId, req.body);
-        // if (!data.error) {
-        //     return res.status(200).json({success: true});
-        // } else {
-        //     return res.status(401).json({success: false, error: 'Something wend wrong'});
-        // }
+    }
+    
+    
+    async fetchFilters (req, res) {
+        if (!req.user) {
+            return res.status(401).json('Access deny');
+        } else {
+            const items = await orderModel.fetchFilters();
+            return res.status(200).json({ items: items.res });
+        }
     }
 }
 
