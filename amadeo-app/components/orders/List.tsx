@@ -9,9 +9,8 @@ import Image from 'next/image';
 import { baseApiUrl } from '../../constants';
 import { checkIdsAction } from '../../redux/layouts';
 import { useTranslations } from 'next-intl';
-import { ListItems } from './index';
+import { Filters, ListItems } from './index';
 import { checkedIdsSelector } from '../../redux/layouts/selectors';
-import { InputText } from '../_form';
 
 const userProfileImg =
     'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80';
@@ -24,7 +23,7 @@ const ListMessages: React.FC = () => {
     const checkedIds = useSelector(checkedIdsSelector);
 
     const [showMoreConfigs, setShowMoreConfigs] = useState<any>({});
-    const [filterOpen, setFilterOpen] = useState(false);
+    const [filterOpen, setFilterOpen] = useState(true);
 
     const sendRequest = useCallback(() => {
         return dispatch(fetchItemsAction());
@@ -43,129 +42,130 @@ const ListMessages: React.FC = () => {
                     {t('Orders')}
                     <span className="text-gray-180 font-normal text-sm"> {count} items</span>
                 </h2>
-                {filterOpen && (
-                    <div className="-top-14 bg-white absolute right-36 w-80 p-6 shadow-xl rounded-3xl">
-                        <div className="pb-3 border-b flex justify-between">
-                            <div className="text-gray-350 font-bold text-xl">{t('Filters')}</div>
-                        </div>
-                        <InputText
-                            style="mt-5 w-full"
-                            icon={''}
-                            label={null}
-                            name={'name'}
-                            placeholder={t('Start typing to search')}
-                            props={{
-                                // handleChange: () => {},
-                                values: { name: '' },
-                                errors: { name: '' }
-                            }}
-                            tips={null}
-                        />
-                        <div className="flex justify-between mb-2">
-                            <div className="flex items-center">
-                                <Image width="10" height="10" src={'/images/lang-arrow.svg'} />
-                                <span className="ml-2 text-xs font-bold text-blue-350">
-                                    {t('Spent')}
-                                </span>
-                            </div>
-                            <div className="text-sm font-thin text-gray-450">999,99,9$</div>
-                        </div>
-                        <input
-                            className="w-full"
-                            type="range"
-                            min="0"
-                            max="100"
-                            step="1"
-                            value="50"
-                        />
-                        <div className="flex mt-1">
-                            <div className="w-1/2 mr-2">
-                                <div className="mb-3 text-xs font-bold text-blue-350">
-                                    {t('Minimum')}
-                                </div>
-                                <InputText
-                                    style="w-full"
-                                    icon={''}
-                                    label={null}
-                                    name={'name'}
-                                    placeholder={t('0,00$')}
-                                    props={{
-                                        // handleChange: () => {},
-                                        values: { name: '' },
-                                        errors: { name: '' }
-                                    }}
-                                    tips={null}
-                                />
-                            </div>
-                            <div className="w-1/2">
-                                <div className="mb-3 text-xs font-bold text-blue-350">
-                                    {t('Maximum')}
-                                </div>
-                                <InputText
-                                    style="w-full"
-                                    icon={''}
-                                    label={null}
-                                    name={'name'}
-                                    placeholder={t('999,999$')}
-                                    props={{
-                                        // handleChange: () => {},
-                                        values: { name: '' },
-                                        errors: { name: '' }
-                                    }}
-                                    tips={null}
-                                />
-                            </div>
-                        </div>
-                        <div className="flex justify-between mb-3">
-                            <div className="flex items-center">
-                                <Image width="10" height="10" src={'/images/lang-arrow.svg'} />
-                                <span className="ml-2 text-xs font-bold text-blue-350">
-                                    {t('Country')}
-                                </span>
-                            </div>
-                            <div className="font-bold rounded-full text-center p-[2px] bg-green-250 text-xs h-5 w-5 text-white">
-                                3
-                            </div>
-                        </div>
-                        <InputText
-                            style="w-full pb-4 border-b mb-6"
-                            icon={''}
-                            label={null}
-                            name={'name'}
-                            placeholder={t('Type to search for...')}
-                            props={{
-                                // handleChange: () => {},
-                                values: { name: '' },
-                                errors: { name: '' }
-                            }}
-                            tips={null}
-                        />
-                        <div className="flex items-center mb-3">
-                            <input
-                                id="acceptTerms"
-                                name="acceptTerms"
-                                className="text-green-250 border-green-250 w-5 h-5 border-2 rounded mr-2.5"
-                                type="checkbox"
-                            />
-                            <Image width="40" height="24" src={'/images/en-flag.svg'} />
-                            <span className="ml-2 text-xs font-bold text-blue-350">
-                                {t('America')}
-                            </span>
-                        </div>
-                        <div className="flex items-center mb-3">
-                            <input
-                                id="acceptTerms"
-                                name="acceptTerms"
-                                className="text-green-250 border-green-250 w-5 h-5 border-2 rounded mr-2.5"
-                                type="checkbox"
-                            />
-                            <Image width="40" height="24" src={'/images/fr-glag.svg'} />
-                            <span className="ml-2 text-xs font-bold text-blue-350">
-                                {t('France')}
-                            </span>
-                        </div>
-                    </div>
-                )}
+                {filterOpen && <Filters />}
+                {/*{filterOpen && (*/}
+                {/*    <div className="-top-14 bg-white absolute right-36 w-80 p-6 shadow-xl rounded-3xl">*/}
+                {/*        <div className="pb-3 border-b flex justify-between">*/}
+                {/*            <div className="text-gray-350 font-bold text-xl">{t('Filters')}</div>*/}
+                {/*        </div>*/}
+                {/*        <InputText*/}
+                {/*            style="mt-5 w-full"*/}
+                {/*            icon={''}*/}
+                {/*            label={null}*/}
+                {/*            name={'name'}*/}
+                {/*            placeholder={t('Start typing to search')}*/}
+                {/*            props={{*/}
+                {/*                // handleChange: () => {},*/}
+                {/*                values: { name: '' },*/}
+                {/*                errors: { name: '' }*/}
+                {/*            }}*/}
+                {/*            tips={null}*/}
+                {/*        />*/}
+                {/*        <div className="flex justify-between mb-2">*/}
+                {/*            <div className="flex items-center">*/}
+                {/*                <Image width="10" height="10" src={'/images/lang-arrow.svg'} />*/}
+                {/*                <span className="ml-2 text-xs font-bold text-blue-350">*/}
+                {/*                    {t('Spent')}*/}
+                {/*                </span>*/}
+                {/*            </div>*/}
+                {/*            <div className="text-sm font-thin text-gray-450">999,99,9$</div>*/}
+                {/*        </div>*/}
+                {/*        <input*/}
+                {/*            className="w-full"*/}
+                {/*            type="range"*/}
+                {/*            min="0"*/}
+                {/*            max="100"*/}
+                {/*            step="1"*/}
+                {/*            value="50"*/}
+                {/*        />*/}
+                {/*        <div className="flex mt-1">*/}
+                {/*            <div className="w-1/2 mr-2">*/}
+                {/*                <div className="mb-3 text-xs font-bold text-blue-350">*/}
+                {/*                    {t('Minimum')}*/}
+                {/*                </div>*/}
+                {/*                <InputText*/}
+                {/*                    style="w-full"*/}
+                {/*                    icon={''}*/}
+                {/*                    label={null}*/}
+                {/*                    name={'name'}*/}
+                {/*                    placeholder={t('0,00$')}*/}
+                {/*                    props={{*/}
+                {/*                        // handleChange: () => {},*/}
+                {/*                        values: { name: '' },*/}
+                {/*                        errors: { name: '' }*/}
+                {/*                    }}*/}
+                {/*                    tips={null}*/}
+                {/*                />*/}
+                {/*            </div>*/}
+                {/*            <div className="w-1/2">*/}
+                {/*                <div className="mb-3 text-xs font-bold text-blue-350">*/}
+                {/*                    {t('Maximum')}*/}
+                {/*                </div>*/}
+                {/*                <InputText*/}
+                {/*                    style="w-full"*/}
+                {/*                    icon={''}*/}
+                {/*                    label={null}*/}
+                {/*                    name={'name'}*/}
+                {/*                    placeholder={t('999,999$')}*/}
+                {/*                    props={{*/}
+                {/*                        // handleChange: () => {},*/}
+                {/*                        values: { name: '' },*/}
+                {/*                        errors: { name: '' }*/}
+                {/*                    }}*/}
+                {/*                    tips={null}*/}
+                {/*                />*/}
+                {/*            </div>*/}
+                {/*        </div>*/}
+                {/*        <div className="flex justify-between mb-3">*/}
+                {/*            <div className="flex items-center">*/}
+                {/*                <Image width="10" height="10" src={'/images/lang-arrow.svg'} />*/}
+                {/*                <span className="ml-2 text-xs font-bold text-blue-350">*/}
+                {/*                    {t('Country')}*/}
+                {/*                </span>*/}
+                {/*            </div>*/}
+                {/*            <div className="font-bold rounded-full text-center p-[2px] bg-green-250 text-xs h-5 w-5 text-white">*/}
+                {/*                3*/}
+                {/*            </div>*/}
+                {/*        </div>*/}
+                {/*        <InputText*/}
+                {/*            style="w-full pb-4 border-b mb-6"*/}
+                {/*            icon={''}*/}
+                {/*            label={null}*/}
+                {/*            name={'name'}*/}
+                {/*            placeholder={t('Type to search for...')}*/}
+                {/*            props={{*/}
+                {/*                // handleChange: () => {},*/}
+                {/*                values: { name: '' },*/}
+                {/*                errors: { name: '' }*/}
+                {/*            }}*/}
+                {/*            tips={null}*/}
+                {/*        />*/}
+                {/*        <div className="flex items-center mb-3">*/}
+                {/*            <input*/}
+                {/*                id="acceptTerms"*/}
+                {/*                name="acceptTerms"*/}
+                {/*                className="text-green-250 border-green-250 w-5 h-5 border-2 rounded mr-2.5"*/}
+                {/*                type="checkbox"*/}
+                {/*            />*/}
+                {/*            <Image width="40" height="24" src={'/images/en-flag.svg'} />*/}
+                {/*            <span className="ml-2 text-xs font-bold text-blue-350">*/}
+                {/*                {t('America')}*/}
+                {/*            </span>*/}
+                {/*        </div>*/}
+                {/*        <div className="flex items-center mb-3">*/}
+                {/*            <input*/}
+                {/*                id="acceptTerms"*/}
+                {/*                name="acceptTerms"*/}
+                {/*                className="text-green-250 border-green-250 w-5 h-5 border-2 rounded mr-2.5"*/}
+                {/*                type="checkbox"*/}
+                {/*            />*/}
+                {/*            <Image width="40" height="24" src={'/images/fr-glag.svg'} />*/}
+                {/*            <span className="ml-2 text-xs font-bold text-blue-350">*/}
+                {/*                {t('France')}*/}
+                {/*            </span>*/}
+                {/*        </div>*/}
+                {/*    </div>*/}
+                {/*)}*/}
                 <button
                     onClick={() => setFilterOpen(!filterOpen)}
                     className="absolute top-0 right-0 flex items-center text-sm border rounded-lg px-4 py-1">
@@ -213,34 +213,42 @@ const ListMessages: React.FC = () => {
                             <td>
                                 <div className="flex">
                                     <Image
-                                        src={item.photo ? baseApiUrl + item.photos : userProfileImg}
+                                        src={
+                                            item.buyer_photo
+                                                ? baseApiUrl + item.buyer_photo
+                                                : userProfileImg
+                                        }
                                         width={24}
                                         height={24}
                                         className="rounded-full cursor-pointer"
                                         alt=""
                                     />
-                                    <span className="pl-3">{item.first_name}</span>
+                                    <span className="pl-3">{item.buyer_first_name}</span>
                                 </div>
                             </td>
                             <td>
-                                <img
-                                    src={`/images/flags/Country=${item.flag_name}.svg`}
-                                    className="fill-current text-black"
-                                    alt={''}
-                                />
+                                {item.flag_name && (
+                                    <img
+                                        src={`/images/flags/${item.flag_name}.svg`}
+                                        className="fill-current text-black"
+                                        alt={''}
+                                    />
+                                )}
                             </td>
                             <td>
-                                <Image
-                                    src={baseApiUrl + item.shipping_image}
-                                    width={36}
-                                    height={24}
-                                    className=""
-                                    alt=""
-                                />
+                                {item.shipping_image && (
+                                    <Image
+                                        src={baseApiUrl + item.shipping_image}
+                                        width={36}
+                                        height={24}
+                                        className=""
+                                        alt=""
+                                    />
+                                )}
                             </td>
                             <td>
                                 <img
-                                    src="/images/payments/Payment method=Maestro.svg"
+                                    src="/images/payments/maestro.svg"
                                     className="fill-current text-black"
                                     alt={''}
                                 />
