@@ -46,14 +46,12 @@ class Product {
             const queryColors = 'SELECT table_translation FROM common__tools._get_translation(\'data\', \'product_colors\', \'id\', \'name, code\');';
             const querySizes = 'SELECT table_translation FROM common__tools._get_translation(\'data\', \'product_sizes\', \'id\', \'name\', \'\', \'id\');';
             const querySizesTable = 'SELECT data.get_products_size_list();';
-            // const queryStyles = 'SELECT table_translation FROM common__tools._get_translation(\'data\', \'product_styles\', \'id\', \'name\');';
             const queryMaterials = 'SELECT table_translation FROM common__tools._get_translation(\'data\', \'product_materials\', \'id\', \'name\');';
             const queryPrices = 'SELECT * FROM data.get_products_price_range();';
             const queryQty = 'SELECT * FROM data.get_products_quantity_range();';
             const resColors = await client.query(queryColors);
             const resSizes = await client.query(querySizes);
             const resSizesTable = await client.query(querySizesTable);
-            // const resStyles = await client.query(queryStyles);
             const resMaterials = await client.query(queryMaterials);
             const resPrices = await client.query(queryPrices);
             const resQty = await client.query(queryQty);
@@ -62,15 +60,18 @@ class Product {
                     sizes: resSizes.rows.length ? resSizes.rows[0].table_translation : null,
                     sizesTable: resSizesTable.rows.length ? resSizesTable.rows[0].get_products_size_list : null,
                     materials: resMaterials.rows.length ? resMaterials.rows[0].table_translation : null,
+                    price: resPrices.rows.length ? [resPrices.rows[0].get_products_price_range.min, resPrices.rows[0].get_products_price_range.max] : [],
+                    quantity: resQty.rows.length ? [resQty.rows[0].get_products_quantity_range.min, resQty.rows[0].get_products_quantity_range.max] : [],
                     priceRange: resPrices.rows.length ? resPrices.rows[0].get_products_price_range : null,
                     qtyRange: resQty.rows.length ? resQty.rows[0].get_products_quantity_range : null
                 }
             };
         } catch (e) {
+            console.log(e.message);
             if (process.env.NODE_ENV === 'development') {
                 logger.log(
                     'error',
-                    'Model error:',
+                    'Model error1:',
                     { message: e.message }
                 );
             }
