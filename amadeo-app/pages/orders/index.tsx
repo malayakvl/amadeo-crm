@@ -2,7 +2,7 @@ import Head from 'next/head';
 import { getSession } from 'next-auth/client';
 import React from 'react';
 import { useTranslations } from 'next-intl';
-import { Filters, List } from '../../components/orders';
+import { List } from '../../components/orders';
 
 // import { showFormSelector } from '../../redux/chatbot/selectors';
 // import { setEmptyFormAction, showFormAction } from '../../redux/chatbot';
@@ -10,13 +10,6 @@ import { Filters, List } from '../../components/orders';
 export default function Index({ session }: { session: any }) {
     if (!session) return <></>;
     const t = useTranslations();
-    // const dispatch = useDispatch();
-    // const showForm = useSelector(showFormSelector);
-
-    // const handleShowForm = () => {
-    //     dispatch(setEmptyFormAction());
-    //     dispatch(showFormAction(!showForm));
-    // };
 
     return (
         <>
@@ -40,7 +33,6 @@ export default function Index({ session }: { session: any }) {
                 </div>
             </div>
             <div className="block-white-8 mr-10 white-shadow-medium mt-10">
-                <Filters />
                 <List />
             </div>
         </>
