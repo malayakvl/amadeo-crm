@@ -6,26 +6,26 @@ import { PaginationType } from '../../constants';
 import { setPaginationAction } from '../../redux/layouts';
 import Image from 'next/image';
 
-const FilterStatus: React.FC<any> = () => {
+const FilterPayment: React.FC<any> = () => {
     const t = useTranslations();
     const dispatch = useDispatch();
     const { filters }: Layouts.Pagination = useSelector(
         paginationSelectorFactory(PaginationType.ORDERS)
     );
-    const [statusSelected, setStatusSelected] = useState<any>(filters.status);
+    const [paymentSelected, setPaymentSelected] = useState<any>(filters.payment_id);
     const [showBlock, setShowBlock] = useState<boolean>(true);
-    const filterStatuses = ['new', 'payed', 'overdue'];
+    const filterStatuses = ['chargebee'];
 
     const handleStatusFilter = (e: any) => {
         if (e.target.checked) {
-            setStatusSelected([...statusSelected, e.target.value]);
+            setPaymentSelected([...paymentSelected, e.target.value]);
             dispatch(
                 setPaginationAction({
                     type: PaginationType.ORDERS,
                     modifier: {
                         filters: {
                             ...filters,
-                            status: [...statusSelected, e.target.value]
+                            payment_id: [...paymentSelected, e.target.value]
                         },
                         offset: 0
                     }
@@ -38,13 +38,13 @@ const FilterStatus: React.FC<any> = () => {
                     modifier: {
                         filters: {
                             ...filters,
-                            status: statusSelected.filter((id: any) => id !== e.target.value)
+                            payment_id: paymentSelected.filter((id: any) => id !== e.target.value)
                         },
                         offset: 0
                     }
                 })
             );
-            setStatusSelected(statusSelected.filter((id: any) => id !== e.target.value));
+            setPaymentSelected(paymentSelected.filter((id: any) => id !== e.target.value));
         }
     };
 
@@ -77,6 +77,12 @@ const FilterStatus: React.FC<any> = () => {
                                 <label
                                     className="text-xs text-blue-350 ml-3 font-bold"
                                     htmlFor={`status_${status}`}>
+                                    <Image
+                                        width="40"
+                                        height="24"
+                                        src={'/images/payments/chargebee.svg'}
+                                        className="mt-4"
+                                    />
                                     {status}
                                 </label>
                             </span>
@@ -88,4 +94,4 @@ const FilterStatus: React.FC<any> = () => {
     );
 };
 
-export default FilterStatus;
+export default FilterPayment;

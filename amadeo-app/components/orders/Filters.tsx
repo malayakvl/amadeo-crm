@@ -7,7 +7,7 @@ import 'rc-slider/assets/index.css';
 import { useSelector } from 'react-redux';
 import { paginationSelectorFactory } from '../../redux/layouts/selectors';
 import { PaginationType } from '../../constants';
-import { FilterStatus } from './index';
+import { FilterPayment, FilterStatus } from './index';
 
 const Filters: React.FC<any> = () => {
     const t = useTranslations();
@@ -32,19 +32,19 @@ const Filters: React.FC<any> = () => {
             <div className="pb-3 border-b flex justify-between">
                 <div className="text-gray-350 font-bold text-xl">{t('Filters')}</div>
             </div>
-            <InputText
-                style="mt-5 w-full"
-                icon={''}
-                label={null}
-                name={'name'}
-                placeholder={t('Start typing to search')}
-                props={{
-                    // handleChange: () => {},
-                    values: { name: '' },
-                    errors: { name: '' }
-                }}
-                tips={null}
-            />
+            {/*<InputText*/}
+            {/*    style="mt-5 w-full"*/}
+            {/*    icon={''}*/}
+            {/*    label={null}*/}
+            {/*    name={'name'}*/}
+            {/*    placeholder={t('Start typing to search')}*/}
+            {/*    props={{*/}
+            {/*        // handleChange: () => {},*/}
+            {/*        values: { name: '' },*/}
+            {/*        errors: { name: '' }*/}
+            {/*    }}*/}
+            {/*    tips={null}*/}
+            {/*/>*/}
             <div className="flex justify-between mb-2">
                 <div className="flex items-center">
                     <Image width="10" height="10" src={'/images/lang-arrow.svg'} />
@@ -103,56 +103,34 @@ const Filters: React.FC<any> = () => {
                     />
                 </div>
             </div>
-            <div className="flex justify-between mb-3">
-                <div className="flex items-center">
-                    <Image width="10" height="10" src={'/images/lang-arrow.svg'} />
-                    <span className="ml-2 text-xs font-bold text-blue-350">{t('Status')}</span>
-                </div>
-                <div className="font-bold rounded-full text-center p-[2px] bg-green-250 text-xs h-5 w-5 text-white">
-                    {filters.status.length}
-                </div>
-            </div>
             <>
                 <FilterStatus />
-                {/*{filterStatuses.map((status) => (*/}
-                {/*    <span className="block">*/}
-                {/*        <input*/}
-                {/*            type="checkbox"*/}
-                {/*            id={`status_${status}`}*/}
-                {/*            value={color.value}*/}
-                {/*            checked={colorSelected.includes(*/}
-                {/*                color.value*/}
-                {/*            )}*/}
-                {/*            onChange={(e) => handleColorFilter(e)}*/}
-                {/*        />*/}
-                {/*        <label htmlFor={`status_${status}`}>*/}
-                {/*            {status}*/}
-                {/*        </label>*/}
-                {/*    </span>*/}
-                {/*))}*/}
             </>
-            <div className="flex justify-between mb-3">
-                <div className="flex items-center">
-                    <Image width="10" height="10" src={'/images/lang-arrow.svg'} />
-                    <span className="ml-2 text-xs font-bold text-blue-350">{t('Country')}</span>
-                </div>
-                <div className="font-bold rounded-full text-center p-[2px] bg-green-250 text-xs h-5 w-5 text-white">
-                    3
-                </div>
-            </div>
-            <InputText
-                style="w-full pb-4 border-b mb-6"
-                icon={''}
-                label={null}
-                name={'name'}
-                placeholder={t('Type to search for...')}
-                props={{
-                    // handleChange: () => {},
-                    values: { name: '' },
-                    errors: { name: '' }
-                }}
-                tips={null}
-            />
+            <>
+                <FilterPayment />
+            </>
+            {/*<div className="flex justify-between mb-3">*/}
+            {/*    <div className="flex items-center">*/}
+            {/*        <Image width="10" height="10" src={'/images/lang-arrow.svg'} />*/}
+            {/*        <span className="ml-2 text-xs font-bold text-blue-350">{t('Country')}</span>*/}
+            {/*    </div>*/}
+            {/*    <div className="font-bold rounded-full text-center p-[2px] bg-green-250 text-xs h-5 w-5 text-white">*/}
+            {/*        3*/}
+            {/*    </div>*/}
+            {/*</div>*/}
+            {/*<InputText*/}
+            {/*    style="w-full pb-4 border-b mb-6"*/}
+            {/*    icon={''}*/}
+            {/*    label={null}*/}
+            {/*    name={'name'}*/}
+            {/*    placeholder={t('Type to search for...')}*/}
+            {/*    props={{*/}
+            {/*        // handleChange: () => {},*/}
+            {/*        values: { name: '' },*/}
+            {/*        errors: { name: '' }*/}
+            {/*    }}*/}
+            {/*    tips={null}*/}
+            {/*/>*/}
             {/*<div className="flex items-center mb-3">*/}
             {/*    <input*/}
             {/*        id="acceptTerms"*/}
