@@ -24,3 +24,11 @@ export const showPopupSelector = createSelector(
     rootSelector,
     (orders: State.Orders): boolean => orders.showPopup
 );
+export const filterDataSelector = createSelector(
+    rootSelector,
+    (orders: State.Orders): any => orders.fileterData
+);
+export const showDatePopupSelector = createSelector(
+    rootSelector,
+    (orders: State.Orders): boolean => orders.showDateSelector
+);
