@@ -40,8 +40,8 @@ function Profile() {
         email: Yup.string()
             .email(t('Must be a valid email'))
             .required(t('You must enter your email')),
-        last_name: Yup.string().required(t('You must enter your family name')),
-        first_name: Yup.string().required(t('You must enter your first name')),
+        last_name: Yup.string().required(t('You must enter your family name')).matches(/^[aA-zZ\s]+$/, "Only alphabets are allowed for this field "),
+        first_name: Yup.string().required(t('You must enter your first name')).matches(/^[aA-zZ\s]+$/, "Only alphabets are allowed for this field "),
         identification_number: Yup.string().required(t('You must enter your tax-ID')),
         full_address: Yup.string().required(t('You must enter your address')),
         phone: Yup.string().required(t('You must enter your phone number'))

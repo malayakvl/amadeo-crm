@@ -15,14 +15,16 @@ export default function SellerRegistration({ email }: { email: any }) {
     const t = useTranslations();
 
     const validationSchema = Yup.object().shape({
-        first_name: Yup.string().required(t('You must enter your first name')),
-        last_name: Yup.string().required(t('You must enter your family name')),
+        first_name: Yup.string().required(t('You must enter your first name')).matches(/^[aA-zZ\s]+$/, "Only alphabets are allowed for this field "),
+        last_name: Yup.string().required(t('You must enter your family name')).matches(/^[aA-zZ\s]+$/, "Only alphabets are allowed for this field "),
         full_address: Yup.string().required(t('You must enter your address')),
         phone: Yup.string().required(t('You must enter your phone number')),
         password: Yup.string()
+            .strict(true)
+            .trim('Password cannot include leading and trailing spaces')
             .required(t('Required field'))
             .min(6, t('Password must be at least 6 characters')),
-        password_confirmation: Yup.string().oneOf(
+        password_confirmation: Yup.string().required(t('Required field')).oneOf(
             [Yup.ref('password'), null],
             t('Passwords must match')
         )
