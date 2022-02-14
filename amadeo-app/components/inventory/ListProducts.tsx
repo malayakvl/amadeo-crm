@@ -3,7 +3,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useTranslations } from 'next-intl';
 import { DataTable, ButtonTableAction } from '../../components/_common';
 import { PaginationType } from '../../constants';
-import { checkedIdsSelector, switchHeaderSelector } from '../../redux/layouts/selectors';
+import {
+    checkedIdsSelector,
+    paginationSelectorFactory,
+    switchHeaderSelector
+} from '../../redux/layouts/selectors';
 import { checkIdsAction, initIdsAction } from '../../redux/layouts';
 import {
     paginatedProductsSelector,
@@ -22,6 +26,8 @@ import { baseApiUrl } from '../../constants';
 import { setModalConfirmationMetaAction } from '../../redux/layouts';
 import { BanIcon } from '@heroicons/react/solid';
 import { setActivePageAction } from '../../redux/layouts/actions';
+import Image from 'next/image';
+import { Filters, FilterValues } from './index';
 
 const ListProducts: React.FC<any> = () => {
     const t = useTranslations();
@@ -32,6 +38,11 @@ const ListProducts: React.FC<any> = () => {
     const checkedIds = useSelector(checkedIdsSelector);
     const switchAllHeader = useSelector(switchHeaderSelector);
     const [showMoreConfigs, setShowMoreConfigs] = useState<any>({});
+
+    const [filterOpen, setFilterOpen] = useState(false);
+    const { filters }: Layouts.Pagination = useSelector(
+        paginationSelectorFactory(PaginationType.ORDERS)
+    );
 
     const sendRequest = useCallback(() => {
         return dispatch(fetchProductsAction());
@@ -148,12 +159,28 @@ const ListProducts: React.FC<any> = () => {
 
     return (
         <>
-            <div className="inline-block min-w-full overflow-hidden align-middle">
-                <div className="flex border border-l-0 border-r-0 border-t-0 pb-5 mb-10">
+            <div className="mt-7">
+                <div className="flex border border-l-0 border-r-0 border-t-0 pb-5 mb-10 relative">
                     <h2 className="dark-blue-header">
                         {t('Products')}
                         <span className="text-gray-180 font-normal text-sm"> {count} items</span>
                     </h2>
+                    {filterOpen && <Filters />}
+                    <button
+                        onClick={() => setFilterOpen(!filterOpen)}
+                        className="absolute top-0 right-0 flex items-center text-sm border rounded-lg px-4 py-1">
+                        <Image width={16} height={16} src={'/images/filter.svg'} />
+                        <div className="font-medium text-gray-400 ml-2">{t('Filters')}</div>
+                        <div className="ml-2 font-bold rounded-full p-[2px] text-center bg-gray-400 text-xs h-5 w-5 text-white">
+                            {filters.country_id.length +
+                                filters.payment_id.length +
+                                filters.status.length +
+                                filters.country_id.length}
+                        </div>
+                    </button>
+                </div>
+                <div className="mb-5">
+                    <FilterValues />
                 </div>
                 <DataTable
                     paginationType={PaginationType.PRODUCTS}

@@ -7,55 +7,56 @@ import { setPaginationAction } from '../../../redux/layouts';
 import Image from 'next/image';
 import { Range } from 'rc-slider';
 import 'rc-slider/assets/index.css';
-import { filterDataSelector } from '../../../redux/orders/selectors';
+import { productAdditionalSelector } from '../../../redux/products/selectors';
 
-const FilterAmount: React.FC<any> = () => {
+const FilterQuantity: React.FC<any> = () => {
     const t = useTranslations();
     const dispatch = useDispatch();
     const { filters }: Layouts.Pagination = useSelector(
-        paginationSelectorFactory(PaginationType.ORDERS)
+        paginationSelectorFactory(PaginationType.PRODUCTS)
     );
-    const filterData = useSelector(filterDataSelector);
+    const filterData = useSelector(productAdditionalSelector);
     const [showBlock, setShowBlock] = useState<boolean>(true);
 
-    const [priceRange, setPriceRange] = useState(
-        filters.total_amount[0] > 0 || filters.total_amount[1] > 0 ? filters.total_amount : [0, 0]
+    const [quantityRange, setQuantityRange] = useState(
+        filters.quantity[0] > 0 || filters.quantity[1] > 0 ? filters.quantity : [0, 0]
     );
 
     const onSliderPriceChange = (_value: any) => {
-        setPriceRange(_value);
+        setQuantityRange(_value);
     };
 
     useEffect(() => {
-        if (filters.total_amount.length === 0) {
-            setPriceRange([0, 0]);
+        if (filters.quantity.length === 0) {
+            setQuantityRange([0, 0]);
         } else {
-            setPriceRange(filters.total_amount);
+            setQuantityRange(filters.quantity);
         }
-    }, [filters.total_amount]);
+    }, [filters.quantity]);
 
     const changePriceDone = () => {
-        if (priceRange[0] !== priceRange[1]) {
+        if (quantityRange[0] !== quantityRange[1]) {
+            console.log(quantityRange);
             dispatch(
                 setPaginationAction({
-                    type: PaginationType.ORDERS,
+                    type: PaginationType.PRODUCTS,
                     modifier: {
                         filters: {
                             ...filters,
-                            total_amount: priceRange
+                            quantity: quantityRange
                         },
                         offset: 0
                     }
                 })
             );
-        } else if (priceRange[0] === priceRange[1] && priceRange[0] === 0) {
+        } else if (quantityRange[0] === quantityRange[1] && quantityRange[0] === 0) {
             dispatch(
                 setPaginationAction({
-                    type: PaginationType.ORDERS,
+                    type: PaginationType.PRODUCTS,
                     modifier: {
                         filters: {
                             ...filters,
-                            total_amount: []
+                            quantity: []
                         },
                         offset: 0
                     }
@@ -76,30 +77,29 @@ const FilterAmount: React.FC<any> = () => {
                 onClick={() => setShowBlock(!showBlock)}>
                 <div className="flex items-center">
                     <Image width="10" height="10" src={'/images/lang-arrow.svg'} />
-                    <span className="ml-2 text-xs font-bold text-blue-350">{t('Spent')}</span>
+                    <span className="ml-2 text-xs font-bold text-blue-350">{t('Quantity')}</span>
                 </div>
                 <div className="text-sm font-thin text-gray-450">
-                    {priceRange[0]} - {priceRange[1]} &euro;
+                    {quantityRange[0]} - {quantityRange[1]}
                 </div>
             </div>
             {showBlock && (
                 <>
                     <div className="block ml-2">
                         <span className="filter-label" style={{ marginLeft: '-4px' }}>
-                            {t('Price')}
+                            {t('Quantity')}
                             <em className="float-right">
-                                {priceRange[0]} - {filterData.amounts[1]}
-                                &euro;
+                                {quantityRange[0]} - {filterData.quantity[1]}
                             </em>
                         </span>
                         <Range
                             allowCross={false}
-                            step={50}
+                            step={10}
                             min={0}
-                            max={filterData.amounts[1]}
+                            max={filterData.quantity[1]}
                             onChange={onSliderPriceChange}
                             onAfterChange={onSliderAfterChange}
-                            value={priceRange}
+                            value={quantityRange}
                         />
                     </div>
                     <div className="flex mt-1">
@@ -110,15 +110,15 @@ const FilterAmount: React.FC<any> = () => {
                             <input
                                 className="w-full form-control"
                                 type="text"
-                                placeholder={'0 €'}
+                                placeholder={'0'}
                                 onChange={(e) => {
                                     onSliderPriceChange([
                                         parseFloat(e.target.value),
-                                        priceRange[1]
+                                        quantityRange[1]
                                     ]);
                                 }}
                                 onKeyUp={() => changePriceDone()}
-                                value={priceRange[0]}
+                                value={quantityRange[0]}
                             />
                         </div>
                         <div className="w-1/2">
@@ -128,15 +128,15 @@ const FilterAmount: React.FC<any> = () => {
                             <input
                                 className="w-full form-control"
                                 type="text"
-                                placeholder={`${filterData.amounts[1]} €`}
+                                placeholder={`${filterData.quantity[1]}`}
                                 onChange={(e) => {
                                     onSliderPriceChange([
-                                        priceRange[0],
+                                        quantityRange[0],
                                         parseFloat(e.target.value)
                                     ]);
                                 }}
                                 onKeyUp={() => changePriceDone()}
-                                value={priceRange[1]}
+                                value={quantityRange[1]}
                             />
                         </div>
                     </div>
@@ -146,4 +146,4 @@ const FilterAmount: React.FC<any> = () => {
     );
 };
 
-export default FilterAmount;
+export default FilterQuantity;
