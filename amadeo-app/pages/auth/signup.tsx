@@ -160,7 +160,7 @@ export default function Signup() {
                                         <label
                                             htmlFor="acceptTerms"
                                             className="text-xs font-medium">
-                                            {t('I have read and acept the')}
+                                            {t('I have read and accept the')}{' '}
                                             <span className="text-orange-450">
                                                 <a
                                                     href="https://www.liveproshop.com/terms-and-conditions"
