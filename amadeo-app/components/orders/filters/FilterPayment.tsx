@@ -19,7 +19,7 @@ const FilterPayment: React.FC<any> = () => {
 
     const handleitemFilter = (e: any) => {
         if (e.target.checked) {
-            setPaymentSelected([...paymentSelected, e.target.value]);
+            setPaymentSelected([...paymentSelected, parseInt(e.target.value)]);
             dispatch(
                 setPaginationAction({
                     type: PaginationType.ORDERS,
@@ -47,7 +47,9 @@ const FilterPayment: React.FC<any> = () => {
                     }
                 })
             );
-            setPaymentSelected(paymentSelected.filter((id: any) => id !== e.target.value));
+            setPaymentSelected(
+                paymentSelected.filter((id: any) => id !== parseInt(e.target.value))
+            );
         }
     };
 
