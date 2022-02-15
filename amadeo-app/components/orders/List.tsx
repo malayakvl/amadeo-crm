@@ -163,7 +163,7 @@ const ListMessages: React.FC = () => {
                             <td>
                                 {item.flag_name && (
                                     <img
-                                        src={`/images/flags/${item.flag_name}.svg`}
+                                        src={`/images/flags/${item.flag_name.toLowerCase()}.svg`}
                                         className="fill-current text-black"
                                         alt={''}
                                     />

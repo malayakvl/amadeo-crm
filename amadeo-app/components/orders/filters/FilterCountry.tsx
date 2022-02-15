@@ -89,7 +89,7 @@ const FilterPayment: React.FC<any> = () => {
                                             <Image
                                                 width="40"
                                                 height="24"
-                                                src={`/images/flags/${item.iso}.svg`}
+                                                src={`/images/flags/${item.iso.toLowerCase()}.svg`}
                                             />
                                             <span className="inline-block text-sm ml-2">
                                                 {item.name}
