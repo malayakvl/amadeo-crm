@@ -1,34 +1,23 @@
 import React from 'react';
-import Invoice from '../../../components/orders/reports/Invoice';
-import invoice from '../../../components/orders/data/invoice';
-import { Document, Page, StyleSheet } from '@react-pdf/renderer';
 import { getSession } from 'next-auth/client';
-import PDFViewer from 'pdf-viewer-reactjs';
+import { Viewer, Worker } from '@react-pdf-viewer/core';
+import { defaultLayoutPlugin } from '@react-pdf-viewer/default-layout';
 
-const styles = StyleSheet.create({
-    page: {
-        flexDirection: 'row',
-        backgroundColor: '#E4E4E4'
-    },
-    section: {
-        margin: 10,
-        padding: 10,
-        flexGrow: 1
-    }
-});
+import '@react-pdf-viewer/core/lib/styles/index.css';
+import '@react-pdf-viewer/default-layout/lib/styles/index.css';
 
 export default function Index() {
+    const defaultLayoutPluginInstance = defaultLayoutPlugin();
+
     return (
-        // <Document>
-        //     <Page size="A4" style={styles.page}>
-        //         <Invoice invoice={invoice} />
-        //     </Page>
-        // </Document>
-        <PDFViewer
-            document={{
-                url: 'https://arxiv.org/pdf/quant-ph/0410100.pdf'
-            }}
-        />
+        <Worker workerUrl="https://unpkg.com/pdfjs-dist@2.12.313/build/pdf.worker.js">
+            <div style={{ height: '750px' }}>
+                <Viewer
+                    fileUrl="/pdf-open-parameters.pdf"
+                    plugins={[defaultLayoutPluginInstance]}
+                />
+            </div>
+        </Worker>
     );
 }
 
