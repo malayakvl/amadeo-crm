@@ -10,7 +10,6 @@ import { PaginationType } from '../../constants';
 import queryString from 'query-string';
 import { showLoaderAction } from '../layouts/actions';
 
-
 export const submitMethodsStatusesAction: any = createAction(
     'payments/CHANGE_METHODS_STATUSES',
     (methods: Payments.PaymentMethod[]) =>
@@ -18,11 +17,15 @@ export const submitMethodsStatusesAction: any = createAction(
             const state = getState();
             dispatch(showLoaderAction(true));
             return axios
-                .patch(`${baseUrl}/payments/change-methods-statuses`, {methods}, {
-                    headers: {
-                        ...authHeader(state.user.user.email)
+                .patch(
+                    `${baseUrl}/payments/change-methods-statuses`,
+                    { methods },
+                    {
+                        headers: {
+                            ...authHeader(state.user.user.email)
+                        }
                     }
-                })
+                )
                 .then(() => {
                     dispatch(showLoaderAction(false));
                     dispatch(setSuccessToastAction('Payment methods saved'));

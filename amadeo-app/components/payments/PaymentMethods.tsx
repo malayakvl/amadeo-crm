@@ -31,7 +31,7 @@ const PaymentMethods: React.FC = () => {
     return (
         <div className="text-sm text-gray-500 mt-12 min-w-max">
             {paymentMethods?.map((paymentMethod) => (
-                <div key={paymentMethod.id} className="flex space-x-2 items-center mb-2">
+                <div key={paymentMethod.payment_id} className="flex space-x-2 items-center mb-2">
                     <div className="flex-none h-auto mr-2">
                         <img
                             width="46"

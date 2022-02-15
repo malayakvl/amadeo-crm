@@ -14,7 +14,7 @@ const initialState: {
     loading: boolean;
     count: number;
     items: Payments.DataItem[];
-    item: Payments.DataItemDetailed;
+    item: Payments.DataItemDetailed | null;
     methods: Payments.PaymentMethod[];
     showPopup: boolean;
     fileterData: any;
@@ -24,7 +24,7 @@ const initialState: {
     loading: false,
     count: 0,
     items: [],
-    item: {},
+    item: null,
     methods: [],
     showPopup: false,
     fileterData: {

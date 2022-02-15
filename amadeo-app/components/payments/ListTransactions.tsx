@@ -2,8 +2,6 @@ import React, { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 import { itemsCountSelector, paginatedItemsSelector } from '../../redux/payments/selectors';
-import { checkedIdsSelector } from '../../redux/layouts/selectors';
-// import { checkIdsAction } from '../../redux/layouts';
 import { PaginationType, baseApiUrl } from '../../constants';
 import { DataTable } from '../_common';
 import { fetchItemsAction } from '../../redux/payments';

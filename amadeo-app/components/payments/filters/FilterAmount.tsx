@@ -19,7 +19,9 @@ const FilterAmount: React.FC<any> = () => {
     const [showBlock, setShowBlock] = useState<boolean>(true);
 
     const [priceRange, setPriceRange] = useState(
-        filters.total_amount?.[0] > 0 || filters.total_amount?.[1] > 0 ? filters.total_amount : [0, 0]
+        filters.total_amount?.[0] > 0 || filters.total_amount?.[1] > 0
+            ? filters.total_amount
+            : [0, 0]
     );
 
     const onSliderPriceChange = (_value: any) => {
