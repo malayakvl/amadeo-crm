@@ -13,6 +13,9 @@ import LivesessionController from "../controllers/LivesessionController.js";
 import ChatbotMessageController from "../controllers/ChatbotMessageController.js";
 import OrderController from "../controllers/OrderController.js";
 import SupportController from '../controllers/SupportController.js';
+import PaymentController from "../controllers/PaymentController.js";
+
+
 const apiRoutes = express.Router();
 
 apiRoutes.use(express.json({
@@ -86,6 +89,11 @@ apiRoutes.route('/chatbot/change-active-all').get(ChatbotController.changeAllAct
 
 apiRoutes.route('/orders/fetch-items').get(OrderController.fetchItems);
 apiRoutes.route('/orders/fetch-filters').get(OrderController.fetchFilters);
+
+apiRoutes.route('/payments/fetch-items').get(PaymentController.fetchItems);
+apiRoutes.route('/payments/fetch-methods').get(PaymentController.fetchMethods);
+apiRoutes.route('/payments/change-methods-statuses').patch(PaymentController.changeMethodsStatuses);
+apiRoutes.route('/payments/fetch-filters').get(PaymentController.fetchFilters);
 
 apiRoutes.route('/support/send-message').post(SupportController.sendMessage);
 

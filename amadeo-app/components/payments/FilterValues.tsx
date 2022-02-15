@@ -4,7 +4,7 @@ import { useTranslations } from 'next-intl';
 import { paginationSelectorFactory } from '../../redux/layouts/selectors';
 import { PaginationType } from '../../constants';
 import { setPaginationAction } from '../../redux/layouts';
-import { filterDataSelector } from '../../redux/orders/selectors';
+import { filterDataSelector } from '../../redux/payments/selectors';
 
 const FilterValues: React.FC<any> = () => {
     const dispatch = useDispatch();
@@ -12,30 +12,30 @@ const FilterValues: React.FC<any> = () => {
 
     const filterData = useSelector(filterDataSelector);
     const { filters }: Layouts.Pagination = useSelector(
-        paginationSelectorFactory(PaginationType.ORDERS)
+        paginationSelectorFactory(PaginationType.PAYMENTS_TRANSACTIONS)
     );
 
     const dataFetched = true;
 
-    const handleStatusDelete = (status: string) => {
-        dispatch(
-            setPaginationAction({
-                type: PaginationType.ORDERS,
-                modifier: {
-                    filters: {
-                        ...filters,
-                        status: filters.status.filter((id: any) => id !== status)
-                    },
-                    offset: 0
-                }
-            })
-        );
-    };
+    // const handleStatusDelete = (status: string) => {
+    //     dispatch(
+    //         setPaginationAction({
+    //             type: PaginationType.PAYMENTS_TRANSACTIONS,
+    //             modifier: {
+    //                 filters: {
+    //                     ...filters,
+    //                     status: filters.status.filter((id: any) => id !== status)
+    //                 },
+    //                 offset: 0
+    //             }
+    //         })
+    //     );
+    // };
 
     const handlePaymentDelete = (dataId: number) => {
         dispatch(
             setPaginationAction({
-                type: PaginationType.ORDERS,
+                type: PaginationType.PAYMENTS_TRANSACTIONS,
                 modifier: {
                     filters: {
                         ...filters,
@@ -47,40 +47,40 @@ const FilterValues: React.FC<any> = () => {
         );
     };
 
-    const handleCountryDelete = (dataId: number) => {
-        dispatch(
-            setPaginationAction({
-                type: PaginationType.ORDERS,
-                modifier: {
-                    filters: {
-                        ...filters,
-                        country_id: filters.country_id.filter((id: any) => id !== dataId)
-                    },
-                    offset: 0
-                }
-            })
-        );
-    };
+    // const handleCountryDelete = (dataId: number) => {
+    //     dispatch(
+    //         setPaginationAction({
+    //             type: PaginationType.PAYMENTS_TRANSACTIONS,
+    //             modifier: {
+    //                 filters: {
+    //                     ...filters,
+    //                     country_id: filters.country_id.filter((id: any) => id !== dataId)
+    //                 },
+    //                 offset: 0
+    //             }
+    //         })
+    //     );
+    // };
 
-    const handleShippingDelete = (dataId: number) => {
-        dispatch(
-            setPaginationAction({
-                type: PaginationType.ORDERS,
-                modifier: {
-                    filters: {
-                        ...filters,
-                        shipping_id: filters.shipping_id.filter((id: any) => id !== dataId)
-                    },
-                    offset: 0
-                }
-            })
-        );
-    };
+    // const handleShippingDelete = (dataId: number) => {
+    //     dispatch(
+    //         setPaginationAction({
+    //             type: PaginationType.PAYMENTS_TRANSACTIONS,
+    //             modifier: {
+    //                 filters: {
+    //                     ...filters,
+    //                     shipping_id: filters.shipping_id.filter((id: any) => id !== dataId)
+    //                 },
+    //                 offset: 0
+    //             }
+    //         })
+    //     );
+    // };
 
     const handleTotalAmountDelete = () => {
         dispatch(
             setPaginationAction({
-                type: PaginationType.ORDERS,
+                type: PaginationType.PAYMENTS_TRANSACTIONS,
                 modifier: {
                     filters: {
                         ...filters,
@@ -95,7 +95,7 @@ const FilterValues: React.FC<any> = () => {
     const handleOrderNumberDelete = () => {
         dispatch(
             setPaginationAction({
-                type: PaginationType.ORDERS,
+                type: PaginationType.PAYMENTS_TRANSACTIONS,
                 modifier: {
                     filters: {
                         ...filters,
@@ -107,13 +107,13 @@ const FilterValues: React.FC<any> = () => {
         );
     };
 
-    console.log(filterData.payments);
-    console.log(filters.payment_id);
+    // console.log(filterData.payments);
+    // console.log(filters.payment_id);
 
     return (
         <>
             {dataFetched && (
-                <div className="flex">
+                <div className="flex ml-8">
                     {filters.order_number && (
                         <div className="filter-value">
                             {t('search_by', {
@@ -129,16 +129,16 @@ const FilterValues: React.FC<any> = () => {
                             <em role="presentation" onClick={() => handleTotalAmountDelete()} />
                         </div>
                     )}
-                    {filters.status.map((_item: any) => (
-                        <div className="filter-value" key={_item}>
-                            {t(_item)}
-                            <em role="presentation" onClick={() => handleStatusDelete(_item)} />
-                        </div>
-                    ))}
                     {filters.payment_id.map((_item: any) => (
                         <div className="filter-value" key={_item}>
                             {filterData.payments.find((_r: any) => _r.id === _item).name}
                             <em role="presentation" onClick={() => handlePaymentDelete(_item)} />
+                        </div>
+                    ))}
+                    {/* {filters.status.map((_item: any) => (
+                        <div className="filter-value" key={_item}>
+                            {t(_item)}
+                            <em role="presentation" onClick={() => handleStatusDelete(_item)} />
                         </div>
                     ))}
                     {filters.country_id.map((_item: any) => (
@@ -152,7 +152,7 @@ const FilterValues: React.FC<any> = () => {
                             {filterData.shippings.find((_r: any) => _r.id === _item).name}
                             <em role="presentation" onClick={() => handleShippingDelete(_item)} />
                         </div>
-                    ))}
+                    ))} */}
                 </div>
             )}
         </>

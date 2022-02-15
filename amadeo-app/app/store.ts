@@ -17,6 +17,7 @@ import livesessionsReducer from '../redux/livesessions/index';
 import countriesReducer from '../redux/countries/index';
 import shippingReducer from '../redux/shipping/index';
 import ordersReducer from '../redux/orders/index';
+import paymentsReducer from '../redux/payments/index';
 
 const reducers = combineReducers({
     // address: addressReducer,
@@ -29,7 +30,8 @@ const reducers = combineReducers({
     livesessions: livesessionsReducer,
     countries: countriesReducer,
     shippings: shippingReducer,
-    orders: ordersReducer
+    orders: ordersReducer,
+    payments: paymentsReducer
 });
 
 const initStore = (initialState = {}) => {

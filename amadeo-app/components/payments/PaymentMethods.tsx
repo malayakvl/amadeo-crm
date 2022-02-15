@@ -1,61 +1,44 @@
 import { useTranslations } from 'next-intl';
-import { useState, useCallback } from 'react';
-import { useDispatch } from 'react-redux';
-import { setSuccessToastAction } from '../../redux/layouts';
-import Image from 'next/image';
+import { useState, useCallback, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchMethodsAction, submitMethodsStatusesAction } from '../../redux/payments/actions';
+import { methodsSelector } from '../../redux/payments/selectors';
 
 const PaymentMethods: React.FC = () => {
     const t = useTranslations();
     const dispatch = useDispatch();
+    const methods: Payments.PaymentMethod[] = useSelector(methodsSelector);
 
-    const [paymentMethods, setPaymentMethods] = useState([
-        {
-            id: 123,
-            name: 'Method_1_name',
-            icon: '/images/payments/amex.svg',
-            active: true
-        },
-        {
-            id: 124,
-            name: 'Method_2_name',
-            icon: '/images/payments/amazon.svg',
-            active: true
-        },
-        {
-            id: 125,
-            name: 'Method_3_name',
-            icon: '/images/payments/bitcoin.svg',
-            active: false
-        },
-        {
-            id: 126,
-            name: 'Method_4_name',
-            icon: '/images/payments/paypal.svg',
-            active: true
-        },
-        {
-            id: 127,
-            name: 'Method_5_name',
-            icon: '/images/payments/visa.svg',
-            active: true
-        }
-    ]);
+    const [paymentMethods, setPaymentMethods] = useState<Payments.PaymentMethod[]>([]);
+
+    useEffect(() => {
+        dispatch(fetchMethodsAction());
+    }, []);
+
+    useEffect(() => {
+        setPaymentMethods(methods.map((obj) => ({ ...obj })));
+    }, [methods]);
 
     const handlerOnSave = useCallback(() => {
-        console.log('paymentMethods = ', paymentMethods);
-        dispatch(setSuccessToastAction(t('Payment methods saved')));
+        const changedPaymentMethods = paymentMethods.filter(
+            (method) =>
+                method.status !==
+                methods.find((item) => item.payment_id === method.payment_id)?.status
+        );
+        dispatch(submitMethodsStatusesAction(changedPaymentMethods));
     }, [paymentMethods]);
 
     return (
         <div className="text-sm text-gray-500 mt-12 min-w-max">
             {paymentMethods?.map((paymentMethod) => (
                 <div key={paymentMethod.id} className="flex space-x-2 items-center mb-2">
-                    <div className="flex-none w-8 h-auto mr-2">
-                        <Image
+                    <div className="flex-none h-auto mr-2">
+                        <img
                             width="46"
                             height="32"
-                            src={paymentMethod.icon}
+                            src={`/images/payments/${paymentMethod.short_name}.svg`}
                             className="text-orange-450"
+                            alt={paymentMethod.name}
                         />
                     </div>
                     <div className="flex-grow h-auto">{paymentMethod.name}</div>
@@ -64,9 +47,9 @@ const PaymentMethods: React.FC = () => {
                             <input
                                 type="checkbox"
                                 className="sr-only"
-                                checked={paymentMethod.active}
+                                checked={paymentMethod.status}
                                 onChange={() => {
-                                    paymentMethod.active = !paymentMethod.active;
+                                    paymentMethod.status = !paymentMethod.status;
                                     setPaymentMethods([...paymentMethods]);
                                 }}
                             />

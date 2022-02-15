@@ -1,25 +1,43 @@
-import Head from 'next/head';
-import { getSession } from 'next-auth/client';
-import React from 'react';
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useTranslations } from 'next-intl';
-import { PaymentInfo, PaymentMethods, ListTransactions } from '../../components/payments';
-// import { accountService } from '../../_services';
-// import SchedulePopup from '../../components/liveselling/SchedulePopup';
-// import { showPopupAction } from '../../redux/livesessions';
-// import { useDispatch } from 'react-redux';
-// import { fetchScenariosAction } from '../../redux/livesessions';
+import { getSession } from 'next-auth/client';
+import Head from 'next/head';
+import Image from 'next/image';
+import {
+    PaymentInfo,
+    PaymentMethods,
+    ListTransactions,
+    Filters,
+    FilterValues
+} from '../../components/payments';
+import { showDatePopupSelector } from '../../redux/payments/selectors';
+import { setPaginationAction } from '../../redux/layouts';
+import { paginationSelectorFactory } from '../../redux/layouts/selectors';
+import { DateRange } from 'react-date-range';
+import { PaginationType } from '../../constants';
+import moment from 'moment';
+
+import 'react-date-range/dist/styles.css'; // main css file
+import 'react-date-range/dist/theme/default.css'; // theme css file
 
 export default function Payments({ session }: { session: any }) {
     if (!session) return <></>;
     const t = useTranslations();
-    // const dispatch = useDispatch();
+    const dispatch = useDispatch();
 
-    // const fbSync = () => {
-    //     accountService.syncFB();
-    // };
-    // useEffect(() => {
-    //     dispatch(fetchScenariosAction());
-    // }, []);
+    const [state, setState] = useState<any>([
+        {
+            startDate: new Date(),
+            endDate: null,
+            key: 'selection'
+        }
+    ]);
+    const [filterOpen, setFilterOpen] = useState(false);
+    const showDatePopup = useSelector(showDatePopupSelector);
+    const { filters }: Layouts.Pagination = useSelector(
+        paginationSelectorFactory(PaginationType.PAYMENTS_TRANSACTIONS)
+    );
 
     return (
         <>
@@ -42,9 +60,60 @@ export default function Payments({ session }: { session: any }) {
                     </div>
 
                     <div className="ml-8 flex-1">
-                        <div className="mb-8 font-bold text-gray-350 text-lg py-4 border-b border-gray-200">
+                        <div className="flex relative mb-8 font-bold text-gray-350 text-lg py-4 border-b border-gray-200">
                             {t('Transactions')}
+
+                            <FilterValues />
+
+                            {filterOpen && <Filters />}
+                            {showDatePopup && (
+                                <div
+                                    className="absolute shadow-xl rounded-3xl"
+                                    style={{ right: '29rem', zIndex: 10 }}>
+                                    <DateRange
+                                        editableDateInputs={true}
+                                        onChange={(item) => {
+                                            setState([item.selection]);
+                                            console.log('[item.selection] = ', [item.selection]);
+                                            dispatch(
+                                                setPaginationAction({
+                                                    type: PaginationType.PAYMENTS_TRANSACTIONS,
+                                                    modifier: {
+                                                        filters: {
+                                                            ...filters,
+                                                            created_at: [
+                                                                moment(
+                                                                    item.selection.startDate
+                                                                ).format('YYYY-MM-DD'),
+                                                                moment(
+                                                                    item.selection.endDate
+                                                                ).format('YYYY-MM-DD')
+                                                            ]
+                                                        },
+                                                        offset: 0
+                                                    }
+                                                })
+                                            );
+                                        }}
+                                        moveRangeOnFirstSelection={false}
+                                        ranges={state}
+                                    />
+                                </div>
+                            )}
+                            <button
+                                onClick={() => setFilterOpen(!filterOpen)}
+                                className="absolute top-0 right-0 flex items-center text-sm border rounded-lg px-4 py-1">
+                                <Image width={16} height={16} src={'/images/filter.svg'} />
+                                <div className="font-medium text-gray-400 ml-2">{t('Filters')}</div>
+                                <div className="ml-2 font-bold rounded-full p-[2px] text-center bg-gray-400 text-xs h-5 w-5 text-white">
+                                    {filters.payment_id.length +
+                                        !!filters.total_amount.length +
+                                        !!filters.order_number.length}
+                                </div>
+                            </button>
                         </div>
+
+                        {/* <FilterValues /> */}
 
                         <ListTransactions />
                     </div>
