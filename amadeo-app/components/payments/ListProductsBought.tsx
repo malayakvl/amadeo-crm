@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 // import { itemsCountSelector, paginatedItemsSelector } from '../../redux/livesessions/selectors';
 import { PaginationType } from '../../constants';
 import { DataTable } from '../_common';
-import { fetchItemsAction } from '../../redux/livesessions';
+import { fetchItemsAction } from '../../redux/payments';
 import Image from 'next/image';
 
 const items = [1, 2, 3, 4, 5];
@@ -21,7 +21,7 @@ const ListTransactions: React.FC = () => {
     return (
         <div className="mt-7 min-w-max">
             <DataTable
-                paginationType={PaginationType.PAYMENTS_TRANSACTION_DETAILS}
+                paginationType={PaginationType.PAYMENTS_TRANSACTIONS}
                 totalAmount={count}
                 sendRequest={sendRequest}
                 hidePaginationBar>
