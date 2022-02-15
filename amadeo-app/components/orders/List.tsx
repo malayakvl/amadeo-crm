@@ -1,16 +1,23 @@
 import React, { Fragment, useCallback, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { itemsCountSelector, paginatedItemsSelector } from '../../redux/orders/selectors';
+import {
+    itemsCountSelector,
+    paginatedItemsSelector,
+    showDatePopupSelector
+} from '../../redux/orders/selectors';
 import { PaginationType } from '../../constants';
 import { DataTable } from '../_common';
 import { fetchItemsAction } from '../../redux/orders';
 import moment from 'moment';
 import Image from 'next/image';
 import { baseApiUrl } from '../../constants';
-import { checkIdsAction } from '../../redux/layouts';
+import { checkIdsAction, setPaginationAction } from '../../redux/layouts';
 import { useTranslations } from 'next-intl';
-import { Filters, ListItems } from './index';
-import { checkedIdsSelector } from '../../redux/layouts/selectors';
+import { Filters, FilterValues, ListItems } from './index';
+import { checkedIdsSelector, paginationSelectorFactory } from '../../redux/layouts/selectors';
+import { DateRange } from 'react-date-range';
+import 'react-date-range/dist/styles.css'; // main css file
+import 'react-date-range/dist/theme/default.css'; // theme css file
 
 const userProfileImg =
     'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80';
@@ -21,9 +28,20 @@ const ListMessages: React.FC = () => {
     const items = useSelector(paginatedItemsSelector);
     const count = useSelector(itemsCountSelector);
     const checkedIds = useSelector(checkedIdsSelector);
+    const { filters }: Layouts.Pagination = useSelector(
+        paginationSelectorFactory(PaginationType.ORDERS)
+    );
+    const [state, setState] = useState<any>([
+        {
+            startDate: new Date(),
+            endDate: null,
+            key: 'selection'
+        }
+    ]);
+    const showDatePopup = useSelector(showDatePopupSelector);
 
     const [showMoreConfigs, setShowMoreConfigs] = useState<any>({});
-    const [filterOpen, setFilterOpen] = useState(true);
+    const [filterOpen, setFilterOpen] = useState(false);
 
     const sendRequest = useCallback(() => {
         return dispatch(fetchItemsAction());
@@ -43,138 +61,54 @@ const ListMessages: React.FC = () => {
                     <span className="text-gray-180 font-normal text-sm"> {count} items</span>
                 </h2>
                 {filterOpen && <Filters />}
-                {/*{filterOpen && (*/}
-                {/*    <div className="-top-14 bg-white absolute right-36 w-80 p-6 shadow-xl rounded-3xl">*/}
-                {/*        <div className="pb-3 border-b flex justify-between">*/}
-                {/*            <div className="text-gray-350 font-bold text-xl">{t('Filters')}</div>*/}
-                {/*        </div>*/}
-                {/*        <InputText*/}
-                {/*            style="mt-5 w-full"*/}
-                {/*            icon={''}*/}
-                {/*            label={null}*/}
-                {/*            name={'name'}*/}
-                {/*            placeholder={t('Start typing to search')}*/}
-                {/*            props={{*/}
-                {/*                // handleChange: () => {},*/}
-                {/*                values: { name: '' },*/}
-                {/*                errors: { name: '' }*/}
-                {/*            }}*/}
-                {/*            tips={null}*/}
-                {/*        />*/}
-                {/*        <div className="flex justify-between mb-2">*/}
-                {/*            <div className="flex items-center">*/}
-                {/*                <Image width="10" height="10" src={'/images/lang-arrow.svg'} />*/}
-                {/*                <span className="ml-2 text-xs font-bold text-blue-350">*/}
-                {/*                    {t('Spent')}*/}
-                {/*                </span>*/}
-                {/*            </div>*/}
-                {/*            <div className="text-sm font-thin text-gray-450">999,99,9$</div>*/}
-                {/*        </div>*/}
-                {/*        <input*/}
-                {/*            className="w-full"*/}
-                {/*            type="range"*/}
-                {/*            min="0"*/}
-                {/*            max="100"*/}
-                {/*            step="1"*/}
-                {/*            value="50"*/}
-                {/*        />*/}
-                {/*        <div className="flex mt-1">*/}
-                {/*            <div className="w-1/2 mr-2">*/}
-                {/*                <div className="mb-3 text-xs font-bold text-blue-350">*/}
-                {/*                    {t('Minimum')}*/}
-                {/*                </div>*/}
-                {/*                <InputText*/}
-                {/*                    style="w-full"*/}
-                {/*                    icon={''}*/}
-                {/*                    label={null}*/}
-                {/*                    name={'name'}*/}
-                {/*                    placeholder={t('0,00$')}*/}
-                {/*                    props={{*/}
-                {/*                        // handleChange: () => {},*/}
-                {/*                        values: { name: '' },*/}
-                {/*                        errors: { name: '' }*/}
-                {/*                    }}*/}
-                {/*                    tips={null}*/}
-                {/*                />*/}
-                {/*            </div>*/}
-                {/*            <div className="w-1/2">*/}
-                {/*                <div className="mb-3 text-xs font-bold text-blue-350">*/}
-                {/*                    {t('Maximum')}*/}
-                {/*                </div>*/}
-                {/*                <InputText*/}
-                {/*                    style="w-full"*/}
-                {/*                    icon={''}*/}
-                {/*                    label={null}*/}
-                {/*                    name={'name'}*/}
-                {/*                    placeholder={t('999,999$')}*/}
-                {/*                    props={{*/}
-                {/*                        // handleChange: () => {},*/}
-                {/*                        values: { name: '' },*/}
-                {/*                        errors: { name: '' }*/}
-                {/*                    }}*/}
-                {/*                    tips={null}*/}
-                {/*                />*/}
-                {/*            </div>*/}
-                {/*        </div>*/}
-                {/*        <div className="flex justify-between mb-3">*/}
-                {/*            <div className="flex items-center">*/}
-                {/*                <Image width="10" height="10" src={'/images/lang-arrow.svg'} />*/}
-                {/*                <span className="ml-2 text-xs font-bold text-blue-350">*/}
-                {/*                    {t('Country')}*/}
-                {/*                </span>*/}
-                {/*            </div>*/}
-                {/*            <div className="font-bold rounded-full text-center p-[2px] bg-green-250 text-xs h-5 w-5 text-white">*/}
-                {/*                3*/}
-                {/*            </div>*/}
-                {/*        </div>*/}
-                {/*        <InputText*/}
-                {/*            style="w-full pb-4 border-b mb-6"*/}
-                {/*            icon={''}*/}
-                {/*            label={null}*/}
-                {/*            name={'name'}*/}
-                {/*            placeholder={t('Type to search for...')}*/}
-                {/*            props={{*/}
-                {/*                // handleChange: () => {},*/}
-                {/*                values: { name: '' },*/}
-                {/*                errors: { name: '' }*/}
-                {/*            }}*/}
-                {/*            tips={null}*/}
-                {/*        />*/}
-                {/*        <div className="flex items-center mb-3">*/}
-                {/*            <input*/}
-                {/*                id="acceptTerms"*/}
-                {/*                name="acceptTerms"*/}
-                {/*                className="text-green-250 border-green-250 w-5 h-5 border-2 rounded mr-2.5"*/}
-                {/*                type="checkbox"*/}
-                {/*            />*/}
-                {/*            <Image width="40" height="24" src={'/images/en-flag.svg'} />*/}
-                {/*            <span className="ml-2 text-xs font-bold text-blue-350">*/}
-                {/*                {t('America')}*/}
-                {/*            </span>*/}
-                {/*        </div>*/}
-                {/*        <div className="flex items-center mb-3">*/}
-                {/*            <input*/}
-                {/*                id="acceptTerms"*/}
-                {/*                name="acceptTerms"*/}
-                {/*                className="text-green-250 border-green-250 w-5 h-5 border-2 rounded mr-2.5"*/}
-                {/*                type="checkbox"*/}
-                {/*            />*/}
-                {/*            <Image width="40" height="24" src={'/images/fr-glag.svg'} />*/}
-                {/*            <span className="ml-2 text-xs font-bold text-blue-350">*/}
-                {/*                {t('France')}*/}
-                {/*            </span>*/}
-                {/*        </div>*/}
-                {/*    </div>*/}
-                {/*)}*/}
+                {showDatePopup && (
+                    <div
+                        className="absolute shadow-xl rounded-3xl"
+                        style={{ right: '29rem', zIndex: 10 }}>
+                        <DateRange
+                            editableDateInputs={true}
+                            onChange={(item) => {
+                                setState([item.selection]);
+                                dispatch(
+                                    setPaginationAction({
+                                        type: PaginationType.ORDERS,
+                                        modifier: {
+                                            filters: {
+                                                ...filters,
+                                                created_at: [
+                                                    moment(item.selection.startDate).format(
+                                                        'YYYY-MM-DD'
+                                                    ),
+                                                    moment(item.selection.endDate).format(
+                                                        'YYYY-MM-DD'
+                                                    )
+                                                ]
+                                            },
+                                            offset: 0
+                                        }
+                                    })
+                                );
+                            }}
+                            moveRangeOnFirstSelection={false}
+                            ranges={state}
+                        />
+                    </div>
+                )}
                 <button
                     onClick={() => setFilterOpen(!filterOpen)}
                     className="absolute top-0 right-0 flex items-center text-sm border rounded-lg px-4 py-1">
                     <Image width={16} height={16} src={'/images/filter.svg'} />
                     <div className="font-medium text-gray-400 ml-2">{t('Filters')}</div>
                     <div className="ml-2 font-bold rounded-full p-[2px] text-center bg-gray-400 text-xs h-5 w-5 text-white">
-                        9
+                        {filters.country_id.length +
+                            filters.payment_id.length +
+                            filters.status.length +
+                            filters.country_id.length}
                     </div>
                 </button>
+            </div>
+            <div className="mb-5">
+                <FilterValues />
             </div>
             <DataTable
                 paginationType={PaginationType.ORDERS}
@@ -229,7 +163,7 @@ const ListMessages: React.FC = () => {
                             <td>
                                 {item.flag_name && (
                                     <img
-                                        src={`/images/flags/${item.flag_name}.svg`}
+                                        src={`/images/flags/${item.flag_name.toLowerCase()}.svg`}
                                         className="fill-current text-black"
                                         alt={''}
                                     />

@@ -44,7 +44,7 @@ const initialState: State.Layouts = {
                 country_id: [],
                 payment_id: [],
                 status: [],
-                order_amount: [],
+                total_amount: [],
                 created_at: []
             }
         }

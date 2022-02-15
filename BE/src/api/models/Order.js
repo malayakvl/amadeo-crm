@@ -8,10 +8,8 @@ class Order {
             // const sellerIds = [];
             // const buyerIds = [];
             const _filters = JSON.parse(filters);
-            console.log(_filters);
             // create main filters for sellet
             if (user.role_id === 2) {
-                // sellerIds.push(user.id);
                 _filters.seller_id = [user.id];
                 if (_filters.userIds) {
                     _filters.buyer_id = _filters.userIds;
@@ -31,17 +29,7 @@ class Order {
                                     seller_first_name, seller_photo, buyer_id,
                                     buyer_first_name, buyer_photo, flag_name, shipping_image, order_items
                                 FROM data.get_orders (${perPage}, ${offset}, '${JSON.stringify(_filters)}', 'orders.created_at DESC');`;
-            // const _ordersQuery = `SELECT data.orders.*,
-            //             data.users.first_name, data.users.photo,
-            //             data.countries.iso AS flag_name,
-            //             data.shipping.image AS shipping_image
-            //         FROM data.orders
-            //         LEFT JOIN data.users ON data.users.id = data.orders.user_id
-            //         LEFT JOIN data.shipping ON data.shipping.id = data.orders.shipping_id
-            //         LEFT JOIN data.countries ON data.countries.id = data.orders.country_id
-            //         ORDER BY created_at DESC
-            //         ;`;
-            console.log(ordersQuery);
+            // console.log(ordersQuery);
             const res = await client.query(ordersQuery);
             const items = res.rows.length > 0 ? res.rows : [];
             const error = null;
@@ -49,6 +37,45 @@ class Order {
             return {
                 items,
                 size,
+                error
+            };
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error (Products getAll):',
+                    { message: e.message }
+                );
+            }
+            const items = null;
+            const error = {
+                code: 500,
+                message: 'Error get list of users'
+            };
+            return {
+                items,
+                error
+            };
+        } finally {
+            client.release();
+        }
+    }
+    
+    async fetchFilters () {
+        const client = await pool.connect();
+        try {
+            const res = {};
+            const shipping = await client.query('SELECT * FROM data.get_orders_shipping();');
+            res.shippings = shipping.rows[0].shipping ? shipping.rows[0].shipping : [];
+            const payments = await client.query('SELECT * FROM data.get_orders_payments();');
+            res.payments = payments.rows[0].payments ? payments.rows[0].payments : [];
+            const countries = await client.query('SELECT * FROM data.get_orders_countries();');
+            res.countries = countries.rows[0].countries ? countries.rows[0].countries : [];
+            const amounts = await client.query('SELECT * FROM data.get_orders_total_amount_range();');
+            res.amounts = amounts.rows[0].total_amount_range.min ? [amounts.rows[0].total_amount_range.min, amounts.rows[0].total_amount_range.max] : [];
+            const error = null;
+            return {
+                res,
                 error
             };
         } catch (e) {

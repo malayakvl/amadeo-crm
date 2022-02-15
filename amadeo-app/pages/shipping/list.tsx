@@ -84,7 +84,7 @@ export default function List() {
         }
     }, [user]);
 
-    if (!countries.length || !threshold) {
+    if (!countries.length || threshold === false) {
         return <></>;
     }
 
@@ -246,7 +246,7 @@ export default function List() {
                                                                 <Image
                                                                     width="34"
                                                                     height="24"
-                                                                    src={`/images/flags/Country=${country.iso}.svg`}
+                                                                    src={`/images/flags/${country.iso.toLowerCase()}.svg`}
                                                                 />
                                                                 <div className="ml-auto">
                                                                     {country.price}
@@ -259,7 +259,7 @@ export default function List() {
                                                         <Image
                                                             width="34"
                                                             height="24"
-                                                            src={`/images/flags/Country=${item.countries[0].iso}.svg`}
+                                                            src={`/images/flags/${item.countries[0].iso.toLowerCase()}.svg`}
                                                         />
                                                         <div className="ml-auto">
                                                             {item.countries[0].price}

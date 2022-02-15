@@ -240,5 +240,9 @@
   "Orders": "Orders",
   "order_number": "Order number",
   "Total": "Total",
-  "Start typing to search": "Start typing to search"
+  "Start typing to search": "Start typing to search",
+  "Status": "Status",
+  "Spent": "Spent",
+  "Support": "Support",
+  "Delivery": "Delivery"
 }
