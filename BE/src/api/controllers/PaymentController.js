@@ -14,10 +14,6 @@ class PaymentController {
             return res.status(401).json('Access deny');
         } else {
             const data = await paymentModel.fetchItems(1, limit, req.user, false, offset, queryFilter);
-            data.items?.forEach(element => {
-                element.payment_name = 'Chargebee';
-                element.payment_short_name = 'chargebee';
-            });
             return res.status(200).json({ count: data.size, items: data.items});
         }
         // const data = await chatbotMessageModel.addMessages(req.query.sessionId, req.body);
@@ -26,6 +22,16 @@ class PaymentController {
         // } else {
         //     return res.status(401).json({success: false, error: 'Something wend wrong'});
         // }
+    }
+
+    async fetchItem(req, res) {
+        const { orderNumber } = req.query;
+        if (!req.user) {
+            return res.status(401).json('Access deny');
+        } else {
+            const data = await paymentModel.fetchItem(orderNumber, req.user.id);
+            return res.status(200).json({ item: data.item});
+        }
     }
 
     async fetchMethods(req, res) {

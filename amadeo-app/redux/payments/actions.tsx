@@ -75,21 +75,25 @@ export const fetchItemsAction: any = createAction(
 
 export const fetchItemAction: any = createAction(
     'payments/FETCH_ITEM_DETAILED',
-    async (id: number) =>
+    async (orderNumber: string) =>
         async (
             dispatch: Type.Dispatch,
             getState: () => State.Root
         ): Promise<{ item: Payments.DataItemDetailed }> => {
             const state = getState();
             dispatch(showLoaderAction(true));
-            const res = await axios.get(`${baseUrl}/payments/${id}`, {
-                headers: {
-                    ...authHeader(state.user.user.email)
+            const res = await axios.get(
+                `${baseUrl}/payments/fetch-item?${queryString.stringify({
+                    orderNumber
+                })}`,
+                {
+                    headers: {
+                        ...authHeader(state.user.user.email)
+                    }
                 }
-            });
+            );
             if (res.status) {
                 dispatch(showLoaderAction(false));
-                // dispatch(showItemAction(true));
             }
             return {
                 item: res.data.item

@@ -87,7 +87,7 @@ const ListTransactions: React.FC = () => {
                             <div className="text-right">{item.total_amount} &euro;</div>
                         </td>
                         <td className="w-1">
-                            <Link href={`${router.asPath}/transaction/${item.id}`}>
+                            <Link href={`${router.asPath}/transaction/${item.order_number}`}>
                                 <a>
                                     <Image
                                         width={24}
