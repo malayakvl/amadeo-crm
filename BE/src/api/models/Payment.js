@@ -138,40 +138,35 @@ class Payment {
 
     async fetchFilters () {
         const client = await pool.connect();
+
+        const filter = '\'{"status":["payed"]}\'';
+        let res = {};
+        let error = null;
+
         try {
-            const res = {};
-            const shipping = await client.query('SELECT * FROM data.get_orders_shipping();');
-            res.shippings = shipping.rows[0].shipping ? shipping.rows[0].shipping : [];
-            const payments = await client.query('SELECT * FROM data.get_orders_payments();');
+            const payments = await client.query(`SELECT * FROM data.get_orders_payments(${filter});`);
             res.payments = payments.rows[0].payments ? payments.rows[0].payments : [];
-            const countries = await client.query('SELECT * FROM data.get_orders_countries();');
-            res.countries = countries.rows[0].countries ? countries.rows[0].countries : [];
-            const amounts = await client.query('SELECT * FROM data.get_orders_total_amount_range()');
+
+            const amounts = await client.query(`SELECT * FROM data.get_orders_total_amount_range(${filter});`);
             res.amounts = amounts.rows[0].total_amount_range.min ? [amounts.rows[0].total_amount_range.min, amounts.rows[0].total_amount_range.max] : [];
-            const error = null;
-            return {
-                res,
-                error
-            };
+
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
+                console.log('[fetchFilters] pgSQL error.message = ', e.message);
                 logger.log(
                     'error',
                     'Model error (Products getAll):',
                     { message: e.message }
                 );
             }
-            const items = null;
-            const error = {
+            error = {
                 code: 500,
                 message: 'Error get list of users'
             };
-            return {
-                items,
-                error
-            };
+
         } finally {
             client.release();
+            return { res, error };
         }
     }
 }
