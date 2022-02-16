@@ -1,5 +1,6 @@
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useState } from 'react';
 
 type PriceProps = {
@@ -73,7 +74,6 @@ export default function Pricing() {
         </div>
     );
 
-    console.log(selected);
     return (
         <div className="text-gray-350 font-medium max-w-[1440px] mx-auto my-16">
             <div className="text-center">
@@ -86,7 +86,7 @@ export default function Pricing() {
                 </div>
             </div>
 
-            <div className="flex my-28 cursor-pointer">
+            <div className="flex mt-28">
                 <div className="text-sm mt-72 mr-auto">
                     <div className="font-bold text-2xl mb-4">{t('Features')}</div>
                     <div className="">
@@ -177,7 +177,7 @@ export default function Pricing() {
                         }
                     />
                     <Price
-                        onClick={() => setSelected('platinum')}
+                        onClick={() => false}
                         selected={selected === 'platinum'}
                         disabled
                         name={t('Platinum')}
@@ -210,7 +210,13 @@ export default function Pricing() {
                 </div>
             </div>
 
-            <div className="text-center">
+            <div className="underline text-center mt-10">
+                <Link href="/dashboard">
+                    <a>{t('Skip for now (Take trial)')}</a>
+                </Link>
+            </div>
+
+            <div className="mt-28 text-center">
                 <div className="text-xs font-bold">{t('Support')}</div>
                 <div className="mb-3 font-bold text-4xl">{t('Frequently asked questions')}</div>
                 <div>

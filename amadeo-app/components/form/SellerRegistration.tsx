@@ -43,7 +43,7 @@ export default function SellerRegistration({ email }: { email: any }) {
                 signIn('credentials_login', {
                     email: values.email,
                     password: values.password,
-                    callbackUrl: `${window.location.origin}/dashboard`
+                    callbackUrl: `${window.location.origin}/pricing`
                 });
             });
         });
