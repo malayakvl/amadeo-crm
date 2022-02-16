@@ -67,6 +67,11 @@
   }
 }
 
+.app{
+  display: table;
+  margin: 0 auto;
+}
+
 @import "components/buttons";
 @import "components/alerts";
 @import "components/sidebar";

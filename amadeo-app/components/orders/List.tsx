@@ -1,4 +1,5 @@
 import React, { Fragment, useCallback, useState } from 'react';
+import Link from 'next/link';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     itemsCountSelector,
@@ -137,7 +138,11 @@ const ListMessages: React.FC = () => {
                                     onClick={() => handleShowMore(item.id)}
                                 />
                             </td>
-                            <td className="order-number">{item.order_number}</td>
+                            <td className="order-number">
+                                <Link href={`/orders/${item.id}`}>
+                                    <a>{item.order_number}</a>
+                                </Link>
+                            </td>
                             <td className="order-status">
                                 <span className={item.status}>{item.status}</span>
                             </td>
