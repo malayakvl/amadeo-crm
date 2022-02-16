@@ -9,7 +9,7 @@ declare namespace Layouts {
             livesessions: Pagination;
             orders: Pagination;
             paymentstransactions: Pagination;
-            paymentstransactiondetails: Pagination;
+            // paymentstransactiondetails: Pagination;
         };
         isSidebarOpen: boolean;
         isDataLoading: boolean;
