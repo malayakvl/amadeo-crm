@@ -120,6 +120,30 @@ export const fetchItemAction: any = createAction(
         }
 );
 
+export const fetchOrderPdfAction: any = createAction(
+    'orders/FETCH_ORDER_PDF',
+    async (id: number) =>
+        async (
+            dispatch: Type.Dispatch,
+            getState: () => State.Root
+        ): Promise<{ orderFetched: Livesessions.DataItem }> => {
+            const state = getState();
+            dispatch(showLoaderAction(true));
+            const res = await axios.get(`${baseUrl}/create-order/${id}`, {
+                headers: {
+                    ...authHeader(state.user.user.email)
+                }
+            });
+            if (res.status) {
+                dispatch(showLoaderAction(false));
+                // dispatch(showItemAction(true));
+            }
+            return {
+                orderFetched: res.data.item
+            };
+        }
+);
+
 export const showPopupAction: any = createAction('orders/SHOW_POPUP');
 export const showDateSelectorAction: any = createAction('orders/SHOW_DATE_POPUP');
 export const setEmptyFormAction: any = createAction('orders/EMPTY_FORM');
