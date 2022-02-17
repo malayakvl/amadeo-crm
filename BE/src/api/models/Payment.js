@@ -80,9 +80,9 @@ class Payment {
 
             const ordersQuery = `SELECT id, order_items,
                                     payment_id, payment_name, payment_short_name,
-                                    total_amount, order_number, order_amount,
-                                    buyer_first_name, buyer_photo,
-                                    flag_name, shipping_image,
+                                    total_amount, order_number, order_amount, shipping_amount,
+                                    buyer_first_name, buyer_photo, buyer_email,
+                                    flag_name, shipping_image, shipping_address,
                                     created_at
                                 FROM data.get_orders (1, 0, '${filter}');`;
             const res = await client.query(ordersQuery);
