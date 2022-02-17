@@ -16,10 +16,7 @@ export default function Password() {
             .min(6, t('Password must be at least 6 characters')),
         password_confirmation: Yup.string()
             .required(t('Required field'))
-            .oneOf(
-                [Yup.ref('password'), null],
-                t('Passwords must match')
-            )
+            .oneOf([Yup.ref('password'), null], t('Passwords must match'))
     });
     return (
         <Formik

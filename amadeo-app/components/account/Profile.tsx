@@ -77,8 +77,7 @@ function Profile() {
         vat: Yup.string()
             .min(3, t('Must be at least 3 characters'))
             .strict(true)
-            .trim('Password cannot include leading and trailing spaces'),
-
+            .trim('Password cannot include leading and trailing spaces')
     });
 
     return (
