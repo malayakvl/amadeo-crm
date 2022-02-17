@@ -91,6 +91,7 @@ apiRoutes.route('/orders/fetch-items').get(OrderController.fetchItems);
 apiRoutes.route('/orders/fetch-filters').get(OrderController.fetchFilters);
 
 apiRoutes.route('/payments/fetch-items').get(PaymentController.fetchItems);
+apiRoutes.route('/payments/fetch-item').get(PaymentController.fetchItem);
 apiRoutes.route('/payments/fetch-methods').get(PaymentController.fetchMethods);
 apiRoutes.route('/payments/change-methods-statuses').patch(PaymentController.changeMethodsStatuses);
 apiRoutes.route('/payments/fetch-filters').get(PaymentController.fetchFilters);
