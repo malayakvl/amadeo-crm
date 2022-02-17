@@ -8,7 +8,7 @@ class Payment {
             // const sellerIds = [];
             // const buyerIds = [];
             const _filters = JSON.parse(filters);
-            console.log(_filters);
+            // console.log(_filters);
             // create main filters for sellet
             if (user.role_id === 2) {
                 // sellerIds.push(user.id);
@@ -25,13 +25,15 @@ class Payment {
                 offset = reqOffset;
             } else {
                 offset = (Number(page) - 1) * Number(perPage);
-            }console.log('_filters =', _filters);
-            const ordersQuery = `SELECT id, payment_id,
+            }
+            // console.log('_filters =', _filters);
+            const ordersQuery = `SELECT id,
+                                    payment_id, payment_name, payment_short_name,
                                     total_amount, order_number,
-                                    created_at, updated_at,
-                                    buyer_first_name, buyer_photo
+                                    buyer_first_name, buyer_photo,
+                                    created_at, updated_at
                                 FROM data.get_orders (${perPage}, ${offset}, '${JSON.stringify(_filters)}', 'orders.created_at DESC');`;
-            console.log(ordersQuery);
+            // console.log(ordersQuery);
             const res = await client.query(ordersQuery);
             const items = res.rows.length > 0 ? res.rows : [];
             const error = null;
@@ -60,6 +62,50 @@ class Payment {
             };
         } finally {
             client.release();
+        }
+    }
+
+    async fetchItem (orderNumber, userId) {
+        const client = await pool.connect();
+
+        let item = null;
+        let error = null;
+
+        try {
+            const filter = JSON.stringify({
+                status: ["payed"],
+                seller_id: userId,
+                order_number: orderNumber
+            });
+
+            const ordersQuery = `SELECT id, order_items,
+                                    payment_id, payment_name, payment_short_name,
+                                    total_amount, order_number, order_amount,
+                                    buyer_first_name, buyer_photo,
+                                    flag_name, shipping_image,
+                                    created_at
+                                FROM data.get_orders (1, 0, '${filter}');`;
+            const res = await client.query(ordersQuery);
+            item = res.rows.length > 0 ? res.rows[0] : [];
+
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error (Products getAll):',
+                    { message: e.message }
+                );
+            }
+            error = {
+                code: 500,
+                message: 'Error get list of users'
+            };
+        } finally {
+            client.release();
+            return {
+                item,
+                error
+            };
         }
     }
 
@@ -138,40 +184,35 @@ class Payment {
 
     async fetchFilters () {
         const client = await pool.connect();
+
+        const filter = '\'{"status":["payed"]}\'';
+        let res = {};
+        let error = null;
+
         try {
-            const res = {};
-            const shipping = await client.query('SELECT * FROM data.get_orders_shipping();');
-            res.shippings = shipping.rows[0].shipping ? shipping.rows[0].shipping : [];
-            const payments = await client.query('SELECT * FROM data.get_orders_payments();');
+            const payments = await client.query(`SELECT * FROM data.get_orders_payments(${filter});`);
             res.payments = payments.rows[0].payments ? payments.rows[0].payments : [];
-            const countries = await client.query('SELECT * FROM data.get_orders_countries();');
-            res.countries = countries.rows[0].countries ? countries.rows[0].countries : [];
-            const amounts = await client.query('SELECT * FROM data.get_orders_total_amount_range()');
+
+            const amounts = await client.query(`SELECT * FROM data.get_orders_total_amount_range(${filter});`);
             res.amounts = amounts.rows[0].total_amount_range.min ? [amounts.rows[0].total_amount_range.min, amounts.rows[0].total_amount_range.max] : [];
-            const error = null;
-            return {
-                res,
-                error
-            };
+
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
+                console.log('[fetchFilters] pgSQL error.message = ', e.message);
                 logger.log(
                     'error',
                     'Model error (Products getAll):',
                     { message: e.message }
                 );
             }
-            const items = null;
-            const error = {
+            error = {
                 code: 500,
                 message: 'Error get list of users'
             };
-            return {
-                items,
-                error
-            };
+
         } finally {
             client.release();
+            return { res, error };
         }
     }
 }

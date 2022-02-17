@@ -27,6 +27,7 @@ apiRoutes.use(express.json({
 apiRoutes.route('/post-test').get(TestController.testData);
 apiRoutes.route('/post-test').post(TestController.testData);
 apiRoutes.route('/upload').post(TestController.uploadFile);
+apiRoutes.route('/invoice').get(OrderController.generateInvoice);
 
 apiRoutes.route('/countries').get(CountryController.getAll);
 
@@ -36,7 +37,6 @@ apiRoutes.route('/fetch-live-sessions').get(LivesessionController.getAllInAir);
 apiRoutes.route('/fetch-active-sessions').get(LivesessionController.getActiveSessions);
 apiRoutes.route('/add-live-messages').post(ChatbotMessageController.addMessages);
 apiRoutes.route('/parse-live-messages').get(ChatbotMessageController.parseMessages);
-apiRoutes.route('/create-orders').get(ChatbotMessageController.createOrders);
 
 /** ===================================================================== */
 /** ================== AUTHENTIFICATED ROUTES =========================== */
@@ -89,8 +89,10 @@ apiRoutes.route('/chatbot/change-active-all').get(ChatbotController.changeAllAct
 
 apiRoutes.route('/orders/fetch-items').get(OrderController.fetchItems);
 apiRoutes.route('/orders/fetch-filters').get(OrderController.fetchFilters);
+apiRoutes.route('/create-order/:id').get(ChatbotMessageController.createOrders);
 
 apiRoutes.route('/payments/fetch-items').get(PaymentController.fetchItems);
+apiRoutes.route('/payments/fetch-item').get(PaymentController.fetchItem);
 apiRoutes.route('/payments/fetch-methods').get(PaymentController.fetchMethods);
 apiRoutes.route('/payments/change-methods-statuses').patch(PaymentController.changeMethodsStatuses);
 apiRoutes.route('/payments/fetch-filters').get(PaymentController.fetchFilters);

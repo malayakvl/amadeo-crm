@@ -5,8 +5,6 @@ class Order {
     async fetchItems (page, perPage = 20, user, isRead = false, reqOffset = null, filters) {
         const client = await pool.connect();
         try {
-            // const sellerIds = [];
-            // const buyerIds = [];
             const _filters = JSON.parse(filters);
             // create main filters for sellet
             if (user.role_id === 2) {
@@ -29,7 +27,6 @@ class Order {
                                     seller_first_name, seller_photo, buyer_id,
                                     buyer_first_name, buyer_photo, flag_name, shipping_image, order_items
                                 FROM data.get_orders (${perPage}, ${offset}, '${JSON.stringify(_filters)}', 'orders.created_at DESC');`;
-            // console.log(ordersQuery);
             const res = await client.query(ordersQuery);
             const items = res.rows.length > 0 ? res.rows : [];
             const error = null;

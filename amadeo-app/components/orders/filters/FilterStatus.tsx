@@ -14,7 +14,7 @@ const FilterStatus: React.FC<any> = () => {
     );
     const [statusSelected, setStatusSelected] = useState<any>(filters.status);
     const [showBlock, setShowBlock] = useState<boolean>(true);
-    const filterStatuses = ['new', 'payed', 'overdue'];
+    const filterStatuses = ['payed', 'shipped', 'canceled'];
 
     const handleStatusFilter = (e: any) => {
         if (e.target.checked) {

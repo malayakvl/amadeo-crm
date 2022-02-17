@@ -8,6 +8,7 @@ declare namespace Orders {
         showPopup: boolean;
         fileterData: any;
         showDateSelector: boolean;
+        orderFetched: boolean;
     }
 
     interface DataItem {

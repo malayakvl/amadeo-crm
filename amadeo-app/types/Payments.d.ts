@@ -51,7 +51,7 @@ declare namespace Payments {
         payment_id: number | null;
         payment_name: string;
         payment_short_name: string;
-        // order_amount: number;
+        order_amount: number;
         // discount_amount: number;
         total_amount: number;
         order_number: number;
@@ -62,9 +62,9 @@ declare namespace Payments {
         // buyer_id: number;
         buyer_first_name: string;
         buyer_photo: string;
-        // flag_name: string | null;
-        // shipping_image: string | null;
-        // order_items: any;
+        flag_name: string | null;
+        shipping_image: string | null;
+        order_items: any;
         // user_id: number;
         // user_name: string;
         // photo: string;
