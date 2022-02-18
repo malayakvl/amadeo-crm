@@ -94,7 +94,7 @@ class User {
                         'facebook',
                         '${userData.id}',
                         '${userData.accessToken}',
-                        '${userData.expirationTime}',
+                        to_timestamp(${userData.expirationTime}),
                         '${userData.name}',
                         '${userData.roleId}'
                     )
@@ -463,7 +463,7 @@ class User {
         const query = `UPDATE data.users SET
                         auth_provider_name='facebook', auth_provider_id='${data.userID}',
                         auth_provider_access_token='${data.accessToken}',
-                        auth_provider_expiration_time='${data.data_access_expiration_time}'
+                        auth_provider_expiration_time=to_timestamp(${data.data_access_expiration_time})
                        WHERE id=${userData.id}
                         `;
         try {
