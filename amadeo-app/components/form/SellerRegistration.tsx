@@ -16,13 +16,26 @@ export default function SellerRegistration({ email }: { email: any }) {
 
     const validationSchema = Yup.object().shape({
         first_name: Yup.string()
+            .strict(true)
+            .trim('Cannot include leading and trailing spaces')
             .required(t('You must enter your first name'))
             .matches(/^[aA-zZ\s]+$/, 'Only alphabets are allowed for this field '),
         last_name: Yup.string()
+            .strict(true)
+            .trim('Cannot include leading and trailing spaces')
             .required(t('You must enter your family name'))
             .matches(/^[aA-zZ\s]+$/, 'Only alphabets are allowed for this field '),
-        full_address: Yup.string().required(t('You must enter your address')),
-        phone: Yup.string().required(t('You must enter your phone number')),
+        full_address: Yup.string()
+            .strict(true)
+            .trim('Cannot include leading and trailing spaces')
+            .required(t('You must enter your address')),
+        company_name: Yup.string().strict(true).trim('Cannot include leading and trailing spaces'),
+        company_id: Yup.string().strict(true).trim('Cannot include leading and trailing spaces'),
+        vat: Yup.string().strict(true).trim('Cannot include leading and trailing spaces'),
+        phone: Yup.string()
+            .required(t('You must enter your phone number'))
+            .strict(true)
+            .trim('Cannot include leading and trailing spaces'),
         password: Yup.string()
             .strict(true)
             .trim('Password cannot include leading and trailing spaces')
