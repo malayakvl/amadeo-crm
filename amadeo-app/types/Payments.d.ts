@@ -21,6 +21,7 @@ declare namespace Payments {
         payment_short_name: string;
         // order_amount: number;
         // discount_amount: number;
+        // shipping_amount: number;
         total_amount: number;
         order_number: number;
         // status: string;
@@ -30,8 +31,10 @@ declare namespace Payments {
         // buyer_id: number;
         buyer_first_name: string;
         buyer_photo: string;
+        // buyer_email: string;
         // flag_name: string | null;
         // shipping_image: string | null;
+        // shipping_address: string;
         // order_items: any;
         // user_id: number;
         // user_name: string;
@@ -53,6 +56,7 @@ declare namespace Payments {
         payment_short_name: string;
         order_amount: number;
         // discount_amount: number;
+        shipping_amount: number;
         total_amount: number;
         order_number: number;
         // status: string;
@@ -62,8 +66,10 @@ declare namespace Payments {
         // buyer_id: number;
         buyer_first_name: string;
         buyer_photo: string;
+        buyer_email: string;
         flag_name: string | null;
         shipping_image: string | null;
+        shipping_address: string;
         order_items: any;
         // user_id: number;
         // user_name: string;

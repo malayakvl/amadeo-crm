@@ -10,7 +10,7 @@ const TransactionDetailsPanel: React.FC<{ item: Payments.DataItemDetailed }> = (
     // const t = useTranslations();
 
     return (
-        <div className="flex flex-col min-w-max min-h-max mb-4 font-bold text-gray-350 text-lg p-6 rounded-md shadow-inner bg-gray-100">
+        <div className="flex flex-col min-w-[35rem] min-h-max mb-4 font-bold text-gray-350 text-lg p-6 rounded-md shadow-inner bg-gray-100 w-full xl:w-auto">
             <div className="text-gray-350 flex justify-between">
                 <div className=" text-1xl">
                     Date
@@ -36,10 +36,10 @@ const TransactionDetailsPanel: React.FC<{ item: Payments.DataItemDetailed }> = (
                         src={item?.buyer_photo ? baseApiUrl + item.buyer_photo : userProfileImg}
                     />
                 </div>
-                <div className="ml-7 pt-2">
+                <div className="ml-7 pt-4">
                     <div>{item?.buyer_first_name}</div>
-                    <div className="font-normal text-sm mt-1">Screen Name</div>
-                    <div className="font-medium text-xs text-orange-450">user@mailserver.com</div>
+                    {/* <div className="font-normal text-sm mt-1">Screen Name</div> */}
+                    <div className="font-medium text-xs text-orange-450">{item?.buyer_email}</div>
                 </div>
             </div>
 
@@ -73,7 +73,7 @@ const TransactionDetailsPanel: React.FC<{ item: Payments.DataItemDetailed }> = (
                         src={`/images/flags/${item?.flag_name?.toLowerCase()}.svg`}
                     />
                 </div>
-                <div className="text-base">3891 Ranchview Dr. Richardson, California 62639</div>
+                <div className="text-base">{item?.shipping_address}</div>
             </div>
         </div>
     );

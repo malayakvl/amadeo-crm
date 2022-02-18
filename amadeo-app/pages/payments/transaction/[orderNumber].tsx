@@ -53,7 +53,7 @@ export default function Payments({ session }: { session: any }) {
                     </div>
 
                     <div className="flex w-full">
-                        <div className="w-1/2 text-center">
+                        <div className="w-1/2 text-center hidden xl:block">
                             <Image
                                 width="280"
                                 height="237"

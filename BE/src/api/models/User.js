@@ -265,8 +265,7 @@ class User {
     async update(userData) {
         const client = await pool.connect();
         try {
-            const user = await this.findUserByEmail(userData.email);
-            const query = `SELECT common__tools._update_table_by_id('data', 'users', '${JSON.stringify(userData)}', ${user.id});`;
+            const query = `SELECT common__tools._update_table_by_id('data', 'users', '${JSON.stringify(userData)}', ${userData.id});`;
             await client.query(query);
             if (user) {
                 return { user: userData, error: null };
