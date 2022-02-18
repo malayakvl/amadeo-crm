@@ -214,11 +214,11 @@ class Shipping {
         }
     }
 
-    async findCountriesById(id) {
+    async findCountriesById(id, userId) {
         const client = await pool.connect();
         try {
             const res = await client.query(
-                'SELECT country_id AS id, price FROM data.shipping_to_country WHERE shipping_id = $1', [id]
+                'SELECT country_id AS id, price FROM data.shipping_to_country WHERE shipping_id = $1 AND user_id = $2', [id, userId]
             );
 
             return res.rows;
