@@ -126,7 +126,7 @@ export const fetchOrderPdfAction: any = createAction(
         async (
             dispatch: Type.Dispatch,
             getState: () => State.Root
-        ): Promise<{ orderFetched: boolean; fileName: string }> => {
+        ): Promise<{ orderFetched: boolean; fileName: string; base64Data: string }> => {
             const state = getState();
             dispatch(showLoaderAction(true));
             const res = await axios.get(`${baseUrl}/create-order/${id}`, {
@@ -140,7 +140,8 @@ export const fetchOrderPdfAction: any = createAction(
             }
             return {
                 orderFetched: true,
-                fileName: res.data.fileName
+                fileName: res.data.fileName,
+                base64Data: res.data.filebase64
             };
         }
 );

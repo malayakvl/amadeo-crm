@@ -10,6 +10,7 @@ declare namespace Orders {
         showDateSelector: boolean;
         orderFetched: boolean;
         fileName: string;
+        base64Data: string;
     }
 
     interface DataItem {

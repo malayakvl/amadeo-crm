@@ -20,6 +20,7 @@ const initialState: {
     showDateSelector: boolean;
     orderFetched: boolean;
     fileName: string;
+    base64Data: string;
 } = {
     isFetched: false,
     loading: false,
@@ -35,7 +36,8 @@ const initialState: {
     },
     showDateSelector: false,
     orderFetched: false,
-    fileName: ''
+    fileName: '',
+    base64Data: ''
 };
 
 const ACTION_HANDLERS: any = {
@@ -120,7 +122,7 @@ const ACTION_HANDLERS: any = {
     [fetchOrderPdfAction]: {
         next: (
             state: State.Orders,
-            action: Type.ReduxAction<Pick<State.Orders, 'orderFetched' | 'fileName'>>
+            action: Type.ReduxAction<Pick<State.Orders, 'orderFetched' | 'fileName' | 'base64Data'>>
         ): State.Orders => ({
             ...state,
             ...action.payload,
