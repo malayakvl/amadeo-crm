@@ -431,7 +431,14 @@ class User {
         const query = `SELECT * FROM data.find_user_by_hash('${hash}', false);`;
         try {
             const res = await client.query(query);
-            return res.rows.length > 0 ? res.rows[0] : null;
+            
+            if (res.rows.length > 0) {
+                const user = res.rows[0];
+                await client.query(`UPDATE data.users SET hash = null WHERE id = $1`, [user.id]);
+                return user;
+            }
+            
+            return null
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
                 logger.log(
