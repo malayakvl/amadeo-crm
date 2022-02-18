@@ -75,6 +75,14 @@ class LivesessionController {
         return res.status(200).json({ success: true });
     }
     
+    async stopSession(req, res) {
+        if (!req.user) {
+            return res.status(401).json('Access deny');
+        }
+        await livesessionModel.stopSession(req.params.id, req.user.id);
+        return res.status(200).json({ success: true });
+    }
+    
 }
 
 export default new LivesessionController();

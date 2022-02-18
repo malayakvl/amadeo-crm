@@ -89,7 +89,7 @@ apiRoutes.route('/chatbot/change-active-all').get(ChatbotController.changeAllAct
 
 apiRoutes.route('/orders/fetch-items').get(OrderController.fetchItems);
 apiRoutes.route('/orders/fetch-filters').get(OrderController.fetchFilters);
-apiRoutes.route('/create-order/:id').get(ChatbotMessageController.createOrders);
+apiRoutes.route('/create-order/:id').get(OrderController.generateInvoice);
 
 apiRoutes.route('/payments/fetch-items').get(PaymentController.fetchItems);
 apiRoutes.route('/payments/fetch-item').get(PaymentController.fetchItem);
@@ -100,6 +100,7 @@ apiRoutes.route('/payments/fetch-filters').get(PaymentController.fetchFilters);
 apiRoutes.route('/support/send-message').post(SupportController.sendMessage);
 
 apiRoutes.route('/livesession').post(LivesessionController.storeItem);
+apiRoutes.route('/livesession/stop/:id').get(LivesessionController.stopSession);
 apiRoutes.route('/livesession/fetch-items').get(LivesessionController.fetchItems);
 apiRoutes.route('/livesession/fetch-scenarios').get(LivesessionController.fetchScenarios);
 

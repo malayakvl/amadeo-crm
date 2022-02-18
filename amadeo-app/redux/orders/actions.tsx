@@ -126,7 +126,7 @@ export const fetchOrderPdfAction: any = createAction(
         async (
             dispatch: Type.Dispatch,
             getState: () => State.Root
-        ): Promise<{ orderFetched: Livesessions.DataItem }> => {
+        ): Promise<{ orderFetched: boolean; fileName: string }> => {
             const state = getState();
             dispatch(showLoaderAction(true));
             const res = await axios.get(`${baseUrl}/create-order/${id}`, {
@@ -139,7 +139,8 @@ export const fetchOrderPdfAction: any = createAction(
                 // dispatch(showItemAction(true));
             }
             return {
-                orderFetched: res.data.item
+                orderFetched: true,
+                fileName: res.data.fileName
             };
         }
 );

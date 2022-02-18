@@ -221,7 +221,7 @@
   "0 min": "0 min",
   "24 hours": "24 hours",
   "Duration session": "Duration",
-  "Duration cart": "Duration",
+  "Duration Cart": "Duration Cart",
   "Participants": "Participants",
   "Add": "Add",
   "Start Time": "Start Time",
@@ -245,5 +245,8 @@
   "Status": "Status",
   "Spent": "Spent",
   "Support": "Support",
-  "Delivery": "Delivery"
+  "Delivery": "Delivery",
+  "num_day_hour": "Number",
+  "Type Interval": "Type Interval",
+  "Stop Session": "Stop Session"
 }

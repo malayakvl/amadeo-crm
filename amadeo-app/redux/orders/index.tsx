@@ -5,6 +5,7 @@ import {
     setEmptyFormAction,
     showPopupAction,
     fetchFilerItems,
+    fetchOrderPdfAction,
     showDateSelectorAction
 } from './actions';
 
@@ -17,6 +18,8 @@ const initialState: {
     showPopup: boolean;
     fileterData: any;
     showDateSelector: boolean;
+    orderFetched: boolean;
+    fileName: string;
 } = {
     isFetched: false,
     loading: false,
@@ -30,7 +33,9 @@ const initialState: {
         shippings: [],
         amounts: []
     },
-    showDateSelector: false
+    showDateSelector: false,
+    orderFetched: false,
+    fileName: ''
 };
 
 const ACTION_HANDLERS: any = {
@@ -111,6 +116,22 @@ const ACTION_HANDLERS: any = {
             ...state,
             showDateSelector: action.payload
         })
+    },
+    [fetchOrderPdfAction]: {
+        next: (
+            state: State.Orders,
+            action: Type.ReduxAction<Pick<State.Orders, 'orderFetched' | 'fileName'>>
+        ): State.Orders => ({
+            ...state,
+            ...action.payload,
+            loading: false,
+            isFetched: true
+        }),
+        throw: (state: State.Orders): State.Orders => ({
+            ...state,
+            loading: false,
+            isFetched: true
+        })
     }
 };
 
@@ -120,7 +141,8 @@ export {
     showPopupAction,
     setEmptyFormAction,
     fetchFilerItems,
-    showDateSelectorAction
+    showDateSelectorAction,
+    fetchOrderPdfAction
 };
 
 // ------------------------------------

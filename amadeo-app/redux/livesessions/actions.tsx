@@ -119,7 +119,23 @@ export const fetchItemAction: any = createAction(
             };
         }
 );
-
+export const stopSessionAction: any = createAction(
+    'livesession/STOP SESSION',
+    async (id: number) =>
+        async (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
+            const state = getState();
+            dispatch(showLoaderAction(true));
+            const res = await axios.get(`${baseUrl}/livesession/stop/${id}`, {
+                headers: {
+                    ...authHeader(state.user.user.email)
+                }
+            });
+            if (res.status) {
+                dispatch(showLoaderAction(false));
+                // dispatch(showItemAction(true));
+            }
+        }
+);
 export const showPopupAction: any = createAction('livesession/SHOW_POPUP');
 export const setEmptyFormAction: any = createAction('livesession/EMPTY_FORM');
 // export const showItemAction: any = createAction('livesession/CHATBOT_SHOWITEM');

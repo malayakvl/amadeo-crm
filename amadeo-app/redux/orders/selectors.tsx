@@ -32,3 +32,11 @@ export const showDatePopupSelector = createSelector(
     rootSelector,
     (orders: State.Orders): boolean => orders.showDateSelector
 );
+export const orderFetchedSelector = createSelector(
+    rootSelector,
+    (orders: State.Orders): boolean => orders.orderFetched
+);
+export const orderFileNameFetchedSelector = createSelector(
+    rootSelector,
+    (orders: State.Orders): string => orders.fileName
+);

@@ -13,7 +13,11 @@ const InputSelect: React.FC<PropsSelect> = ({ style, name, label, options, props
     const t = useTranslations();
     return (
         <div className={`mb-4 ${style} relative`}>
-            {label && <label htmlFor={name}>{t(label)}</label>}
+            {label && (
+                <label className="control-label" htmlFor={name}>
+                    {t(label)}
+                </label>
+            )}
             <select
                 name={name}
                 className="form-control"

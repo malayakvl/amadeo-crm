@@ -9,6 +9,7 @@ declare namespace Orders {
         fileterData: any;
         showDateSelector: boolean;
         orderFetched: boolean;
+        fileName: string;
     }
 
     interface DataItem {
