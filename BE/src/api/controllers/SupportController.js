@@ -7,7 +7,7 @@ class SupportController {
         sendMail(
             'info@liveproshop.com',
             `Support message from ${email}`,
-            message
+            message.replaceAll('\n', '<br>')
         );
 
         sendMail(
