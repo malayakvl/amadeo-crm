@@ -2,7 +2,8 @@ import pool from './connect.js';
 import { logger } from '../../common/logger.js';
 import fs from 'fs';
 import PDFDocument from 'pdfkit'
-import moment from "moment";
+import moment from 'moment';
+import pdf2base64 from 'pdf-to-base64';
 
 const createInvoice = (invoice, path) => {
     let doc = new PDFDocument({ size: "A4", margin: 50 });
@@ -315,11 +316,28 @@ class Order {
                                 FROM data.get_orders (1, 0, '${filter}');`;
             const res = await client.query(ordersQuery);
             const dirUpload = `${process.env.DOWNLOAD_FOLDER}/orders/${userId}`;
+            
             if (fs.existsSync(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${res.rows[0].order_number}.pdf`)) {
+                const base64 = await pdf2base64(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${res.rows[0].order_number}.pdf`)
+                    .then(
+                        (response) => {
+                            return response;
+                        }
+                    )
+                    .catch(
+                        (error) => {
+                            console.log(error); //Exepection error....
+                        }
+                    );
                 return {
                     filename: `${process.env.DB_DOWNLOAD_FOLDER}/orders/${userId}/${res.rows[0].order_number}.pdf`,
+                    fileEncoded: base64,
                     error: null
-                }
+                }                // return {
+                //     filename: `${process.env.DB_DOWNLOAD_FOLDER}/orders/${userId}/${res.rows[0].order_number}.pdf`,
+                //     error: null
+                // }
+                
             } else {
                 if (!fs.existsSync(dirUpload)) {
                     fs.mkdirSync(dirUpload);
