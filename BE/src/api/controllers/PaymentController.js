@@ -1,5 +1,8 @@
-import paymentModel from '../models/Payment.js';
+import { existsSync } from 'fs';
+import { resolve } from 'path';
 
+import paymentModel from '../models/Payment.js';
+import orderModel from '../models/Order.js';
 
 class PaymentController {
     /**
@@ -60,6 +63,23 @@ class PaymentController {
         } else {
             const items = await paymentModel.fetchFilters();
             return res.status(200).json({ items: items.res });
+        }
+    }
+    
+    async downloadInvoice(req, res) {
+        if (!req.user) {
+            return res.status(401).json('Access deny');
+
+        } else { 
+            const filePath = resolve(process.env.DOWNLOAD_FOLDER, 'orders', String(req.user.id), req.params.orderNumber + '.pdf');
+
+            if (!existsSync(filePath)) {
+                const order = await orderModel.generatePdf(req.params.orderNumber, req.user.id);
+                if (order.error) {
+                    return res.status(500).json(order.error);
+                }
+            }
+            res.download(filePath);
         }
     }
 }

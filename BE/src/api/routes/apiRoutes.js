@@ -14,6 +14,7 @@ import ChatbotMessageController from "../controllers/ChatbotMessageController.js
 import OrderController from "../controllers/OrderController.js";
 import SupportController from '../controllers/SupportController.js';
 import PaymentController from "../controllers/PaymentController.js";
+// import BuyerController from "../controllers/BuyerController.js";
 
 
 const apiRoutes = express.Router();
@@ -96,6 +97,9 @@ apiRoutes.route('/payments/fetch-item').get(PaymentController.fetchItem);
 apiRoutes.route('/payments/fetch-methods').get(PaymentController.fetchMethods);
 apiRoutes.route('/payments/change-methods-statuses').patch(PaymentController.changeMethodsStatuses);
 apiRoutes.route('/payments/fetch-filters').get(PaymentController.fetchFilters);
+apiRoutes.route('/payments/download-invoice/:orderNumber').get(PaymentController.downloadInvoice);
+
+// apiRoutes.route('/buyers/fetch-items').get(BuyerController.fetchItems);
 
 apiRoutes.route('/support/send-message').post(SupportController.sendMessage);
 
