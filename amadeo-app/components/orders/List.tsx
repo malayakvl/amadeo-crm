@@ -139,7 +139,7 @@ const ListMessages: React.FC = () => {
                                 />
                             </td>
                             <td className="order-number">
-                                <Link href={`/orders/${item.id}`}>
+                                <Link href={`/orders/${item.order_number}`}>
                                     <a>{item.order_number}</a>
                                 </Link>
                             </td>

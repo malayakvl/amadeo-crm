@@ -4,17 +4,26 @@ import fs from 'fs';
 import PDFDocument from 'pdfkit'
 import moment from 'moment';
 import pdf2base64 from 'pdf-to-base64';
+import {
+    setTimeout,
+} from 'timers/promises';
 
-const createInvoice = (invoice, path) => {
-    let doc = new PDFDocument({ size: "A4", margin: 50 });
-    
-    generateHeader(doc);
-    generateCustomerInformation(doc, invoice);
-    generateInvoiceTable(doc, invoice);
-    generateFooter(doc);
-    
-    doc.end();
-    doc.pipe(fs.createWriteStream(path));
+function createInvoice (invoice, path) {
+    try {
+        let doc = new PDFDocument({ size: "A4", margin: 50 });
+        
+        generateHeader(doc);
+        generateCustomerInformation(doc, invoice);
+        generateInvoiceTable(doc, invoice);
+        generateFooter(doc);
+        
+        doc.end();
+        doc.pipe(fs.createWriteStream(path));
+        
+        return {success: true}
+    } catch (e) {
+        return {success: false}
+    }
 }
 
 
@@ -93,7 +102,6 @@ function generateInvoiceTable(doc, invoice) {
     for (i = 0; i < invoice.items.length; i++) {
         const item = invoice.items[i];
         const position = invoiceTableTop + (i + 1) * 30;
-        console.log(item);
         generateTableRow(
             doc,
             position,
@@ -306,7 +314,6 @@ class Order {
                 seller_id: userId,
                 order_number: orderNumber
             })
-            
             const ordersQuery = `SELECT id, order_items,
                                     payment_id, payment_name, payment_short_name,
                                     total_amount, order_number, order_amount,
@@ -333,17 +340,12 @@ class Order {
                     filename: `${process.env.DB_DOWNLOAD_FOLDER}/orders/${userId}/${res.rows[0].order_number}.pdf`,
                     fileEncoded: base64,
                     error: null
-                }                // return {
-                //     filename: `${process.env.DB_DOWNLOAD_FOLDER}/orders/${userId}/${res.rows[0].order_number}.pdf`,
-                //     error: null
-                // }
-                
+                }
             } else {
                 if (!fs.existsSync(dirUpload)) {
                     fs.mkdirSync(dirUpload);
                 }
             }
-            // item = res.rows.length > 0 ? res.rows[0] : [];
             if (res.rows.length > 0) {
                 const invoice = {
                     shipping: {
@@ -360,8 +362,25 @@ class Order {
                 };
                 createInvoice(invoice, `${dirUpload}/${res.rows[0].order_number}.pdf`);
     
+                await setTimeout(2000);
+                if (!fs.existsSync(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${res.rows[0].order_number}.pdf`)) {
+                    await setTimeout(2000);
+                }
+                const base64 = await pdf2base64(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${res.rows[0].order_number}.pdf`)
+                    .then(
+                        (response) => {
+                            console.log(response);
+                            return response;
+                        }
+                    )
+                    .catch(
+                        (error) => {
+                            console.log(error); //Exepection error....
+                        }
+                    );
                 return {
                     filename: `${process.env.DB_DOWNLOAD_FOLDER}/orders/${userId}/${res.rows[0].order_number}.pdf`,
+                    fileEncoded: base64,
                     error: null
                 }
             }

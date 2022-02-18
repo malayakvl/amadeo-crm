@@ -122,7 +122,7 @@ export const fetchItemAction: any = createAction(
 
 export const fetchOrderPdfAction: any = createAction(
     'orders/FETCH_ORDER_PDF',
-    async (id: number) =>
+    async (id: string) =>
         async (
             dispatch: Type.Dispatch,
             getState: () => State.Root

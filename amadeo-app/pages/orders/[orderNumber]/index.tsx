@@ -40,12 +40,12 @@ export default function Index() {
     const [url, setUrl] = useState('');
 
     const {
-        query: { id }
+        query: { orderNumber }
     } = useRouter();
 
     useEffect(() => {
         dispatch(showLoaderAction(true));
-        dispatch(fetchOrderPdfAction(id));
+        dispatch(fetchOrderPdfAction(orderNumber));
     }, []);
 
     useEffect(() => {
