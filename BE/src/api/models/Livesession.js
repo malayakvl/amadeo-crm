@@ -68,6 +68,38 @@ class Livesession {
         }
     }
     
+    async stopSession(itemId, userId) {
+        const client = await pool.connect();
+        try {
+            const query = await client.query(
+                `UPDATE data.live_sessions SET closed=true WHERE id=${itemId} AND user_id=${userId}`
+            );
+            const result = query.rows.length > 0 ? query.rows : [];
+            return {
+                result
+            };
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error (Products getAll):',
+                    { message: e.message }
+                );
+            }
+            const products = null;
+            const error = {
+                code: 500,
+                message: 'Error get list of users'
+            };
+            return {
+                products,
+                error
+            };
+        } finally {
+            client.release();
+        }
+    }
+    
     async getAllActive () {
         const client = await pool.connect();
         try {
@@ -183,11 +215,16 @@ class Livesession {
         const client = await pool.connect();
         
         const scenariosRes = await client.query(`SELECT ARRAY_AGG(id) AS ids FROM data.chatbot_scenarios WHERE user_id = ${userId}`);
-        console.log(scenariosRes.rows[0].ids);
+        let intervalDuration;
+        if (data.type === 'h') {
+            intervalDuration = `${data.cart_duration} hour${data.cart_duration > 1 ? 's' : ''}`;
+        } else {
+            intervalDuration = `${data.cart_duration} day${data.cart_duration > 1 ? 's' : ''}`;
+        }
         
-        const query =  `INSERT INTO data.live_sessions (user_id, event_date, event_time, scenarios, status)
+        const query =  `INSERT INTO data.live_sessions (user_id, event_date, event_time, scenarios, status, order_timer)
                 VALUES (${userId}, '${data.event_date}', '${data.event_time}',
-                    '{${scenariosRes.rows[0].ids}}', 'scheduled'
+                    '{${scenariosRes.rows[0].ids}}', 'scheduled', '${intervalDuration}'
                 );`;
         try {
             await client.query(query);

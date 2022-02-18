@@ -10,7 +10,7 @@ export enum PaginationType {
     SHIPPING = 'shipping',
     LIVESESSIONS = 'livesessions',
     PAYMENTS_TRANSACTIONS = 'paymentstransactions',
-    PAYMENTS_TRANSACTION_DETAILS = 'paymentstransactiondetails',
+    // PAYMENTS_TRANSACTION_DETAILS = 'paymentstransactiondetails',
     BUYERS = 'buyers',
     ORDERS = 'orders'
 }
@@ -49,21 +49,22 @@ export const TableHeaders: { [key in PaginationType]: Type.DataTableHeader[] } =
     [PaginationType.LIVESESSIONS]: [
         { titleKey: null, iconClass: 'icon-tbl-date' },
         { titleKey: 'Start Time', iconClass: 'icon-tbl-time' },
-        // { titleKey: 'Duration cart', iconClass: 'icon-tbl-cart' },
-        { titleKey: null, iconClass: 'icon-tbl-status' }
+        { titleKey: 'Duration Cart', iconClass: 'icon-tbl-cart' },
+        { titleKey: null, iconClass: 'icon-tbl-status' },
+        { titleKey: null }
         // { titleKey: 'Participants', iconClass: 'icon-tbl-users' },
         // { titleKey: 'Products' }
     ],
     [PaginationType.PAYMENTS_TRANSACTIONS]: [
-        { titleKey: null, iconClass: 'icon-tbl-order', className: 'flex justify-center' },
+        { titleKey: null, iconClass: 'icon-tbl-order' },
         { titleKey: null, iconClass: 'icon-tbl-date' },
-        { titleKey: null, iconClass: 'icon-tbl-order', className: 'flex justify-center' },
+        // { titleKey: null, iconClass: 'icon-tbl-order', className: 'flex justify-center' },
         { titleKey: 'Shopper', iconClass: 'icon-tbl-users' },
-        { titleKey: null, iconClass: 'icon-tbl-amount', className: 'flex justify-center' },
+        { titleKey: null, iconClass: 'icon-tbl-amount' },
         { titleKey: 'Total', className: 'text-right' },
         { titleKey: null }
     ],
-    [PaginationType.PAYMENTS_TRANSACTION_DETAILS]: [],
+    // [PaginationType.PAYMENTS_TRANSACTION_DETAILS]: [],
     [PaginationType.BUYERS]: [
         { className: 'flex justify-center', iconClass: 'icon-tbl-index' },
         { iconClass: 'icon-tbl-users', titleKey: 'Shopper' },

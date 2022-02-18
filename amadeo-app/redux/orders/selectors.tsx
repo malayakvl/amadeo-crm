@@ -24,3 +24,23 @@ export const showPopupSelector = createSelector(
     rootSelector,
     (orders: State.Orders): boolean => orders.showPopup
 );
+export const filterDataSelector = createSelector(
+    rootSelector,
+    (orders: State.Orders): any => orders.fileterData
+);
+export const showDatePopupSelector = createSelector(
+    rootSelector,
+    (orders: State.Orders): boolean => orders.showDateSelector
+);
+export const orderFetchedSelector = createSelector(
+    rootSelector,
+    (orders: State.Orders): boolean => orders.orderFetched
+);
+export const orderFileNameFetchedSelector = createSelector(
+    rootSelector,
+    (orders: State.Orders): string => orders.fileName
+);
+export const orderBase64DataSelector = createSelector(
+    rootSelector,
+    (orders: State.Orders): string => orders.base64Data
+);

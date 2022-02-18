@@ -73,6 +73,29 @@ export const fetchItemsAction: any = createAction(
                 });
         }
 );
+export const fetchFilerItems: any = createAction(
+    'orders/FETCH_FILTER_ITEMS',
+    async () =>
+        async (
+            dispatch: Type.Dispatch,
+            getState: () => State.Root
+        ): Promise<{ fileterData: any }> => {
+            const state = getState();
+            dispatch(showLoaderAction(true));
+            const res = await axios.get(`${baseUrl}/orders/fetch-filters`, {
+                headers: {
+                    ...authHeader(state.user.user.email)
+                }
+            });
+            if (res.status) {
+                dispatch(showLoaderAction(false));
+            }
+            return {
+                fileterData: res.data.items
+            };
+        }
+);
+
 export const fetchItemAction: any = createAction(
     'orders/FETCH_ITEM',
     async (id: number) =>
@@ -97,6 +120,33 @@ export const fetchItemAction: any = createAction(
         }
 );
 
+export const fetchOrderPdfAction: any = createAction(
+    'orders/FETCH_ORDER_PDF',
+    async (id: number) =>
+        async (
+            dispatch: Type.Dispatch,
+            getState: () => State.Root
+        ): Promise<{ orderFetched: boolean; fileName: string; base64Data: string }> => {
+            const state = getState();
+            dispatch(showLoaderAction(true));
+            const res = await axios.get(`${baseUrl}/create-order/${id}`, {
+                headers: {
+                    ...authHeader(state.user.user.email)
+                }
+            });
+            if (res.status) {
+                dispatch(showLoaderAction(false));
+                // dispatch(showItemAction(true));
+            }
+            return {
+                orderFetched: true,
+                fileName: res.data.fileName,
+                base64Data: res.data.filebase64
+            };
+        }
+);
+
 export const showPopupAction: any = createAction('orders/SHOW_POPUP');
+export const showDateSelectorAction: any = createAction('orders/SHOW_DATE_POPUP');
 export const setEmptyFormAction: any = createAction('orders/EMPTY_FORM');
 // export const showItemAction: any = createAction('orders/CHATBOT_SHOWITEM');

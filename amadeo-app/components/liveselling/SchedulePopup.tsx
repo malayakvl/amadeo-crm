@@ -12,6 +12,7 @@ import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { submitFormAction } from '../../redux/livesessions/actions';
 import InputMask from 'react-input-mask';
+import { InputSelect, InputText } from '../_form';
 
 const SchedulePopup: React.FC<any> = () => {
     const t = useTranslations();
@@ -40,7 +41,10 @@ const SchedulePopup: React.FC<any> = () => {
     //     }
     //     setSelectedScenarios(_scenarios);
     // };
-    const SubmitSchema = Yup.object().shape({});
+    const SubmitSchema = Yup.object().shape({
+        cart_duration: Yup.number().required(t('Required field')),
+        type: Yup.string().required(t('Required field'))
+    });
 
     return (
         <div className="modal modal-schedule opacity-0 pointer-events-none fixed w-full h-full top-0 left-0 flex items-center justify-center">
@@ -70,10 +74,9 @@ const SchedulePopup: React.FC<any> = () => {
                     <div>
                         <div className="flex">
                             <Formik
-                                enableReinitialize
-                                initialValues={{ min_time: 0 }}
+                                initialValues={{ cart_duration: '', type: '' }}
                                 validationSchema={SubmitSchema}
-                                onSubmit={(values) => {
+                                onSubmit={(values, { resetForm }) => {
                                     const sessionData: any = {};
                                     sessionData.event_date = moment(startDate).format('YYYY-MM-DD');
                                     // sessionData.event_time = moment(startTime).format('HH:mm');
@@ -82,7 +85,10 @@ const SchedulePopup: React.FC<any> = () => {
                                     if ((values as any).id) {
                                         sessionData.id = (values as any).id;
                                     }
+                                    sessionData.cart_duration = (values as any).cart_duration;
+                                    sessionData.type = (values as any).type;
                                     dispatch(submitFormAction(sessionData));
+                                    resetForm();
                                 }}>
                                 {(props) => {
                                     return (
@@ -103,6 +109,7 @@ const SchedulePopup: React.FC<any> = () => {
                                                                 onChange={(date: any) => {
                                                                     setStartDate(date);
                                                                 }}
+                                                                dateFormat="dd/MM/yyyy"
                                                             />
                                                         </div>
                                                         <div className="mb-4 ml-5">
@@ -121,6 +128,29 @@ const SchedulePopup: React.FC<any> = () => {
                                                                     value={startTime}
                                                                 />
                                                             </div>
+                                                        </div>
+                                                        <div className="ml-5 max-w-[100px]">
+                                                            <InputText
+                                                                icon={null}
+                                                                label={'Duration Cart'}
+                                                                name={'cart_duration'}
+                                                                placeholder={'num_day_hour'}
+                                                                style={null}
+                                                                props={props}
+                                                                tips={null}
+                                                            />
+                                                        </div>
+                                                        <div className="ml-5">
+                                                            <InputSelect
+                                                                options={[
+                                                                    { id: 'h', name: 'Hour(s)' },
+                                                                    { id: 'd', name: 'Day(s)' }
+                                                                ]}
+                                                                label={'Type Interval'}
+                                                                name={'type'}
+                                                                style={null}
+                                                                props={props}
+                                                            />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -170,6 +200,7 @@ const SchedulePopup: React.FC<any> = () => {
                                                     onClick={() => {
                                                         dispatch(showPopupAction(false));
                                                         toggleModalPopup('.modal-schedule');
+                                                        props.resetForm();
                                                     }}>
                                                     {t('Cancel')}
                                                 </button>

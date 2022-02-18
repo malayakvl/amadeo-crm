@@ -15,17 +15,35 @@ export default function SellerRegistration({ email }: { email: any }) {
     const t = useTranslations();
 
     const validationSchema = Yup.object().shape({
-        first_name: Yup.string().required(t('You must enter your first name')),
-        last_name: Yup.string().required(t('You must enter your family name')),
-        full_address: Yup.string().required(t('You must enter your address')),
-        phone: Yup.string().required(t('You must enter your phone number')),
+        first_name: Yup.string()
+            .strict(true)
+            .trim('Cannot include leading and trailing spaces')
+            .required(t('You must enter your first name'))
+            .matches(/^[aA-zZ\s]+$/, 'Only alphabets are allowed for this field '),
+        last_name: Yup.string()
+            .strict(true)
+            .trim('Cannot include leading and trailing spaces')
+            .required(t('You must enter your family name'))
+            .matches(/^[aA-zZ\s]+$/, 'Only alphabets are allowed for this field '),
+        full_address: Yup.string()
+            .strict(true)
+            .trim('Cannot include leading and trailing spaces')
+            .required(t('You must enter your address')),
+        company_name: Yup.string().strict(true).trim('Cannot include leading and trailing spaces'),
+        company_id: Yup.string().strict(true).trim('Cannot include leading and trailing spaces'),
+        vat: Yup.string().strict(true).trim('Cannot include leading and trailing spaces'),
+        phone: Yup.string()
+            .required(t('You must enter your phone number'))
+            .strict(true)
+            .trim('Cannot include leading and trailing spaces'),
         password: Yup.string()
+            .strict(true)
+            .trim('Password cannot include leading and trailing spaces')
             .required(t('Required field'))
             .min(6, t('Password must be at least 6 characters')),
-        password_confirmation: Yup.string().oneOf(
-            [Yup.ref('password'), null],
-            t('Passwords must match')
-        )
+        password_confirmation: Yup.string()
+            .required(t('Required field'))
+            .oneOf([Yup.ref('password'), null], t('Passwords must match'))
     });
 
     const onSubmit = (values: any) => {
@@ -38,7 +56,7 @@ export default function SellerRegistration({ email }: { email: any }) {
                 signIn('credentials_login', {
                     email: values.email,
                     password: values.password,
-                    callbackUrl: `${window.location.origin}/dashboard`
+                    callbackUrl: `${window.location.origin}/pricing`
                 });
             });
         });

@@ -11,15 +11,12 @@ export default function Password() {
     const dispatch = useDispatch();
 
     const SubmitSchema = Yup.object().shape({
-        // old_password: Yup.string()
-        //     .required(t('Required field')),
         password: Yup.string()
             .required(t('Required field'))
-            .min(3, t('Password must be at least 6 characters')),
-        password_confirmation: Yup.string().oneOf(
-            [Yup.ref('password'), null],
-            t('Passwords must match')
-        )
+            .min(6, t('Password must be at least 6 characters')),
+        password_confirmation: Yup.string()
+            .required(t('Required field'))
+            .oneOf([Yup.ref('password'), null], t('Passwords must match'))
     });
     return (
         <Formik

@@ -6,6 +6,11 @@ declare namespace Orders {
         isFetched: boolean;
         loading: boolean;
         showPopup: boolean;
+        fileterData: any;
+        showDateSelector: boolean;
+        orderFetched: boolean;
+        fileName: string;
+        base64Data: string;
     }
 
     interface DataItem {

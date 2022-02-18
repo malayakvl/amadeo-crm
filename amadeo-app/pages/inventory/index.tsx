@@ -3,13 +3,7 @@ import { getSession } from 'next-auth/client';
 import React, { useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-    AddProduct,
-    ListProducts,
-    EditProduct,
-    InventoryFilters,
-    SyncProduct
-} from '../../components/inventory';
+import { AddProduct, ListProducts, EditProduct, SyncProduct } from '../../components/inventory';
 import { fetchAdditionalAction, importProductAction } from '../../redux/products/actions';
 import { activeTabSelectorFactory } from '../../redux/layouts/selectors';
 import { setSwitchHeaderAction } from '../../redux/layouts/actions';
@@ -63,9 +57,6 @@ export default function Index({ session, locale }: { session: any; locale: strin
                         </span>
                     </div>
                     <div className="clear-both" />
-                </div>
-                <div className="block">
-                    {activeTabLayout.tab === 'products' && <InventoryFilters locale={locale} />}
                 </div>
             </div>
             <div className="block-white-8 mr-10 white-shadow-medium mt-10">

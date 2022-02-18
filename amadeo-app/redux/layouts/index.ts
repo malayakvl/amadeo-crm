@@ -34,8 +34,19 @@ const initialState: State.Layouts = {
             ...initPagination,
             filters: { status: [], duration: [], cart_duration: [], event_date: '' }
         },
-        paymentstransactions: { ...initPagination },
-        paymentstransactiondetails: { ...initPagination },
+        paymentstransactions: {
+            ...initPagination,
+            filters: {
+                order_number: '',
+                shipping_id: [],
+                country_id: [],
+                payment_id: [],
+                status: ['payed'],
+                total_amount: [],
+                created_at: []
+            }
+        },
+        // paymentstransactiondetails: { ...initPagination },
         orders: {
             ...initPagination,
             filters: {
@@ -44,7 +55,7 @@ const initialState: State.Layouts = {
                 country_id: [],
                 payment_id: [],
                 status: [],
-                order_amount: [],
+                total_amount: [],
                 created_at: []
             }
         }

@@ -86,8 +86,7 @@ class ChatbotMessage {
             items.forEach(item => {
                 promisesQuery.push(this.createOrder(item));
             });
-            const dataOrders = await Promise.all(promisesQuery);
-            console.log(dataOrders);
+            await Promise.all(promisesQuery);
             return {
                 items,
                 error
@@ -115,9 +114,9 @@ class ChatbotMessage {
     }
     
     
-    async createOrder(item) {
-        return { success: true};
-    }
+    // async createOrder(item) {
+    //     return { success: true};
+    // }
     
     async createMessage(item) {
         const client = await pool.connect();

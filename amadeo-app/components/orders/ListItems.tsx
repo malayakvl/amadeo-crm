@@ -30,8 +30,8 @@ const ListItems: React.FC<any> = ({ items }) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {items?.map((item: any) => (
-                        <tr key={item.id}>
+                    {items?.map((item: any, num: number) => (
+                        <tr key={num}>
                             <td style={{ width: '150px' }}>
                                 {item.previewphoto && (
                                     <img
@@ -56,7 +56,7 @@ const ListItems: React.FC<any> = ({ items }) => {
                             </td>
                             <td>
                                 <span className="text-gray-180 text-sm">Ref.</span>{' '}
-                                <span className="text-blue-350">{item.id}</span> <br />
+                                <span className="text-blue-350">{item.product_id}</span> <br />
                                 <span className="text-[18px] red-yellow-gradient-text">
                                     {item.name}
                                 </span>
@@ -74,13 +74,11 @@ const ListItems: React.FC<any> = ({ items }) => {
                                 <div
                                     className="rounded-full w-3 h-3 inline-block mr-1"
                                     style={{
-                                        backgroundColor: `${item.configuration[0].color_code}`
+                                        backgroundColor: `${item.color_code}`
                                     }}
                                 />
                             </td>
-                            <td className="whitespace-nowrap">
-                                {item.configuration[0].configuration[0].size_name}
-                            </td>
+                            <td className="whitespace-nowrap">{item.size_name}</td>
                             <td style={{ textAlign: 'center' }}>{item.quantity}</td>
                             <td>{item.price} &euro;</td>
                         </tr>

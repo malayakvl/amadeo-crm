@@ -1,6 +1,5 @@
 import orderModel from '../models/Order.js';
 
-
 class OrderController {
     /**
      *
@@ -16,12 +15,26 @@ class OrderController {
             const data = await orderModel.fetchItems(1, limit, req.user, false, offset, queryFilter);
             return res.status(200).json({ count: data.size, items: data.items});
         }
-        // const data = await chatbotMessageModel.addMessages(req.query.sessionId, req.body);
-        // if (!data.error) {
-        //     return res.status(200).json({success: true});
-        // } else {
-        //     return res.status(401).json({success: false, error: 'Something wend wrong'});
-        // }
+    }
+    
+    
+    async fetchFilters (req, res) {
+        if (!req.user) {
+            return res.status(401).json('Access deny');
+        } else {
+            const items = await orderModel.fetchFilters();
+            return res.status(200).json({ items: items.res });
+        }
+    }
+    
+    async generateInvoice (req, res) {
+        if (!req.user) {
+            return res.status(401).json('Access deny');
+        } else {
+            // check if file exist, than return true
+            const order = await orderModel.generatePdf(req.params.id, req.user.id);
+            return res.status(200).json({ fileName: order.filename, success: true, filebase64: order.fileEncoded });
+        }
     }
 }
 
