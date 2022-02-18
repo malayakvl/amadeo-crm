@@ -49,8 +49,9 @@ export const TableHeaders: { [key in PaginationType]: Type.DataTableHeader[] } =
     [PaginationType.LIVESESSIONS]: [
         { titleKey: null, iconClass: 'icon-tbl-date' },
         { titleKey: 'Start Time', iconClass: 'icon-tbl-time' },
-        // { titleKey: 'Duration cart', iconClass: 'icon-tbl-cart' },
-        { titleKey: null, iconClass: 'icon-tbl-status' }
+        { titleKey: 'Duration Cart', iconClass: 'icon-tbl-cart' },
+        { titleKey: null, iconClass: 'icon-tbl-status' },
+        { titleKey: null }
         // { titleKey: 'Participants', iconClass: 'icon-tbl-users' },
         // { titleKey: 'Products' }
     ],

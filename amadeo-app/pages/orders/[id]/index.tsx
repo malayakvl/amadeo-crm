@@ -1,23 +1,55 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { getSession } from 'next-auth/client';
+import { useDispatch, useSelector } from 'react-redux';
 import { Viewer, Worker } from '@react-pdf-viewer/core';
+import { useRouter } from 'next/router';
 import { defaultLayoutPlugin } from '@react-pdf-viewer/default-layout';
-
+import {
+    orderFetchedSelector,
+    orderFileNameFetchedSelector
+} from '../../../redux/orders/selectors';
+import { fetchOrderPdfAction } from '../../../redux/orders';
+import { showLoaderAction } from '../../../redux/layouts/actions';
+import { baseApiUrl } from '../../../constants';
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import '@react-pdf-viewer/default-layout/lib/styles/index.css';
 
 export default function Index() {
     const defaultLayoutPluginInstance = defaultLayoutPlugin();
+    const dispatch = useDispatch();
+    const orderFetched: boolean = useSelector(orderFetchedSelector);
+    const fileName: string = useSelector(orderFileNameFetchedSelector);
+
+    const {
+        query: { id }
+    } = useRouter();
+
+    console.log(fileName);
+
+    useEffect(() => {
+        dispatch(showLoaderAction(true));
+        dispatch(fetchOrderPdfAction(id));
+    }, []);
+
+    useEffect(() => {
+        if (orderFetched) {
+            dispatch(showLoaderAction(false));
+        }
+    }, [orderFetched]);
 
     return (
-        <Worker workerUrl="https://unpkg.com/pdfjs-dist@2.12.313/build/pdf.worker.js">
-            <div style={{ height: '750px' }}>
-                <Viewer
-                    fileUrl="/pdf-open-parameters.pdf"
-                    plugins={[defaultLayoutPluginInstance]}
-                />
-            </div>
-        </Worker>
+        <>
+            {orderFetched && (
+                <Worker workerUrl="https://unpkg.com/pdfjs-dist@2.12.313/build/pdf.worker.js">
+                    <div style={{ height: '750px' }}>
+                        <Viewer
+                            fileUrl={`${baseApiUrl}${fileName}`}
+                            plugins={[defaultLayoutPluginInstance]}
+                        />
+                    </div>
+                </Worker>
+            )}
+        </>
     );
 }
 

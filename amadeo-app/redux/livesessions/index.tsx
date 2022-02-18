@@ -22,38 +22,18 @@ const initialState: {
     items: [],
     item: {
         id: null,
-        name: '',
-        keywords: '',
-        message_fr: '',
-        message_en: '',
-        active: true,
-        answer_count: '',
-        product: null,
-        discount: '',
-        created_at: null,
-        updated_at: null
+        event_date: '',
+        event_time: '',
+        order_timer: '',
+        closed: false,
+        created_at: '',
+        updated_at: ''
     },
     showPopup: false,
     itemScenarios: []
 };
 
 const ACTION_HANDLERS: any = {
-    [fetchScenariosAction]: {
-        next: (
-            state: State.Livesessions,
-            action: Type.ReduxAction<Pick<State.Livesessions, 'itemScenarios'>>
-        ): State.Livesessions => ({
-            ...state,
-            ...action.payload,
-            loading: false,
-            isFetched: true
-        }),
-        throw: (state: State.Livesessions): State.Livesessions => ({
-            ...state,
-            loading: false,
-            isFetched: false
-        })
-    },
     [fetchItemsAction]: {
         next: (
             state: State.Livesessions,
@@ -91,14 +71,10 @@ const ACTION_HANDLERS: any = {
             ...state,
             item: {
                 id: null,
-                name: '',
-                keywords: '',
-                message_fr: '',
-                message_en: '',
-                active: true,
-                product: null,
-                discount: '',
-                answer_count: '',
+                event_date: '',
+                event_time: '',
+                order_timer: '',
+                closed: false,
                 created_at: null,
                 updated_at: null
             }

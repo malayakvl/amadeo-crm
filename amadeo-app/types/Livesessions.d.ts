@@ -16,14 +16,10 @@ declare namespace Livesessions {
 
     interface DataItem {
         id: number | null;
-        name: string;
-        keywords: string;
-        message_fr: string;
-        message_en: string;
-        active: boolean;
-        answer_count: any;
-        discount: any;
-        product: any;
+        event_date: string;
+        event_time: string;
+        order_timer: string;
+        closed: boolean;
         created_at: any;
         updated_at: any;
     }
