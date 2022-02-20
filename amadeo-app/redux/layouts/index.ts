@@ -58,6 +58,18 @@ const initialState: State.Layouts = {
                 total_amount: [],
                 created_at: []
             }
+        },
+        waiting: {
+            ...initPagination,
+            filters: {
+                order_number: '',
+                shipping_id: [],
+                country_id: [],
+                payment_id: [],
+                status: [],
+                total_amount: [],
+                created_at: []
+            }
         }
     },
     isSidebarOpen: true,

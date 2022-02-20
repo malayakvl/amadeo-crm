@@ -50,7 +50,7 @@ const SidebarFull: React.FC = () => {
                 </Link>
             </li>
             <li>
-                <Link href={'/'}>
+                <Link href={'/waiting-list'}>
                     <a>
                         <i className="waiting-list" />
                         <span className="s-caption">{t('Waiting List')}</span>

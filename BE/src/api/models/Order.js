@@ -204,6 +204,62 @@ function formatCurrency(cents) {
 
 
 class Order {
+    async fetchWaitingItems (page, perPage = 20, user, isRead = false, reqOffset = null, filters) {
+        const client = await pool.connect();
+        try {
+            const _filters = JSON.parse(filters);
+            if (user.role_id === 2) {
+                _filters.seller_id = [user.id];
+                // if (_filters.userIds) {
+                //     _filters.buyer_id = _filters.userIds;
+                //     delete _filters.userIds;
+                // }
+            }
+            
+            // const _total = await client.query(`SELECT count FROM data.get_orders_count('${JSON.stringify(_filters)}');`);
+            // const size = _total.rows[0].count;
+            const size = 1;
+            let offset;
+            if (reqOffset) {
+                offset = reqOffset;
+            } else {
+                offset = (Number(page) - 1) * Number(perPage);
+            }
+            const ordersQuery = `SELECT
+                                    id_cnt, live_sessions_id, product_id, product_configuration_id, configuration, item_buyers
+                                    FROM data.get_orders_waiting_list(${perPage}, ${offset}, NULL, '');`;
+            const res = await client.query(ordersQuery);
+            const items = res.rows.length > 0 ? res.rows : [];
+            const error = null;
+            
+            return {
+                items,
+                size,
+                error
+            };
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error (Products getAll):',
+                    { message: e.message }
+                );
+            }
+            const items = null;
+            const error = {
+                code: 500,
+                message: 'Error get list of users'
+            };
+            return {
+                items,
+                error
+            };
+        } finally {
+            client.release();
+        }
+    }
+    
+    
     async fetchItems (page, perPage = 20, user, isRead = false, reqOffset = null, filters) {
         const client = await pool.connect();
         try {
@@ -261,6 +317,7 @@ class Order {
             client.release();
         }
     }
+    
     async fetchFilters () {
         const client = await pool.connect();
         try {

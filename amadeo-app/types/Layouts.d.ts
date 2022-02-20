@@ -8,6 +8,7 @@ declare namespace Layouts {
             buyers: Pagination;
             livesessions: Pagination;
             orders: Pagination;
+            waiting: Pagination;
             paymentstransactions: Pagination;
             // paymentstransactiondetails: Pagination;
         };

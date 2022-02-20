@@ -12,7 +12,8 @@ export enum PaginationType {
     PAYMENTS_TRANSACTIONS = 'paymentstransactions',
     // PAYMENTS_TRANSACTION_DETAILS = 'paymentstransactiondetails',
     BUYERS = 'buyers',
-    ORDERS = 'orders'
+    ORDERS = 'orders',
+    WAITING = 'waiting'
 }
 
 export const TableHeaders: { [key in PaginationType]: Type.DataTableHeader[] } = {
@@ -84,5 +85,19 @@ export const TableHeaders: { [key in PaginationType]: Type.DataTableHeader[] } =
         { sortKey: 'payment', iconClass: 'icon-tbl-card' },
         { titleKey: 'Products' },
         { titleKey: 'Total' }
+    ],
+    [PaginationType.WAITING]: [
+        { iconClass: 'icon-tbl-triangle' },
+        { sortKey: 'photo', titleKey: 'Photo' },
+        { sortKey: 'name', titleKey: 'Reference | Name | Description' },
+        { titleKey: null, className: 'inventory-color' },
+        { titleKey: null, className: 'inventory-size' },
+        // { sortKey: 'created_at', iconClass: 'icon-tbl-date' },
+        { sortKey: 'user', titleKey: 'Shopper', iconClass: 'icon-tbl-users' }
+        // { sortKey: 'country', iconClass: 'icon-tbl-country' },
+        // { sortKey: 'country', iconClass: 'icon-tbl-sh-cart' },
+        // { sortKey: 'payment', iconClass: 'icon-tbl-card' },
+        // { titleKey: 'Products' },
+        // { titleKey: 'Total' }
     ]
 };

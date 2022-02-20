@@ -36,6 +36,17 @@ class OrderController {
             return res.status(200).json({ fileName: order.filename, success: true, filebase64: order.fileEncoded });
         }
     }
+    
+    
+    async fetchWaitingList (req, res) {
+        const { limit, offset, queryFilter } = req.query;
+        if (!req.user) {
+            return res.status(401).json('Access deny');
+        } else {
+            const data = await orderModel.fetchWaitingItems(1, limit, req.user, false, offset, queryFilter);
+            return res.status(200).json({ count: data.size, items: data.items});
+        }
+    }
 }
 
 export default new OrderController();

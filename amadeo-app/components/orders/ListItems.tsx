@@ -3,7 +3,7 @@ import { baseApiUrl } from '../../constants';
 import { BanIcon } from '@heroicons/react/solid';
 import { useTranslations } from 'next-intl';
 
-const ListItems: React.FC<any> = ({ items }) => {
+const ListItems: React.FC<any> = ({ items, orderId }) => {
     const t = useTranslations();
     return (
         <>
@@ -16,7 +16,7 @@ const ListItems: React.FC<any> = ({ items }) => {
                             className="pb-4">
                             <div className="text-[18px] text-bold text-gray-350">
                                 Products in order{' '}
-                                <span className="red-yellow-gradient-text">12345</span>
+                                <span className="red-yellow-gradient-text">{orderId}</span>
                             </div>
                         </th>
                     </tr>

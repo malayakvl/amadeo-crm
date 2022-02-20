@@ -6,7 +6,6 @@ import reduxThunkFsa from 'redux-thunk-fsa';
 import { createStore, applyMiddleware, combineReducers } from 'redux';
 import logger from 'redux-logger';
 
-// import addressReducer from '../redux/address';
 import profileReducer from '../redux/profile/index';
 import userReducer from '../redux/user/index';
 import notificationsReducer from '../redux/notifications/index';
@@ -18,6 +17,7 @@ import countriesReducer from '../redux/countries/index';
 import shippingReducer from '../redux/shipping/index';
 import ordersReducer from '../redux/orders/index';
 import paymentsReducer from '../redux/payments/index';
+import waitingListReducer from '../redux/waitingList/index';
 
 const reducers = combineReducers({
     // address: addressReducer,
@@ -31,7 +31,8 @@ const reducers = combineReducers({
     countries: countriesReducer,
     shippings: shippingReducer,
     orders: ordersReducer,
-    payments: paymentsReducer
+    payments: paymentsReducer,
+    waitingList: waitingListReducer
 });
 
 const initStore = (initialState = {}) => {
