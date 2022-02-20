@@ -45,8 +45,9 @@ export default function Payments({ session }: { session: any }) {
                         {t('Transaction details')}
 
                         <a
-                            href="/api/getPDF"
-                            className="flex px-5 py-3 rounded-lg text-base min-w-max align-middle border shadow-lg">
+                            href={`/api/download-invoice/${orderNumber}`}
+                            className="flex px-5 py-3 rounded-lg text-base min-w-max align-middle border shadow-lg"
+                            rel="noreferrer">
                             <Image width="20" height="18" src={'/images/download.svg'} />
                             <span className="pl-4 pt-px">{t('Download Invoice from emmisor')}</span>
                         </a>
