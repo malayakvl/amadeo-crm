@@ -13,6 +13,7 @@ declare namespace State {
         livesessions: Livesessions;
         orders: Orders;
         payments: Payments;
+        waitingList: WaitingList;
     }
 
     type Address = Address.Root;
@@ -31,4 +32,5 @@ declare namespace State {
     type Livesessions = Livesessions.Root;
     type Orders = Orders.Root;
     type Payments = Payments.Root;
+    type WaitingList = WaitingList.Root;
 }

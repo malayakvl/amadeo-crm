@@ -238,6 +238,7 @@
   "Send": "Send",
   "Schedule new session": "Schedule new session",
   "orders_descr": "Orders section should provide information for the merchant about his orders and their status. It should be a  table with filters so that merchant could search for needed orders and info. merchant should have bulk selection with checkboxes in order to change statuses of several orders at the same time.",
+  "waiting_descr": "Waiting list contains info about buyers who wanted to buy some item during the live session but the product ran out of stock. So the main reason why someone appears on the waiting list is that the item they wanted to buy is not available. \nAnd that’s why they are automatically put to the waiting list.",
   "Orders": "Orders",
   "order_number": "Order number",
   "Total": "Total",
