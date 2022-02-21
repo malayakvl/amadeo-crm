@@ -51,7 +51,9 @@ const ListMessages: React.FC = () => {
                                 </span>
                             )}
                             {(item.closed || closedSessions.includes(item.id)) && (
-                                <span className="text-[10px] bg-green-200 rounded-lg p-1.5 cursor-pointer">
+                                <span
+                                    className="text-[10px] bg-green-200 rounded-lg p-1.5"
+                                    style={{ backgroundColor: 'rgb(167, 243, 208)' }}>
                                     {t('Closed')}
                                 </span>
                             )}
