@@ -38,6 +38,7 @@ apiRoutes.route('/fetch-live-sessions').get(LivesessionController.getAllInAir);
 apiRoutes.route('/fetch-active-sessions').get(LivesessionController.getActiveSessions);
 apiRoutes.route('/add-live-messages').post(ChatbotMessageController.addMessages);
 apiRoutes.route('/parse-live-messages').get(ChatbotMessageController.parseMessages);
+apiRoutes.route('/create-orders').get(OrderController.createOrders);
 
 /** ===================================================================== */
 /** ================== AUTHENTIFICATED ROUTES =========================== */
