@@ -47,6 +47,10 @@ class OrderController {
             return res.status(200).json({ count: data.size, items: data.items});
         }
     }
+    
+    async createOrders (req, res) {
+        await orderModel.createOrder(1, limit, req.user, false, offset, queryFilter);
+    }
 }
 
 export default new OrderController();

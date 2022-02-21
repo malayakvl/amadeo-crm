@@ -50,6 +50,11 @@ const ListMessages: React.FC = () => {
                                     {t('Stop Session')}
                                 </span>
                             )}
+                            {(item.closed || closedSessions.includes(item.id)) && (
+                                <span className="text-[10px] bg-green-200 rounded-lg p-1.5 cursor-pointer">
+                                    {t('Closed')}
+                                </span>
+                            )}
                         </td>
                         {/*<td>{item.product_cnt ? item.product_cnt : '-'}</td>*/}
                         {/*<td>{item.user_cnt ? item.user_cnt : '-'}</td>*/}
