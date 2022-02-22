@@ -10,7 +10,7 @@ const FilterNumber: React.FC<any> = () => {
     const t = useTranslations();
     const dispatch = useDispatch();
     const { filters }: Layouts.Pagination = useSelector(
-        paginationSelectorFactory(PaginationType.PAYMENTS_TRANSACTIONS)
+        paginationSelectorFactory(PaginationType.PAYMENTS)
     );
     const [numberSelected, setNumberSelected] = useState<any>(filters.order_number);
     const [showBlock, setShowBlock] = useState<boolean>(true);
@@ -19,7 +19,7 @@ const FilterNumber: React.FC<any> = () => {
         setNumberSelected('');
         dispatch(
             setPaginationAction({
-                type: PaginationType.PAYMENTS_TRANSACTIONS,
+                type: PaginationType.PAYMENTS,
                 modifier: {
                     filters: {
                         ...filters,
@@ -57,7 +57,7 @@ const FilterNumber: React.FC<any> = () => {
                             onKeyUp={() => {
                                 dispatch(
                                     setPaginationAction({
-                                        type: PaginationType.PAYMENTS_TRANSACTIONS,
+                                        type: PaginationType.PAYMENTS,
                                         modifier: {
                                             filters: {
                                                 ...filters,

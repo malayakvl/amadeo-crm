@@ -36,7 +36,7 @@ export default function Payments({ session }: { session: any }) {
     const [filterOpen, setFilterOpen] = useState(false);
     const showDatePopup = useSelector(showDatePopupSelector);
     const { filters }: Layouts.Pagination = useSelector(
-        paginationSelectorFactory(PaginationType.PAYMENTS_TRANSACTIONS)
+        paginationSelectorFactory(PaginationType.PAYMENTS)
     );
 
     return (
@@ -76,7 +76,7 @@ export default function Payments({ session }: { session: any }) {
                                             setState([item.selection]);
                                             dispatch(
                                                 setPaginationAction({
-                                                    type: PaginationType.PAYMENTS_TRANSACTIONS,
+                                                    type: PaginationType.PAYMENTS,
                                                     modifier: {
                                                         filters: {
                                                             ...filters,

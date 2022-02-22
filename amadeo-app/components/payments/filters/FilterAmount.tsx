@@ -13,7 +13,7 @@ const FilterAmount: React.FC<any> = () => {
     const t = useTranslations();
     const dispatch = useDispatch();
     const { filters }: Layouts.Pagination = useSelector(
-        paginationSelectorFactory(PaginationType.PAYMENTS_TRANSACTIONS)
+        paginationSelectorFactory(PaginationType.PAYMENTS)
     );
     const filterData = useSelector(filterDataSelector);
     const [showBlock, setShowBlock] = useState<boolean>(true);
@@ -40,7 +40,7 @@ const FilterAmount: React.FC<any> = () => {
         if (priceRange[0] !== priceRange[1]) {
             dispatch(
                 setPaginationAction({
-                    type: PaginationType.PAYMENTS_TRANSACTIONS,
+                    type: PaginationType.PAYMENTS,
                     modifier: {
                         filters: {
                             ...filters,
@@ -53,7 +53,7 @@ const FilterAmount: React.FC<any> = () => {
         } else if (priceRange[0] === priceRange[1] && priceRange[0] === 0) {
             dispatch(
                 setPaginationAction({
-                    type: PaginationType.PAYMENTS_TRANSACTIONS,
+                    type: PaginationType.PAYMENTS,
                     modifier: {
                         filters: {
                             ...filters,

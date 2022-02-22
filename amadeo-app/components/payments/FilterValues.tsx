@@ -12,7 +12,7 @@ const FilterValues: React.FC<any> = () => {
 
     const filterData = useSelector(filterDataSelector);
     const { filters }: Layouts.Pagination = useSelector(
-        paginationSelectorFactory(PaginationType.PAYMENTS_TRANSACTIONS)
+        paginationSelectorFactory(PaginationType.PAYMENTS)
     );
 
     const dataFetched = true;
@@ -20,7 +20,7 @@ const FilterValues: React.FC<any> = () => {
     // const handleStatusDelete = (status: string) => {
     //     dispatch(
     //         setPaginationAction({
-    //             type: PaginationType.PAYMENTS_TRANSACTIONS,
+    //             type: PaginationType.PAYMENTS,
     //             modifier: {
     //                 filters: {
     //                     ...filters,
@@ -35,7 +35,7 @@ const FilterValues: React.FC<any> = () => {
     const handlePaymentDelete = (dataId: number) => {
         dispatch(
             setPaginationAction({
-                type: PaginationType.PAYMENTS_TRANSACTIONS,
+                type: PaginationType.PAYMENTS,
                 modifier: {
                     filters: {
                         ...filters,
@@ -50,7 +50,7 @@ const FilterValues: React.FC<any> = () => {
     // const handleCountryDelete = (dataId: number) => {
     //     dispatch(
     //         setPaginationAction({
-    //             type: PaginationType.PAYMENTS_TRANSACTIONS,
+    //             type: PaginationType.PAYMENTS,
     //             modifier: {
     //                 filters: {
     //                     ...filters,
@@ -65,7 +65,7 @@ const FilterValues: React.FC<any> = () => {
     // const handleShippingDelete = (dataId: number) => {
     //     dispatch(
     //         setPaginationAction({
-    //             type: PaginationType.PAYMENTS_TRANSACTIONS,
+    //             type: PaginationType.PAYMENTS,
     //             modifier: {
     //                 filters: {
     //                     ...filters,
@@ -80,7 +80,7 @@ const FilterValues: React.FC<any> = () => {
     const handleTotalAmountDelete = () => {
         dispatch(
             setPaginationAction({
-                type: PaginationType.PAYMENTS_TRANSACTIONS,
+                type: PaginationType.PAYMENTS,
                 modifier: {
                     filters: {
                         ...filters,
@@ -95,7 +95,7 @@ const FilterValues: React.FC<any> = () => {
     const handleOrderNumberDelete = () => {
         dispatch(
             setPaginationAction({
-                type: PaginationType.PAYMENTS_TRANSACTIONS,
+                type: PaginationType.PAYMENTS,
                 modifier: {
                     filters: {
                         ...filters,

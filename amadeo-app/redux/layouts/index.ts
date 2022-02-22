@@ -17,19 +17,20 @@ import {
     setActivePageAction,
     setSwitchToggleAction
 } from './actions';
+import { PaginationType } from '../../constants';
 
 const initPagination = { limit: 25, offset: 0, sort: 'DESC', column: 'created_at', query: '' };
 
 const initialState: State.Layouts = {
     pagination: {
-        notifications: { ...initPagination },
-        products: {
+        [PaginationType.NOTIFICATIONS]: { ...initPagination },
+        [PaginationType.PRODUCTS]: {
             ...initPagination,
             filters: { product_name: '', color_id: [], size_id: [], price: [], quantity: [] }
         },
-        chatbot: { ...initPagination },
-        shipping: { ...initPagination },
-        buyers: {
+        [PaginationType.CHATBOT]: { ...initPagination },
+        [PaginationType.SHIPPING]: { ...initPagination },
+        [PaginationType.BUYERS]: {
             ...initPagination,
             sort: 'ASC',
             column: 'first_name',
@@ -39,11 +40,11 @@ const initialState: State.Layouts = {
                 total_amount: []
             }
         },
-        livesessions: {
+        [PaginationType.LIVESESSIONS]: {
             ...initPagination,
             filters: { status: [], duration: [], cart_duration: [], event_date: '' }
         },
-        paymentstransactions: {
+        [PaginationType.PAYMENTS]: {
             ...initPagination,
             filters: {
                 order_number: '',
@@ -55,8 +56,7 @@ const initialState: State.Layouts = {
                 created_at: []
             }
         },
-        // paymentstransactiondetails: { ...initPagination },
-        orders: {
+        [PaginationType.ORDERS]: {
             ...initPagination,
             filters: {
                 order_number: '',
@@ -68,7 +68,7 @@ const initialState: State.Layouts = {
                 created_at: []
             }
         },
-        waiting: {
+        [PaginationType.WAITING]: {
             ...initPagination,
             filters: {
                 order_number: '',
