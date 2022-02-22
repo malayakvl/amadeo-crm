@@ -1,3 +1,4 @@
+import { getSession } from 'next-auth/client';
 import { useTranslations } from 'next-intl';
 import { useSelector } from 'react-redux';
 import { ListBuyers, Filters, FilterValues } from '../../components/buyer';
@@ -6,7 +7,8 @@ import { PaginationType } from '../../constants';
 import Image from 'next/image';
 import { useState } from 'react';
 
-export default function Buyers() {
+export default function Buyers({ session }: { session: any }) {
+    if (!session) return <></>;
     const t = useTranslations();
 
     const [filterOpen, setFilterOpen] = useState(false);
@@ -49,4 +51,25 @@ export default function Buyers() {
             </div>
         </>
     );
+}
+
+export async function getServerSideProps(context: any) {
+    const { locale } = context;
+    const session = await getSession(context);
+
+    if (!session) {
+        return {
+            redirect: { destination: `/${locale === 'fr' ? '' : `${locale}/`}auth/signin` }
+        };
+    }
+
+    return {
+        props: {
+            session,
+            locale,
+            messages: {
+                ...require(`../../messages/${locale}.json`)
+            }
+        }
+    };
 }
