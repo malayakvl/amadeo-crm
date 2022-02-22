@@ -29,7 +29,16 @@ const initialState: State.Layouts = {
         },
         chatbot: { ...initPagination },
         shipping: { ...initPagination },
-        buyers: { ...initPagination },
+        buyers: {
+            ...initPagination,
+            sort: 'ASC',
+            column: 'first_name',
+            filters: {
+                name: '',
+                country_id: [],
+                total_amount: []
+            }
+        },
         livesessions: {
             ...initPagination,
             filters: { status: [], duration: [], cart_duration: [], event_date: '' }

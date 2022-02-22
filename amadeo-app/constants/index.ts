@@ -65,9 +65,9 @@ export const TableHeaders: { [key in PaginationType]: Type.DataTableHeader[] } =
         { titleKey: 'Total', className: 'text-right' },
         { titleKey: null }
     ],
-    // [PaginationType.PAYMENTS_TRANSACTION_DETAILS]: [],
     [PaginationType.BUYERS]: [
-        { className: 'flex justify-center', iconClass: 'icon-tbl-index' },
+        { iconClass: 'icon-tbl-triangle' },
+        // { className: 'flex justify-center', iconClass: 'icon-tbl-index' },
         { iconClass: 'icon-tbl-users', titleKey: 'Shopper' },
         { className: 'flex justify-center', iconClass: 'icon-tbl-phone' },
         { iconClass: 'icon-tbl-address', titleKey: 'Address' },

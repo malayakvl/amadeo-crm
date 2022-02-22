@@ -14,7 +14,7 @@ import {
 import { showDatePopupSelector } from '../../redux/payments/selectors';
 import { setPaginationAction } from '../../redux/layouts';
 import { paginationSelectorFactory } from '../../redux/layouts/selectors';
-import { DateRange } from 'react-date-range';
+import { DateRangePicker } from 'react-date-range';
 import { PaginationType } from '../../constants';
 import moment from 'moment';
 
@@ -70,11 +70,10 @@ export default function Payments({ session }: { session: any }) {
                                 <div
                                     className="absolute shadow-xl rounded-3xl"
                                     style={{ right: '29rem', zIndex: 10 }}>
-                                    <DateRange
-                                        editableDateInputs={true}
+                                    <DateRangePicker
+                                        // editableDateInputs={true}
                                         onChange={(item) => {
                                             setState([item.selection]);
-                                            console.log('[item.selection] = ', [item.selection]);
                                             dispatch(
                                                 setPaginationAction({
                                                     type: PaginationType.PAYMENTS_TRANSACTIONS,
@@ -96,7 +95,9 @@ export default function Payments({ session }: { session: any }) {
                                             );
                                         }}
                                         moveRangeOnFirstSelection={false}
+                                        months={1}
                                         ranges={state}
+                                        direction="horizontal"
                                     />
                                 </div>
                             )}
