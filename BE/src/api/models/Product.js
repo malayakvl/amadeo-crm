@@ -478,7 +478,7 @@ class Product {
         }
     }
 
-    async getAll (page, perPage = 20, userId, isRead = false, reqOffset = null, filters) {
+    async getAll (page, perPage = 20, userId, isRead = false, reqOffset = null, filters, column, sort) {
         const client = await pool.connect();
         try {
             const userIds = [];
@@ -493,7 +493,7 @@ class Product {
             } else {
                 offset = (Number(page) - 1) * Number(perPage);
             }
-            const productQuery = `SELECT * FROM data.get_products(${perPage}, ${offset}, '${JSON.stringify(_filters)}', 'products.created_at DESC');`;
+            const productQuery = `SELECT * FROM data.get_products(${perPage}, ${offset}, '${JSON.stringify(_filters)}', '${column} ${sort}');`;
             // const res = await client.query(`SELECT * FROM data.get_all_products(${perPage}, ${offset}, 'user_id=''${userId}'' ')`);
             const res = await client.query(productQuery);
             const products = res.rows.length > 0 ? res.rows : [];
