@@ -11,7 +11,7 @@ const FilterPayment: React.FC<any> = () => {
     const t = useTranslations();
     const dispatch = useDispatch();
     const { filters }: Layouts.Pagination = useSelector(
-        paginationSelectorFactory(PaginationType.PAYMENTS_TRANSACTIONS)
+        paginationSelectorFactory(PaginationType.PAYMENTS)
     );
     const filterData = useSelector(filterDataSelector);
     const [paymentSelected, setPaymentSelected] = useState<any>(filters.payment_id);
@@ -22,7 +22,7 @@ const FilterPayment: React.FC<any> = () => {
             setPaymentSelected([...paymentSelected, parseInt(e.target.value)]);
             dispatch(
                 setPaginationAction({
-                    type: PaginationType.PAYMENTS_TRANSACTIONS,
+                    type: PaginationType.PAYMENTS,
                     modifier: {
                         filters: {
                             ...filters,
@@ -35,7 +35,7 @@ const FilterPayment: React.FC<any> = () => {
         } else {
             dispatch(
                 setPaginationAction({
-                    type: PaginationType.PAYMENTS_TRANSACTIONS,
+                    type: PaginationType.PAYMENTS,
                     modifier: {
                         filters: {
                             ...filters,

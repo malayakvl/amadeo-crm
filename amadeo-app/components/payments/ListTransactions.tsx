@@ -31,7 +31,7 @@ const ListTransactions: React.FC = () => {
         <div className="mt-7 min-w-max">
             <DataTable
                 hideBulk
-                paginationType={PaginationType.PAYMENTS_TRANSACTIONS}
+                paginationType={PaginationType.PAYMENTS}
                 totalAmount={count}
                 sendRequest={sendRequest}>
                 {items?.map((item) => (

@@ -23,7 +23,7 @@ import 'react-date-range/dist/theme/default.css'; // theme css file
 const userProfileImg =
     'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80';
 
-const ListMessages: React.FC = () => {
+const ListOrders: React.FC = () => {
     const t = useTranslations();
     const dispatch = useDispatch();
     const items = useSelector(paginatedItemsSelector);
@@ -240,4 +240,4 @@ const ListMessages: React.FC = () => {
     );
 };
 
-export default ListMessages;
+export default ListOrders;
