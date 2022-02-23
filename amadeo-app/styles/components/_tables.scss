@@ -16,7 +16,7 @@
   }
 
   th {
-    @apply px-3 py-3 text-xs font-bold leading-4 tracking-wider text-blue-350 align-top;
+    @apply px-3 py-3 text-xs font-bold leading-4 tracking-wider text-blue-350 align-top relative;
 
     .toggle-bg {
       width: 20px;
@@ -38,6 +38,9 @@
       color: #99abce;
       border-radius: 4px;
     }
+  }
+  th.actions {
+    @apply text-right;
   }
   td {
     @apply px-3 py-1 text-sm font-bold text-left text-gray-350 align-top;
@@ -203,3 +206,12 @@ td.order-status {
   }
 }
 
+span.closed {
+  @apply text-[10px] bg-green-200 rounded-lg p-1.5 bg-gray-200;
+}
+span.live {
+  @apply text-[10px] bg-green-200 rounded-lg p-1.5 bg-green-200 cursor-pointer;
+}
+span.scheduled {
+  @apply text-[10px] bg-green-200 rounded-lg p-1.5 bg-yellow-200 cursor-pointer;
+}

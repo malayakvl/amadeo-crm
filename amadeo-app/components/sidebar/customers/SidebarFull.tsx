@@ -1,9 +1,12 @@
 import React, { Fragment } from 'react';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
+import { itemsCountSelector } from '../../../redux/waitingList/selectors';
+import { useSelector } from 'react-redux';
 
 const SidebarFull: React.FC = () => {
     const t = useTranslations();
+    const countWaiting = useSelector(itemsCountSelector);
     return (
         <Fragment>
             <li className="active">
@@ -54,7 +57,7 @@ const SidebarFull: React.FC = () => {
                     <a>
                         <i className="waiting-list" />
                         <span className="s-caption">{t('Waiting List')}</span>
-                        <em>9</em>
+                        {countWaiting > 0 && <em>{countWaiting}</em>}
                     </a>
                 </Link>
             </li>

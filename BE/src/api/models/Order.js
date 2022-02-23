@@ -204,7 +204,41 @@ function formatCurrency(cents) {
 
 
 class Order {
-    async fetchWaitingItems (page, perPage = 20, user, isRead = false, reqOffset = null, filters) {
+    async createOrders (sessionId) {
+        const client = await pool.connect();
+        try {
+            const productQuery = `SELECT * FROM data.set_orders_from_live_sessions_messages(${sessionId}, 100);`;
+            await client.query(productQuery);
+            const items = [];
+            const error = null;
+    
+            return {
+                items,
+                error
+            };
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error (Create orders):',
+                    { message: e.message }
+                );
+            }
+            const items = null;
+            const error = {
+                code: 500,
+                message: 'Error get list of users'
+            };
+            return {
+                items,
+                error
+            };
+        } finally {
+            client.release();
+        }
+    }
+    
+    async fetchWaitingItems (page, perPage = 20, user, isRead = false, reqOffset = null, filters, column, sort) {
         const client = await pool.connect();
         try {
             const _filters = JSON.parse(filters);
@@ -215,10 +249,8 @@ class Order {
                 //     delete _filters.userIds;
                 // }
             }
-            
-            // const _total = await client.query(`SELECT count FROM data.get_orders_count('${JSON.stringify(_filters)}');`);
-            // const size = _total.rows[0].count;
-            const size = 1;
+            const _total = await client.query(`SELECT count FROM data.get_orders_waiting_list_count('${JSON.stringify(_filters)}');`);
+            const size = _total.rows[0].count;
             let offset;
             if (reqOffset) {
                 offset = reqOffset;
@@ -226,8 +258,9 @@ class Order {
                 offset = (Number(page) - 1) * Number(perPage);
             }
             const ordersQuery = `SELECT
-                                    id_cnt, live_sessions_id, product_id, product_configuration_id, configuration, item_buyers
-                                    FROM data.get_orders_waiting_list(${perPage}, ${offset}, NULL, '');`;
+                                    id_cnt, live_sessions_id, product_id, product_configuration_id, configuration, item_buyers, total_quantity, total_price
+                                    FROM data.get_orders_waiting_list(${perPage}, ${offset}, '${JSON.stringify(_filters)}', '${column} ${sort}');`;
+            console.log(ordersQuery);
             const res = await client.query(ordersQuery);
             const items = res.rows.length > 0 ? res.rows : [];
             const error = null;
@@ -260,7 +293,7 @@ class Order {
     }
     
     
-    async fetchItems (page, perPage = 20, user, isRead = false, reqOffset = null, filters) {
+    async fetchItems (page, perPage = 20, user, isRead = false, reqOffset = null, filters, column, sort) {
         const client = await pool.connect();
         try {
             const _filters = JSON.parse(filters);
@@ -282,11 +315,16 @@ class Order {
             } else {
                 offset = (Number(page) - 1) * Number(perPage);
             }
+            if (!column && !sort) {
+            
+            } else {
+            
+            }
             const ordersQuery = `SELECT id, live_sessions_id, shipping_id, country_id, payment_id, order_amount, discount_amount,
                                     total_amount, order_number, status, created_at, updated_at, seller_id,
                                     seller_first_name, seller_photo, buyer_id,
                                     buyer_first_name, buyer_photo, flag_name, shipping_image, order_items
-                                FROM data.get_orders (${perPage}, ${offset}, '${JSON.stringify(_filters)}', 'orders.created_at DESC');`;
+                                FROM data.get_orders (${perPage}, ${offset}, '${JSON.stringify(_filters)}', '${column} ${sort}');`;
             const res = await client.query(ordersQuery);
             const items = res.rows.length > 0 ? res.rows : [];
             const error = null;

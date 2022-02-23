@@ -18,14 +18,14 @@ export enum PaginationType {
 
 export const TableHeaders: { [key in PaginationType]: Type.DataTableHeader[] } = {
     [PaginationType.PRODUCTS]: [
-        { sortKey: 'photo', titleKey: 'Photo' },
-        { sortKey: 'name', titleKey: 'Reference | Name | Description' },
+        { titleKey: 'Photo' },
+        { sortKey: 'products.name', titleKey: 'Reference | Name | Description' },
         { titleKey: null, className: 'option-switcher' },
         { titleKey: null, className: 'inventory-color' },
         { titleKey: null, className: 'inventory-size' },
         { titleKey: null, className: 'inventory-qty' },
         { titleKey: 'Price', className: 'inventory-price' },
-        { titleKey: 'Actions', className: 'Actions' }
+        { titleKey: 'Actions', className: 'actions' }
     ],
     [PaginationType.NOTIFICATIONS]: [],
     [PaginationType.CHATBOT]: [
@@ -51,8 +51,7 @@ export const TableHeaders: { [key in PaginationType]: Type.DataTableHeader[] } =
         { titleKey: null, iconClass: 'icon-tbl-date' },
         { titleKey: 'Start Time', iconClass: 'icon-tbl-time' },
         { titleKey: 'Duration Cart', iconClass: 'icon-tbl-cart' },
-        { titleKey: null, iconClass: 'icon-tbl-status' },
-        { titleKey: null }
+        { titleKey: null, iconClass: 'icon-tbl-status' }
         // { titleKey: 'Participants', iconClass: 'icon-tbl-users' },
         // { titleKey: 'Products' }
     ],
@@ -76,24 +75,31 @@ export const TableHeaders: { [key in PaginationType]: Type.DataTableHeader[] } =
     ],
     [PaginationType.ORDERS]: [
         { iconClass: 'icon-tbl-triangle' },
-        { sortKey: 'order_number', iconClass: 'icon-tbl-order' },
-        { sortKey: 'status', iconClass: 'icon-tbl-status' },
-        { sortKey: 'created_at', iconClass: 'icon-tbl-date' },
-        { sortKey: 'user', titleKey: 'Shopper', iconClass: 'icon-tbl-users' },
-        { sortKey: 'country', iconClass: 'icon-tbl-country' },
-        { sortKey: 'country', iconClass: 'icon-tbl-sh-cart' },
-        { sortKey: 'payment', iconClass: 'icon-tbl-card' },
+        { sortKey: 'orders.order_number', iconClass: 'icon-tbl-order' },
+        { sortKey: 'orders.status', iconClass: 'icon-tbl-status' },
+        { sortKey: 'orders.created_at', iconClass: 'icon-tbl-date' },
+        { sortKey: 'users__buyer.first_name', titleKey: 'Shopper', iconClass: 'icon-tbl-users' },
+        { sortKey: 'countries.iso', iconClass: 'icon-tbl-country' },
+        // { sortKey: 'orders.shipping_id', iconClass: 'icon-tbl-sh-cart' },
+        { sortKey: 'shipping.name', iconClass: 'icon-tbl-sh-cart' },
+        { sortKey: 'payments.name', iconClass: 'icon-tbl-card' },
         { titleKey: 'Products' },
-        { titleKey: 'Total' }
+        { sortKey: 'orders.order_amount', titleKey: 'Total' }
     ],
     [PaginationType.WAITING]: [
         { iconClass: 'icon-tbl-triangle' },
-        { sortKey: 'photo', titleKey: 'Photo' },
-        { sortKey: 'name', titleKey: 'Reference | Name | Description' },
+        { titleKey: 'Photo' },
+        { titleKey: 'Reference | Name | Description' },
         { titleKey: null, className: 'inventory-color' },
         { titleKey: null, className: 'inventory-size' },
+        { sortKey: 'oi.total_quantity', titleKey: null, className: 'inventory-qty' },
+        { sortKey: 'oi.total_price', titleKey: 'Price', className: 'inventory-price' },
         // { sortKey: 'created_at', iconClass: 'icon-tbl-date' },
-        { sortKey: 'user', titleKey: 'Shopper', iconClass: 'icon-tbl-users' }
+        {
+            sortKey: 'order_items_waiting_list.id_cnt',
+            titleKey: 'Shopper',
+            iconClass: 'icon-tbl-users'
+        }
         // { sortKey: 'country', iconClass: 'icon-tbl-country' },
         // { sortKey: 'country', iconClass: 'icon-tbl-sh-cart' },
         // { sortKey: 'payment', iconClass: 'icon-tbl-card' },

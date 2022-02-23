@@ -1,5 +1,6 @@
 import pool from './connect.js';
 import { logger } from '../../common/logger.js';
+import moment from 'moment';
 
 class Livesession {
     async getUserScenarios (userId) {
@@ -50,7 +51,7 @@ class Livesession {
             if (process.env.NODE_ENV === 'development') {
                 logger.log(
                     'error',
-                    'Model error (Products getAll):',
+                    'Model error (Products getAll)2:',
                     { message: e.message }
                 );
             }
@@ -71,8 +72,150 @@ class Livesession {
     async stopSession(itemId, userId) {
         const client = await pool.connect();
         try {
+            // const query = await client.query(
+            //     `UPDATE data.live_sessions SET closed=true WHERE id=${itemId} AND user_id=${userId}`
+            // );
             const query = await client.query(
-                `UPDATE data.live_sessions SET closed=true WHERE id=${itemId} AND user_id=${userId}`
+                `UPDATE data.live_sessions SET status='closed' WHERE id=${itemId} AND user_id=${userId}`
+            );
+            const result = query.rows.length > 0 ? query.rows : [];
+            return {
+                result
+            };
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error (Products getAll):',
+                    { message: e.message }
+                );
+            }
+            const result = [];
+            const error = {
+                code: 500,
+                message: 'Error get list of users'
+            };
+            return {
+                result,
+                error
+            };
+        } finally {
+            client.release();
+        }
+    }
+    
+    async updateSessionStatusFB(sessionId, videoId) {
+        const client = await pool.connect();
+        const queryStr = `UPDATE data.live_sessions SET status='live', video_id='${videoId}' WHERE id=${sessionId}`;
+        try {
+            await client.query(queryStr);
+            return { success: true };
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error (updateSessionStatusFB):',
+                    { message: e.message }
+                );
+                logger.log(
+                    'error',
+                    'Model query:',
+                    { message: queryStr }
+                );
+            }
+            const error = {
+                code: 500,
+                message: 'check query'
+            };
+            return {
+                success: false,
+                error
+            };
+        } finally {
+            client.release();
+        }
+    }
+    
+    async getSessionsForStart () {
+        const client = await pool.connect();
+        const queryStr = `SELECT
+                    id,
+                    user_id,
+                    auth_provider_id,
+                    auth_provider_access_token,
+                    auth_provider_expiration_time,
+                    auth_provider_expires_in
+                FROM data.get_live_sessions_scheduled('${moment().format('YYYY-MM-DD')}', '${moment().format('HH:mm:ss')}');`;
+        try {
+            const query = await client.query(queryStr);
+            const result = query.rows.length > 0 ? query.rows : [];
+            return {
+                result
+            };
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error (Live Sessions):',
+                    { message: e.message }
+                );
+                logger.log(
+                    'error',
+                    'Model query:',
+                    { message: queryStr }
+                );
+            }
+            const products = null;
+            const error = {
+                code: 500,
+                message: 'Error get list of users'
+            };
+            return {
+                products,
+                error
+            };
+        } finally {
+            client.release();
+        }
+    }
+    
+    async launchedSession(sessionId) {
+        const client = await pool.connect();
+        try {
+            const query = await client.query(
+                `UPDATE data.live_sessions SET launched=true WHERE id=${sessionId}`
+            );
+            const result = query.rows.length > 0 ? query.rows : [];
+            return {
+                result
+            };
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error (Launched session):',
+                    { message: e.message }
+                );
+            }
+            const products = null;
+            const error = {
+                code: 500,
+                message: 'Error get list of users'
+            };
+            return {
+                products,
+                error
+            };
+        } finally {
+            client.release();
+        }
+    }
+    
+    async launchedForStopSession() {
+        const client = await pool.connect();
+        try {
+            const query = await client.query(
+                `SELECT data.live_sessions.id WHERE video_id IS NOT NULL AND launched=true`
             );
             const result = query.rows.length > 0 ? query.rows : [];
             return {
@@ -100,31 +243,34 @@ class Livesession {
         }
     }
     
+    
     async getAllActive () {
         const client = await pool.connect();
+        const query = await client.query(
+            `SELECT data.live_sessions.*, u.auth_provider_access_token FROM data.live_sessions LEFT JOIN data.users u ON u.id = user_id WHERE video_id IS NOT NULL AND launched IS NULL`
+        );
         try {
-            const query = await client.query(
-                `SELECT data.live_sessions.*, u.auth_provider_access_token FROM data.live_sessions LEFT JOIN data.users u ON u.id = user_id WHERE video_id IS NOT NULL`
-            );
+            const error = null;
             const result = query.rows.length > 0 ? query.rows : [];
             return {
-                result
+                result,
+                error
             };
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
                 logger.log(
                     'error',
-                    'Model error (Products getAll):',
+                    `Model error (Live Session getAllActive): ${query}`,
                     { message: e.message }
                 );
             }
-            const products = null;
+            const result = null;
             const error = {
                 code: 500,
                 message: 'Error get list of users'
             };
             return {
-                products,
+                result,
                 error
             };
         } finally {
@@ -160,7 +306,7 @@ class Livesession {
             if (process.env.NODE_ENV === 'development') {
                 logger.log(
                     'error',
-                    'Model error (Products getAll):',
+                    'Model error (Products getAll)1:',
                     { message: e.message }
                 );
             }

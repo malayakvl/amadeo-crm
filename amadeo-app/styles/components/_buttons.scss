@@ -114,3 +114,41 @@
     }
   }
 }
+.btn_sort {
+  //@apply bg-gray-100 w-[24px] h-[24px] inline-block cursor-pointer border;
+  display: inline;
+  content: "";
+  position: absolute;
+  background-repeat: no-repeat;
+  background-position: center;
+  //border: 6px solid transparent;
+  cursor: pointer;
+}
+.btn_sort.top.active, .btn_sort.top:hover {
+  background: url("../../public/images/sort-up-active.svg");
+  //border-bottom-color: #343a40;
+}
+.btn_sort.down.active, .btn_sort.down:hover {
+  background: url("../../public/images/sort-down-active.svg");
+  //border-top-color: #343a40;
+}
+.btn_sort.top {
+  background: url("../../public/images/sort-up.svg");
+  background-repeat: no-repeat;
+  height: 5px;
+  width: 8px;
+  background-position: center;
+  //border-bottom: 10px solid #999;
+  top: calc(50% - 6px);
+  right: 10px;
+}
+.btn_sort.down {
+  //border-top: 10px solid #999;
+  height: 5px;
+  width: 8px;
+  background-position: center;
+  background: url("../../public/images/sort-down.svg");
+  background-repeat: no-repeat;
+  bottom: calc(50% - 6px);
+  right: 10px;
+}

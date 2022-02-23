@@ -61,13 +61,11 @@ const initialState: State.Layouts = {
         },
         waiting: {
             ...initPagination,
+            column: 'oi.total_quantity',
             filters: {
-                order_number: '',
-                shipping_id: [],
-                country_id: [],
-                payment_id: [],
-                status: [],
+                product_search: '',
                 total_amount: [],
+                total_qty: [],
                 created_at: []
             }
         }

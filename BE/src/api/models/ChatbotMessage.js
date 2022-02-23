@@ -5,8 +5,8 @@ import moment from 'moment';
 class ChatbotMessage {
     async addMessages(sessionId, data) {
         const client = await pool.connect();
+        const productQuery = `SELECT * FROM data.set_live_sessions_messages(${sessionId}, '${JSON.stringify(data).replaceAll("'", '')}');`;
         try {
-            const productQuery = `SELECT * FROM data.set_live_sessions_messages(${sessionId}, '${JSON.stringify(data).replaceAll("'", '')}');`;
             await client.query(productQuery);
             const items = [];
             const error = null;
@@ -20,13 +20,18 @@ class ChatbotMessage {
                 logger.log(
                     'error',
                     'Model error (chatbot messages addMessages):',
+                    { message: productQuery }
+                );
+                logger.log(
+                    'error',
+                    'Query:',
                     { message: e.message }
                 );
             }
             const items = null;
             const error = {
                 code: 500,
-                message: 'add live messages'
+                message: 'error insering message'
             };
             return {
                 items,

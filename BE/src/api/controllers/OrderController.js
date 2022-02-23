@@ -8,11 +8,11 @@ class OrderController {
      * @returns {Promise<*>}
      */
     async fetchItems(req, res) {
-        const { limit, offset, queryFilter } = req.query;
+        const { limit, offset, queryFilter, column, sort } = req.query;
         if (!req.user) {
             return res.status(401).json('Access deny');
         } else {
-            const data = await orderModel.fetchItems(1, limit, req.user, false, offset, queryFilter);
+            const data = await orderModel.fetchItems(1, limit, req.user, false, offset, queryFilter, column, sort);
             return res.status(200).json({ count: data.size, items: data.items});
         }
     }
@@ -39,17 +39,23 @@ class OrderController {
     
     
     async fetchWaitingList (req, res) {
-        const { limit, offset, queryFilter } = req.query;
+        const { limit, offset, queryFilter, column, sort } = req.query;
         if (!req.user) {
             return res.status(401).json('Access deny');
         } else {
-            const data = await orderModel.fetchWaitingItems(1, limit, req.user, false, offset, queryFilter);
+            const data = await orderModel.fetchWaitingItems(1, limit, req.user, false, offset, queryFilter, column, sort);
             return res.status(200).json({ count: data.size, items: data.items});
         }
     }
     
     async createOrders (req, res) {
-        await orderModel.createOrder(1, limit, req.user, false, offset, queryFilter);
+        await orderModel.createOrders(req.query.sessionId);
+        // if (!data.error) {
+        //     return res.status(200).json({success: true});
+        // } else {
+        //     return res.status(401).json({success: false, error: 'Something wend wrong'});
+        // }
+        return res.status(200).json({success: true, message: 'creating orders'});
     }
 }
 

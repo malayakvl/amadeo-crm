@@ -37,25 +37,20 @@ const ListMessages: React.FC = () => {
                                     : `${item.order_timer.hours} hour(s)`
                                 : ''}
                         </td>
-                        <td>{item.status}</td>
                         <td>
-                            {!item.closed && !closedSessions.includes(item.id) && (
+                            {item.status != 'closed' && !closedSessions.includes(item.id) && (
                                 <span
                                     onClick={() => {
                                         dispatch(stopSessionAction(item.id));
                                         setClosedSession([...closedSessions, item.id]);
                                     }}
                                     role="presentation"
-                                    className="text-[10px] bg-red-200 rounded-lg p-1.5 cursor-pointer">
-                                    {t('Stop Session')}
+                                    className={item.status}>
+                                    {t(item.status)}
                                 </span>
                             )}
-                            {(item.closed || closedSessions.includes(item.id)) && (
-                                <span
-                                    className="text-[10px] bg-green-200 rounded-lg p-1.5"
-                                    style={{ backgroundColor: 'rgb(167, 243, 208)' }}>
-                                    {t('Closed')}
-                                </span>
+                            {(item.status === 'closed' || closedSessions.includes(item.id)) && (
+                                <span className="closed">{t('Closed')}</span>
                             )}
                         </td>
                         {/*<td>{item.product_cnt ? item.product_cnt : '-'}</td>*/}

@@ -22,10 +22,81 @@ class LivesessionController {
         }
     }
     
+    /**
+     * After start event for session change status that session is add to pm2 process
+     * @param req
+     * @param res
+     * @returns {Promise<*>}
+     */
+    async launchedSession (req, res) {
+        const data = await livesessionModel.launchedSession(req.params.id);
+        return res.status(200).json({ result: data.result });
+    }
+    
+    
+    /**
+     * Get list of session which have parameter close but still worked on pm2
+     * @param req
+     * @param res
+     * @returns {Promise<*>}
+     */
+    async getLaunchForStop (req, res) {
+        const data = await livesessionModel.launchedForStopSession(req.params.id);
+        if (!data.error) {
+            return res.status(200).json({ result: data.result, error: data.error });
+        } else {
+            return res.status(401).json({ error: data.error });
+        }
+    }
+    
+    
+    /**
+     * Get list of session wich started and get video id for it
+     * @param req
+     * @param res
+     * @returns {Promise<*>}
+     */
+    async getSessionsForStart (req, res) {
+        const data = await livesessionModel.getSessionsForStart();
+        if (!data.error) {
+            return res.status(200).json({ result: data.result, error: data.error });
+        } else {
+            return res.status(401).json({ error: data.error });
+        }
+    }
+    
+    
+    /**
+     * Get list session with started and have video for apply event about parsing/creating order
+     * @param req
+     * @param res
+     * @returns {Promise<*>}
+     */
     async getActiveSessions (req, res) {
         const data = await livesessionModel.getAllActive();
-        return res.status(200).json({ items: data.result });
+        if (!data.error) {
+            return res.status(200).json({ result: data.result, error: data.error });
+        } else {
+            return res.status(401).json({ result: [], error: data.error });
+        }
     }
+    
+    
+    /**
+     * Getting FB video id change status to active and setup video ID
+     * @param req
+     * @param res
+     * @returns {Promise<void>}
+     */
+    async updateSessionStatusFB (req, res) {
+        const data = await livesessionModel.updateSessionStatusFB(req.query.sessionId, req.query.videoId);
+        if (!data.error) {
+            return res.status(200).json({ result: true, error: data.error });
+        } else {
+            return res.status(401).json({ result: false, error: data.error });
+        }
+    }
+    
     
     async getAllInAir (req, res) {
         const data = await livesessionModel.getAllInAir();

@@ -13,7 +13,7 @@ class ChatbotMessageController {
         if (!data.error) {
             return res.status(200).json({success: true});
         } else {
-            return res.status(401).json({success: false, error: 'Something wend wrong'});
+            return res.status(401).json({success: false, error: data.error});
         }
     }
     

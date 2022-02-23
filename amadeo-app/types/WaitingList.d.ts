@@ -28,6 +28,10 @@ declare namespace WaitingList {
         buyer_id: number;
         buyer_first_name: string;
         buyer_photo: string;
+        product_configuration_id: number;
+        total_quantity: number;
+        total_price: number;
+        id_cnt: number;
         flag_name: string | null;
         configuration: any;
         item_buyers: any;

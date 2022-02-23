@@ -16,7 +16,7 @@ import { checkIdsAction, setPaginationAction } from '../../redux/layouts';
 import { useTranslations } from 'next-intl';
 import { Filters, FilterValues, ListItems } from './index';
 import { checkedIdsSelector, paginationSelectorFactory } from '../../redux/layouts/selectors';
-import { DateRange } from 'react-date-range';
+import { DateRangePicker } from 'react-date-range';
 import 'react-date-range/dist/styles.css'; // main css file
 import 'react-date-range/dist/theme/default.css'; // theme css file
 
@@ -66,8 +66,7 @@ const ListMessages: React.FC = () => {
                     <div
                         className="absolute shadow-xl rounded-3xl"
                         style={{ right: '29rem', zIndex: 10 }}>
-                        <DateRange
-                            editableDateInputs={true}
+                        <DateRangePicker
                             onChange={(item) => {
                                 setState([item.selection]);
                                 dispatch(
@@ -90,9 +89,39 @@ const ListMessages: React.FC = () => {
                                     })
                                 );
                             }}
+                            // showSelectionPreview={true}
                             moveRangeOnFirstSelection={false}
+                            months={1}
                             ranges={state}
+                            direction="horizontal"
                         />
+                        {/*<DateRange*/}
+                        {/*    editableDateInputs={true}*/}
+                        {/*    onChange={(item) => {*/}
+                        {/*        setState([item.selection]);*/}
+                        {/*        dispatch(*/}
+                        {/*            setPaginationAction({*/}
+                        {/*                type: PaginationType.ORDERS,*/}
+                        {/*                modifier: {*/}
+                        {/*                    filters: {*/}
+                        {/*                        ...filters,*/}
+                        {/*                        created_at: [*/}
+                        {/*                            moment(item.selection.startDate).format(*/}
+                        {/*                                'YYYY-MM-DD'*/}
+                        {/*                            ),*/}
+                        {/*                            moment(item.selection.endDate).format(*/}
+                        {/*                                'YYYY-MM-DD'*/}
+                        {/*                            )*/}
+                        {/*                        ]*/}
+                        {/*                    },*/}
+                        {/*                    offset: 0*/}
+                        {/*                }*/}
+                        {/*            })*/}
+                        {/*        );*/}
+                        {/*    }}*/}
+                        {/*    moveRangeOnFirstSelection={false}*/}
+                        {/*    ranges={state}*/}
+                        {/*/>*/}
                     </div>
                 )}
                 <button
