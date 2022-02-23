@@ -43,7 +43,7 @@ export const fetchItemsAction: any = createAction(
         ): Promise<{ count: number; items: Payments.DataItem[] }> => {
             const state = getState();
             const { limit, offset, sort, column, query, filters } = paginationSelectorFactory(
-                PaginationType.PAYMENTS_TRANSACTIONS
+                PaginationType.PAYMENTS
             )(state);
             const queryFilter = JSON.stringify(filters);
             dispatch(showLoaderAction(true));

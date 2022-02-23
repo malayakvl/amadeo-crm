@@ -43,7 +43,7 @@ const DataTable: React.FC<Props> = ({
     switcherOnClick,
     hideBulk
 }) => {
-    const { PRODUCTS, CHATBOT, SHIPPING, ORDERS, PAYMENTS_TRANSACTIONS, WAITING } = PaginationType;
+    const { PRODUCTS, CHATBOT, SHIPPING, ORDERS, PAYMENTS, WAITING } = PaginationType;
     const t = useTranslations();
     const checkedIds = useSelector(checkedIdsSelector);
     const switchAllHeader = useSelector(switchHeaderSelector);
@@ -51,14 +51,9 @@ const DataTable: React.FC<Props> = ({
     // const showFilters = [PRODUCTS].includes(paginationType);
     // const hideEntries: boolean = [CATEGORIES, INVESTMENT].includes(paginationType);
     // const hideEntries = false;
-    const showIds: boolean = [
-        PRODUCTS,
-        CHATBOT,
-        SHIPPING,
-        ORDERS,
-        PAYMENTS_TRANSACTIONS,
-        WAITING
-    ].includes(paginationType);
+    const showIds: boolean = [PRODUCTS, CHATBOT, SHIPPING, ORDERS, PAYMENTS, WAITING].includes(
+        paginationType
+    );
     // const hideSearch: boolean = [INVESTMENT].includes(paginationType);
     // const hideSearch = false;
     const headers = TableHeaders[paginationType];

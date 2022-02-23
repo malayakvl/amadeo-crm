@@ -10,7 +10,7 @@ const FilterStatus: React.FC<any> = () => {
     const t = useTranslations();
     const dispatch = useDispatch();
     const { filters }: Layouts.Pagination = useSelector(
-        paginationSelectorFactory(PaginationType.PAYMENTS_TRANSACTIONS)
+        paginationSelectorFactory(PaginationType.PAYMENTS)
     );
     const [statusSelected, setStatusSelected] = useState<any>(filters.status);
     const [showBlock, setShowBlock] = useState<boolean>(true);
@@ -21,7 +21,7 @@ const FilterStatus: React.FC<any> = () => {
             setStatusSelected([...statusSelected, e.target.value]);
             dispatch(
                 setPaginationAction({
-                    type: PaginationType.PAYMENTS_TRANSACTIONS,
+                    type: PaginationType.PAYMENTS,
                     modifier: {
                         filters: {
                             ...filters,
@@ -34,7 +34,7 @@ const FilterStatus: React.FC<any> = () => {
         } else {
             dispatch(
                 setPaginationAction({
-                    type: PaginationType.PAYMENTS_TRANSACTIONS,
+                    type: PaginationType.PAYMENTS,
                     modifier: {
                         filters: {
                             ...filters,

@@ -13,7 +13,7 @@ const FilterDate: React.FC<any> = () => {
     const t = useTranslations();
     const dispatch = useDispatch();
     const { filters }: Layouts.Pagination = useSelector(
-        paginationSelectorFactory(PaginationType.PAYMENTS_TRANSACTIONS)
+        paginationSelectorFactory(PaginationType.PAYMENTS)
     );
     const showDatePopup = useSelector(showDatePopupSelector);
     const [showBlock, setShowBlock] = useState<boolean>(true);
@@ -21,7 +21,7 @@ const FilterDate: React.FC<any> = () => {
     const clear = () => {
         dispatch(
             setPaginationAction({
-                type: PaginationType.PAYMENTS_TRANSACTIONS,
+                type: PaginationType.PAYMENTS,
                 modifier: {
                     filters: {
                         ...filters,

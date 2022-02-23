@@ -2,7 +2,7 @@ import Head from 'next/head';
 import { getSession } from 'next-auth/client';
 import React from 'react';
 import { useTranslations } from 'next-intl';
-import { List } from '../../components/orders';
+import { ListOrders } from '../../components/orders';
 
 // import { showFormSelector } from '../../redux/chatbot/selectors';
 // import { setEmptyFormAction, showFormAction } from '../../redux/chatbot';
@@ -33,7 +33,7 @@ export default function Index({ session }: { session: any }) {
                 </div>
             </div>
             <div className="block-white-8 mr-10 white-shadow-medium mt-10">
-                <List />
+                <ListOrders />
             </div>
         </>
     );

@@ -5,24 +5,24 @@ import { paginationSelectorFactory } from '../../../redux/layouts/selectors';
 import { PaginationType } from '../../../constants';
 import { setPaginationAction } from '../../../redux/layouts';
 import Image from 'next/image';
-import { filterDataSelector } from '../../../redux/orders/selectors';
+import { filterDataSelector } from '../../../redux/buyers/selectors';
 
 const FilterCountry: React.FC<any> = () => {
     const t = useTranslations();
     const dispatch = useDispatch();
     const { filters }: Layouts.Pagination = useSelector(
-        paginationSelectorFactory(PaginationType.ORDERS)
+        paginationSelectorFactory(PaginationType.BUYERS)
     );
     const filterData = useSelector(filterDataSelector);
     const [countrySelected, setCountrySelected] = useState<any>(filters.country_id);
     const [showBlock, setShowBlock] = useState<boolean>(true);
 
-    const handleitemFilter = (e: any) => {
+    const handlerItemFilter = (e: any) => {
         if (e.target.checked) {
             setCountrySelected([...countrySelected, parseInt(e.target.value)]);
             dispatch(
                 setPaginationAction({
-                    type: PaginationType.ORDERS,
+                    type: PaginationType.BUYERS,
                     modifier: {
                         filters: {
                             ...filters,
@@ -35,7 +35,7 @@ const FilterCountry: React.FC<any> = () => {
         } else {
             dispatch(
                 setPaginationAction({
-                    type: PaginationType.ORDERS,
+                    type: PaginationType.BUYERS,
                     modifier: {
                         filters: {
                             ...filters,
@@ -81,7 +81,7 @@ const FilterCountry: React.FC<any> = () => {
                                             id={`country_${item.id}`}
                                             value={item.id}
                                             checked={filters.country_id.includes(item.id)}
-                                            onChange={(e) => handleitemFilter(e)}
+                                            onChange={(e) => handlerItemFilter(e)}
                                         />
                                         <label
                                             className="text-xs text-blue-350 ml-3 font-bold flex"

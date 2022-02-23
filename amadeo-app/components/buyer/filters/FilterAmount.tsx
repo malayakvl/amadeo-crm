@@ -2,58 +2,58 @@ import React, { useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { paginationSelectorFactory } from '../../../redux/layouts/selectors';
+import { filterDataSelector } from '../../../redux/buyers/selectors';
 import { PaginationType } from '../../../constants';
 import { setPaginationAction } from '../../../redux/layouts';
 import Image from 'next/image';
 import { Range } from 'rc-slider';
 import 'rc-slider/assets/index.css';
-import { filterDataSelector } from '../../../redux/payments/selectors';
 
 const FilterAmount: React.FC<any> = () => {
     const t = useTranslations();
     const dispatch = useDispatch();
     const { filters }: Layouts.Pagination = useSelector(
-        paginationSelectorFactory(PaginationType.PAYMENTS)
+        paginationSelectorFactory(PaginationType.BUYERS)
     );
     const filterData = useSelector(filterDataSelector);
     const [showBlock, setShowBlock] = useState<boolean>(true);
 
-    const [priceRange, setPriceRange] = useState(
+    const [amountRange, setAmountRange] = useState(
         filters.total_amount?.[0] > 0 || filters.total_amount?.[1] > 0
             ? filters.total_amount
             : [0, 0]
     );
 
     const onSliderPriceChange = (_value: any) => {
-        setPriceRange(_value);
+        setAmountRange(_value);
     };
 
     useEffect(() => {
         if (filters.total_amount?.length === 0) {
-            setPriceRange([0, 0]);
+            setAmountRange([0, 0]);
         } else {
-            setPriceRange(filters.total_amount);
+            setAmountRange(filters.total_amount);
         }
     }, [filters.total_amount]);
 
     const changePriceDone = () => {
-        if (priceRange[0] !== priceRange[1]) {
+        if (amountRange[0] !== amountRange[1]) {
             dispatch(
                 setPaginationAction({
-                    type: PaginationType.PAYMENTS,
+                    type: PaginationType.BUYERS,
                     modifier: {
                         filters: {
                             ...filters,
-                            total_amount: priceRange
+                            total_amount: amountRange
                         },
                         offset: 0
                     }
                 })
             );
-        } else if (priceRange[0] === priceRange[1] && priceRange[0] === 0) {
+        } else if (amountRange[0] === amountRange[1] && amountRange[0] === 0) {
             dispatch(
                 setPaginationAction({
-                    type: PaginationType.PAYMENTS,
+                    type: PaginationType.BUYERS,
                     modifier: {
                         filters: {
                             ...filters,
@@ -81,7 +81,7 @@ const FilterAmount: React.FC<any> = () => {
                     <span className="ml-2 text-xs font-bold text-blue-350">{t('Spent')}</span>
                 </div>
                 <div className="text-sm font-thin text-gray-450">
-                    {priceRange[0]} - {priceRange[1]} &euro;
+                    {amountRange[0]} - {amountRange[1]} &euro;
                 </div>
             </div>
             {showBlock && (
@@ -90,7 +90,7 @@ const FilterAmount: React.FC<any> = () => {
                         <span className="filter-label" style={{ marginLeft: '-4px' }}>
                             {t('Price')}
                             <em className="float-right">
-                                {priceRange[0]} - {filterData.amounts[1]}
+                                {amountRange[0]} - {filterData.amounts[1]}
                                 &euro;
                             </em>
                         </span>
@@ -101,7 +101,7 @@ const FilterAmount: React.FC<any> = () => {
                             max={filterData.amounts[1]}
                             onChange={onSliderPriceChange}
                             onAfterChange={onSliderAfterChange}
-                            value={priceRange}
+                            value={amountRange}
                         />
                     </div>
                     <div className="flex mt-1">
@@ -116,11 +116,11 @@ const FilterAmount: React.FC<any> = () => {
                                 onChange={(e) => {
                                     onSliderPriceChange([
                                         parseFloat(e.target.value),
-                                        priceRange[1]
+                                        amountRange[1]
                                     ]);
                                 }}
                                 onKeyUp={() => changePriceDone()}
-                                value={priceRange[0]}
+                                value={amountRange[0]}
                             />
                         </div>
                         <div className="w-1/2">
@@ -133,12 +133,12 @@ const FilterAmount: React.FC<any> = () => {
                                 placeholder={`${filterData.amounts[1]} €`}
                                 onChange={(e) => {
                                     onSliderPriceChange([
-                                        priceRange[0],
+                                        amountRange[0],
                                         parseFloat(e.target.value)
                                     ]);
                                 }}
                                 onKeyUp={() => changePriceDone()}
-                                value={priceRange[1]}
+                                value={amountRange[1]}
                             />
                         </div>
                     </div>

@@ -6,24 +6,24 @@ import { PaginationType } from '../../../constants';
 import { setPaginationAction } from '../../../redux/layouts';
 import Image from 'next/image';
 
-const FilterNumber: React.FC<any> = () => {
+const FilterName: React.FC<any> = () => {
     const t = useTranslations();
     const dispatch = useDispatch();
-    const { filters }: Layouts.Pagination = useSelector(
-        paginationSelectorFactory(PaginationType.PAYMENTS)
+    const { filters = {} }: Layouts.Pagination = useSelector(
+        paginationSelectorFactory(PaginationType.BUYERS)
     );
-    const [numberSelected, setNumberSelected] = useState<any>(filters.order_number);
+    const [nameSelected, setNameSelected] = useState<any>(filters.name);
     const [showBlock, setShowBlock] = useState<boolean>(true);
 
     const clear = () => {
-        setNumberSelected('');
+        setNameSelected('');
         dispatch(
             setPaginationAction({
-                type: PaginationType.PAYMENTS,
+                type: PaginationType.BUYERS,
                 modifier: {
                     filters: {
                         ...filters,
-                        order_number: ''
+                        name: ''
                     },
                     offset: 0
                 }
@@ -39,9 +39,7 @@ const FilterNumber: React.FC<any> = () => {
                 onClick={() => setShowBlock(!showBlock)}>
                 <div className="flex items-center">
                     <Image width="10" height="10" src={'/images/lang-arrow.svg'} />
-                    <span className="ml-2 text-xs font-bold text-blue-350">
-                        {t('order_number')}
-                    </span>
+                    <span className="ml-2 text-xs font-bold text-blue-350">{t('Buyer name')}</span>
                 </div>
             </div>
             <div className="mt-3 mb-4 pt-1 overflow-auto max-h-36 relative max-w-sm mx-auto">
@@ -50,25 +48,25 @@ const FilterNumber: React.FC<any> = () => {
                         <input
                             className="w-full form-control"
                             type="text"
-                            placeholder={t('order_number')}
+                            placeholder={t('Buyer name')}
                             onChange={(e) => {
-                                setNumberSelected(e.target.value);
+                                setNameSelected(e.target.value);
                             }}
                             onKeyUp={() => {
                                 dispatch(
                                     setPaginationAction({
-                                        type: PaginationType.PAYMENTS,
+                                        type: PaginationType.BUYERS,
                                         modifier: {
                                             filters: {
                                                 ...filters,
-                                                order_number: numberSelected
+                                                name: nameSelected
                                             },
                                             offset: 0
                                         }
                                     })
                                 );
                             }}
-                            value={numberSelected}
+                            value={nameSelected}
                         />
                         <i
                             role="presentation"
@@ -82,4 +80,4 @@ const FilterNumber: React.FC<any> = () => {
     );
 };
 
-export default FilterNumber;
+export default FilterName;
