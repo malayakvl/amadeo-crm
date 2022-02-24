@@ -2,16 +2,18 @@ import Head from 'next/head';
 import { getSession } from 'next-auth/client';
 import React from 'react';
 import { useTranslations } from 'next-intl';
-import { DefaultMessages } from '../../components/chatbot/index';
-// import { useSelector, useDispatch } from 'react-redux';
-// import { showFormSelector } from '../../redux/chatbot/selectors';
+import { DefaultMessages, ChatbotDefaultForm } from '../../components/chatbot/index';
+import { useSelector } from 'react-redux';
+import { showFormSelector } from '../../redux/chatbot/selectors';
 // import { setEmptyFormAction, showFormAction } from '../../redux/chatbot';
+import { userSelector } from '../../redux/user/selectors';
 
 export default function Index({ session }: { session: any }) {
     if (!session) return <></>;
     const t = useTranslations();
     // const dispatch = useDispatch();
-    // const showForm = useSelector(showFormSelector);
+    const showForm = useSelector(showFormSelector);
+    const user = useSelector(userSelector);
 
     // const handleShowForm = () => {
     //     dispatch(setEmptyFormAction());
@@ -40,7 +42,7 @@ export default function Index({ session }: { session: any }) {
                 </div>
             </div>
             <div className="block-white-8 mr-10 white-shadow-medium mt-10">
-                <DefaultMessages />
+                <DefaultMessages user={user} />
 
                 {/*<div className="flex border border-l-0 border-r-0 border-t-0 pb-5 mb-10 mt-10">*/}
                 {/*    <h2 className="dark-blue-header w-full">*/}
@@ -57,11 +59,11 @@ export default function Index({ session }: { session: any }) {
                 {/*    </h2>*/}
                 {/*</div>*/}
 
-                {/*{showForm && (*/}
-                {/*    <div className="shadow-border">*/}
-                {/*        <ChatbotForm />*/}
-                {/*    </div>*/}
-                {/*)}*/}
+                {showForm && user.role_id === 3 && (
+                    <div className="shadow-border">
+                        <ChatbotDefaultForm />
+                    </div>
+                )}
 
                 {/*<ListMessages />*/}
             </div>

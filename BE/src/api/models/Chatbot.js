@@ -9,7 +9,7 @@ class Chatbot {
                 `SELECT * FROM common__tools._select_total_from_table_by_where('data', 'system_chatbot_scenarios', 'id');`
             );
             const size = _total.rows[0].total;
-            const productQuery = `SELECT * FROM data.system_chatbot_scenarios`;
+            const productQuery = `SELECT * FROM data.system_chatbot_scenarios ORDER BY id`;
             const res = await client.query(productQuery);
             const items = res.rows.length > 0 ? res.rows : [];
             const error = null;
@@ -156,6 +156,48 @@ class Chatbot {
             client.release();
         }
     }
+    
+    async updateDefault (userId, data) {
+        const client = await pool.connect();
+        try {
+            const itemId = data.id;
+            // delete data.id;
+            const query =  `UPDATE data.system_chatbot_scenarios SET
+                                message_fr = regexp_replace($$${data.translationFr}$$, '\\\\n+', E'\\n', 'g' ),
+                                message_en = regexp_replace($$${data.translationEn}$$, '\\\\n+', E'\\n', 'g' )
+                            WHERE id=${itemId}
+                `;
+            // console.log(query);
+            await client.query(query);
+            // await client.query(`SELECT * FROM common__tools._update_table_by_where(
+            //     'data',
+            //     'chatbot_scenarios',
+            //     '${JSON.stringify(data)}',
+            //     'user_id = ''${userId}'' AND id = ''${itemId}''')`);
+            return { success: true };
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error (Chatbot update):',
+                    { message: e.message }
+                );
+            }
+            const item = null;
+            const error = {
+                code: 500,
+                message: 'Error update chatbot_scenarios'
+            };
+            return {
+                success: false,
+                error,
+                item
+            };
+        } finally {
+            client.release();
+        }
+    }
+    
     
     async update (userId, data) {
         const client = await pool.connect();

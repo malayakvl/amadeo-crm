@@ -3,6 +3,8 @@
 }
 
 .filters {
+  z-index: 99;
+
   input[type="checkbox"] {
     appearance: none;
     margin: 0;

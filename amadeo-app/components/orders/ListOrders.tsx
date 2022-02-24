@@ -95,33 +95,6 @@ const ListOrders: React.FC = () => {
                             ranges={state}
                             direction="horizontal"
                         />
-                        {/*<DateRange*/}
-                        {/*    editableDateInputs={true}*/}
-                        {/*    onChange={(item) => {*/}
-                        {/*        setState([item.selection]);*/}
-                        {/*        dispatch(*/}
-                        {/*            setPaginationAction({*/}
-                        {/*                type: PaginationType.ORDERS,*/}
-                        {/*                modifier: {*/}
-                        {/*                    filters: {*/}
-                        {/*                        ...filters,*/}
-                        {/*                        created_at: [*/}
-                        {/*                            moment(item.selection.startDate).format(*/}
-                        {/*                                'YYYY-MM-DD'*/}
-                        {/*                            ),*/}
-                        {/*                            moment(item.selection.endDate).format(*/}
-                        {/*                                'YYYY-MM-DD'*/}
-                        {/*                            )*/}
-                        {/*                        ]*/}
-                        {/*                    },*/}
-                        {/*                    offset: 0*/}
-                        {/*                }*/}
-                        {/*            })*/}
-                        {/*        );*/}
-                        {/*    }}*/}
-                        {/*    moveRangeOnFirstSelection={false}*/}
-                        {/*    ranges={state}*/}
-                        {/*/>*/}
                     </div>
                 )}
                 <button

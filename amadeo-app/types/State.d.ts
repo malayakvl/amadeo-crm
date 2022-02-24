@@ -15,6 +15,7 @@ declare namespace State {
         payments: Payments;
         waitingList: WaitingList;
         buyers: Buyers;
+        sellers: Sellers;
     }
 
     type Address = Address.Root;
@@ -35,4 +36,5 @@ declare namespace State {
     type Payments = Payments.Root;
     type WaitingList = WaitingList.Root;
     type Buyers = Buyers.Root;
+    type Sellers = Sellers.Root;
 }

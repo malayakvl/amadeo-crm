@@ -1,12 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { showedItemsSelector } from '../../redux/chatbot/selectors';
 import { showItemAction } from '../../redux/chatbot';
-import { ButtonTableAction } from '../_common';
+import { useTranslations } from 'next-intl';
+import { submitDefaultFormAction } from '../../redux/chatbot/actions';
 
-const Row: React.FC<any> = ({ item, handleEditBtnClick, handleDeleteBtnClick }) => {
+const Row: React.FC<any> = ({ item }) => {
     const dispatch = useDispatch();
     const showedItems = useSelector(showedItemsSelector);
+    const t = useTranslations();
+
+    const [translationEn, setTranslationEn] = useState(item.message_en);
+    const [translationFr, setTranslationFr] = useState(item.message_fr);
 
     return (
         <>
@@ -22,42 +27,42 @@ const Row: React.FC<any> = ({ item, handleEditBtnClick, handleDeleteBtnClick }) 
                     onClick={() => dispatch(showItemAction(item.id))}>
                     <i className={showedItems.includes(item.id) ? 'eye' : 'eye-cross'} />
                 </td>
-                <td className="actions" style={{ width: '150px' }}>
-                    <ButtonTableAction
-                        dataId={String(item.id)}
-                        localeKey="Edit"
-                        className={'btn-edit'}
-                        onClick={handleEditBtnClick}
-                    />
-                    <ButtonTableAction
-                        dataId={String(item.id)}
-                        onClick={handleDeleteBtnClick}
-                        localeKey="Delete"
-                        className={'btn-delete'}
-                    />
-                </td>
             </tr>
             <tr className={showedItems.includes(item.id) ? '' : 'hidden'}>
                 <td colSpan={2} className="translations" style={{ paddingLeft: '16px' }}>
                     <i className="trans-fr" />
-                    <div className="shadow-border float-left ml-5 mb-5 translations-msg">
-                        <div
-                            className="pl-5 inline-block"
-                            dangerouslySetInnerHTML={{
-                                __html: item.message_fr
-                            }}
+                    <div className="    float-left ml-5 mb-5 translations-msg">
+                        <textarea
+                            rows={10}
+                            name={`message_fr_${item.id}`}
+                            className="form-control sm d-inline-block align-middle"
+                            value={translationFr}
+                            onChange={(e) => setTranslationFr(e.target.value)}
                         />
                     </div>
                     <div className="clear-both" />
                     <i className="trans-en" />
-                    <div className="shadow-border float-left ml-5 mb-5 translations-msg">
-                        <div
-                            className="pl-5 inline-block"
-                            dangerouslySetInnerHTML={{
-                                __html: item.message_en
-                            }}
+                    <div className="float-left ml-5 mb-5 translations-msg">
+                        <textarea
+                            rows={10}
+                            name={`message_en_${item.id}`}
+                            className="form-control sm d-inline-block align-middle"
+                            value={translationEn}
+                            onChange={(e) => setTranslationEn(e.target.value)}
                         />
                     </div>
+                    <button
+                        type="button"
+                        className="gradient-btn"
+                        onClick={() => {
+                            const values: any = {};
+                            values.translationEn = translationEn;
+                            values.translationFr = translationFr;
+                            values.id = item.id;
+                            dispatch(submitDefaultFormAction(values));
+                        }}>
+                        {t('Save')}
+                    </button>
                 </td>
             </tr>
         </>

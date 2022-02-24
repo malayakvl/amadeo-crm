@@ -1,11 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { Fragment, useCallback, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { itemsSystemSelector } from '../../redux/chatbot/selectors';
-import { RowDefault } from './index';
-import { fetchDataSystemAction } from '../../redux/chatbot';
+import { RowDefault, Row } from './index';
+import { fetchDataSystemAction, fetchFormAction } from '../../redux/chatbot';
 
-const DefaultMessages: React.FC = () => {
+const DefaultMessages: React.FC<any> = ({ user }) => {
     const t = useTranslations();
     const dispatch = useDispatch();
     const items = useSelector(itemsSystemSelector);
@@ -13,6 +13,14 @@ const DefaultMessages: React.FC = () => {
     useEffect(() => {
         dispatch(fetchDataSystemAction('system'));
     }, []);
+
+    const handleEditBtnClick = useCallback(
+        (event: React.SyntheticEvent): void => {
+            const id = Number(event.currentTarget.getAttribute('data-id'));
+            dispatch(fetchFormAction(id));
+        },
+        [items, dispatch]
+    );
 
     return (
         <>
@@ -28,7 +36,7 @@ const DefaultMessages: React.FC = () => {
                         <tr>
                             {/*<th />*/}
                             {/*<th />*/}
-                            <th>
+                            <th style={{ textAlign: 'left' }}>
                                 <i className="scenario" />
                                 {t('Scenario')}
                             </th>
@@ -45,7 +53,30 @@ const DefaultMessages: React.FC = () => {
                     </thead>
                     <tbody>
                         {items?.map((item: any) => (
-                            <RowDefault key={item.id} item={item} />
+                            <Fragment key={item.id}>
+                                {user.role_id === 3 && (
+                                    <RowDefault
+                                        key={item.id}
+                                        item={item}
+                                        user={user}
+                                        handleEditBtnClick={handleEditBtnClick}
+                                    />
+                                )}
+                                {user.role_id !== 3 && (
+                                    <Row
+                                        key={item.id}
+                                        item={item}
+                                        user={user}
+                                        handleEditBtnClick={handleEditBtnClick}
+                                    />
+                                )}
+                            </Fragment>
+                            // <RowDefault
+                            //     key={item.id}
+                            //     item={item}
+                            //     user={user}
+                            //     handleEditBtnClick={handleEditBtnClick}
+                            // />
                         ))}
                     </tbody>
                 </table>

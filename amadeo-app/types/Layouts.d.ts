@@ -5,7 +5,7 @@ declare namespace Layouts {
             products: Pagination;
             chatbot: Pagination;
             shipping: Pagination;
-            buyers: Pagination;
+            sellers: Pagination;
             livesessions: Pagination;
             orders: Pagination;
             waiting: Pagination;

@@ -15,6 +15,7 @@ import OrderController from "../controllers/OrderController.js";
 import SupportController from '../controllers/SupportController.js';
 import PaymentController from "../controllers/PaymentController.js";
 import BuyerController from "../controllers/BuyerController.js";
+import SellerController from "../controllers/SellerController.js";
 
 
 const apiRoutes = express.Router();
@@ -85,6 +86,7 @@ apiRoutes.route('/products/find').get(ProductController.find);
 apiRoutes.route('/tags/find').get(TagController.fetchTags);
 
 apiRoutes.route('/chatbot').post(ChatbotController.storeItem);
+apiRoutes.route('/chatbot-default').post(ChatbotController.storeItemDefault);
 apiRoutes.route('/chatbot/delete/:id').delete(ChatbotController.deleteRow);
 apiRoutes.route('/fetch-chatbot-messages').get(ChatbotController.fetchItems);
 apiRoutes.route('/fetch-chatbot-default-messages').get(ChatbotController.fetchItemsSystem);
@@ -107,6 +109,10 @@ apiRoutes.route('/payments/download-invoice/:orderNumber').get(PaymentController
 
 apiRoutes.route('/buyers/fetch-items').get(BuyerController.fetchItems);
 apiRoutes.route('/buyers/fetch-filters').get(BuyerController.fetchFilters);
+
+apiRoutes.route('/sellers/fetch-items').get(SellerController.fetchItems);
+apiRoutes.route('/sellers/fetch-filters').get(SellerController.fetchFilters);
+
 
 apiRoutes.route('/support/send-message').post(SupportController.sendMessage);
 
