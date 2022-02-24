@@ -2,9 +2,9 @@ import Head from 'next/head';
 import { getSession } from 'next-auth/client';
 import React from 'react';
 import { useTranslations } from 'next-intl';
-import { DefaultMessages, ChatbotDefaultForm } from '../../components/chatbot/index';
+import { DefaultMessages } from '../../components/chatbot/index';
 import { useSelector } from 'react-redux';
-import { showFormSelector } from '../../redux/chatbot/selectors';
+// import { showFormSelector } from '../../redux/chatbot/selectors';
 // import { setEmptyFormAction, showFormAction } from '../../redux/chatbot';
 import { userSelector } from '../../redux/user/selectors';
 
@@ -12,7 +12,7 @@ export default function Index({ session }: { session: any }) {
     if (!session) return <></>;
     const t = useTranslations();
     // const dispatch = useDispatch();
-    const showForm = useSelector(showFormSelector);
+    // const showForm = useSelector(showFormSelector);
     const user = useSelector(userSelector);
 
     // const handleShowForm = () => {
@@ -58,12 +58,6 @@ export default function Index({ session }: { session: any }) {
                 {/*        </div>*/}
                 {/*    </h2>*/}
                 {/*</div>*/}
-
-                {showForm && user.role_id === 3 && (
-                    <div className="shadow-border">
-                        <ChatbotDefaultForm />
-                    </div>
-                )}
 
                 {/*<ListMessages />*/}
             </div>
