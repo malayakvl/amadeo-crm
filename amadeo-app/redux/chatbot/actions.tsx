@@ -40,6 +40,37 @@ export const submitFormAction: any = createAction(
                 });
         }
 );
+export const submitDefaultFormAction: any = createAction(
+    'chatbot/ADD_UPDATE_DEFAULT_DATA',
+    async (data: any) =>
+        (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
+            const state = getState();
+            const isNew = data.id;
+            dispatch(showLoaderAction(true));
+            return axios
+                .post(`${baseUrl}/chatbot-default`, data, {
+                    headers: {
+                        ...authHeader(state.user.user.email)
+                    }
+                })
+                .then(async () => {
+                    dispatch(
+                        setSuccessToastAction(
+                            isNew ? 'Record has been update' : 'Record has been created'
+                        )
+                    );
+                    // dispatch(fetchDataAction('users'));
+                    // dispatch(setEmptyFormAction());
+                    dispatch(showFormAction(false));
+                    dispatch(showLoaderAction(false));
+                })
+                .catch((e) => {
+                    dispatch(setErrorToastAction(e.response.data.error));
+                    dispatch(showLoaderAction(false));
+                });
+        }
+);
+
 export const fetchDataAction: any = createAction(
     'chatbot/FETCH_ITEMS',
     async (type: string) =>

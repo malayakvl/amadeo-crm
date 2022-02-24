@@ -18,6 +18,7 @@ import shippingReducer from '../redux/shipping/index';
 import ordersReducer from '../redux/orders/index';
 import paymentsReducer from '../redux/payments/index';
 import waitingListReducer from '../redux/waitingList/index';
+import sellersReducer from '../redux/sellers/index';
 import buyersReducer from '../redux/buyers/index';
 
 const reducers = combineReducers({
@@ -34,7 +35,8 @@ const reducers = combineReducers({
     orders: ordersReducer,
     payments: paymentsReducer,
     waitingList: waitingListReducer,
-    buyers: buyersReducer
+    buyers: buyersReducer,
+    sellers: sellersReducer
 });
 
 const initStore = (initialState = {}) => {

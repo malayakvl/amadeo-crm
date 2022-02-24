@@ -66,6 +66,18 @@ class ChatbotController {
         }
     }
     
+    async storeItemDefault(req, res) {
+        if (!req.user || req.user.role_id !== 3) {
+            return res.status(401).json('Access deny');
+        }
+        const result = await chatbotModel.updateDefault(req.user.id, req.body);
+        if (!result.error) {
+            return res.status(200).json({ success: true });
+        } else {
+            return res.status(500).json({ success: false, error: result.error.message });
+        }
+    }
+    
     async bulkDelete (req, res) {
         if (!req.user) {
             return res.status(401).json('Access deny');

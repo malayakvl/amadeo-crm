@@ -1,4 +1,4 @@
-import { SidebarCustomer, SidebarBuyer } from '../sidebar/index';
+import { SidebarCustomer, SidebarBuyer, SidebarAdmin } from '../sidebar/index';
 import SidebarHeader from '../header/SidebarHeader';
 import React from 'react';
 import { useSelector } from 'react-redux';
@@ -23,7 +23,7 @@ export default function SidebarLayout({ children }: { children: any }) {
             )}
             {user.role_id === 1 && <SidebarBuyer />}
             {user.role_id === 2 && <SidebarCustomer />}
-            {user.role_id === 3 && <SidebarCustomer />}
+            {user.role_id === 3 && <SidebarAdmin />}
             <div className="h-full mt-8 mb-10 md:ml-64 md:pl-4 md:mr-8">
                 {/*Sideheader*/}
                 <SidebarHeader />

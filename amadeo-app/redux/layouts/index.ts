@@ -68,6 +68,19 @@ const initialState: State.Layouts = {
                 created_at: []
             }
         },
+        [PaginationType.SELLERS]: {
+            ...initPagination,
+            filters: {
+                search_str: '',
+                shipping_id: [],
+                country_id: [],
+                total_orders: [],
+                total_sessions: [],
+                total_buyers: [],
+                total_amount: [],
+                created_at: []
+            }
+        },
         [PaginationType.WAITING]: {
             ...initPagination,
             column: 'oi.total_quantity',
@@ -195,7 +208,6 @@ const ACTION_HANDLERS: any = {
         ...state,
         toasts: [...state.toasts, { id: Date.now(), type: 'error', message: action.payload }]
     }),
-
     [setSuccessToastAction]: (
         state: State.Layouts,
         action: Type.ReduxAction<Layouts.ToastMessage>
@@ -203,7 +215,6 @@ const ACTION_HANDLERS: any = {
         ...state,
         toasts: [...state.toasts, { id: Date.now(), type: 'success', message: action.payload }]
     }),
-
     [setInfoToastAction]: (
         state: State.Layouts,
         action: Type.ReduxAction<Layouts.ToastMessage>
@@ -211,7 +222,6 @@ const ACTION_HANDLERS: any = {
         ...state,
         toasts: [...state.toasts, { id: Date.now(), type: 'info', message: action.payload }]
     }),
-
     [deleteToastAction]: (
         state: State.Layouts,
         action: Type.ReduxAction<number>
