@@ -11,6 +11,7 @@ declare namespace Orders {
         orderFetched: boolean;
         fileName: string;
         base64Data: string;
+        tagSellersSuggestions: any[];
     }
 
     interface DataItem {

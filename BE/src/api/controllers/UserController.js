@@ -2,6 +2,7 @@ import userModel from '../models/User.js';
 import countryModel from '../models/Country.js'
 import multer from 'multer';
 import fs from 'fs';
+import tagModel from "../models/Tag.js";
 
 class UserController {
     async getProfile(req, res) {
@@ -33,6 +34,14 @@ class UserController {
         }
 
         return res.status(200).json(response);
+    }
+    
+    async fetchSellers (req, res) {
+        if (!req.user) {
+            return res.status(401).json('Access deny');
+        }
+        const data = await userModel.findUsersSuggestion(req.query.searchStr, 2);
+        return res.status(200).json({ result: data});
     }
 
     async updateProfile(req, res) {

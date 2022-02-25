@@ -292,7 +292,7 @@ class Livesession {
                 offset = (Number(page) - 1) * Number(perPage);
             }
             
-            const productQuery = `SELECT * FROM data.live_sessions WHERE user_id='${userId}' ORDER BY event_date DESC limit ${perPage} OFFSET ${offset}`;
+            const productQuery = `SELECT * FROM data.live_sessions WHERE user_id='${userId}' ORDER BY event_date DESC, event_time DESC limit ${perPage} OFFSET ${offset}`;
             const res = await client.query(productQuery);
             const items = res.rows.length > 0 ? res.rows : [];
             const error = null;

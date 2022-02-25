@@ -53,7 +53,7 @@ const FilterSize: React.FC<any> = () => {
 
     return (
         <>
-            {filterData.colors.length > 0 && (
+            {filterData.sizes.length > 0 && (
                 <>
                     <div
                         role="presentation"
@@ -79,7 +79,7 @@ const FilterSize: React.FC<any> = () => {
                                                 type="checkbox"
                                                 id={`size_${item.id}`}
                                                 value={item.id}
-                                                checked={filters.color_id.includes(item.id)}
+                                                checked={filters.size_id.includes(item.id)}
                                                 onChange={(e) => handleitemFilter(e)}
                                             />
                                             <label

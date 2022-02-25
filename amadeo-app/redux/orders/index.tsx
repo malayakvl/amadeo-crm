@@ -6,7 +6,8 @@ import {
     showPopupAction,
     fetchFilerItems,
     fetchOrderPdfAction,
-    showDateSelectorAction
+    showDateSelectorAction,
+    findSellersAction
 } from './actions';
 
 const initialState: {
@@ -21,6 +22,7 @@ const initialState: {
     orderFetched: boolean;
     fileName: string;
     base64Data: string;
+    tagSellersSuggestions: any[];
 } = {
     isFetched: false,
     loading: false,
@@ -37,7 +39,8 @@ const initialState: {
     showDateSelector: false,
     orderFetched: false,
     fileName: '',
-    base64Data: ''
+    base64Data: '',
+    tagSellersSuggestions: []
 };
 
 const ACTION_HANDLERS: any = {
@@ -87,6 +90,12 @@ const ACTION_HANDLERS: any = {
             ...state,
             loading: false,
             isFetched: true
+        })
+    },
+    [findSellersAction]: {
+        next: (state: State.Orders, action: Action<any>): State.Orders => ({
+            ...state,
+            tagSellersSuggestions: action.payload
         })
     },
     // [setEmptyFormAction]: {
@@ -144,7 +153,8 @@ export {
     setEmptyFormAction,
     fetchFilerItems,
     showDateSelectorAction,
-    fetchOrderPdfAction
+    fetchOrderPdfAction,
+    findSellersAction
 };
 
 // ------------------------------------

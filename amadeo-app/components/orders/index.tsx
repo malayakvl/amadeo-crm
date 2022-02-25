@@ -9,3 +9,4 @@ export { default as FilterCountry } from './filters/FilterCountry';
 export { default as FilterDelivery } from './filters/FilterDelivery';
 export { default as FilterNumber } from './filters/FilterNumber';
 export { default as FilterDate } from './filters/FilterDate';
+export { default as FilterSeller } from './filters/FilterSeller';

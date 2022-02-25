@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useTranslations } from 'next-intl';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
     FilterPayment,
     FilterStatus,
@@ -8,13 +8,16 @@ import {
     FilterCountry,
     FilterDelivery,
     FilterNumber,
-    FilterDate
+    FilterDate,
+    FilterSeller
 } from './index';
 import { fetchFilerItems } from '../../redux/orders';
+import { userSelector } from '../../redux/user/selectors';
 
 const Filters: React.FC<any> = () => {
     const t = useTranslations();
     const dispatch = useDispatch();
+    const user = useSelector(userSelector);
 
     useEffect(() => {
         dispatch(fetchFilerItems());
@@ -29,6 +32,8 @@ const Filters: React.FC<any> = () => {
                 <FilterNumber />
 
                 <FilterDate />
+
+                {user.role_id === 3 && <FilterSeller />}
 
                 <FilterAmount />
 

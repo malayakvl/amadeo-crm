@@ -145,6 +145,20 @@ export const fetchOrderPdfAction: any = createAction(
             };
         }
 );
+export const findSellersAction: any = createAction(
+    'orders/FIND_SELLER_AUTOSUGGEST',
+    async (query: string) =>
+        (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
+            const state = getState();
+            return axios
+                .get(`${baseUrl}/users/find-seller?searchStr=${query}`, {
+                    headers: {
+                        ...authHeader(state.user.user.email)
+                    }
+                })
+                .then((res: any) => res.data.result);
+        }
+);
 
 export const showPopupAction: any = createAction('orders/SHOW_POPUP');
 export const showDateSelectorAction: any = createAction('orders/SHOW_DATE_POPUP');

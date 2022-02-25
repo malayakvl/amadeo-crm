@@ -132,7 +132,7 @@ const ListSellers: React.FC = () => {
                             </td>
                             <td>{item.phone}</td>
                             <td>{item.full_address}</td>
-                            <td />
+                            <td>{item.total_sessions}</td>
                             <td>{item.total_count}</td>
                             <td>{item.total_buyers}</td>
                             <td>{item.total_amount} &euro;</td>
