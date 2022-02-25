@@ -13,8 +13,8 @@ export enum PaginationType {
     BUYERS = 'buyers',
     ORDERS = 'orders',
     WAITING = 'waiting',
-    SELLERS = 'sellers'
-    // DASHBOARD = 'dashboard'
+    SELLERS = 'sellers',
+    DASHBOARD = 'dashboard'
 }
 
 export const TableHeaders: { [key in PaginationType]: Type.DataTableHeader[] } = {
@@ -122,6 +122,6 @@ export const TableHeaders: { [key in PaginationType]: Type.DataTableHeader[] } =
         // { sortKey: 'payment', iconClass: 'icon-tbl-card' },
         // { titleKey: 'Products' },
         // { titleKey: 'Total' }
-    ]
-    // [PaginationType.DASHBOARD]: []
+    ],
+    [PaginationType.DASHBOARD]: []
 };

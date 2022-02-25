@@ -16,6 +16,7 @@ import SupportController from '../controllers/SupportController.js';
 import PaymentController from "../controllers/PaymentController.js";
 import BuyerController from "../controllers/BuyerController.js";
 import SellerController from "../controllers/SellerController.js";
+import DashboardController from "../controllers/DashboardController.js";
 
 
 const apiRoutes = express.Router();
@@ -113,6 +114,7 @@ apiRoutes.route('/buyers/fetch-filters').get(BuyerController.fetchFilters);
 apiRoutes.route('/sellers/fetch-items').get(SellerController.fetchItems);
 apiRoutes.route('/sellers/fetch-filters').get(SellerController.fetchFilters);
 
+apiRoutes.route('/dashboard/fetch-items').get(DashboardController.fetchItems);
 
 apiRoutes.route('/support/send-message').post(SupportController.sendMessage);
 

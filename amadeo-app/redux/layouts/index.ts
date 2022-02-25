@@ -90,6 +90,19 @@ const initialState: State.Layouts = {
                 total_qty: [],
                 created_at: []
             }
+        },
+        [PaginationType.DASHBOARD]: {
+            ...initPagination,
+            limit: 5,
+            filters: {
+                // order_number: '',
+                // shipping_id: [],
+                // country_id: [],
+                // payment_id: [],
+                // status: [],
+                // total_amount: [],
+                created_at: []
+            }
         }
     },
     isSidebarOpen: true,

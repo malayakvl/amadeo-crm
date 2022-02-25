@@ -33,8 +33,9 @@ export default function Payments({ session }: { session: any }) {
             key: 'selection'
         }
     ]);
-    const [filterOpen, setFilterOpen] = useState(false);
     const showDatePopup = useSelector(showDatePopupSelector);
+
+    const [filterOpen, setFilterOpen] = useState(false);
     const { filters }: Layouts.Pagination = useSelector(
         paginationSelectorFactory(PaginationType.PAYMENTS)
     );
