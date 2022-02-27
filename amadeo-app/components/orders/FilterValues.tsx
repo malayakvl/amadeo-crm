@@ -107,9 +107,6 @@ const FilterValues: React.FC<any> = () => {
         );
     };
 
-    console.log(filterData.payments);
-    console.log(filters.payment_id);
-
     return (
         <>
             {dataFetched && (

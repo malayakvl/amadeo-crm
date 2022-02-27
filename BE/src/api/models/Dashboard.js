@@ -38,17 +38,19 @@ class Dashboard {
             // console.log('[Dashboard.fetchItems] buyersQuery = ', querySQL);
             let res = await client.query(querySQL);
             buyers = res.rows.length > 0 ? res.rows : [];
-                            
+    
+            const _orderFilters = _filters;
+            _orderFilters.status = ["payed", "shipped", "canceled"];
             querySQL = `SELECT
                             id, live_sessions_id, shipping_id, country_id, payment_id, order_amount, discount_amount,
                             total_amount, order_number, status, created_at, updated_at, seller_id,
                             seller_first_name, seller_photo, buyer_id,
                             buyer_first_name, buyer_photo, flag_name, shipping_image, order_items
-                        FROM data.get_orders(${perPage}, ${offset}, '${JSON.stringify(_filters)}', '${column} ${sort}');`; // 'created_at DESC'
-            // console.log('[Dashboard.fetchItems] ordersQuery = ', querySQL);
+                        FROM data.get_orders(${perPage}, ${offset}, '${JSON.stringify(_orderFilters)}', '${column} ${sort}');`; // 'created_at DESC'
+            console.log('[Dashboard.fetchItems] ordersQuery = ', querySQL);
             res = await client.query(querySQL);
             orders = res.rows.length > 0 ? res.rows : [];
-                            
+            
             querySQL = `SELECT dashboard_total FROM data.get_dashboard_total('${JSON.stringify(_filters)}');`;
             // console.log('[Dashboard.fetchItems] ordersQuery = ', querySQL);
             res = await client.query(querySQL);

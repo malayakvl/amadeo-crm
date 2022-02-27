@@ -260,7 +260,6 @@ class Order {
             const ordersQuery = `SELECT
                                     id_cnt, live_sessions_id, product_id, product_configuration_id, configuration, item_buyers, total_quantity, total_price
                                     FROM data.get_orders_waiting_list(${perPage}, ${offset}, '${JSON.stringify(_filters)}', '${column} ${sort}');`;
-            console.log(ordersQuery);
             const res = await client.query(ordersQuery);
             const items = res.rows.length > 0 ? res.rows : [];
             const error = null;

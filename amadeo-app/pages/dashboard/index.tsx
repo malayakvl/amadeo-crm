@@ -51,22 +51,24 @@ export default function Index({ session }: { session: any }) {
     );
 
     useEffect(() => {
-        dispatch(
-            setPaginationAction({
-                type: PaginationType.DASHBOARD,
-                modifier: {
-                    filters: {
-                        ...filters,
-                        created_at: [
-                            moment(state[0].startDate).format('YYYY-MM-DD'),
-                            moment(state[0].endDate).format('YYYY-MM-DD')
-                        ]
+        if (user.id) {
+            dispatch(
+                setPaginationAction({
+                    type: PaginationType.DASHBOARD,
+                    modifier: {
+                        filters: {
+                            ...filters,
+                            created_at: [
+                                moment(state[0].startDate).format('YYYY-MM-DD'),
+                                moment(state[0].endDate).format('YYYY-MM-DD')
+                            ]
+                        }
                     }
-                }
-            })
-        );
-        dispatch(fetchItemsAction());
-    }, [state]);
+                })
+            );
+            dispatch(fetchItemsAction());
+        }
+    }, [state, user]);
 
     return (
         <>

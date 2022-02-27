@@ -22,12 +22,26 @@ const FilterNumber: React.FC<any> = () => {
     const [isBusy, setIsBusy] = useState(false);
     const onDelete = useCallback(
         (tagIndex: number) => {
+            const _sellers = tags.filter((_, i) => i !== tagIndex);
             setTags(tags.filter((_, i) => i !== tagIndex));
+            dispatch(
+                setPaginationAction({
+                    type: PaginationType.ORDERS,
+                    modifier: {
+                        filters: {
+                            ...filters,
+                            seller_id: _sellers.map((v: any) => v.id)
+                        },
+                        offset: 0
+                    }
+                })
+            );
         },
         [tags]
     );
     const onAddition = useCallback(
         (newTag) => {
+            const _sellers = [...tags, newTag];
             setTags([...tags, newTag]);
             dispatch(
                 setPaginationAction({
@@ -35,7 +49,7 @@ const FilterNumber: React.FC<any> = () => {
                     modifier: {
                         filters: {
                             ...filters,
-                            seller_id: [newTag.id]
+                            seller_id: _sellers.map((v: any) => v.id)
                         },
                         offset: 0
                     }
@@ -51,16 +65,9 @@ const FilterNumber: React.FC<any> = () => {
         }
     };
     useEffect(() => {
-        console.log(searchTagSuggestions);
         setSuggestions(searchTagSuggestions);
         setIsBusy(false);
     }, [searchTagSuggestions]);
-
-    // useEffect(() => {
-    //     if (item.product) {
-    //         setTags(item.product);
-    //     }
-    // }, [item]);
 
     return (
         <>
