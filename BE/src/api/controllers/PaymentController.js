@@ -12,11 +12,11 @@ class PaymentController {
      * @returns {Promise<*>}
      */
     async fetchItems(req, res) {
-        const { limit, offset, queryFilter } = req.query;
+        const { limit, offset, queryFilter, column, sort } = req.query;
         if (!req.user) {
             return res.status(401).json('Access deny');
         } else {
-            const data = await paymentModel.fetchItems(1, limit, req.user, false, offset, queryFilter);
+            const data = await paymentModel.fetchItems(1, limit, req.user, false, offset, queryFilter, column, sort);
             return res.status(200).json({ count: data.size, items: data.items});
         }
         // const data = await chatbotMessageModel.addMessages(req.query.sessionId, req.body);
