@@ -28,7 +28,7 @@ class Seller {
             
             }
             const ordersQuery = `SELECT
-                                    id, email, first_name, last_name, company_name, phone, full_address, photo, created_at, total_count, total_buyers, total_amount
+                                    id, email, first_name, last_name, company_name, phone, full_address, photo, created_at, total_count, total_buyers, total_amount, total_sessions
                                  FROM data.get_sellers (${perPage}, ${offset}, NULL, 'total_count DESC');`;
             const res = await client.query(ordersQuery);
             const items = res.rows.length > 0 ? res.rows : [];

@@ -465,6 +465,12 @@ class User {
         }
     }
     
+    /**
+     * sync our user data with fb profile data
+     * @param userData - user object
+     * @param data -fb data object
+     * @returns {Promise<{user: (*|null)}|{error: {code: number, message: string}, user: null}>}
+     */
     async syncFb(userData, data) {
         const client = await pool.connect();
         const query = `UPDATE data.users SET
@@ -499,6 +505,30 @@ class User {
                 user: null,
                 error
             };
+        } finally {
+            client.release();
+        }
+    }
+    
+    
+    async findUsersSuggestion(searchStr, roleId) {
+        const client = await pool.connect();
+        try {
+            const regex = /\'/ig;
+            // const query = `SELECT data.get_hashtags_json_arr('${searchStr.replaceAll(regex, "''")}');`;
+            const query = `SELECT users FROM data.get_users('{"role_id": ${roleId}, "name":  "${searchStr.replaceAll(regex, "''")}"}');`;
+            const res = await client.query(query);
+            return res.rows[0].users ? res.rows[0].users : [];
+            // return [{ name: 'hello', id: 2}, { name: 'hello2', id: 3}, { name: 'hello3', id: 3}];
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model User (findUsersSuggestion) error:',
+                    { message: e.message }
+                );
+            }
+            return { success: false, error: { code: 404, message: 'Users not found' } };
         } finally {
             client.release();
         }

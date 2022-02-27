@@ -29,7 +29,7 @@ function createInvoice (invoice, path) {
 
 function generateHeader(doc) {
     doc
-        .image("./public/images/logoBig.png", 90, 45, { width: 90 })
+        // .image("./public/images/logoBig.png", 90, 45, { width: 90 })
         .fillColor("#444444")
         .fontSize(20)
         .text("", 170, 57)

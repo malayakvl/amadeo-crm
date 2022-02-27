@@ -5,7 +5,8 @@ class Tag {
     async findTags (searchStr) {
         const client = await pool.connect();
         try {
-            const query = `SELECT data.get_hashtags_json_arr('${searchStr}');`;
+            const regex = /\'/ig;
+            const query = `SELECT data.get_hashtags_json_arr('${searchStr.replaceAll(regex, "''")}');`;
             const res = await client.query(query);
             return res.rows[0].get_hashtags_json_arr ? res.rows[0].get_hashtags_json_arr : [];
         } catch (e) {

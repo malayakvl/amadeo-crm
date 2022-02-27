@@ -44,3 +44,7 @@ export const orderBase64DataSelector = createSelector(
     rootSelector,
     (orders: State.Orders): string => orders.base64Data
 );
+export const tagSellersSuggestionsSelector = createSelector(
+    rootSelector,
+    (orders: State.Orders): any => orders.tagSellersSuggestions
+);
