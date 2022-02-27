@@ -11,6 +11,7 @@ declare namespace Layouts {
             waiting: Pagination;
             payments: Pagination;
             buyers: Pagination;
+            dashboard: Pagination;
         };
         isSidebarOpen: boolean;
         isDataLoading: boolean;

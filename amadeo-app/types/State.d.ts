@@ -16,6 +16,7 @@ declare namespace State {
         waitingList: WaitingList;
         buyers: Buyers;
         sellers: Sellers;
+        dashboard: Dashboard;
     }
 
     type Address = Address.Root;
@@ -37,4 +38,5 @@ declare namespace State {
     type WaitingList = WaitingList.Root;
     type Buyers = Buyers.Root;
     type Sellers = Sellers.Root;
+    type Dashboard = Dashboard.Root;
 }
