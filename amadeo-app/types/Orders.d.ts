@@ -24,7 +24,7 @@ declare namespace Orders {
         discount_amount: number;
         total_amount: number;
         order_number: number;
-        status: string;
+        status: OrderStatus;
         seller_id: number;
         seller_first_name: string;
         seller_photo: string;
@@ -43,4 +43,6 @@ declare namespace Orders {
         created_at: any;
         updated_at: any;
     }
+
+    type OrderStatus = import('../constants').OrderStatus;
 }

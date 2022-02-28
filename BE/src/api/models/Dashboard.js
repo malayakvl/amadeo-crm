@@ -1,5 +1,6 @@
 import pool from './connect.js';
 import { logger } from '../../common/logger.js';
+import { OrderStatus, UserRole } from '../../constants/index.js';
 
 class Dashboard {
 
@@ -14,15 +15,17 @@ class Dashboard {
         try {
             const _filters = JSON.parse(filters);
 
-            if (user.role_id === 2) {
-                // sellerIds.push(user.id);
-                _filters.seller_id = [user.id];
-                if (_filters.userIds) {
-                    _filters.buyer_id = _filters.userIds;
-                    delete _filters.userIds;
-                }
-            } else if (user.role_id === 1) {
-                _filters.buyer_id = [user.id];
+            switch (user.role_id) {
+                case UserRole.ADMIN:  
+                case UserRole.CUSTOMER:
+                    _filters.seller_id = [user.id];
+                    if (_filters.userIds) {
+                        _filters.buyer_id = _filters.userIds;
+                        delete _filters.userIds;
+                    }
+                    break;
+                case UserRole.BUYER:
+                    _filters.buyer_id = [user.id];
             }
 
             let offset;
@@ -33,7 +36,7 @@ class Dashboard {
             }
             // console.log('[Dashboard.fetchItems] _filters =', _filters);
 
-            if (user.role_id !== 1) {
+            if (user.role_id !== UserRole.BUYER) {
                 let querySQL = `SELECT
                         buyer_id, buyer_email, buyer_first_name, buyer_photo, country_iso, country_name, state,
                         post_code, city, address_line_1, address_line_2, total_count, total_amount, order_items
@@ -44,9 +47,18 @@ class Dashboard {
             }    
 
             const _orderFilters = { ..._filters };
-            if (user.role_id === 2) {
-                _orderFilters.status = ["payed", "shipped", "canceled"];
+
+            if (!_orderFilters.status?.length) {
+                switch (user.role_id) {
+                    case UserRole.ADMIN:
+                    case UserRole.CUSTOMER:
+                        _orderFilters.status = [OrderStatus.PAYED, OrderStatus.SHIPPED, OrderStatus.CANCELED]; 
+                        break;
+                    case UserRole.BUYER:
+                        // _orderFilters.status = [OrderStatus.NEW, OrderStatus.PAYED, OrderStatus.SHIPPED, OrderStatus.CANCELED]
+                }
             }
+
             let querySQL = `SELECT
                     id, live_sessions_id, shipping_id, country_id, payment_id, order_amount, discount_amount,
                     total_amount, order_number, status, created_at, updated_at, seller_id,
@@ -70,7 +82,7 @@ class Dashboard {
                     { message: e.message }
                 );
             }
-            console.log('[Dashboard.fetchItems] error.message = ', e.message);
+            // console.log('[Dashboard.fetchItems] error.message = ', e.message);
             error = {
                 code: 500,
                 message: 'Error get Dashboard data'

@@ -1,5 +1,6 @@
 import pool from './connect.js';
 import { logger } from '../../common/logger.js';
+import { OrderStatus, UserRole } from '../../constants/index.js';
 import fs from 'fs';
 import PDFDocument from 'pdfkit'
 import moment from 'moment';
@@ -216,6 +217,7 @@ class Order {
                 items,
                 error
             };
+
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
                 logger.log(
@@ -233,6 +235,7 @@ class Order {
                 items,
                 error
             };
+
         } finally {
             client.release();
         }
@@ -242,13 +245,20 @@ class Order {
         const client = await pool.connect();
         try {
             const _filters = JSON.parse(filters);
-            if (user.role_id === 2) {
-                _filters.seller_id = [user.id];
-                // if (_filters.userIds) {
-                //     _filters.buyer_id = _filters.userIds;
-                //     delete _filters.userIds;
-                // }
+
+            switch (user.role_id) {
+                case UserRole.ADMIN:  
+                case UserRole.CUSTOMER:
+                    _filters.seller_id = [user.id];
+                    // if (_filters.userIds) {
+                    //     _filters.buyer_id = _filters.userIds;
+                    //     delete _filters.userIds;
+                    // }
+                    break;
+                case UserRole.BUYER:
+                    _filters.buyer_id = [user.id];
             }
+
             const _total = await client.query(`SELECT count FROM data.get_orders_waiting_list_count('${JSON.stringify(_filters)}');`);
             const size = _total.rows[0].count;
             let offset;
@@ -258,8 +268,8 @@ class Order {
                 offset = (Number(page) - 1) * Number(perPage);
             }
             const ordersQuery = `SELECT
-                                    id_cnt, live_sessions_id, product_id, product_configuration_id, configuration, item_buyers, total_quantity, total_price
-                                    FROM data.get_orders_waiting_list(${perPage}, ${offset}, '${JSON.stringify(_filters)}', '${column} ${sort}');`;
+                    id_cnt, live_sessions_id, product_id, product_configuration_id, configuration, item_buyers, total_quantity, total_price
+                FROM data.get_orders_waiting_list(${perPage}, ${offset}, '${JSON.stringify(_filters)}', '${column} ${sort}');`;
             const res = await client.query(ordersQuery);
             const items = res.rows.length > 0 ? res.rows : [];
             const error = null;
@@ -269,6 +279,7 @@ class Order {
                 size,
                 error
             };
+
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
                 logger.log(
@@ -296,16 +307,24 @@ class Order {
         const client = await pool.connect();
         try {
             const _filters = JSON.parse(filters);
-            if (user.role_id === 2) {
-                _filters.seller_id = [user.id];
-                if (_filters.userIds) {
-                    _filters.buyer_id = _filters.userIds;
-                    delete _filters.userIds;
-                }
+
+            switch (user.role_id) {
+                case UserRole.ADMIN:  
+                case UserRole.CUSTOMER:
+                    _filters.seller_id = [user.id];
+                    if (_filters.userIds) {
+                        _filters.buyer_id = _filters.userIds;
+                        delete _filters.userIds;
+                    }
+                    break;
+                case UserRole.BUYER:
+                    _filters.buyer_id = [user.id];
             }
-            if (_filters.status.length === 0) {
-                _filters.status = ["payed", "shipped", "canceled"];
+
+            if (_filters.status?.length === 0) {
+                _filters.status = [OrderStatus.PAYED, OrderStatus.SHIPPED, OrderStatus.CANCELED];
             }
+
             const _total = await client.query(`SELECT count FROM data.get_orders_count('${JSON.stringify(_filters)}');`);
             const size = _total.rows[0].count;
             let offset;
@@ -333,6 +352,7 @@ class Order {
                 size,
                 error
             };
+
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
                 logger.log(
@@ -350,6 +370,7 @@ class Order {
                 items,
                 error
             };
+
         } finally {
             client.release();
         }
@@ -368,10 +389,12 @@ class Order {
             const amounts = await client.query('SELECT * FROM data.get_orders_total_amount_range();');
             res.amounts = amounts.rows[0].total_amount_range.min ? [amounts.rows[0].total_amount_range.min, amounts.rows[0].total_amount_range.max] : [];
             const error = null;
+
             return {
                 res,
                 error
             };
+
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
                 logger.log(
@@ -389,6 +412,7 @@ class Order {
                 items,
                 error
             };
+
         } finally {
             client.release();
         }
@@ -403,18 +427,28 @@ class Order {
         let error = null;
     
         try {
-            const filter = JSON.stringify({
-                status: ["payed"],
-                seller_id: userId,
+            const _filters = {
+                status: [OrderStatus.PAYED],
                 order_number: orderNumber
-            })
+            };
+
+            switch (user.role_id) {
+                case UserRole.ADMIN:  
+                case UserRole.CUSTOMER:
+                    _filters.seller_id = userId;
+                    break;
+                case UserRole.BUYER:
+                    _filters.buyer_id = userId;
+            }
+
+            const filter = JSON.stringify(_filters);
             const ordersQuery = `SELECT id, order_items,
                                     payment_id, payment_name, payment_short_name,
                                     total_amount, order_number, order_amount,
                                     buyer_first_name, buyer_photo,
                                     flag_name, shipping_image, shipping_address,
                                     created_at
-                                FROM data.get_orders (1, 0, '${filter}');`;
+                                FROM data.get_orders(1, 0, '${filter}');`;
             const res = await client.query(ordersQuery);
             const dirUpload = `${process.env.DOWNLOAD_FOLDER}/orders/${userId}`;
             

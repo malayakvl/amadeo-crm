@@ -26,7 +26,7 @@ const ListOrders: React.FC<{ orders: Orders.DataItem[] }> = ({ orders }) => {
             </thead>
 
             <tbody className="bg-white">
-                {orders?.map((item: any) => (
+                {orders?.map((item) => (
                     <Fragment key={item.id}>
                         <tr>
                             <td className="red-yellow-gradient-text">
