@@ -1,9 +1,12 @@
 import React from 'react';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 import Brand from './Brand';
 import Pages from './Pages';
 
 const SidebarBuyer: React.FC = () => {
+    const t = useTranslations();
+
     return (
         <>
             <div className="sidebar">
@@ -15,6 +18,14 @@ const SidebarBuyer: React.FC = () => {
                                 <a>
                                     <i className="dashboard" />
                                     <span className="s-caption">Dashboard</span>
+                                </a>
+                            </Link>
+                        </li>
+                        <li>
+                            <Link href={'/orders'}>
+                                <a>
+                                    <i className="order" />
+                                    <span className="s-caption">{t('Orders')}</span>
                                 </a>
                             </Link>
                         </li>

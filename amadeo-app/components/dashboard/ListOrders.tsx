@@ -12,7 +12,7 @@ const ListOrders: React.FC<{ orders: Orders.DataItem[] }> = ({ orders }) => {
     const t = useTranslations();
 
     return (
-        <table className="min-w-full float-table">
+        <table className="min-w-full float-table text-left">
             <thead>
                 <tr>
                     <th>{t('ID')}</th>
@@ -20,8 +20,8 @@ const ListOrders: React.FC<{ orders: Orders.DataItem[] }> = ({ orders }) => {
                     <th>{t('Date')}</th>
                     <th>{t('Shoppers')}</th>
                     <th>{t('Country')}</th>
-                    <th>{t('Product')}</th>
-                    <th>{t('Total')}</th>
+                    <th className="text-right">{t('Product')}</th>
+                    <th className="text-right">{t('Total')}</th>
                 </tr>
             </thead>
 
@@ -36,9 +36,6 @@ const ListOrders: React.FC<{ orders: Orders.DataItem[] }> = ({ orders }) => {
                             </td>
                             <td>
                                 <span className={item.status}>{item.status}</span>
-                                {/* <span className="payed">payed</span>
-                                    <span className="shipped">shipped</span>
-                                    <span className="canceled">canceled</span> */}
                             </td>
                             <td>{moment(item.created_at).format('DD/MM/YYYY')}</td>
                             {/*<td>{item.buyer_first_name}</td>*/}
@@ -53,7 +50,7 @@ const ListOrders: React.FC<{ orders: Orders.DataItem[] }> = ({ orders }) => {
                                         width={24}
                                         height={24}
                                         className="rounded-full cursor-pointer"
-                                        alt=""
+                                        alt="buyer"
                                     />
                                     <span className="pl-3">{item.buyer_first_name}</span>
                                 </div>
@@ -63,12 +60,16 @@ const ListOrders: React.FC<{ orders: Orders.DataItem[] }> = ({ orders }) => {
                                     <img
                                         src={`/images/flags/${item.flag_name.toLowerCase()}.svg`}
                                         className="fill-current text-black"
-                                        alt={''}
+                                        alt={item.flag_name}
                                     />
                                 )}
                             </td>
-                            <td>Entry</td>
-                            <td>{item.total_amount} €</td>
+                            <td>
+                                <div className="text-right">x product (s)</div>
+                            </td>
+                            <td>
+                                <div className="text-right">{item.total_amount} €</div>
+                            </td>
                         </tr>
                     </Fragment>
                 ))}

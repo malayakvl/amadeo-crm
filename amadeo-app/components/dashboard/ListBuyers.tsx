@@ -5,7 +5,7 @@ const ListBuyers: React.FC<{ buyers: Buyers.DataItem[] }> = ({ buyers }) => {
     const t = useTranslations();
 
     return (
-        <table className="min-w-full float-table">
+        <table className="min-w-full float-table text-left">
             <thead>
                 <tr>
                     <th>{t('ID')}</th>
@@ -22,9 +22,17 @@ const ListBuyers: React.FC<{ buyers: Buyers.DataItem[] }> = ({ buyers }) => {
                         <tr>
                             <td className="red-yellow-gradient-text">{item.buyer_id}</td>
                             <td>{item.buyer_first_name}</td>
-                            <td>123</td>
+                            <td>{item.total_count}</td>
                             <td>{item.total_amount} €</td>
-                            <td>{item.country_name}</td>
+                            <td>
+                                {item.country_iso && (
+                                    <img
+                                        src={`/images/flags/${item.country_iso.toLowerCase()}.svg`}
+                                        className="fill-current text-black align-center"
+                                        alt={item.country_name}
+                                    />
+                                )}
+                            </td>
                         </tr>
                     </Fragment>
                 ))}
