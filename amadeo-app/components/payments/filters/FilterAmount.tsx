@@ -96,7 +96,7 @@ const FilterAmount: React.FC<any> = () => {
                         </span>
                         <Range
                             allowCross={false}
-                            step={50}
+                            step={1}
                             min={0}
                             max={filterData.amounts[1]}
                             onChange={onSliderPriceChange}
@@ -115,7 +115,7 @@ const FilterAmount: React.FC<any> = () => {
                                 placeholder={'0 €'}
                                 onChange={(e) => {
                                     onSliderPriceChange([
-                                        parseFloat(e.target.value),
+                                        e.target.value.replace(/[^0-9]/g, ''),
                                         priceRange[1]
                                     ]);
                                 }}
@@ -134,7 +134,7 @@ const FilterAmount: React.FC<any> = () => {
                                 onChange={(e) => {
                                     onSliderPriceChange([
                                         priceRange[0],
-                                        parseFloat(e.target.value)
+                                        e.target.value.replace(/[^0-9]/g, '')
                                     ]);
                                 }}
                                 onKeyUp={() => changePriceDone()}

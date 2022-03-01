@@ -114,7 +114,8 @@ export default function Payments({ session }: { session: any }) {
                                 <div className="ml-2 font-bold rounded-full p-[2px] text-center bg-gray-400 text-xs h-5 w-5 text-white">
                                     {filters.payment_id.length +
                                         !!filters.total_amount.length +
-                                        !!filters.order_number.length}
+                                        !!filters.order_number.length +
+                                        !!filters.created_at.length}
                                 </div>
                             </button>
                         </div>
