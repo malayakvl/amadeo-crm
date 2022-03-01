@@ -366,7 +366,7 @@ class Order {
             const countries = await client.query('SELECT * FROM data.get_orders_countries();');
             res.countries = countries.rows[0].countries ? countries.rows[0].countries : [];
             const amounts = await client.query('SELECT * FROM data.get_orders_total_amount_range();');
-            res.amounts = amounts.rows[0].total_amount_range.min ? [amounts.rows[0].total_amount_range.min, amounts.rows[0].total_amount_range.max] : [];
+            res.amounts = amounts.rows[0].total_amount_range.max ? [amounts.rows[0].total_amount_range.min, amounts.rows[0].total_amount_range.max] : [];
             const error = null;
             return {
                 res,

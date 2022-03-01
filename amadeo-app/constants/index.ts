@@ -90,17 +90,23 @@ export const TableHeaders: { [key in PaginationType]: Type.DataTableHeader[] } =
     [PaginationType.SELLERS]: [
         // { className: 'flex justify-center', iconClass: 'icon-tbl-index' },
         { iconClass: 'icon-tbl-users', titleKey: 'Seller' },
-        { className: '', iconClass: 'icon-tbl-phone' },
-        { iconClass: 'icon-tbl-address', titleKey: 'Address' },
+        { sortKey: 'users__seller.phone', className: '', iconClass: 'icon-tbl-phone' },
+        { sortKey: 'countries.name', iconClass: 'icon-tbl-country', titleKey: 'Country' },
+        { sortKey: 'full_address', iconClass: 'icon-tbl-address', titleKey: 'Address' },
         {
             className: 'justify-center',
             iconClass: 'scenario',
-            titleKey: 'Live Sessions'
+            titleKey: 'Live Sessions',
+            sortKey: 'total_sessions'
         },
-        { iconClass: 'icon-tbl-order', titleKey: 'Buyers' },
-        { iconClass: 'icon-tbl-order', titleKey: 'Orders' },
-        { titleKey: 'Total Spent' },
-        { titleKey: 'Creation Date', iconClass: 'icon-tbl-date' },
+        { sortKey: 'total_buyers', iconClass: 'icon-tbl-order', titleKey: 'Buyers' },
+        { sortKey: 'total_orders', iconClass: 'icon-tbl-order', titleKey: 'Orders' },
+        { sortKey: 'total_amount', titleKey: 'Total Spent' },
+        {
+            sortKey: 'users__seller.created_at',
+            titleKey: 'Creation Date',
+            iconClass: 'icon-tbl-date'
+        },
         { iconClass: 'icon-tbl-keys', titleKey: 'LogIn' }
     ],
     [PaginationType.WAITING]: [

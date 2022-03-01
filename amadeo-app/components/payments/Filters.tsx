@@ -1,12 +1,14 @@
 import React, { useEffect } from 'react';
 import { useTranslations } from 'next-intl';
-import { useDispatch } from 'react-redux';
-import { FilterPayment, FilterAmount, FilterNumber, FilterDate } from './index';
+import { useDispatch, useSelector } from 'react-redux';
+import { FilterPayment, FilterAmount, FilterNumber, FilterDate, FilterSeller } from './index';
 import { fetchFilerItems } from '../../redux/payments';
+import { userSelector } from '../../redux/user/selectors';
 
 const Filters: React.FC<any> = () => {
     const t = useTranslations();
     const dispatch = useDispatch();
+    const user = useSelector(userSelector);
 
     useEffect(() => {
         dispatch(fetchFilerItems());
@@ -19,6 +21,8 @@ const Filters: React.FC<any> = () => {
             </div>
             <div>
                 <FilterNumber />
+
+                {user.role_id === 3 && <FilterSeller />}
 
                 <FilterDate />
 

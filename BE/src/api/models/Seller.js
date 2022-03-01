@@ -22,14 +22,14 @@ class Seller {
             } else {
                 offset = (Number(page) - 1) * Number(perPage);
             }
-            if (!column && !sort) {
             
-            } else {
-            
-            }
-            const ordersQuery = `SELECT
-                                    id, email, first_name, last_name, company_name, phone, full_address, photo, created_at, total_count, total_buyers, total_amount, total_sessions
-                                 FROM data.get_sellers (${perPage}, ${offset}, NULL, 'total_count DESC');`;
+            // const ordersQuery = `SELECT country_name, country_iso,
+            //                         id, email, first_name, last_name, company_name, phone, full_address, photo, created_at, total_count, total_buyers, total_amount, total_sessions
+            //                      FROM data.get_sellers (${perPage}, ${offset}, '${JSON.stringify(_filters)}', 'total_count DESC');`;
+            const ordersQuery = `SELECT country_name, country_iso,
+                                    id, email, first_name, last_name, company_name, phone, full_address, photo, created_at, total_orders, total_buyers, total_amount, total_sessions
+                                 FROM data.get_sellers (${perPage}, ${offset}, '${JSON.stringify(_filters)}', '${column} ${sort}');`;
+            console.log(ordersQuery);
             const res = await client.query(ordersQuery);
             const items = res.rows.length > 0 ? res.rows : [];
             const error = null;
@@ -69,14 +69,25 @@ class Seller {
             // res.shippings = shipping.rows[0].shipping ? shipping.rows[0].shipping : [];
             // const payments = await client.query('SELECT * FROM data.get_orders_payments();');
             // res.payments = payments.rows[0].payments ? payments.rows[0].payments : [];
-            const countries = await client.query('SELECT * FROM data.get_orders_countries();');
+            const countries = await client.query('SELECT * FROM data.get_sellers_countries();');
             res.countries = countries.rows[0].countries ? countries.rows[0].countries : [];
-            // const amounts = await client.query('SELECT * FROM data.get_orders_total_amount_range();');
-            // res.amounts = amounts.rows[0].total_amount_range.min ? [amounts.rows[0].total_amount_range.min, amounts.rows[0].total_amount_range.max] : [];
-            res.amounts = [];
-            res.total_orders = [];
-            res.total_buyers = [];
-            res.total_sessions = [];
+            const amounts = await client.query('SELECT total_amount_range FROM data.get_sellers_total_amount_range();');
+            res.amounts = amounts.rows[0].total_amount_range.max ? [amounts.rows[0].total_amount_range.min, amounts.rows[0].total_amount_range.max] : [];
+            const sessions = await client.query('SELECT total_sessions_range FROM data.get_sellers_total_sessions_range();');
+            res.total_sessions = sessions.rows[0].total_sessions_range.max ? [sessions.rows[0].total_sessions_range.min, sessions.rows[0].total_sessions_range.max] : [];
+            const buyer = await client.query('SELECT total_buyers_range FROM data.get_sellers_total_buyers_range();');
+            res.total_buyers = buyer.rows[0].total_buyers_range.max ? [buyer.rows[0].total_buyers_range.min, buyer.rows[0].total_buyers_range.max] : [];
+            const orders = await client.query('SELECT total_orders_range FROM data.get_sellers_total_orders_range();');
+            res.total_orders = orders.rows[0].total_orders_range.max ? [orders.rows[0].total_orders_range.min, orders.rows[0].total_orders_range.max] : [];
+            // SELECT total_sessions_range FROM data.get_sellers_total_sessions_range();
+            //
+            // SELECT total_count_range FROM data.get_sellers_total_count_range();
+            //
+            // SELECT total_buyers_range FROM data.get_sellers_total_buyers_range();
+            //
+            // SELECT total_amount_range FROM data.get_sellers_total_amount_range();
+            // res.total_orders = [];
+            // res.total_buyers = [];
             const error = null;
             return {
                 res,

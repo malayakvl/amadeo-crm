@@ -9,4 +9,5 @@ export { default as FilterValues } from './FilterValues';
 export { default as FilterPayment } from './filters/FilterPayment';
 export { default as FilterAmount } from './filters/FilterAmount';
 export { default as FilterNumber } from './filters/FilterNumber';
+export { default as FilterSeller } from './filters/FilterSeller';
 export { default as FilterDate } from './filters/FilterDate';

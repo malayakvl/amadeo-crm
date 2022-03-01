@@ -95,7 +95,7 @@ const ListSellers: React.FC = () => {
                     <Image width={16} height={16} src={'/images/filter.svg'} />
                     <div className="font-medium text-gray-400 ml-2">{t('Filters')}</div>
                     <div className="ml-2 font-bold rounded-full p-[2px] text-center bg-gray-400 text-xs h-5 w-5 text-white">
-                        {filters.country_id.length}
+                        {0}
                     </div>
                 </button>
             </div>
@@ -131,9 +131,18 @@ const ListSellers: React.FC = () => {
                                 </div>
                             </td>
                             <td>{item.phone}</td>
+                            <td>
+                                {item.country_iso && (
+                                    <img
+                                        src={`/images/flags/${item.country_iso.toLowerCase()}.svg`}
+                                        className="fill-current text-black"
+                                        alt={''}
+                                    />
+                                )}
+                            </td>
                             <td>{item.full_address}</td>
                             <td>{item.total_sessions}</td>
-                            <td>{item.total_count}</td>
+                            <td>{item.total_orders}</td>
                             <td>{item.total_buyers}</td>
                             <td>{item.total_amount} &euro;</td>
                             <td className="order-date">

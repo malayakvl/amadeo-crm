@@ -95,7 +95,7 @@ const FilterOrdersCnt: React.FC<any> = () => {
                         </span>
                         <Range
                             allowCross={false}
-                            step={50}
+                            step={1}
                             min={0}
                             max={filterData.total_orders[1]}
                             onChange={onSliderPriceChange}
@@ -114,7 +114,7 @@ const FilterOrdersCnt: React.FC<any> = () => {
                                 placeholder={'0 €'}
                                 onChange={(e) => {
                                     onSliderPriceChange([
-                                        parseFloat(e.target.value),
+                                        e.target.value.replace(/[^0-9]/g, ''),
                                         countRange[1]
                                     ]);
                                 }}
@@ -133,7 +133,7 @@ const FilterOrdersCnt: React.FC<any> = () => {
                                 onChange={(e) => {
                                     onSliderPriceChange([
                                         countRange[0],
-                                        parseFloat(e.target.value)
+                                        e.target.value.replace(/[^0-9]/g, '')
                                     ]);
                                 }}
                                 onKeyUp={() => changePriceDone()}

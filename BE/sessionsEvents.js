@@ -12,6 +12,7 @@ async function startProcess() {
     
     await axios(`${apiUrl}/api/fetch-active-sessions`)
         .then( (response) => {
+            console.log(response.data.result);
             response.data.result.forEach(async session => {
                 shell.exec(`pm2 start sessionLaunche.js --name "Launch session ${session.id}" -- sessionId=${session.id}`, function(code, output) {
                     console.log('Exit code:', code);
