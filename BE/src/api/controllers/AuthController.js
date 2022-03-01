@@ -31,6 +31,35 @@ class AuthController {
             }
         )(req, res, next);
     }
+    
+    authSellerLogin(req, res, next) {
+        const { seller_email } = req.body;
+        passport.authenticate('local', { session: false },
+            (err, authUser, info) => {
+                if (err) {
+                    return res.status(500).json({ code: 500, message: err.message });
+                }
+                if (!authUser) {
+                    return res.status(400).json({ code: 400, message: info.message });
+                }
+                req.login(authUser, { session: false }, async (err) => {
+                    if (err) {
+                        res.send(err);
+                    }
+                    const sellerUser = await userModel.findUserByEmail(seller_email);
+                    if (sellerUser) {
+                        getTokensAndSetCookies(req, res, sellerUser.id, sellerUser.email);
+                        console.log('SELLER USER', sellerUser);
+                        res.status(200).json({ user: sellerUser });
+                    } else {
+                        getTokensAndSetCookies(req, res, authUser.id, authUser.email);
+    
+                        res.status(200).json({ user: authUser });
+                    }
+                });
+            }
+        )(req, res, next);
+    }
 
     /**
      * Login/Create account via providers

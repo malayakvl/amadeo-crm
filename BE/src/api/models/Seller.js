@@ -13,9 +13,9 @@ class Seller {
                     delete _filters.userIds;
                 }
             }
-            // const _total = await client.query(`SELECT count FROM data.get_orders_count('${JSON.stringify(_filters)}');`);
-            // const size = _total.rows[0].count;
-            const size = 12;
+            const _total = await client.query(`SELECT count FROM data.get_sellers_count('${JSON.stringify(_filters)}');`);
+            const size = _total.rows[0].count;
+            // const size = 12;
             let offset;
             if (reqOffset) {
                 offset = reqOffset;
@@ -23,13 +23,9 @@ class Seller {
                 offset = (Number(page) - 1) * Number(perPage);
             }
             
-            // const ordersQuery = `SELECT country_name, country_iso,
-            //                         id, email, first_name, last_name, company_name, phone, full_address, photo, created_at, total_count, total_buyers, total_amount, total_sessions
-            //                      FROM data.get_sellers (${perPage}, ${offset}, '${JSON.stringify(_filters)}', 'total_count DESC');`;
             const ordersQuery = `SELECT country_name, country_iso,
                                     id, email, first_name, last_name, company_name, phone, full_address, photo, created_at, total_orders, total_buyers, total_amount, total_sessions
                                  FROM data.get_sellers (${perPage}, ${offset}, '${JSON.stringify(_filters)}', '${column} ${sort}');`;
-            console.log(ordersQuery);
             const res = await client.query(ordersQuery);
             const items = res.rows.length > 0 ? res.rows : [];
             const error = null;

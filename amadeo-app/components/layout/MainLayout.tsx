@@ -14,7 +14,15 @@ export default function MainLayout({ children }: { children: any }) {
             if (session?.user?.email && !window.localStorage.getItem('user')) {
                 dispatch(fetchUserAction(session.user.email));
             } else {
-                dispatch(setUserAction(JSON.parse(window.localStorage.getItem('user') || '{}')));
+                const localUser = JSON.parse(window.localStorage.getItem('user') || '{}');
+                if (session?.user?.email !== localUser.email) {
+                    window.localStorage.setItem('user', JSON.stringify({}));
+                    dispatch(fetchUserAction(session?.user?.email));
+                } else {
+                    dispatch(
+                        setUserAction(JSON.parse(window.localStorage.getItem('user') || '{}'))
+                    );
+                }
             }
         },
         [dispatch, session?.user?.email]

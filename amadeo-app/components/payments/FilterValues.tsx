@@ -17,21 +17,6 @@ const FilterValues: React.FC<any> = () => {
 
     const dataFetched = true;
 
-    // const handleStatusDelete = (status: string) => {
-    //     dispatch(
-    //         setPaginationAction({
-    //             type: PaginationType.PAYMENTS,
-    //             modifier: {
-    //                 filters: {
-    //                     ...filters,
-    //                     status: filters.status.filter((id: any) => id !== status)
-    //                 },
-    //                 offset: 0
-    //             }
-    //         })
-    //     );
-    // };
-
     const handlePaymentDelete = (dataId: number) => {
         dispatch(
             setPaginationAction({
@@ -46,36 +31,6 @@ const FilterValues: React.FC<any> = () => {
             })
         );
     };
-
-    // const handleCountryDelete = (dataId: number) => {
-    //     dispatch(
-    //         setPaginationAction({
-    //             type: PaginationType.PAYMENTS,
-    //             modifier: {
-    //                 filters: {
-    //                     ...filters,
-    //                     country_id: filters.country_id.filter((id: any) => id !== dataId)
-    //                 },
-    //                 offset: 0
-    //             }
-    //         })
-    //     );
-    // };
-
-    // const handleShippingDelete = (dataId: number) => {
-    //     dispatch(
-    //         setPaginationAction({
-    //             type: PaginationType.PAYMENTS,
-    //             modifier: {
-    //                 filters: {
-    //                     ...filters,
-    //                     shipping_id: filters.shipping_id.filter((id: any) => id !== dataId)
-    //                 },
-    //                 offset: 0
-    //             }
-    //         })
-    //     );
-    // };
 
     const handleTotalAmountDelete = () => {
         dispatch(
@@ -107,8 +62,20 @@ const FilterValues: React.FC<any> = () => {
         );
     };
 
-    // console.log(filterData.payments);
-    // console.log(filters.payment_id);
+    const handlePeriodDelete = () => {
+        dispatch(
+            setPaginationAction({
+                type: PaginationType.SELLERS,
+                modifier: {
+                    filters: {
+                        ...filters,
+                        created_at: []
+                    },
+                    offset: 0
+                }
+            })
+        );
+    };
 
     return (
         <>
@@ -135,24 +102,12 @@ const FilterValues: React.FC<any> = () => {
                             <em role="presentation" onClick={() => handlePaymentDelete(_item)} />
                         </div>
                     ))}
-                    {/* {filters.status.map((_item: any) => (
-                        <div className="filter-value" key={_item}>
-                            {t(_item)}
-                            <em role="presentation" onClick={() => handleStatusDelete(_item)} />
+                    {filters.created_at[1] && (
+                        <div className="filter-value">
+                            {t('Period')}: {filters.created_at[0]} - {filters.created_at[1]}
+                            <em role="presentation" onClick={() => handlePeriodDelete()} />
                         </div>
-                    ))}
-                    {filters.country_id.map((_item: any) => (
-                        <div className="filter-value" key={_item}>
-                            {filterData.countries.find((_r: any) => _r.id === _item).name}
-                            <em role="presentation" onClick={() => handleCountryDelete(_item)} />
-                        </div>
-                    ))}
-                    {filters.shipping_id.map((_item: any) => (
-                        <div className="filter-value" key={_item}>
-                            {filterData.shippings.find((_r: any) => _r.id === _item).name}
-                            <em role="presentation" onClick={() => handleShippingDelete(_item)} />
-                        </div>
-                    ))} */}
+                    )}
                 </div>
             )}
         </>
