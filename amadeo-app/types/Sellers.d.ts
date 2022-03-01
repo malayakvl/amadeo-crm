@@ -9,6 +9,8 @@ declare namespace Sellers {
         fileterData: any;
         showDateSelector: boolean;
         orderFetched: boolean;
+        showLoginForm: boolean;
+        selectedSeller: string;
     }
 
     interface DataItem {

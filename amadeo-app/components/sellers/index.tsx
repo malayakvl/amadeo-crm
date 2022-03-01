@@ -8,3 +8,4 @@ export { default as FilterBuyersCnt } from './filters/FilterBuyersCnt';
 export { default as FilterOrdersCnt } from './filters/FilterOrdersCnt';
 export { default as FilterSessionsCnt } from './filters/FilterSessionsCnt';
 export { default as FilterSeller } from './filters/FilterSeller';
+export { default as SellerLogin } from './SellerLogin';

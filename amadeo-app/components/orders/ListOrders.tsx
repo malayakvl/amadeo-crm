@@ -8,7 +8,7 @@ import {
 } from '../../redux/orders/selectors';
 import { PaginationType } from '../../constants';
 import { DataTable } from '../_common';
-import { fetchItemsAction } from '../../redux/orders';
+import { fetchItemsAction, showDateSelectorAction } from '../../redux/orders';
 import moment from 'moment';
 import Image from 'next/image';
 import { baseApiUrl } from '../../constants';
@@ -98,7 +98,12 @@ const ListOrders: React.FC = () => {
                     </div>
                 )}
                 <button
-                    onClick={() => setFilterOpen(!filterOpen)}
+                    onClick={() => {
+                        if (filterOpen) {
+                            dispatch(showDateSelectorAction(false));
+                        }
+                        setFilterOpen(!filterOpen);
+                    }}
                     className="absolute top-0 right-0 flex items-center text-sm border rounded-lg px-4 py-1">
                     <Image width={16} height={16} src={'/images/filter.svg'} />
                     <div className="font-medium text-gray-400 ml-2">{t('Filters')}</div>
@@ -106,6 +111,9 @@ const ListOrders: React.FC = () => {
                         {filters.country_id.length +
                             filters.payment_id.length +
                             filters.status.length +
+                            filters.seller_id.length +
+                            !!filters.total_amount.length +
+                            !!filters.created_at.length +
                             filters.country_id.length}
                     </div>
                 </button>

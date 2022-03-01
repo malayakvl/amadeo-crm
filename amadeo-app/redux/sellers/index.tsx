@@ -2,10 +2,11 @@ import { Action, handleActions } from 'redux-actions';
 import {
     fetchItemsAction,
     fetchItemAction,
-    setEmptyFormAction,
+    showLoginFormAction,
     showPopupAction,
     fetchFilerItems,
-    showDateSelectorAction
+    showDateSelectorAction,
+    setSelectedSellerAction
 } from './actions';
 
 const initialState: {
@@ -17,6 +18,8 @@ const initialState: {
     showPopup: boolean;
     fileterData: any;
     showDateSelector: boolean;
+    showLoginForm: boolean;
+    selectedSeller: string;
 } = {
     isFetched: false,
     loading: false,
@@ -32,7 +35,9 @@ const initialState: {
         shippings: [],
         amounts: []
     },
-    showDateSelector: false
+    showDateSelector: false,
+    showLoginForm: false,
+    selectedSeller: ''
 };
 
 const ACTION_HANDLERS: any = {
@@ -84,34 +89,28 @@ const ACTION_HANDLERS: any = {
             isFetched: true
         })
     },
-    // [setEmptyFormAction]: {
-    //     next: (state: State.Orders): State.Orders => ({
-    //         ...state,
-    //         item: {
-    //             id: null,
-    //             name: '',
-    //             keywords: '',
-    //             message_fr: '',
-    //             message_en: '',
-    //             active: true,
-    //             product: null,
-    //             discount: '',
-    //             answer_count: '',
-    //             created_at: null,
-    //             updated_at: null
-    //         }
-    //     })
-    // },
     [showPopupAction]: {
-        next: (state: State.Orders, action: Action<boolean>): State.Orders => ({
+        next: (state: State.Sellers, action: Action<boolean>): State.Sellers => ({
             ...state,
             showPopup: action.payload
         })
     },
+    [showLoginFormAction]: {
+        next: (state: State.Sellers, action: Action<boolean>): State.Sellers => ({
+            ...state,
+            showLoginForm: action.payload
+        })
+    },
     [showDateSelectorAction]: {
-        next: (state: State.Orders, action: Action<boolean>): State.Orders => ({
+        next: (state: State.Sellers, action: Action<boolean>): State.Sellers => ({
             ...state,
             showDateSelector: action.payload
+        })
+    },
+    [setSelectedSellerAction]: {
+        next: (state: State.Sellers, action: Action<string>): State.Sellers => ({
+            ...state,
+            selectedSeller: action.payload
         })
     }
 };
@@ -120,9 +119,10 @@ export {
     fetchItemsAction,
     fetchItemAction,
     showPopupAction,
-    setEmptyFormAction,
+    showLoginFormAction,
     fetchFilerItems,
-    showDateSelectorAction
+    showDateSelectorAction,
+    setSelectedSellerAction
 };
 
 // ------------------------------------

@@ -16,7 +16,8 @@ class Dashboard {
             const _filters = JSON.parse(filters);
 
             switch (user.role_id) {
-                case UserRole.ADMIN:  
+                case UserRole.ADMIN:
+                    break;
                 case UserRole.CUSTOMER:
                     _filters.seller_id = [user.id];
                     if (_filters.userIds) {
@@ -44,7 +45,7 @@ class Dashboard {
                 // console.log('[Dashboard.fetchItems] buyersQuery = ', querySQL);
                 let res = await client.query(querySQL);
                 buyers = res.rows.length > 0 ? res.rows : [];
-            }    
+            }
 
             const _orderFilters = { ..._filters };
 
@@ -52,7 +53,7 @@ class Dashboard {
                 switch (user.role_id) {
                     case UserRole.ADMIN:
                     case UserRole.CUSTOMER:
-                        _orderFilters.status = [OrderStatus.PAYED, OrderStatus.SHIPPED, OrderStatus.CANCELED]; 
+                        _orderFilters.status = [OrderStatus.PAYED, OrderStatus.SHIPPED, OrderStatus.CANCELED];
                         break;
                     case UserRole.BUYER:
                         // _orderFilters.status = [OrderStatus.NEW, OrderStatus.PAYED, OrderStatus.SHIPPED, OrderStatus.CANCELED]
