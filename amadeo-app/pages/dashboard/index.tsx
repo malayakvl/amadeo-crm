@@ -93,7 +93,7 @@ export default function Index({ session }: { session: any }) {
 
             <div className="block-white-4 mr-10" onClick={reverseDatePopup}>    {/* eslint-disable-line */}
                 <div className="flex flex-row flex-wrap w-full">
-                    <Totals totals={data.totals} />
+                    <Totals totals={data.totals} roleId={user.role_id} />
 
                     <div className="flex flex-col w-full lg:w-1/4 xl:w-2/5 justify-center align-middle pl-4 border border-b-0 border-t-0 border-r-0">
                         <span className="font-bold text-sm text-blue-350">{t('Period')}</span>
@@ -139,8 +139,8 @@ export default function Index({ session }: { session: any }) {
                 </div>
             )}
 
-            <div className="block-white-4 mr-10 mt-8" onClick={reverseDatePopup}>   {/* eslint-disable-line */}
-                <div className="font-bold text-gray-350 text-base pb-4 mb-2 border border-t-0 border-l-0 border-r-0">
+            <div className="block-white-4 mr-10" onClick={reverseDatePopup}>   {/* eslint-disable-line */}
+                <div className="font-bold text-gray-350 text-base pb-4 mt-8 mb-2 border border-t-0 border-l-0 border-r-0">
                     Orders{' '}
                     <span className="text-sm text-gray-180 font-normal">
                         (Last {data.orders?.length} items)
@@ -154,20 +154,21 @@ export default function Index({ session }: { session: any }) {
                 </div>
             </div>
 
-            <div className="block-white-4 mr-10 mt-8" onClick={reverseDatePopup}>   {/* eslint-disable-line */}
-                <div className="font-bold text-gray-350 text-base pb-4 mb-2 border border-t-0 border-l-0 border-r-0">
-                    Clients{' '}
-                    <span className="text-sm text-gray-180 font-normal">
-                        (Last {data.buyers?.length} items)
-                    </span>
-                    <Link href={'/buyers'}>
-                        <a className="view-all float-right mr-4">{t('See all')}</a>
-                    </Link>
+            {(user.role_id !== 1) && (<div className="block-white-4 mr-10" onClick={reverseDatePopup}>   {/* eslint-disable-line */}
+                    <div className="font-bold text-gray-350 text-base pb-4 mt-8 mb-2 border border-t-0 border-l-0 border-r-0">
+                        Clients{' '}
+                        <span className="text-sm text-gray-180 font-normal">
+                            (Last {data.buyers?.length} items)
+                        </span>
+                        <Link href={'/buyers'}>
+                            <a className="view-all float-right mr-4">{t('See all')}</a>
+                        </Link>
+                    </div>
+                    <div className="inline-block min-w-full overflow-hidden align-middle">
+                        <ListBuyers buyers={data.buyers} />
+                    </div>
                 </div>
-                <div className="inline-block min-w-full overflow-hidden align-middle">
-                    <ListBuyers buyers={data.buyers} />
-                </div>
-            </div>
+            )}
         </>
     );
 }

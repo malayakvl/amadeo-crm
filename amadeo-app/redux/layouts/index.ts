@@ -17,7 +17,7 @@ import {
     setActivePageAction,
     setSwitchToggleAction
 } from './actions';
-import { PaginationType } from '../../constants';
+import { PaginationType, OrderStatus } from '../../constants';
 
 const initPagination = { limit: 25, offset: 0, sort: 'DESC', column: 'created_at', query: '' };
 
@@ -51,7 +51,7 @@ const initialState: State.Layouts = {
                 shipping_id: [],
                 country_id: [],
                 payment_id: [],
-                status: ['payed'],
+                status: [OrderStatus.PAYED],
                 total_amount: [],
                 created_at: []
             }
