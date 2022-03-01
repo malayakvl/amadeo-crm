@@ -95,7 +95,7 @@ const filterPrice: React.FC<any> = () => {
                         </span>
                         <Range
                             allowCross={false}
-                            step={10}
+                            step={1}
                             min={0}
                             max={filterData.price[1]}
                             onChange={onSliderPriceChange}

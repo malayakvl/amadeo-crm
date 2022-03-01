@@ -53,7 +53,8 @@ const initialState: State.Layouts = {
                 payment_id: [],
                 status: [OrderStatus.PAYED],
                 total_amount: [],
-                created_at: []
+                created_at: [],
+                seller_id: []
             }
         },
         [PaginationType.ORDERS]: {
@@ -70,14 +71,16 @@ const initialState: State.Layouts = {
         },
         [PaginationType.SELLERS]: {
             ...initPagination,
+            column: 'total_orders',
             filters: {
-                search_str: '',
-                shipping_id: [],
+                // search_str: '',
+                // shipping_id: [],
                 country_id: [],
                 total_orders: [],
                 total_sessions: [],
                 total_buyers: [],
                 total_amount: [],
+                seller_id: [],
                 created_at: []
             }
         },

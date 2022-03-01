@@ -93,12 +93,11 @@ const FilterSessionsCnt: React.FC<any> = () => {
                             {t('Count')}
                             <em className="float-right">
                                 {countRange[0]} - {filterData.total_sessions[1]}
-                                &euro;
                             </em>
                         </span>
                         <Range
                             allowCross={false}
-                            step={50}
+                            step={1}
                             min={0}
                             max={filterData.total_sessions[1]}
                             onChange={onSliderPriceChange}
@@ -114,10 +113,10 @@ const FilterSessionsCnt: React.FC<any> = () => {
                             <input
                                 className="w-full form-control"
                                 type="text"
-                                placeholder={'0 €'}
+                                placeholder={'0'}
                                 onChange={(e) => {
                                     onSliderPriceChange([
-                                        parseFloat(e.target.value),
+                                        e.target.value.replace(/[^0-9]/g, ''),
                                         countRange[1]
                                     ]);
                                 }}
@@ -136,7 +135,7 @@ const FilterSessionsCnt: React.FC<any> = () => {
                                 onChange={(e) => {
                                     onSliderPriceChange([
                                         countRange[0],
-                                        parseFloat(e.target.value)
+                                        e.target.value.replace(/[^0-9]/g, '')
                                     ]);
                                 }}
                                 onKeyUp={() => changePriceDone()}

@@ -92,6 +92,21 @@ const FilterValues: React.FC<any> = () => {
         );
     };
 
+    const handlePeriodDelete = () => {
+        dispatch(
+            setPaginationAction({
+                type: PaginationType.ORDERS,
+                modifier: {
+                    filters: {
+                        ...filters,
+                        created_at: []
+                    },
+                    offset: 0
+                }
+            })
+        );
+    };
+
     const handleOrderNumberDelete = () => {
         dispatch(
             setPaginationAction({
@@ -150,6 +165,12 @@ const FilterValues: React.FC<any> = () => {
                             <em role="presentation" onClick={() => handleShippingDelete(_item)} />
                         </div>
                     ))}
+                    {filters.created_at[1] && (
+                        <div className="filter-value">
+                            {t('Period')}: {filters.created_at[0]} - {filters.created_at[1]}
+                            <em role="presentation" onClick={() => handlePeriodDelete()} />
+                        </div>
+                    )}
                 </div>
             )}
         </>

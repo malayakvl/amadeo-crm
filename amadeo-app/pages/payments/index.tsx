@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslations } from 'next-intl';
+import { userSelector } from '../../redux/user/selectors';
 import { getSession } from 'next-auth/client';
 import Head from 'next/head';
 import Image from 'next/image';
@@ -25,6 +26,7 @@ export default function Payments({ session }: { session: any }) {
     if (!session) return <></>;
     const t = useTranslations();
     const dispatch = useDispatch();
+    const user = useSelector(userSelector);
 
     const [state, setState] = useState<any>([
         {
@@ -53,12 +55,14 @@ export default function Payments({ session }: { session: any }) {
 
             <div className="block-white-8 white-shadow-medium mt-8">
                 <div className="flex">
-                    <div className="w-80 p-4 bg-gray-100 rounded-lg shadow-inner">
-                        <div className="font-bold text-gray-350 text-lg pb-4">
-                            {t('Payment Methods')}
+                    {user.role_id === 2 && (
+                        <div className="w-80 p-4 bg-gray-100 rounded-lg shadow-inner">
+                            <div className="font-bold text-gray-350 text-lg pb-4">
+                                {t('Payment Methods')}
+                            </div>
+                            <PaymentMethods />
                         </div>
-                        <PaymentMethods />
-                    </div>
+                    )}
 
                     <div className="ml-8 flex-1">
                         <div className="flex relative mb-8 font-bold text-gray-350 text-lg py-4 border-b border-gray-200">

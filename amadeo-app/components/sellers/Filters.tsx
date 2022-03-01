@@ -7,7 +7,8 @@ import {
     FilterDate,
     FilterBuyersCnt,
     FilterOrdersCnt,
-    FilterSessionsCnt
+    FilterSessionsCnt,
+    FilterSeller
 } from './index';
 import { fetchFilerItems } from '../../redux/sellers';
 
@@ -28,6 +29,8 @@ const Filters: React.FC<any> = () => {
                 <FilterDate />
 
                 <FilterAmount />
+
+                <FilterSeller />
 
                 <FilterOrdersCnt />
 
