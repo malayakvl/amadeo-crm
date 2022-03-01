@@ -9,7 +9,7 @@ export default function ActivateHash({ locale, hash }: { locale: string; hash: s
                 hash: hash,
                 callbackUrl: `${window.location.origin}${
                     locale === 'fr' ? '' : `/${locale}`
-                }/account?activeTab=password`
+                }/restore/password`
             });
         }
     }, [locale, hash]);

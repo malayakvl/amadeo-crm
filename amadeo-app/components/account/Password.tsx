@@ -27,7 +27,7 @@ export default function Password() {
                 dispatch(changePasswordAction(values));
             }}>
             {(props) => (
-                <form onSubmit={props.handleSubmit} className="mt-5">
+                <form onSubmit={props.handleSubmit} className="mt-5 w-full">
                     {/*<TogglePassword name={'old_password'} label={'Current Password'} props={props}  />*/}
 
                     <TogglePassword
@@ -35,7 +35,7 @@ export default function Password() {
                         icon={'f-key'}
                         name={'password'}
                         placeholder={'New Password'}
-                        style={'lg:w-1/4'}
+                        style=""
                         props={props}
                     />
 
@@ -44,7 +44,7 @@ export default function Password() {
                         icon={'f-key'}
                         name={'password_confirmation'}
                         placeholder={'Confirm Password'}
-                        style={'lg:w-1/4'}
+                        style=""
                         props={props}
                     />
                     <div className="mt-10 mb-7 block border border-gray-180 border-b-0" />

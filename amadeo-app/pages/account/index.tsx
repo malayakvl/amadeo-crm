@@ -89,7 +89,7 @@ function Account({ locale, reqActiveTab }: { locale: string; reqActiveTab: strin
                             </Fragment>
                         )}
                     </div>
-                    <div className={`w-full ${activeTab !== 'password' ? 'hidden' : ''}`}>
+                    <div className={`w-96 ${activeTab !== 'password' ? 'hidden' : ''}`}>
                         <Password />
                     </div>
                 </div>
