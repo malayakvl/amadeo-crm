@@ -124,7 +124,7 @@ export const TableHeaders: { [key in PaginationType]: Type.DataTableHeader[] } =
         // { titleKey: 'Total' }
     ],
     [PaginationType.DASHBOARD]: []
-}
+};
 
 export enum OrderStatus {
     NEW = 'new',
