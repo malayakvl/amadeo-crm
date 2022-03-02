@@ -311,6 +311,7 @@ class Order {
 
             switch (user.role_id) {
                 case UserRole.ADMIN:
+                    break;
                 case UserRole.CUSTOMER:
                     _filters.seller_id = [user.id];
                     if (_filters.userIds) {
