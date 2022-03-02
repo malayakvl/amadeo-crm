@@ -28,3 +28,11 @@ export const showDatePopupSelector = createSelector(
     rootSelector,
     (sellers: State.Sellers): boolean => sellers.showDateSelector
 );
+export const showLoginFormSelector = createSelector(
+    rootSelector,
+    (sellers: State.Sellers): boolean => sellers.showLoginForm
+);
+export const selectedSellerSelector = createSelector(
+    rootSelector,
+    (sellers: State.Sellers): string => sellers.selectedSeller
+);

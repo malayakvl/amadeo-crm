@@ -1,5 +1,4 @@
 import React, { Fragment, useCallback, useState } from 'react';
-import Link from 'next/link';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     itemsCountSelector,
@@ -8,13 +7,18 @@ import {
 } from '../../redux/sellers/selectors';
 import { PaginationType } from '../../constants';
 import { DataTable } from '../_common';
-import { fetchItemsAction } from '../../redux/sellers';
+import {
+    fetchItemsAction,
+    showDateSelectorAction,
+    showLoginFormAction,
+    setSelectedSellerAction
+} from '../../redux/sellers';
 import moment from 'moment';
 import Image from 'next/image';
 import { baseApiUrl } from '../../constants';
 import { setPaginationAction } from '../../redux/layouts';
 import { useTranslations } from 'next-intl';
-import { Filters, FilterValues } from './index';
+import { Filters, FilterValues, SellerLogin } from './index';
 import { paginationSelectorFactory } from '../../redux/layouts/selectors';
 import { DateRangePicker } from 'react-date-range';
 import 'react-date-range/dist/styles.css'; // main css file
@@ -90,12 +94,23 @@ const ListSellers: React.FC = () => {
                     </div>
                 )}
                 <button
-                    onClick={() => setFilterOpen(!filterOpen)}
+                    onClick={() => {
+                        if (filterOpen) {
+                            dispatch(showDateSelectorAction(false));
+                        }
+                        setFilterOpen(!filterOpen);
+                    }}
                     className="absolute top-0 right-0 flex items-center text-sm border rounded-lg px-4 py-1">
                     <Image width={16} height={16} src={'/images/filter.svg'} />
                     <div className="font-medium text-gray-400 ml-2">{t('Filters')}</div>
                     <div className="ml-2 font-bold rounded-full p-[2px] text-center bg-gray-400 text-xs h-5 w-5 text-white">
-                        {0}
+                        {filters.country_id.length +
+                            !!filters.total_amount.length +
+                            !!filters.total_orders.length +
+                            !!filters.total_sessions.length +
+                            !!filters.total_buyers.length +
+                            !!filters.created_at.length +
+                            filters.seller_id.length}
                     </div>
                 </button>
             </div>
@@ -149,12 +164,21 @@ const ListSellers: React.FC = () => {
                                 {moment(item.created_at).format('DD/MM/YYYY')}
                             </td>
                             <td>
-                                <Link href={`/orders/${item.order_number}`}>LogIn</Link>
+                                <span
+                                    className="cursor-pointer"
+                                    role="presentation"
+                                    onClick={() => {
+                                        dispatch(setSelectedSellerAction(item.email));
+                                        dispatch(showLoginFormAction(true));
+                                    }}>
+                                    {t('LogIn')}
+                                </span>
                             </td>
                         </tr>
                     </Fragment>
                 ))}
             </DataTable>
+            <SellerLogin />
         </div>
     );
 };

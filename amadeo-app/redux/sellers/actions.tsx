@@ -95,7 +95,7 @@ export const fetchItemAction: any = createAction(
         }
 );
 
-export const showPopupAction: any = createAction('orders/SHOW_POPUP');
-export const showDateSelectorAction: any = createAction('orders/SHOW_DATE_POPUP');
-export const setEmptyFormAction: any = createAction('orders/EMPTY_FORM');
-// export const showItemAction: any = createAction('orders/CHATBOT_SHOWITEM');
+export const showPopupAction: any = createAction('sellers/SHOW_POPUP');
+export const showDateSelectorAction: any = createAction('sellers/SHOW_DATE_POPUP');
+export const showLoginFormAction: any = createAction('sellers/SHOW_LOGIN_FORM');
+export const setSelectedSellerAction: any = createAction('sellers/SET_SELECTED_SELLER');

@@ -20,7 +20,8 @@ import { PaginationType } from '../../constants';
 import moment from 'moment';
 
 import 'react-date-range/dist/styles.css'; // main css file
-import 'react-date-range/dist/theme/default.css'; // theme css file
+import 'react-date-range/dist/theme/default.css';
+import { showDateSelectorAction } from '../../redux/payments'; // theme css file
 
 export default function Payments({ session }: { session: any }) {
     if (!session) return <></>;
@@ -107,12 +108,19 @@ export default function Payments({ session }: { session: any }) {
                                 </div>
                             )}
                             <button
-                                onClick={() => setFilterOpen(!filterOpen)}
+                                onClick={() => {
+                                    if (filterOpen) {
+                                        dispatch(showDateSelectorAction(false));
+                                    }
+                                    setFilterOpen(!filterOpen);
+                                }}
                                 className="absolute top-0 right-0 flex items-center text-sm border rounded-lg px-4 py-1">
                                 <Image width={16} height={16} src={'/images/filter.svg'} />
                                 <div className="font-medium text-gray-400 ml-2">{t('Filters')}</div>
                                 <div className="ml-2 font-bold rounded-full p-[2px] text-center bg-gray-400 text-xs h-5 w-5 text-white">
                                     {filters.payment_id.length +
+                                        !!filters.created_at.length +
+                                        filters.seller_id.length +
                                         !!filters.total_amount.length +
                                         !!filters.order_number.length +
                                         !!filters.created_at.length}

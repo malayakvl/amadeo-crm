@@ -38,5 +38,5 @@ export const deleteToastAction: any = createAction('layouts/DELETE_TOAST');
 export const setActivePageAction: any = createAction('layouts/SET_ACTIVE_TAB');
 
 export const setModalConfirmationMetaAction: any = createAction(
-    'layouts/SET_MODAL_DELETE_CONFIRMATION_META'
+    'layouts/SET_MODAL_DELETE_CONFIRMATION'
 );

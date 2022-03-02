@@ -41,7 +41,7 @@ const ListProducts: React.FC<any> = () => {
 
     const [filterOpen, setFilterOpen] = useState(false);
     const { filters }: Layouts.Pagination = useSelector(
-        paginationSelectorFactory(PaginationType.ORDERS)
+        paginationSelectorFactory(PaginationType.PRODUCTS)
     );
 
     const sendRequest = useCallback(() => {
@@ -172,10 +172,11 @@ const ListProducts: React.FC<any> = () => {
                         <Image width={16} height={16} src={'/images/filter.svg'} />
                         <div className="font-medium text-gray-400 ml-2">{t('Filters')}</div>
                         <div className="ml-2 font-bold rounded-full p-[2px] text-center bg-gray-400 text-xs h-5 w-5 text-white">
-                            {filters.country_id.length +
-                                filters.payment_id.length +
-                                filters.status.length +
-                                filters.country_id.length}
+                            {filters.color_id.length +
+                                filters.size_id.length +
+                                !!filters.price.length +
+                                !!filters.quantity.length +
+                                (filters.product_name ? 1 : 0)}
                         </div>
                     </button>
                 </div>
