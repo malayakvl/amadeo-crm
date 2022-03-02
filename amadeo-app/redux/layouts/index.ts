@@ -66,7 +66,8 @@ const initialState: State.Layouts = {
                 payment_id: [],
                 status: [],
                 total_amount: [],
-                created_at: []
+                created_at: [],
+                seller_id: []
             }
         },
         [PaginationType.SELLERS]: {

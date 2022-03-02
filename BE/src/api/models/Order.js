@@ -247,7 +247,8 @@ class Order {
             const _filters = JSON.parse(filters);
 
             switch (user.role_id) {
-                case UserRole.ADMIN:  
+                case UserRole.ADMIN:
+                    break;
                 case UserRole.CUSTOMER:
                     _filters.seller_id = [user.id];
                     // if (_filters.userIds) {
@@ -309,7 +310,7 @@ class Order {
             const _filters = JSON.parse(filters);
 
             switch (user.role_id) {
-                case UserRole.ADMIN:  
+                case UserRole.ADMIN:
                 case UserRole.CUSTOMER:
                     _filters.seller_id = [user.id];
                     if (_filters.userIds) {
@@ -433,7 +434,7 @@ class Order {
             };
 
             switch (user.role_id) {
-                case UserRole.ADMIN:  
+                case UserRole.ADMIN:
                 case UserRole.CUSTOMER:
                     _filters.seller_id = userId;
                     break;
