@@ -119,14 +119,14 @@ const FilterValues: React.FC<any> = () => {
                             {t('search_by', {
                                 searchStr: filters.name
                             })}
-                            <em role="presentation" onClick={() => handleBuyerNameDelete()} />
+                            <em role="presentation" onClick={handleBuyerNameDelete} />
                         </div>
                     )}
                     {filters?.total_amount[1] && (
                         <div className="filter-value">
                             {t('Spent')}: {filters.total_amount[0]} - {filters.total_amount[1]}{' '}
                             &euro;
-                            <em role="presentation" onClick={() => handleTotalAmountDelete()} />
+                            <em role="presentation" onClick={handleTotalAmountDelete} />
                         </div>
                     )}
                     {/* {filters.payment_id.map((_item: any) => (

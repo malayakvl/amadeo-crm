@@ -122,7 +122,8 @@ export default function Payments({ session }: { session: any }) {
                                         !!filters.created_at.length +
                                         filters.seller_id.length +
                                         !!filters.total_amount.length +
-                                        !!filters.order_number.length}
+                                        !!filters.order_number.length +
+                                        !!filters.created_at.length}
                                 </div>
                             </button>
                         </div>

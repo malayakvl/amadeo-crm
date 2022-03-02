@@ -65,7 +65,7 @@ const FilterValues: React.FC<any> = () => {
     const handlePeriodDelete = () => {
         dispatch(
             setPaginationAction({
-                type: PaginationType.SELLERS,
+                type: PaginationType.PAYMENTS,
                 modifier: {
                     filters: {
                         ...filters,
@@ -86,14 +86,14 @@ const FilterValues: React.FC<any> = () => {
                             {t('search_by', {
                                 searchStr: filters.order_number
                             })}
-                            <em role="presentation" onClick={() => handleOrderNumberDelete()} />
+                            <em role="presentation" onClick={handleOrderNumberDelete} />
                         </div>
                     )}
                     {filters.total_amount[1] && (
                         <div className="filter-value">
                             {t('Spent')}: {filters.total_amount[0]} - {filters.total_amount[1]}{' '}
                             &euro;
-                            <em role="presentation" onClick={() => handleTotalAmountDelete()} />
+                            <em role="presentation" onClick={handleTotalAmountDelete} />
                         </div>
                     )}
                     {filters.payment_id.map((_item: any) => (
@@ -105,7 +105,7 @@ const FilterValues: React.FC<any> = () => {
                     {filters.created_at[1] && (
                         <div className="filter-value">
                             {t('Period')}: {filters.created_at[0]} - {filters.created_at[1]}
-                            <em role="presentation" onClick={() => handlePeriodDelete()} />
+                            <em role="presentation" onClick={handlePeriodDelete} />
                         </div>
                     )}
                 </div>
