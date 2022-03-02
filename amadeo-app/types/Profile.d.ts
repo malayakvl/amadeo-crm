@@ -3,6 +3,7 @@ declare namespace Profile {
         profile: Profile;
         crudStatus: string | null;
         validEmail: string | null;
+        isPasswordChanged: boolean;
     }
 
     interface Profile {
