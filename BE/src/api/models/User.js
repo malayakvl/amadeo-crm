@@ -262,10 +262,10 @@ class User {
      * @param userData - json
      * @returns {Promise<{error: null, user}|{error: {code: number, message: string}, user: null}>}
      */
-    async update(userData) {
+    async update(userData, userId) {
         const client = await pool.connect();
         try {
-            const query = `SELECT common__tools._update_table_by_id('data', 'users', '${JSON.stringify(userData)}', ${userData.id});`;
+            const query = `SELECT common__tools._update_table_by_id('data', 'users', '${JSON.stringify(userData)}', ${userId});`;
             await client.query(query);
             if (user) {
                 return { user: userData, error: null };
