@@ -150,6 +150,10 @@ export default function Signup() {
                                             <div className="error-el">{props.errors.email}</div>
                                         )}
                                     </div>
+                                    <div
+                                        style={{ lineHeight: '0.1em' }}
+                                        className="text-center border-b my-5"
+                                    />
                                     <div>
                                         <Field
                                             id="acceptTerms"

@@ -112,7 +112,7 @@ function Signin({ locale }: { locale: string }) {
                 </button>
                 <div className="error-el">{query.message}</div>
 
-                <div className="mt-6 border-t text-center text-sm">
+                <div className="mt-3 border-t text-center text-sm">
                     <div className="mb-2 pt-1">
                         {t('Don’t have an account?')}{' '}
                         <Link href={'/auth/signup'}>
@@ -125,7 +125,7 @@ function Signin({ locale }: { locale: string }) {
                             href="https://www.liveproshop.com/terms-and-conditions"
                             target="_blank"
                             rel="noreferrer"
-                            className="text-orange-450 font-bold">
+                            className="text-orange-450">
                             {t('terms of use')}
                         </a>
                     </div>
