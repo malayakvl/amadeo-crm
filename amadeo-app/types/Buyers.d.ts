@@ -26,6 +26,6 @@ declare namespace Buyers {
     }
 
     interface OrderDataItem extends Orders.DataItem {
-        products_count: number;
+        order_items_count: number;
     }
 }
