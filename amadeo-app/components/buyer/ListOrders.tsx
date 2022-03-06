@@ -133,7 +133,7 @@ const ListOrders: React.FC<{ orders: Orders.DataItem[]; className?: string }> = 
                                 />
                             </td>
                             <td className="order-date">
-                                {item.order_items?.length}x{' '}
+                                {item.order_items_count}x{' '}
                                 <span className="red-yellow-gradient-text">product (s)</span>
                             </td>
                             <td style={{ textAlign: 'right' }}>{item.total_amount} &euro;</td>

@@ -49,8 +49,8 @@ const SidebarHeader: React.FC = () => {
     };
 
     return (
-        <div className="flex items-center align-middle">
-            <div className="w-full sm:w-1/2 md:w-3/5 lg:w-3/5 xl:w-3/5 items-center">
+        <div className="md:flex items-center align-middle">
+            <div className="hidden md:flex w-full sm:w-1/2 md:w-3/5 lg:w-3/5 xl:w-3/5 items-center">
                 <form>
                     <div className="relative">
                         <input className="form-control" placeholder="Click to Search" />
@@ -58,7 +58,7 @@ const SidebarHeader: React.FC = () => {
                     </div>
                 </form>
             </div>
-            <div className="w-full sm:w-1/2 md:w-2/5 lg:w-2/5 xl:w-2/5 flex items-center justify-end">
+            <div className="w-full sm:w-1/2 md:w-2/5 lg:w-2/5 xl:w-2/5 flex items-center justify-center md:justify-end">
                 <NoticeCounter delay={120000} />
 
                 {/*<span className="divider" />*/}

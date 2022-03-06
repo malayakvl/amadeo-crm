@@ -41,7 +41,7 @@ const SidebarFull: React.FC = () => {
                     </a>
                 </Link>
             </li>
-            <li>
+            <li className="separator-line">
                 <div className="separator" />
             </li>
             <li>

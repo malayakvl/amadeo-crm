@@ -184,8 +184,7 @@ class Buyer {
             }
             // console.log('_filters =', _filters);
             const buyersQuery = `SELECT
-                 buyer_id, buyer_email, buyer_first_name, buyer_photo, country_iso, country_name, state,
-                 post_code, city, address_line_1, address_line_2, total_count, total_amount, order_items
+                 *
                  FROM data.get_buyers(${perPage}, ${offset}, '${JSON.stringify(_filters)}', '${column} ${sort}');`;
             // console.log(buyersQuery);
             const res = await client.query(buyersQuery);

@@ -15,6 +15,7 @@ declare namespace Orders {
     }
 
     interface DataItem {
+        order_items_count: number;
         id: number;
         live_sessions_id: number;
         shipping_id: number | null;
