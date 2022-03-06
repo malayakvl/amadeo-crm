@@ -3,6 +3,7 @@ import {
     fetchProfileAction,
     updateProfileAction,
     changePasswordAction,
+    changePasswordInvitationAction,
     restorePasswordAction,
     setValidEmailStatusAction,
     saveAddressAction
@@ -11,7 +12,8 @@ import {
 const initialState: State.Profile = {
     profile: {} as Profile.Profile,
     crudStatus: null,
-    validEmail: null
+    validEmail: null,
+    isPasswordChanged: false
 };
 
 const ACTION_HANDLERS: any = {
@@ -44,6 +46,12 @@ const ACTION_HANDLERS: any = {
             ...state,
             crudStatus: action.payload
         })
+    },
+    [changePasswordInvitationAction]: {
+        next: (state: State.Profile, action: Action<any>): State.Profile => ({
+            ...state,
+            isPasswordChanged: action.payload
+        })
     }
 };
 
@@ -51,6 +59,7 @@ export {
     fetchProfileAction,
     updateProfileAction,
     changePasswordAction,
+    changePasswordInvitationAction,
     restorePasswordAction,
     setValidEmailStatusAction,
     saveAddressAction

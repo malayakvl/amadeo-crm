@@ -50,7 +50,7 @@ class UserController {
         }
         const dirUpload = `${process.env.DOWNLOAD_FOLDER}/users/${req.user.id}`;
         if (!fs.existsSync(dirUpload)) {
-            fs.mkdirSync(dirUpload);
+            fs.mkdirSync(dirUpload, { recursive: true });
         }
         const storage = multer.diskStorage({
             destination: function (req, file, cb) {
@@ -71,7 +71,7 @@ class UserController {
             if (req.file) {
                 dataUser.photo = `/uploads/users/${req.user.id}/${req.file.filename}`;
             }
-            await userModel.update(dataUser);
+            await userModel.update(dataUser, req.user.id);
             const user = await userModel.findUserByEmail(req.user.email);
             delete user.password;
             delete user.salt;

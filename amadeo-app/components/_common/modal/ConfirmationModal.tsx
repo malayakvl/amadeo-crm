@@ -14,7 +14,8 @@ const ConfirmationModal: React.FC = () => {
         title = '',
         titleKey = 'Do you want to delete',
         submitButtonProps,
-        onConfirm
+        onConfirm,
+        onCancel
     } = meta || ({} as any);
 
     useEffect(() => {
@@ -53,7 +54,9 @@ const ConfirmationModal: React.FC = () => {
             titleKey={titleKey}
             cancelButtonProps={{
                 disabled: isLoading,
-                onClick: handleCancelBtnClick
+                onClick: onCancel
+                    ? () => onCancel().then(handleCancelBtnClick)
+                    : handleCancelBtnClick
             }}
             submitButtonProps={{
                 isLoading,

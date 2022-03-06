@@ -147,6 +147,7 @@ const SidebarHeader: React.FC = () => {
                 <span className="mt-1 ml-3">
                     <a
                         href={`/api/auth/signout`}
+                        title={t('Logout')}
                         onClick={(e) => {
                             e.preventDefault();
                             window.localStorage.removeItem('user');

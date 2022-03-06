@@ -108,7 +108,9 @@ const ListBuyers: React.FC = () => {
                                 </div>
                             </td>
                             <td>
-                                <div className="font-medium">{item.buyer_address}</div>
+                                <div className="font-medium">
+                                    {item.buyer_full_address?.slice(0, -2)}
+                                </div>
                             </td>
                             <td>
                                 <div className="text-center text-orange-450">

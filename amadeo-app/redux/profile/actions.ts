@@ -1,13 +1,12 @@
 import { createAction } from 'redux-actions';
 import axios from 'axios';
-import getConfig from 'next/config';
 import { authHeader } from '../../lib/functions';
-import { setSuccessToastAction } from '../layouts';
+import { setSuccessToastAction, setErrorToastAction } from '../layouts';
 import { setUserAction } from '../user/';
-
-const { publicRuntimeConfig } = getConfig();
-const baseUrl = `${publicRuntimeConfig.apiUrl}/api`;
-const baseAuthUrl = `${publicRuntimeConfig.apiUrl}/auth`;
+import { showLoaderAction } from '../../redux/layouts/actions';
+import { baseApiUrl } from '../../constants';
+const baseUrl = `${baseApiUrl}/api`;
+const baseAuthUrl = `${baseApiUrl}/auth`;
 
 export const fetchProfileAction: any = createAction(
     'profile/FETCH_PROFILE',
@@ -43,6 +42,7 @@ export const updateProfileAction: any = createAction(
                 });
         }
 );
+
 export const changePasswordAction: any = createAction(
     'profile/CHANGE_PASSWORD',
     async (data: any) =>
@@ -60,21 +60,53 @@ export const changePasswordAction: any = createAction(
         }
 );
 
+export const changePasswordInvitationAction: any = createAction(
+    'profile/CHANGE_PASSWORD_INVITATION',
+    (data: any) =>
+        async (dispatch: Type.Dispatch): Promise<any> => {
+            dispatch(showLoaderAction(true));
+            return axios
+                .post(`${baseAuthUrl}/changePassword`, data)
+                .then(({ data: { success, message } }) => {
+                    if (success) {
+                        dispatch(setSuccessToastAction('Password has been updated'));
+                        return true;
+                    } else if (message) {
+                        dispatch(setErrorToastAction(message));
+                    }
+                })
+                .catch((error) => {
+                    dispatch(
+                        setErrorToastAction(
+                            error.response.data.message ||
+                                error.request ||
+                                error.message ||
+                                'Error restore password'
+                        )
+                    );
+                })
+                .finally(() => dispatch(showLoaderAction(false)));
+        }
+);
+
 export const restorePasswordAction: any = createAction(
     'profile/RESTORE_PASSWORD',
-    async (data: any) => {
-        const res = await fetch(`${baseAuthUrl}/restorePassword`, {
-            method: 'post',
-            body: JSON.stringify(data),
-            headers: { 'Content-Type': 'application/json' }
-        });
-        const resp = await res.json();
-        if (res.ok && resp.status) {
-            return 'yes';
-        } else {
-            return resp.error.message ? resp.error.message : resp.error;
+    (data: any) =>
+        async (dispatch: Type.Dispatch): Promise<any> => {
+            dispatch(showLoaderAction(true));
+            const res = await fetch(`${baseAuthUrl}/restorePassword`, {
+                method: 'post',
+                body: JSON.stringify(data),
+                headers: { 'Content-Type': 'application/json' }
+            });
+            const resp = await res.json();
+            dispatch(showLoaderAction(false));
+            if (res.ok && resp.status) {
+                return 'yes';
+            } else {
+                return resp.error.message ? resp.error.message : resp.error;
+            }
         }
-    }
 );
 
 export const saveAddressAction: any = createAction(

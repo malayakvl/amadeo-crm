@@ -65,7 +65,9 @@ const ListOrders: React.FC<{ orders: Orders.DataItem[] }> = ({ orders }) => {
                                 )}
                             </td>
                             <td>
-                                <div className="text-right">x product (s)</div>
+                                <div className="text-right">
+                                    {item.order_items?.length} x product (s)
+                                </div>
                             </td>
                             <td>
                                 <div className="text-right">{item.total_amount} €</div>
