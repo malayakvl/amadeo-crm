@@ -423,7 +423,7 @@ class Order {
     
     
     
-    async generatePdf (orderNumber, userId) {
+    async generatePdf (orderNumber, userId, user) {
         const client = await pool.connect();
     
         let error = null;
@@ -444,12 +444,7 @@ class Order {
             }
 
             const filter = JSON.stringify(_filters);
-            const ordersQuery = `SELECT id, order_items,
-                                    payment_id, payment_name, payment_short_name,
-                                    total_amount, order_number, order_amount,
-                                    buyer_first_name, buyer_photo,
-                                    flag_name, shipping_image, shipping_address,
-                                    created_at
+            const ordersQuery = `SELECT *
                                 FROM data.get_orders(1, 0, '${filter}');`;
             const res = await client.query(ordersQuery);
             const dirUpload = `${process.env.DOWNLOAD_FOLDER}/orders/${userId}`;
@@ -490,6 +485,7 @@ class Order {
                     invoice_nr: res.rows[0].order_number,
                     invoice_date: moment(res.rows[0].created_at).format('DD/MM/YYYY'),
                 };
+                console.log(invoice);
                 createInvoice(invoice, `${dirUpload}/${res.rows[0].order_number}.pdf`);
     
                 await setTimeout(2000);
@@ -518,7 +514,7 @@ class Order {
             if (process.env.NODE_ENV === 'development') {
                 logger.log(
                     'error',
-                    'Model error (Products getAll):',
+                    'Model error (Generate PDF):',
                     { message: e.message }
                 );
             }
