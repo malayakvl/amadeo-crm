@@ -9,7 +9,7 @@ import moment from 'moment';
 // const userProfileImg =
 //     'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80';
 
-const ListOrders: React.FC<{ orders: Orders.DataItem[]; className?: string }> = ({
+const ListOrders: React.FC<{ orders: Buyers.OrderDataItem[]; className?: string }> = ({
     orders,
     className
 }) => {
@@ -121,7 +121,7 @@ const ListOrders: React.FC<{ orders: Orders.DataItem[]; className?: string }> = 
                                         width={36}
                                         height={24}
                                         className=""
-                                        alt=""
+                                        alt="shipping"
                                     />
                                 )}
                             </td>
@@ -129,12 +129,12 @@ const ListOrders: React.FC<{ orders: Orders.DataItem[]; className?: string }> = 
                                 <img
                                     src="/images/payments/maestro.svg"
                                     className="fill-current text-black"
-                                    alt={''}
+                                    alt={'payments'}
                                 />
                             </td>
                             <td className="order-date">
-                                {item.order_items?.length}x{' '}
-                                <span className="red-yellow-gradient-text">product (s)</span>
+                                {item.order_items_count}{' '}
+                                <span className="red-yellow-gradient-text">x product (s)</span>
                             </td>
                             <td style={{ textAlign: 'right' }}>{item.total_amount} &euro;</td>
                         </tr>

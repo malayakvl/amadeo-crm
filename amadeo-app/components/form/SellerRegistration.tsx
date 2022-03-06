@@ -17,28 +17,32 @@ export default function SellerRegistration({ email }: { email: any }) {
     const validationSchema = Yup.object().shape({
         first_name: Yup.string()
             .strict(true)
-            .trim('Cannot include leading and trailing spaces')
+            .trim(t('Cannot include leading and trailing spaces'))
             .required(t('You must enter your first name'))
-            .matches(/^[aA-zZ\s]+$/, 'Only alphabets are allowed for this field '),
+            .matches(/^[aA-zZ\s]+$/, t('Only alphabets are allowed for this field')),
         last_name: Yup.string()
             .strict(true)
-            .trim('Cannot include leading and trailing spaces')
+            .trim(t('Cannot include leading and trailing spaces'))
             .required(t('You must enter your family name'))
-            .matches(/^[aA-zZ\s]+$/, 'Only alphabets are allowed for this field '),
+            .matches(/^[aA-zZ\s]+$/, t('Only alphabets are allowed for this field')),
         full_address: Yup.string()
             .strict(true)
-            .trim('Cannot include leading and trailing spaces')
-            .required(t('You must enter your address')),
-        company_name: Yup.string().strict(true).trim('Cannot include leading and trailing spaces'),
-        company_id: Yup.string().strict(true).trim('Cannot include leading and trailing spaces'),
-        vat: Yup.string().strict(true).trim('Cannot include leading and trailing spaces'),
-        phone: Yup.string()
-            .required(t('You must enter your phone number'))
+            .trim(t('Cannot include leading and trailing spaces'))
+            .required(t('You must enter your address'))
+            .min(5, t('Address must be at least 5 characters')),
+        company_name: Yup.string()
             .strict(true)
-            .trim('Cannot include leading and trailing spaces'),
+            .trim(t('Cannot include leading and trailing spaces')),
+        company_id: Yup.string().strict(true).trim(t('Cannot include leading and trailing spaces')),
+        vat: Yup.string().strict(true).trim(t('Cannot include leading and trailing spaces')),
+        phone: Yup.string()
+            .strict(true)
+            .trim(t('Cannot include leading and trailing spaces'))
+            .required(t('You must enter your phone number'))
+            .min(5, t('Phone must be at least 5 characters')),
         password: Yup.string()
             .strict(true)
-            .trim('Password cannot include leading and trailing spaces')
+            .trim(t('Cannot include leading and trailing spaces'))
             .required(t('Required field'))
             .min(6, t('Password must be at least 6 characters')),
         password_confirmation: Yup.string()
@@ -156,6 +160,13 @@ export default function SellerRegistration({ email }: { email: any }) {
                                 placeholder={'Phone Number'}
                                 props={props}
                                 tips={null}
+                                onChange={(event) => {
+                                    event.target.value = event.target.value.replace(
+                                        /[^\s\d+()-]+/gm,
+                                        ''
+                                    );
+                                    props.handleChange(event);
+                                }}
                             />
                             <TogglePassword
                                 icon={'f-key'}

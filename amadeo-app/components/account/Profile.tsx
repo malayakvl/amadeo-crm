@@ -60,25 +60,25 @@ function Profile() {
 
     const SubmitSchema = Yup.object().shape({
         email: Yup.string()
-            .trim(t('Field cannot include leading and trailing spaces'))
+            .trim(t('Cannot include leading and trailing spaces'))
             .min(3, t('Must be at least 3 characters'))
             .email(t('Must be a valid email'))
             .strict(true)
             .required(t('You must enter your email')),
         last_name: Yup.string()
-            .trim(t('Field cannot include leading and trailing spaces'))
+            .trim(t('Cannot include leading and trailing spaces'))
             .required(t('You must enter your family name'))
             .min(3, t('Must be at least 3 characters'))
             .strict(true)
             .matches(/^[aA-zZ\s]+$/, 'Only alphabets are allowed for this field '),
         first_name: Yup.string()
-            .trim(t('Field cannot include leading and trailing spaces'))
+            .trim(t('Cannot include leading and trailing spaces'))
             .required(t('You must enter your first name'))
             .strict(true)
             .min(3, t('Must be at least 3 characters'))
             .matches(/^[aA-zZ\s]+$/, 'Only alphabets are allowed for this field '),
         identification_number: Yup.string()
-            .trim(t('Field cannot include leading and trailing spaces'))
+            .trim(t('Cannot include leading and trailing spaces'))
             .strict(true)
             .min(3, t('Must be at least 3 characters'))
             .required(t('You must enter your tax-ID')),
@@ -86,20 +86,20 @@ function Profile() {
             .required(t('You must enter your address'))
             .strict(true)
             .min(3, t('Must be at least 3 characters'))
-            .trim(t('Field cannot include leading and trailing spaces')),
+            .trim(t('Cannot include leading and trailing spaces')),
         company_name: Yup.string()
             .strict(true)
             .min(3, t('Must be at least 3 characters'))
-            .trim(t('Field cannot include leading and trailing spaces')),
+            .trim(t('Cannot include leading and trailing spaces')),
         phone: Yup.string()
-            .trim(t('Field cannot include leading and trailing spaces'))
+            .trim(t('Cannot include leading and trailing spaces'))
             .required(t('You must enter your phone number'))
             .min(5, t('Must be at least 5 characters'))
             .strict(true),
         vat: Yup.string()
             .min(3, t('Must be at least 3 characters'))
             .strict(true)
-            .trim(t('Field cannot include leading and trailing spaces'))
+            .trim(t('Cannot include leading and trailing spaces'))
     });
 
     return (

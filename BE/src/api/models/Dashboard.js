@@ -38,10 +38,7 @@ class Dashboard {
             // console.log('[Dashboard.fetchItems] _filters =', _filters);
 
             if (user.role_id !== UserRole.BUYER) {
-                let querySQL = `SELECT
-                        buyer_id, buyer_email, buyer_first_name, buyer_photo, country_iso, country_name, state,
-                        post_code, city, address_line_1, address_line_2, total_count, total_amount, order_items
-                    FROM data.get_buyers(${perPage}, ${offset}, '${JSON.stringify(_filters)}', 'first_name ASC');`; //'${column} ${sort}'
+                let querySQL = `SELECT * FROM data.get_buyers(${perPage}, ${offset}, '${JSON.stringify(_filters)}', 'first_name ASC');`; //'${column} ${sort}'
                 // console.log('[Dashboard.fetchItems] buyersQuery = ', querySQL);
                 let res = await client.query(querySQL);
                 buyers = res.rows.length > 0 ? res.rows : [];
