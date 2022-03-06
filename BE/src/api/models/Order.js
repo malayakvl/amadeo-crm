@@ -423,7 +423,7 @@ class Order {
     
     
     
-    async generatePdf (orderNumber, userId) {
+    async generatePdf (orderNumber, userId, user) {
         const client = await pool.connect();
     
         let error = null;
