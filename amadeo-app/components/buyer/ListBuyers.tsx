@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { Fragment, useCallback, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { itemsCountSelector, paginatedItemsSelector } from '../../redux/buyers/selectors';
 import { PaginationType, baseApiUrl } from '../../constants';
@@ -38,8 +38,8 @@ const ListBuyers: React.FC = () => {
                 totalAmount={count}
                 sendRequest={sendRequest}>
                 {items?.map((item) => (
-                    <>
-                        <tr key={item.buyer_id}>
+                    <Fragment key={item.buyer_id}>
+                        <tr>
                             <td>
                                 {item.order_items?.length > 0 ? (
                                     <button
@@ -60,11 +60,6 @@ const ListBuyers: React.FC = () => {
                                     </button>
                                 ) : null}
                             </td>
-                            {/* <td className="text-center">
-                                <div className="text-center text-orange-450 font-medium">
-                                    {item.buyer_id + 1}
-                                </div>
-                            </td> */}
                             <td className="">
                                 <div className="flex">
                                     <div className="relative w-8 h-8">
@@ -102,7 +97,7 @@ const ListBuyers: React.FC = () => {
                                             />
                                         )}
                                     </div>
-                                    <div className="ml-2" text-center font-medium>
+                                    <div className="ml-2 text-center font-medium">
                                         {item.buyer_phone}
                                     </div>
                                 </div>
@@ -128,7 +123,7 @@ const ListBuyers: React.FC = () => {
                                 <ListOrders orders={item.order_items} />
                             </td>
                         </tr>
-                    </>
+                    </Fragment>
                 ))}
             </DataTable>
         </div>

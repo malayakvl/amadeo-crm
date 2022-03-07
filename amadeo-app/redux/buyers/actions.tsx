@@ -115,6 +115,34 @@ export const fetchFilerItems: any = createAction(
             };
         }
 );
+export const findSellersAction: any = createAction(
+    'orders/FIND_SELLER_AUTOSUGGEST',
+    async (query: string) =>
+        (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
+            const state = getState();
+            return axios
+                .get(`${baseUrl}/users/find-seller?searchStr=${query}`, {
+                    headers: {
+                        ...authHeader(state.user.user.email)
+                    }
+                })
+                .then((res: any) => res.data.result);
+        }
+);
+export const findBuyersAction: any = createAction(
+    'orders/FIND_BUYER_AUTOSUGGEST',
+    async (query: string) =>
+        (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
+            const state = getState();
+            return axios
+                .get(`${baseUrl}/users/find-buyer?searchStr=${query}`, {
+                    headers: {
+                        ...authHeader(state.user.user.email)
+                    }
+                })
+                .then((res: any) => res.data.result);
+        }
+);
 
 export const showPopupAction: any = createAction('buyers/SHOW_POPUP');
 export const showDateSelectorAction: any = createAction('buyers/SHOW_DATE_POPUP');

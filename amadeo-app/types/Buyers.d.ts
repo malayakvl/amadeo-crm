@@ -9,6 +9,8 @@ declare namespace Buyers {
         showPopup: boolean;
         fileterData: any;
         showDateSelector: boolean;
+        tagSellersSuggestions: any[];
+        tagBuyerssSuggestions: any[];
     }
 
     interface DataItem {

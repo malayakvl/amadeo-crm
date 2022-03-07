@@ -37,7 +37,9 @@ const initialState: State.Layouts = {
             filters: {
                 name: '',
                 country_id: [],
-                total_amount: []
+                total_amount: [],
+                seller_id: [],
+                buyer_id: []
             }
         },
         [PaginationType.LIVESESSIONS]: {

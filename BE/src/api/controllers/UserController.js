@@ -42,6 +42,14 @@ class UserController {
         const data = await userModel.findUsersSuggestion(req.query.searchStr, 2);
         return res.status(200).json({ result: data});
     }
+    
+    async fetchBuyers (req, res) {
+        if (!req.user) {
+            return res.status(401).json('Access deny');
+        }
+        const data = await userModel.findUsersSuggestion(req.query.searchStr, 1);
+        return res.status(200).json({ result: data});
+    }
 
     async updateProfile(req, res) {
         // const _user = req.user;
