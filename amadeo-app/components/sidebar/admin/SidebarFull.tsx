@@ -74,14 +74,14 @@ const SidebarFull: React.FC = () => {
                     </a>
                 </Link>
             </li>
-            <li>
-                <Link href={'/support'}>
-                    <a>
-                        <i className="support" />
-                        <span className="s-caption">{t('Support')}</span>
-                    </a>
-                </Link>
-            </li>
+            {/*<li>*/}
+            {/*    <Link href={'/support'}>*/}
+            {/*        <a>*/}
+            {/*            <i className="support" />*/}
+            {/*            <span className="s-caption">{t('Support')}</span>*/}
+            {/*        </a>*/}
+            {/*    </Link>*/}
+            {/*</li>*/}
         </Fragment>
     );
 };
