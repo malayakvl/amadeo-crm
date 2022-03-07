@@ -115,6 +115,7 @@ apiRoutes.route('/sellers/fetch-items').get(SellerController.fetchItems);
 apiRoutes.route('/sellers/fetch-filters').get(SellerController.fetchFilters);
 
 apiRoutes.route('/users/find-seller').get(UserController.fetchSellers);
+apiRoutes.route('/users/find-buyer').get(UserController.fetchBuyers);
 apiRoutes.route('/dashboard/fetch-items').get(DashboardController.fetchItems);
 
 apiRoutes.route('/support/send-message').post(SupportController.sendMessage);

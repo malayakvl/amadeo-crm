@@ -518,7 +518,7 @@ class Order {
             if (process.env.NODE_ENV === 'development') {
                 logger.log(
                     'error',
-                    'Model error (Products getAll):',
+                    'Model error (Generate PDF):',
                     { message: e.message }
                 );
             }

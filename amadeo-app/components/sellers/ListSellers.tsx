@@ -155,7 +155,7 @@ const ListSellers: React.FC = () => {
                                     />
                                 )}
                             </td>
-                            <td>{item.full_address}</td>
+                            <td>{item.full_address?.slice(0, -2)}</td>
                             <td>{item.total_sessions}</td>
                             <td>{item.total_orders}</td>
                             <td>{item.total_buyers}</td>

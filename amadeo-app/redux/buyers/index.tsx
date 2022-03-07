@@ -4,7 +4,9 @@ import {
     // fetchOrdersAction,
     showPopupAction,
     fetchFilerItems,
-    showDateSelectorAction
+    showDateSelectorAction,
+    findSellersAction,
+    findBuyersAction
 } from './actions';
 
 const initialState: {
@@ -16,6 +18,7 @@ const initialState: {
     // orders: Record<number, Orders.DataItem[]>;
     showPopup: boolean;
     fileterData: any;
+    tagSellersSuggestions: any[];
     // showDateSelector: boolean;
 } = {
     isFetched: false,
@@ -29,8 +32,8 @@ const initialState: {
         countries: [],
         // shippings: [],
         amounts: []
-    }
-    // ,showDateSelector: false
+    },
+    tagSellersSuggestions: []
 };
 
 const ACTION_HANDLERS: any = {
@@ -88,6 +91,18 @@ const ACTION_HANDLERS: any = {
             showPopup: action.payload
         })
     },
+    [findSellersAction]: {
+        next: (state: State.Buyers, action: Action<any>): State.Buyers => ({
+            ...state,
+            tagSellersSuggestions: action.payload
+        })
+    },
+    [findBuyersAction]: {
+        next: (state: State.Buyers, action: Action<any>): State.Buyers => ({
+            ...state,
+            tagBuyerssSuggestions: action.payload
+        })
+    },
     [showDateSelectorAction]: {
         next: (state: State.Buyers, action: Action<boolean>): State.Buyers => ({
             ...state,
@@ -101,7 +116,9 @@ export {
     // fetchOrdersAction,
     showPopupAction,
     fetchFilerItems,
-    showDateSelectorAction
+    showDateSelectorAction,
+    findSellersAction,
+    findBuyersAction
 };
 
 // ------------------------------------
