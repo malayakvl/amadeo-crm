@@ -2,7 +2,7 @@ import pool from './connect.js';
 import { logger } from '../../common/logger.js';
 
 class Shipping {
-    async fetchAll() {
+    async fetchAll(userId) {
         const client = await pool.connect();
         try {
             const query = `
@@ -24,6 +24,7 @@ class Shipping {
                             ) AS shipping_to_country__info
                         FROM data.shipping_to_country s2c
                         WHERE TRUE
+                            AND (s2c.user_id = ${userId})
                             AND (s2c.shipping_id = s.id)
                         GROUP BY
                             s.id
@@ -81,6 +82,7 @@ class Shipping {
                 LEFT JOIN data.countries c
                     ON c.id = s2c.country_id 
                 WHERE TRUE
+                    AND (s2c.user_id = ${userId})
                     AND (s2c.shipping_id = s.id)
                 GROUP BY
                     s.id
