@@ -24,7 +24,7 @@ export default function SidebarLayout({ children }: { children: any }) {
             {user.role_id === 1 && <SidebarBuyer />}
             {user.role_id === 2 && <SidebarCustomer />}
             {user.role_id === 3 && <SidebarAdmin />}
-            <div className="h-full mt-8 mb-10 md:ml-64 md:pl-4 md:mr-8">
+            <div className="h-full mt-4 md:mt-8 md:mb-10 md:ml-64 md:pl-4 md:mr-8">
                 {/*Sideheader*/}
                 {/*<div className="md:hidden flex items-center">*/}
                 {/*    <button className="outline-none mobile-menu-button">*/}

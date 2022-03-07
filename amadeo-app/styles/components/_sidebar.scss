@@ -1,11 +1,8 @@
 .sidebar {
-  //background: #141A3C;
-  //border-radius: 0 24px 0 0;
-  box-shadow: 0px -8px 16px rgba(0, 0, 0, 0.15);
-  @apply rounded-none absolute inset-x-0 bottom-0 bg-white w-full min-h-[110px]
-    md:max-w-[240px] md:h-screen md:flex-col md:top-0 md:left-0 md:h-full md:text-white md:border-none md:fixed md:bg-blue-550 md:rounded-r-3xl
-    md:shadow-none
-    xl:min-w-[240px];
+  background: #141A3C;
+  border-radius: 0 24px 0 0;
+  @apply max-w-[240px] xl:min-w-[240px] h-screen
+  hidden md:fixed md:flex flex-col top-0 left-0 h-full text-white transition-all duration-300 border-none;
 
   .go-back {
     @apply text-white text-base font-bold tracking-wide truncate cursor-pointer w-full text-right relative;
@@ -30,40 +27,39 @@
   }
 
   .brand {
-    @apply hidden md:block;
     background-image: url("../../public/images/logo-sidebar.svg");
     width: 176px;
     height: 52px;
     text-indent: -99999px;
     white-space: nowrap;
+    @apply block;
   }
 
   ul {
-    @apply flex md:flex-col;
+    @apply flex flex-col;
 
     li {
-      @apply pl-2 pr-3 mt-5 mb-5 md:pl-8 md:pr-8;
+      @apply mt-5 mb-5 pl-8 pr-8;
 
       a {
         @apply  relative flex flex-row items-center;
 
         .s-caption {
-          @apply text-blue-350 hidden
-            md:block text-blue-350 md:ml-2 text-base font-bold tracking-wide truncate cursor-pointer w-full;
+          @apply text-blue-350 ml-2 text-base font-bold tracking-wide truncate cursor-pointer w-full;
         }
       }
 
       em {
-        @apply hidden md:inline-flex items-center justify-center px-1 py-0.5 text-white not-italic
-          mr-2 text-xs font-bold leading-none red-yellow-gradient rounded-full absolute right-0;
+        @apply inline-flex items-center justify-center px-1 py-0.5 text-white not-italic
+        mr-2 text-xs font-bold leading-none red-yellow-gradient rounded-full absolute right-0;
       }
 
       i {
         background-repeat: no-repeat;
         background-position: center;
-        //width: 30px;
-        //height: 30px;
-        @apply w-[30px] h-[30px] inline-flex justify-center items-center cursor-pointer md:w-[20px] md:h-[20px];
+        width: 20px;
+        height: 20px;
+        @apply inline-flex justify-center items-center cursor-pointer;
       }
       .chatbot {
         background-image: url("../../public/images/icon-chatbot.svg");
@@ -105,17 +101,13 @@
       }
     }
 
-    .separator-line {
-      @apply hidden md:inline-block;
-    }
-
     li.active, li:hover {
       .s-caption {
         @apply text-white;
       }
-      //.dashboard {
-      //  background-image: url("../../public/images/icon-active-dashboard.svg");
-      //}
+      .dashboard {
+        background-image: url("../../public/images/icon-active-dashboard.svg");
+      }
       .selling {
         background-image: url("../../public/images/icon-active-selling.svg");
       }

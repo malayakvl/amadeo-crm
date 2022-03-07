@@ -25,7 +25,7 @@ export default function LangSwitcher() {
     }, []);
 
     const handleClick = (e: any) => {
-        if (node?.current?.contains(e.target)) {
+        if (e.target.parentNode.classList.contains('btn-langs')) {
             return;
         }
         setShowLangMenu(false);
@@ -33,7 +33,7 @@ export default function LangSwitcher() {
 
     return (
         <div className="relative">
-            <div className="inline-block text-right dropdown">
+            <div className="language-block inline-block text-right dropdown">
                 <button
                     className="btn-langs"
                     onClick={() => {

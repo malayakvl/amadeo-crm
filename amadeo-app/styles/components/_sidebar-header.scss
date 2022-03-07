@@ -1,3 +1,10 @@
+.shadow-bottom {
+  box-shadow: 0 5px 5px -5px #333;
+
+  @media (min-width: 641px) {
+    box-shadow: none;
+  }
+}
 .divider {
   height: 24px;
   border: 1px solid #CFD8DC;
@@ -13,13 +20,18 @@
   mr-2 text-[10px] font-bold leading-none red-yellow-gradient rounded-full;
 }
 
-.profile-name {
-  @apply text-sm font-bold text-gray-350 pl-3;
+.profile-block {
+  @apply mt-2 md:mt-0;
 
-  em {
-    @apply block not-italic text-blue-350 -mt-1 text-xs;
+  .profile-name {
+    @apply hidden text-sm font-bold text-gray-350 pl-3 md:inline-block;
+
+    em {
+      @apply block not-italic text-blue-350 -mt-1 text-xs;
+    }
   }
 }
+
 .corner {
   background-image: url("../../public/images/trianlge.svg");
   top: -8px;

@@ -31,6 +31,8 @@ const NoticeCounter = ({ delay = 1000 }) => {
     }, []);
 
     const handleClick = (e: any) => {
+        console.log(e.target.parentNode);
+        console.log(e.target);
         if (node?.current?.contains(e.target)) {
             return;
         }
@@ -38,17 +40,21 @@ const NoticeCounter = ({ delay = 1000 }) => {
     };
 
     return (
-        <div className="relative">
+        <div className="notice-block relative">
             <div className={`inline-block mt-2.5 ${noticeCnt > 0 ? 'cursor-pointer' : ''}`}>
-                <Image
-                    src="/images/bell.svg"
-                    width={16}
-                    height={20}
-                    layout="fixed"
-                    alt=""
+                <span
+                    className="bell-img border"
                     role="presentation"
                     onClick={() => setShowLatest(!showLatest)}
-                />
+                >
+                    <Image
+                        src="/images/bell.svg"
+                        width={16}
+                        height={20}
+                        layout="fixed"
+                        alt=""
+                    />
+                </span>
             </div>
             {noticeCnt > 0 && <span className="counter">{noticeCnt}</span>}
             {showLatest && noticeCnt > 0 && (
