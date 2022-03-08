@@ -99,7 +99,7 @@ export default new class ShippingController {
             shippings = await shippingModel.fetchCustomerAll(req.user.id)
 
         } else {
-            shippings = await shippingModel.fetchAll()
+            shippings = await shippingModel.fetchAll(req.user.id)
 
         }
 
