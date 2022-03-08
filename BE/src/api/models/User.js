@@ -170,27 +170,22 @@ class User {
         const client = await pool.connect();
         try {
             const res = await client.query(`
-                INSERT INTO data.users
-                (
-                    email, password, salt, role_id, first_name, last_name, company_name,
-                    phone, vat, identification_number, full_address
-                )
-                VALUES
-                (
-                    '${userData.email}',
-                    '${hash}',
-                    '${salt}',
-                    '${userData.role_id}',
-                    '${userData.first_name || ''}',
-                    '${userData.last_name || ''}',
-                    '${userData.company_name || ''}',
-                    '${userData.phone || ''}',
-                    '${userData.vat || ''}',
-                    '${userData.identification_number || ''}',
-                    '${userData.full_address || ''}'
-                )
-                ;
-            `);
+            INSERT INTO data.users (
+                email, password, salt, role_id, first_name, last_name, company_name,
+                phone, vat, identification_number, full_address
+            ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`, [
+                userData.email,
+                hash,
+                salt,
+                userData.role_id,
+                userData.first_name,
+                userData.last_name,
+                userData.company_name,
+                userData.phone,
+                userData.vat,
+                userData.identification_number,
+                userData.full_address
+            ]);
             const user = res ? await this.findUserByEmail(userData.email) : null;
             if (user) {
                 // add to user default chatbot scenarios
@@ -330,19 +325,19 @@ class User {
                 user_id, country_id, state, post_code, address_type, city,
                 address_line_1, address_line_2
             )
-            VALUES
-            (
-                '${userId}',
-                '${addressData.country_id}',
-                '${addressData.state || ''}',
-                '${addressData.post_code || ''}',
-                '${addressData.address_type || ''}',
-                '${addressData.city || ''}',
-                '${addressData.address_line_1 || ''}',
-                '${addressData.address_line_2 || ''}'
-            )`);
+            VALUES ( $1, $2, $3, $4, $5, $6, $7, $8 )`, [
+                userId,
+                addressData.country_id,
+                addressData.state,
+                addressData.post_code,
+                addressData.address_type,
+                addressData.city,
+                addressData.address_line_1,
+                addressData.address_line_2
+            ]);
 
             return { success: true };
+
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
                 logger.log(
@@ -352,6 +347,7 @@ class User {
                 );
             }
             return { user: null, error: { code: 404, message: 'Addresses Not found' } };
+
         } finally {
             client.release();
         }

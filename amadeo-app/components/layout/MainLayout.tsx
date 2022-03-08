@@ -30,7 +30,7 @@ export default function MainLayout({ children }: { children: any }) {
 
     useEffect(
         function () {
-            if (Object.keys(user).length) {
+            if (user && Object.keys(user).length) {
                 const storeUser = window.localStorage.getItem('user')
                     ? JSON.parse(window.localStorage.getItem('user') || '')
                     : {};
