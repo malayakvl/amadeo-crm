@@ -12,6 +12,8 @@ export default function Password() {
 
     const SubmitSchema = Yup.object().shape({
         password: Yup.string()
+            .strict(true)
+            .trim(t('Cannot include leading and trailing spaces'))
             .required(t('Required field'))
             .min(6, t('Password must be at least 6 characters')),
         password_confirmation: Yup.string()

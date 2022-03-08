@@ -15,9 +15,9 @@ export default function BuyerRegistration({ email }: { email: string }) {
 
     const validationSchema = Yup.object().shape({
         password: Yup.string()
-            .required(t('Required field'))
             .strict(true)
-            .trim('Password cannot include leading and trailing spaces')
+            .trim(t('Cannot include leading and trailing spaces'))
+            .required(t('Required field'))
             .min(6, t('Password must be at least 6 characters')),
         password_confirmation: Yup.string().oneOf(
             [Yup.ref('password'), null],
