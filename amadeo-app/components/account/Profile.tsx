@@ -166,6 +166,7 @@ function Profile() {
                         </div>
                     </div>
                     <InputText
+                        disabled
                         icon={'f-email'}
                         label={null}
                         name={'email'}
