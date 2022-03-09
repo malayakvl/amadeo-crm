@@ -113,7 +113,7 @@ class Shipping {
         try {
             const queryInsert =
                 `INSERT INTO data.shipping (name, image, status) VALUES ($1, $2, $3) RETURNING id;`;
-            const res = await client.query(queryInsert, [name, image, true]);
+            const res = await client.query(queryInsert, [name, image, false]);
             return res.rows[0].id;
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
