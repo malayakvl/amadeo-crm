@@ -75,7 +75,9 @@ export default function SellerRegistration({
         company_name: Yup.string()
             .strict(true)
             .trim(t('Cannot include leading and trailing spaces')),
-        company_id: Yup.string().strict(true).trim(t('Cannot include leading and trailing spaces')),
+        identification_number: Yup.string()
+            .strict(true)
+            .trim(t('Cannot include leading and trailing spaces')),
         vat: Yup.string().strict(true).trim(t('Cannot include leading and trailing spaces')),
         phone: Yup.string()
             .strict(true)
@@ -171,7 +173,7 @@ export default function SellerRegistration({
                                 icon={'f-company-id'}
                                 style={'w-1/2'}
                                 label={null}
-                                name={'company_id'}
+                                name={'identification_number'}
                                 placeholder={t('Company ID')}
                                 props={props}
                                 tips={null}

@@ -126,7 +126,7 @@ class AuthController {
             phone: formData.phone,
             full_address: [address_line_1, address_line_2, city, state, post_code, countryName].filter(Boolean).join(', '),
             company_name: formData.company_name,
-            identification_number: formData.company_id,
+            identification_number: formData.identification_number,
             vat: formData.vat
         }
 
