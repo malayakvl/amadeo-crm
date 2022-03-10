@@ -53,15 +53,28 @@ const ListBuyers: React.FC = () => {
                                             handlerShowMore(item.buyer_id)
                                         }>
                                         <Image
-                                            width="12"
+                                            width="14"
                                             height="14"
                                             src={`/images/action-arrow.svg`}
+                                            className={
+                                                showMoreConfigs[item.buyer_id] ? 'rotate-90' : ''
+                                            }
                                         />
                                     </button>
                                 ) : null}
                             </td>
-                            <td className="">
-                                <div className="flex">
+                            <td>
+                                <div
+                                    className="flex cursor-pointer"
+                                    onClick={() => handlerShowMore(item.buyer_id)}
+                                    onKeyDown={(e) =>
+                                        (e.key === ' ' || e.key === 'Enter') &&
+                                        handlerShowMore(item.buyer_id)
+                                    }
+                                    role="switch"
+                                    tabIndex={0}
+                                    aria-checked={showMoreConfigs[item.buyer_id]}
+                                    aria-labelledby="showMore">
                                     <div className="relative w-8 h-8">
                                         <Image
                                             src={

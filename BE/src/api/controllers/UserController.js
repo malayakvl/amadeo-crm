@@ -76,6 +76,7 @@ class UserController {
                 return res.status(500).json(err);
             }
             const dataUser = req.body;
+            delete dataUser.email;
             if (req.file) {
                 dataUser.photo = `/uploads/users/${req.user.id}/${req.file.filename}`;
             }

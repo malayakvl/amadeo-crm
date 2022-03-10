@@ -1,6 +1,7 @@
 import passport from '../middleware/passport.js';
 import userModel from '../models/User.js';
 import invitationModel from '../models/Invitation.js'
+import countryModel from '../models/Country.js';
 import { getTokensAndSetCookies } from '../lib/token.js';
 import { sendMail } from '../lib/sendMail.js';
 
@@ -112,15 +113,47 @@ class AuthController {
 
         }
 
-        let createUserData = { ...formData, role_id: invitation.role_id }
+        const { country_id, state, city, post_code, address_line_1, address_line_2, address_type } = formData;
 
+        const countryName = (await countryModel.findById(country_id))?.nicename;
+
+        const createUserData = {
+            email,
+            password: formData.password,
+            role_id: invitation.role_id,
+            first_name: formData.first_name,
+            last_name: formData.last_name,
+            phone: formData.phone,
+            full_address: [address_line_1, address_line_2, city, state, post_code, countryName].filter(Boolean).join(', '),
+            company_name: formData.company_name,
+            identification_number: formData.identification_number,
+            vat: formData.vat
+        }
 
         const { user, error } = await userModel.create(createUserData);
 
         if (error) {
             return res.status(error.code).json(error);
+        }
+
+
+        const createAddressData = {
+            country_id,
+            state,
+            city,
+            post_code,
+            address_line_1,
+            address_line_2,
+            address_type
+        }
+
+        const { error: errorAddress } = await userModel.saveAddress(user.id, createAddressData);
+
+        if (errorAddress) {
+            return res.status(errorAddress.code).json(errorAddress);
 
         }
+
 
         invitationModel.deactivate(invitation.id)
 

@@ -7,12 +7,36 @@ import * as Yup from 'yup';
 import { useTranslations } from 'next-intl';
 import getConfig from 'next/config';
 import { signIn } from 'next-auth/client';
+import { prepareCountriesDropdown } from '../../lib/functions';
+import { useEffect, useMemo } from 'react';
+import Select from 'react-select';
+import { useDispatch, useSelector } from 'react-redux';
+import { countriesSelector } from '../../redux/countries/selectors';
+import { fetchCountriesAction } from '../../redux/countries/actions';
 
 const { publicRuntimeConfig } = getConfig();
 const baseUrl = `${publicRuntimeConfig.apiUrl}/auth`;
 
-export default function SellerRegistration({ email }: { email: any }) {
+export default function SellerRegistration({
+    email,
+    locale = ''
+}: {
+    email: any;
+    locale?: string;
+}) {
     const t = useTranslations();
+    const dispatch = useDispatch();
+
+    const countries = useSelector(countriesSelector);
+
+    const preparedCountriesDropdown = useMemo(
+        () => prepareCountriesDropdown(countries, locale),
+        [countries]
+    );
+
+    useEffect(() => {
+        dispatch(fetchCountriesAction());
+    }, []);
 
     const validationSchema = Yup.object().shape({
         first_name: Yup.string()
@@ -25,15 +49,35 @@ export default function SellerRegistration({ email }: { email: any }) {
             .trim(t('Cannot include leading and trailing spaces'))
             .required(t('You must enter your family name'))
             .matches(/^[aA-zZ\s]+$/, t('Only alphabets are allowed for this field')),
-        full_address: Yup.string()
+        country_id: Yup.number().required(t('You must select country')),
+        post_code: Yup.string()
             .strict(true)
             .trim(t('Cannot include leading and trailing spaces'))
-            .required(t('You must enter your address'))
+            .required(t('Required field')),
+        state: Yup.string()
+            .strict(true)
+            .trim(t('Cannot include leading and trailing spaces'))
+            .required(t('Required field'))
+            .min(3, t('State must be at least 3 characters')),
+        city: Yup.string()
+            .strict(true)
+            .trim(t('Cannot include leading and trailing spaces'))
+            .required(t('Required field'))
+            .min(3, t('City must be at least 3 characters')),
+        address_line_1: Yup.string()
+            .strict(true)
+            .trim(t('Cannot include leading and trailing spaces'))
+            .required(t('Required field'))
             .min(5, t('Address must be at least 5 characters')),
+        address_line_2: Yup.string()
+            .strict(true)
+            .trim(t('Cannot include leading and trailing spaces')),
         company_name: Yup.string()
             .strict(true)
             .trim(t('Cannot include leading and trailing spaces')),
-        company_id: Yup.string().strict(true).trim(t('Cannot include leading and trailing spaces')),
+        identification_number: Yup.string()
+            .strict(true)
+            .trim(t('Cannot include leading and trailing spaces')),
         vat: Yup.string().strict(true).trim(t('Cannot include leading and trailing spaces')),
         phone: Yup.string()
             .strict(true)
@@ -70,7 +114,7 @@ export default function SellerRegistration({ email }: { email: any }) {
         <Formik
             enableReinitialize
             validationSchema={validationSchema}
-            initialValues={{ email }}
+            initialValues={{ email, country_id: undefined }}
             onSubmit={onSubmit}>
             {(props) => (
                 <form onSubmit={props.handleSubmit}>
@@ -103,7 +147,7 @@ export default function SellerRegistration({ email }: { email: any }) {
                                 style={null}
                                 label={null}
                                 name={'first_name'}
-                                placeholder={'Name'}
+                                placeholder={t('Name')}
                                 props={props}
                                 tips={null}
                             />
@@ -112,7 +156,7 @@ export default function SellerRegistration({ email }: { email: any }) {
                                 style={null}
                                 label={null}
                                 name={'last_name'}
-                                placeholder={'Family Name'}
+                                placeholder={t('Sername')}
                                 props={props}
                                 tips={null}
                             />
@@ -121,7 +165,7 @@ export default function SellerRegistration({ email }: { email: any }) {
                                 style={null}
                                 label={null}
                                 name={'company_name'}
-                                placeholder={'Company'}
+                                placeholder={t('Company Name')}
                                 props={props}
                                 tips={null}
                             />
@@ -129,8 +173,8 @@ export default function SellerRegistration({ email }: { email: any }) {
                                 icon={'f-company-id'}
                                 style={'w-1/2'}
                                 label={null}
-                                name={'company_id'}
-                                placeholder={'Company ID'}
+                                name={'identification_number'}
+                                placeholder={t('Company ID')}
                                 props={props}
                                 tips={null}
                             />
@@ -139,16 +183,71 @@ export default function SellerRegistration({ email }: { email: any }) {
                                 style={'w-1/2'}
                                 label={null}
                                 name={'vat'}
-                                placeholder={'VAT'}
+                                placeholder={t('Vat')}
+                                props={props}
+                                tips={null}
+                            />
+                            <div className="mb-4">
+                                <Select
+                                    className={'form-control-dropdown mb-0'}
+                                    classNamePrefix={'inventory'}
+                                    placeholder={t('Country')}
+                                    name="country_id"
+                                    options={preparedCountriesDropdown}
+                                    value={preparedCountriesDropdown?.find(
+                                        (option: any) => option.value === props.values.country_id
+                                    )}
+                                    onChange={(selectedOption) =>
+                                        props.setFieldValue('country_id', selectedOption.value)
+                                    }
+                                />
+                                {props.errors.country_id && (
+                                    <div className="error-el">{props.errors.country_id}</div>
+                                )}
+                            </div>
+                            <InputText
+                                name={'state'}
+                                label={null}
+                                icon={'f-location'}
+                                placeholder={t('State')}
+                                style={null}
+                                props={props}
+                                tips={null}
+                            />
+
+                            <InputText
+                                label={null}
+                                icon={'f-location'}
+                                name={'city'}
+                                placeholder={t('City')}
+                                style={null}
                                 props={props}
                                 tips={null}
                             />
                             <InputText
-                                icon={'f-location'}
-                                style={null}
                                 label={null}
-                                name={'full_address'}
-                                placeholder={'Full Address'}
+                                icon={'f-location'}
+                                name={'post_code'}
+                                placeholder={t('Post Code')}
+                                style={'w-1/2'}
+                                props={props}
+                                tips={null}
+                            />
+                            <InputText
+                                label={null}
+                                icon={'f-location'}
+                                name={'address_line_1'}
+                                placeholder={t('Address Line 1')}
+                                style={null}
+                                props={props}
+                                tips={null}
+                            />
+                            <InputText
+                                label={null}
+                                icon={'f-location'}
+                                name={'address_line_2'}
+                                placeholder={t('Address Line 2')}
+                                style={null}
                                 props={props}
                                 tips={null}
                             />
@@ -157,7 +256,7 @@ export default function SellerRegistration({ email }: { email: any }) {
                                 style={null}
                                 label={null}
                                 name={'phone'}
-                                placeholder={'Phone Number'}
+                                placeholder={t('Phone Number')}
                                 props={props}
                                 tips={null}
                                 onChange={(event) => {
@@ -173,7 +272,7 @@ export default function SellerRegistration({ email }: { email: any }) {
                                 style={null}
                                 label={null}
                                 name={'password'}
-                                placeholder={'Password'}
+                                placeholder={t('Password')}
                                 props={props}
                             />
                             <TogglePassword
@@ -181,7 +280,7 @@ export default function SellerRegistration({ email }: { email: any }) {
                                 style={'mb-9'}
                                 label={null}
                                 name={'password_confirmation'}
-                                placeholder={'Confirm password'}
+                                placeholder={t('Confirm password')}
                                 props={props}
                             />
                             <div className="border-t pt-9">
@@ -197,4 +296,17 @@ export default function SellerRegistration({ email }: { email: any }) {
             )}
         </Formik>
     );
+}
+
+export async function getServerSideProps(context: any) {
+    const { locale } = context;
+
+    return {
+        props: {
+            locale: locale,
+            messages: {
+                ...require(`../../messages/${locale}.json`)
+            }
+        }
+    };
 }

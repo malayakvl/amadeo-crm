@@ -99,9 +99,9 @@ export const TableHeaders: { [key in PaginationType]: Type.DataTableHeader[] } =
             titleKey: 'Live Sessions',
             sortKey: 'total_sessions'
         },
-        { sortKey: 'total_buyers', iconClass: 'icon-tbl-order', titleKey: 'Buyers' },
+        { sortKey: 'total_buyers', iconClass: 'icon-tbl-order', titleKey: 'Shoppers' },
         { sortKey: 'total_orders', iconClass: 'icon-tbl-order', titleKey: 'Orders' },
-        { sortKey: 'total_amount', titleKey: 'Total Spent' },
+        { sortKey: 'total_amount', titleKey: 'Total Revenue' },
         {
             sortKey: 'users__seller.created_at',
             titleKey: 'Creation Date',

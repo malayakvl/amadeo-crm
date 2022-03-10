@@ -92,10 +92,10 @@ function Profile() {
             .min(3, t('Must be at least 3 characters'))
             .trim(t('Cannot include leading and trailing spaces')),
         phone: Yup.string()
+            .strict(true)
             .trim(t('Cannot include leading and trailing spaces'))
             .required(t('You must enter your phone number'))
-            .min(5, t('Must be at least 5 characters'))
-            .strict(true),
+            .min(5, t('Phone must be at least 5 characters')),
         vat: Yup.string()
             .min(3, t('Must be at least 3 characters'))
             .strict(true)
@@ -166,10 +166,11 @@ function Profile() {
                         </div>
                     </div>
                     <InputText
+                        disabled
                         icon={'f-email'}
                         label={null}
                         name={'email'}
-                        placeholder={'Email Address'}
+                        placeholder={t('Email Address')}
                         style={'lg:w-1/4'}
                         props={props}
                         tips={null}
@@ -179,7 +180,7 @@ function Profile() {
                         icon={'f-fname'}
                         label={null}
                         name={'first_name'}
-                        placeholder={'Name'}
+                        placeholder={t('Name')}
                         style={'lg:w-1/4'}
                         props={props}
                         tips={null}
@@ -189,7 +190,7 @@ function Profile() {
                         icon={'f-lname'}
                         label={null}
                         name={'last_name'}
-                        placeholder={'Sername'}
+                        placeholder={t('Sername')}
                         style={'lg:w-1/4'}
                         props={props}
                         tips={null}
@@ -199,7 +200,7 @@ function Profile() {
                         icon={'f-company'}
                         label={null}
                         name={'company_name'}
-                        placeholder={'Company Name'}
+                        placeholder={t('Company Name')}
                         style={'lg:w-1/4'}
                         props={props}
                         tips={null}
@@ -209,7 +210,7 @@ function Profile() {
                         icon={'f-company-id'}
                         label={null}
                         name={'identification_number'}
-                        placeholder={'Company ID'}
+                        placeholder={t('Company ID')}
                         style={'lg:w-1/6'}
                         props={props}
                         tips={null}
@@ -219,7 +220,7 @@ function Profile() {
                         icon={'f-vat'}
                         label={null}
                         name={'vat'}
-                        placeholder={'VAT (If applicable)'}
+                        placeholder={t('VAT (If applicable)')}
                         style={'lg:w-1/6'}
                         props={props}
                         tips={null}
@@ -229,10 +230,14 @@ function Profile() {
                         icon={'f-phone'}
                         label={null}
                         name={'phone'}
-                        placeholder={'Phone number'}
+                        placeholder={t('Phone Number')}
                         style={'lg:w-1/4'}
                         props={props}
                         tips={null}
+                        onChange={(event) => {
+                            event.target.value = event.target.value.replace(/[^\s\d+()-]+/gm, '');
+                            props.handleChange(event);
+                        }}
                     />
 
                     <div className="mt-10 mb-7 block border border-gray-180 border-b-0" />
