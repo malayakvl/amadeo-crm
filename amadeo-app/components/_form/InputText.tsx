@@ -9,6 +9,7 @@ interface Props {
     placeholder: string | null;
     props: any;
     tips: string | null;
+    disabled?: boolean;
     onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -20,11 +21,13 @@ const InputText: React.FC<Props> = ({
     placeholder,
     tips,
     props,
+    disabled,
     onChange
 }) => {
     const t = useTranslations();
 
     const clear = () => {
+        if (disabled) return;
         props.setFieldValue(name, '');
     };
 
@@ -47,12 +50,9 @@ const InputText: React.FC<Props> = ({
                     // value={inputValue || ''}
                     value={props.values[name]}
                     name={name}
+                    disabled={disabled}
                 />
-                <i
-                    role="presentation"
-                    className="input-close cursor-pointer"
-                    onClick={() => clear()}
-                />
+                <i role="presentation" className="input-close cursor-pointer" onClick={clear} />
                 {props.errors[name] && <div className="error-el">{props.errors[name]}</div>}
             </div>
         </div>

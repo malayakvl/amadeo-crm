@@ -45,9 +45,9 @@ export default function EditMethod() {
     }, []);
 
     useEffect(() => {
-        if (!id) return;
+        if (!id || !user.email) return;
         dispatch(fetchShippingAction(id));
-    }, [id]);
+    }, [id, user]);
 
     if (!shipping || shipping.id != id) {
         return <></>;

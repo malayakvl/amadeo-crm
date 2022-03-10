@@ -67,6 +67,7 @@ declare namespace Layouts {
 
     interface ModalConfirmationMeta {
         titleKey?: string;
-        onConfirm: null;
+        onConfirm: () => void;
+        onCancel?: () => void;
     }
 }

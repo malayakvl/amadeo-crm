@@ -32,3 +32,11 @@ export const showDatePopupSelector = createSelector(
     rootSelector,
     (buyers: State.Buyers): boolean => buyers.showDateSelector
 );
+export const tagSellersSuggestionsSelector = createSelector(
+    rootSelector,
+    (buyers: State.Buyers): any => buyers.tagSellersSuggestions
+);
+export const tagBuyersSuggestionsSelector = createSelector(
+    rootSelector,
+    (buyers: State.Buyers): any => buyers.tagBuyerssSuggestions
+);

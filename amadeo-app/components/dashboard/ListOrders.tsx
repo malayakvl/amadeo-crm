@@ -25,7 +25,6 @@ const ListOrders: React.FC<{ orders: Orders.DataItem[] }> = ({ orders }) => {
                         <th className="text-right">{t('Total')}</th>
                     </tr>
                 </thead>
-
                 <tbody className="bg-white">
                     {orders?.map((item) => (
                         <Fragment key={item.id}>

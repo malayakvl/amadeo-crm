@@ -1,6 +1,7 @@
 import passport from '../middleware/passport.js';
 import userModel from '../models/User.js';
 import invitationModel from '../models/Invitation.js'
+import countryModel from '../models/Country.js';
 import { getTokensAndSetCookies } from '../lib/token.js';
 import { sendMail } from '../lib/sendMail.js';
 
@@ -112,15 +113,47 @@ class AuthController {
 
         }
 
-        let createUserData = { ...formData, role_id: invitation.role_id }
+        const { country_id, state, city, post_code, address_line_1, address_line_2, address_type } = formData;
 
+        const countryName = (await countryModel.findById(country_id))?.nicename;
+
+        const createUserData = {
+            email,
+            password: formData.password,
+            role_id: invitation.role_id,
+            first_name: formData.first_name,
+            last_name: formData.last_name,
+            phone: formData.phone,
+            full_address: [address_line_1, address_line_2, city, state, post_code, countryName].filter(Boolean).join(', '),
+            company_name: formData.company_name,
+            identification_number: formData.identification_number,
+            vat: formData.vat
+        }
 
         const { user, error } = await userModel.create(createUserData);
 
         if (error) {
             return res.status(error.code).json(error);
+        }
+
+
+        const createAddressData = {
+            country_id,
+            state,
+            city,
+            post_code,
+            address_line_1,
+            address_line_2,
+            address_type
+        }
+
+        const { error: errorAddress } = await userModel.saveAddress(user.id, createAddressData);
+
+        if (errorAddress) {
+            return res.status(errorAddress.code).json(errorAddress);
 
         }
+
 
         invitationModel.deactivate(invitation.id)
 
@@ -171,29 +204,65 @@ class AuthController {
 
 
     async restorePassword(req, res) {
-        const _user = await userModel.findUserByEmail(req.body.email);
+        const data = req.body;
 
-        if (_user) {
-            const { success, hash } = await userModel.generateRestoreHash(_user);
-            if (success) {
-                const link = `${process.env.APPLICATION_BASE_URL}/auth/activateHash?hash=${hash}`;
-                sendMail(
-                    req.body.email,
-                    'Amadeo CRM - restore password',
-                    `
-                        Hi, ${req.body.email}!<br>
-                        You can use following <a href='${link}'>link</a> for continue
-                        <br><br>
-                        Good luck!
-                `);
-                console.log('Restore link', link);
-                res.status(200).json({ status: success });
-            } else {
-                res.status(402).json({ status: false });
-            }
-        } else {
-            res.status(402).json({ status: false, error: 'wrong email' });
+        const user = await userModel.findUserByEmail(data.email);
+
+        if (!user) {
+            console.log('restorePassword _user = ', user);
+            return res.status(402).json({ status: false, error: 'wrong email' });
         }
+
+        let invitation = await invitationModel.findByEmail(data.email);
+
+        if (invitation) {
+            await invitationModel.delete(invitation.id)
+        }
+
+        invitation = await invitationModel.create(user);
+
+        const link = `${process.env.APPLICATION_BASE_URL}/auth/restore/password?hash=${invitation.hash}`;
+
+        sendMail(
+            req.body.email,
+            'Amadeo CRM - restore password',
+            `
+                Hi, ${req.body.email}!<br>
+                You can use following <a href='${link}'>link</a> for continue
+                <br><br>
+                Good luck!`
+        );
+        res.status(200).json({ status: true });
+    }
+
+    async changePassword(req, res) {
+        let { hash, password, password_confirmation } = req.body;
+
+        let invitation = await invitationModel.findByHash(hash);
+
+        if (!invitation) {
+            return res.status(403).json({ success: false, message: "You don't have invitation" });
+        }
+
+        if (!invitation.active) {
+            return res.status(403).json({ success: false, message: "Your invitation isn't active" });
+        }
+
+        const user = await userModel.findUserByEmail(invitation.email);
+
+        if (password !== password_confirmation) {
+            return res.status(200).json({success: false, message: 'Passwords do not match'});
+        }
+
+        const { success = false, error } = await userModel.changePassword(user, { password });
+
+        if (error) {
+            return res.status(error.code).json({success, message: error.message});
+        }
+
+        invitationModel.deactivate(invitation.id);
+
+        return res.status(200).json({ success });
     }
 
     async activateHash(req, res) {

@@ -1,14 +1,17 @@
 import React, { useEffect } from 'react';
 import { useTranslations } from 'next-intl';
-import { useDispatch } from 'react-redux';
-import { FilterAmount, FilterName, FilterCountry } from './';
+import { useDispatch, useSelector } from 'react-redux';
+import { FilterAmount, FilterName, FilterCountry, FilterBuyer } from './';
 import { fetchFilerItems } from '../../redux/buyers';
 import { setPaginationAction } from '../../redux/layouts';
 import { PaginationType } from '../../constants';
+import { FilterSeller } from '../buyer';
+import { userSelector } from '../../redux/user/selectors';
 
 const Filters: React.FC<any> = () => {
     const t = useTranslations();
     const dispatch = useDispatch();
+    const user = useSelector(userSelector);
 
     useEffect(() => {
         dispatch(fetchFilerItems());
@@ -45,6 +48,10 @@ const Filters: React.FC<any> = () => {
                 <FilterName />
 
                 <FilterAmount />
+
+                {user.role_id === 3 && <FilterSeller />}
+
+                {user.role_id === 3 && <FilterBuyer />}
 
                 <FilterCountry />
             </div>

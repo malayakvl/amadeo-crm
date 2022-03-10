@@ -6,6 +6,7 @@
   "Address update successful": "Address update successful",
   "Address delete successful": "Address delete successful",
   "Country": "Country",
+  "You must select country": "You must select country",
   "State": "State",
   "Post Code": "Post Code",
   "Address Type": "Address Type",
@@ -19,6 +20,7 @@
   "Current Password": "Current Password",
   "New Password": "New Password",
   "Password change successful": "Password change successful",
+  "Are you sure want to change email?": "Are you sure want to change email?",
   "Sign Up": "Sign Up",
   "Create account": "Create account",
   "Email Address": "Email Address",
@@ -44,8 +46,13 @@
   "Check your email": "Check your email",
   "No registered email": "No registered email",
   "Required field": "Required field",
+  "Cannot include leading and trailing spaces": "Cannot include leading and trailing spaces",
+  "Only alphabets are allowed for this field": "Only alphabets are allowed for this field",
   "Must be a valid email": "Must be a valid email",
   "Password must be at least 6 characters": "Password must be at least 6 characters",
+  "Phone must be at least 5 characters": "Phone must be at least 5 characters",
+  "State must be at least 3 characters": "State must be at least 3 characters",
+  "City must be at least 3 characters": "City must be at least 3 characters",
   "Passwords must match": "Passwords must match",
   "You must enter your email": "You must enter your email",
   "You must enter your family name": "You must enter your family name",
@@ -213,6 +220,7 @@
   "Welcome back": "Welcome back",
   "Remember me": "Remember me",
   "Login": "Login",
+  "Are you sure you want to login as this seller?": "Are you sure you want to login as this seller?",
   "Sign up here!": "Sign up here!",
   "Don’t have an account?": "Don’t have an account?",
   "By signing in, you accept the": "By signing in, you accept the",
@@ -283,4 +291,5 @@
   "payment_descr": "Payment section should allow merchant to view all payment<br/> transactions he had in our system.{pmk}Merchant should be able to:{endpmk}{listmk}{limk}choose a period using calendar and see transactions within this period{endlimk}{limk}download invoices of each transaction one by one or with bulk selection{endlimk}{limk}manage and adjust payment methods that will be seen and available for his buyers{endlimk}{endlistmk}",
   "scheduled": "scheduled",
   "live": "live"
+  "Buyer": "Buyer"
 }

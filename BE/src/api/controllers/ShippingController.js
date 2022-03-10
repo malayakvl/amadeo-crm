@@ -99,7 +99,7 @@ export default new class ShippingController {
             shippings = await shippingModel.fetchCustomerAll(req.user.id)
 
         } else {
-            shippings = await shippingModel.fetchAll()
+            shippings = await shippingModel.fetchAll(req.user.id)
 
         }
 
@@ -112,11 +112,12 @@ export default new class ShippingController {
     }
 
     async fetch(req, res) {
+        if (!req.user) return res.status(401).json('Access deny');
+
         const shipping = await shippingModel.findById(req.params.id)
         const countries = await shippingModel.findCountriesById(req.params.id, req.user.id)
 
         return res.status(200).json({ ...shipping, countries })
-
     }
 
     changeStatuses(req, res) {

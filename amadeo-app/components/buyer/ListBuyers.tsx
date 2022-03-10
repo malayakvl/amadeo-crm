@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { Fragment, useCallback, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { itemsCountSelector, paginatedItemsSelector } from '../../redux/buyers/selectors';
 import { PaginationType, baseApiUrl } from '../../constants';
@@ -38,8 +38,8 @@ const ListBuyers: React.FC = () => {
                 totalAmount={count}
                 sendRequest={sendRequest}>
                 {items?.map((item) => (
-                    <>
-                        <tr key={item.buyer_id}>
+                    <Fragment key={item.buyer_id}>
+                        <tr>
                             <td>
                                 {item.order_items?.length > 0 ? (
                                     <button
@@ -53,20 +53,28 @@ const ListBuyers: React.FC = () => {
                                             handlerShowMore(item.buyer_id)
                                         }>
                                         <Image
-                                            width="12"
+                                            width="14"
                                             height="14"
                                             src={`/images/action-arrow.svg`}
+                                            className={
+                                                showMoreConfigs[item.buyer_id] ? 'rotate-90' : ''
+                                            }
                                         />
                                     </button>
                                 ) : null}
                             </td>
-                            {/* <td className="text-center">
-                                <div className="text-center text-orange-450 font-medium">
-                                    {item.buyer_id + 1}
-                                </div>
-                            </td> */}
-                            <td className="">
-                                <div className="flex">
+                            <td>
+                                <div
+                                    className="flex cursor-pointer"
+                                    onClick={() => handlerShowMore(item.buyer_id)}
+                                    onKeyDown={(e) =>
+                                        (e.key === ' ' || e.key === 'Enter') &&
+                                        handlerShowMore(item.buyer_id)
+                                    }
+                                    role="switch"
+                                    tabIndex={0}
+                                    aria-checked={showMoreConfigs[item.buyer_id]}
+                                    aria-labelledby="showMore">
                                     <div className="relative w-8 h-8">
                                         <Image
                                             src={
@@ -109,6 +117,10 @@ const ListBuyers: React.FC = () => {
                             </td>
                             <td style={{ minWidth: '150px' }}>
                                 <div className="font-medium">{item.buyer_address}</div>
+                            <td>
+                                <div className="font-medium">
+                                    {item.buyer_full_address?.slice(0, -2)}
+                                </div>
                             </td>
                             <td>
                                 <div className="text-center text-orange-450">
@@ -126,7 +138,7 @@ const ListBuyers: React.FC = () => {
                                 <ListOrders orders={item.order_items} />
                             </td>
                         </tr>
-                    </>
+                    </Fragment>
                 ))}
             </DataTable>
         </div>

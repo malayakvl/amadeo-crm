@@ -30,10 +30,10 @@ const ListProductsBought: React.FC<{ item: Payments.DataItemDetailed }> = ({ ite
                         <div className="flex items-center">
                             <div className="w-2 mr-2">
                                 <Image
-                                    width="12"
+                                    width="14"
                                     height="14"
                                     src={`/images/action-arrow.svg`}
-                                    className="text-orange-450"
+                                    className={showMoreConfigs[index] ? 'rotate-90' : ''}
                                 />
                             </div>
                             {product.name}

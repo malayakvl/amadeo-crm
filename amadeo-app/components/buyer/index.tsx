@@ -6,3 +6,5 @@ export { default as FilterValues } from './FilterValues';
 export { default as FilterName } from './filters/FilterName';
 export { default as FilterAmount } from './filters/FilterAmount';
 export { default as FilterCountry } from './filters/FilterCountry';
+export { default as FilterSeller } from './filters/FilterSeller';
+export { default as FilterBuyer } from './filters/FilterBuyer';
