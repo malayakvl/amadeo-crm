@@ -13,7 +13,7 @@ const ListProductsBought: React.FC<{ item: Payments.DataItemDetailed }> = ({ ite
     };
 
     return (
-        <div className="mt-7 min-w-max">
+        <div className="overflow-x-scroll mt-7 md:min-w-max md:overflow-x-visible">
             {order_items.map((product: any, index: number) => (
                 <>
                     <div

@@ -59,15 +59,13 @@ const ListSellers: React.FC = () => {
                 </h2>
                 {filterOpen && <Filters />}
                 {showDatePopup && (
-                    <div
-                        className="absolute shadow-xl rounded-3xl"
-                        style={{ right: '29rem', zIndex: 10 }}>
+                    <div className="filters-calendar">
                         <DateRangePicker
                             onChange={(item) => {
                                 setState([item.selection]);
                                 dispatch(
                                     setPaginationAction({
-                                        type: PaginationType.ORDERS,
+                                        type: PaginationType.SELLERS,
                                         modifier: {
                                             filters: {
                                                 ...filters,
@@ -84,6 +82,7 @@ const ListSellers: React.FC = () => {
                                         }
                                     })
                                 );
+                                dispatch(showDateSelectorAction(false));
                             }}
                             // showSelectionPreview={true}
                             moveRangeOnFirstSelection={false}

@@ -1,8 +1,8 @@
 .float-tabs {
-  @apply flex flex-col sm:flex-row border border-t-0 border-l-0 border-r-0;
+  @apply flex flex-col sm:flex-row border-b;
 
   .tabs {
-    @apply text-sm font-bold text-blue-350 mr-4 pb-4;
+    @apply mb-4 md:mb-0 text-sm font-bold text-blue-350 mr-4 pb-4;
   }
   .tabs.active {
     //border-bottom:solid 3px;

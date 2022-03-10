@@ -9,7 +9,7 @@ const Totals: React.FC<{ totals: Dashboard.Totals; roleId: number }> = ({
 
     return (
         <>
-            <div className="flex flex-col w-full lg:w-1/4 xl:w-1/5 justify-center align-middle">
+            <div className="w-1/2 mb-4 md:mb-0 flex flex-col w-full md:w-full  lg:w-1/4 xl:w-1/5 justify-center align-middle">
                 <span className="font-bold text-sm text-blue-350">{t('Total Revenue')}</span>
                 <div className="">
                     <Image src="/images/dashboard-card.svg" width={20} height={18} />
@@ -19,7 +19,7 @@ const Totals: React.FC<{ totals: Dashboard.Totals; roleId: number }> = ({
                 </div>
             </div>
             {roleId !== 1 && (
-                <div className="flex flex-col w-full lg:w-1/4 xl:w-1/5 justify-center align-middle pl-4 border border-b-0 border-t-0 border-r-0">
+                <div className="w-1/2 mb-4 md:mb-0 flex flex-col md:w-full lg:w-1/4 xl:w-1/5 justify-center align-middle md:mb-0 pl-4 border-l">
                     <span className="font-bold text-sm text-blue-350">{t('Shoppers')}</span>
                     <div className="">
                         <Image src="/images/dashboard-customers.svg" width={20} height={18} />
@@ -29,7 +29,7 @@ const Totals: React.FC<{ totals: Dashboard.Totals; roleId: number }> = ({
                     </div>
                 </div>
             )}
-            <div className="flex flex-col w-full lg:w-1/4 xl:w-1/5 justify-center align-middle pl-4 border border-b-0 border-t-0 border-r-0">
+            <div className="w-1/2 mb-4 md:mb-0 flex flex-col md:w-full lg:w-1/4 xl:w-1/5 justify-center align-middle md:pl-4 md:border-l">
                 <span className="font-bold text-sm text-blue-350">{t('Pending orders')}</span>
                 <div className="">
                     <Image src="/images/dashboard-invoices.svg" width={20} height={20} />

@@ -26,6 +26,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
     const Layout = (Component as any).Layout || SidebarLayout;
     // console.log(Layout);
 
+    // @ts-ignore
     return getLayout(
         <ReduxProvider store={store}>
             <Provider
@@ -71,6 +72,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
                         <div id="fb-root" />
                         <Head>
                             <title>Amadeo CRM</title>
+                            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
                             <script
                                 async
                                 defer

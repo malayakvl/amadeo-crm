@@ -84,7 +84,7 @@ export default function List() {
         }
     }, [user]);
 
-    if (!countries.length || threshold === false) {
+    if (!countries.length || !threshold) {
         return <></>;
     }
 
@@ -101,9 +101,9 @@ export default function List() {
                 </div>
             </div>
 
-            <div className="flex mt-10 block-white-8">
+            <div className="md:flex mt-10 block-white-8">
                 {user.role_id !== 3 && (
-                    <div className="w-64 p-4 bg-gray-100 rounded-lg shadow-inner">
+                    <div className="w-full md:w-64 p-4 bg-gray-100 rounded-lg shadow-inner">
                         <div className="font-bold text-gray-350 text-lg pb-4 border-b border-gray-200">
                             {t('Free shipping')}
                         </div>
@@ -139,7 +139,7 @@ export default function List() {
                     </div>
                 )}
 
-                <div className="ml-8 flex-1">
+                <div className="md:ml-8 md:flex-1">
                     <div className="mb-8 font-bold text-gray-350 text-lg py-4 border-b border-gray-200">
                         {t('Shipping methods')}
                     </div>
@@ -196,7 +196,9 @@ export default function List() {
                                 <td>
                                     <div className="text-center">{index + 1}</div>
                                 </td>
-                                <td className="break-all">{item.name}</td>
+                                <td className="break-all" style={{ minWidth: '150px' }}>
+                                    {item.name}
+                                </td>
 
                                 <td className="flex justify-center">
                                     <Image

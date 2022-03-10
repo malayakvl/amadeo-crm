@@ -243,7 +243,7 @@ function ProductForm({
                 };
                 return (
                     <form onSubmit={props.handleSubmit} className="mt-5">
-                        <div className="grid grid-cols-4 gap-4">
+                        <div className="md:grid md:grid-cols-4 md:w-full">
                             <div className="flex-col mb-4">
                                 <InventoryPhotos
                                     uploadedFiles={uploadedFiles}

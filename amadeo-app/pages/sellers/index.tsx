@@ -4,9 +4,6 @@ import React from 'react';
 import { useTranslations } from 'next-intl';
 import { ListSellers } from '../../components/sellers';
 
-// import { showFormSelector } from '../../redux/chatbot/selectors';
-// import { setEmptyFormAction, showFormAction } from '../../redux/chatbot';
-
 export default function Index({ session }: { session: any }) {
     if (!session) return <></>;
     const t = useTranslations();
@@ -22,15 +19,12 @@ export default function Index({ session }: { session: any }) {
                 <div className="page-title">
                     <h1>{t('Sellers')}</h1>
                 </div>
-                <div className="shadow-border relative mt-5">
-                    <i className="info absolute left-3 top-3.5" />
-                    <div
-                        className="pl-5 inline-block"
-                        dangerouslySetInnerHTML={{
-                            __html: t('orders_descr')
-                        }}
-                    />
-                </div>
+                <div
+                    className="text-gray-400"
+                    dangerouslySetInnerHTML={{
+                        __html: t('seller_descr')
+                    }}
+                />
             </div>
             <div className="block-white-8 mr-10 white-shadow-medium mt-10">
                 <ListSellers />

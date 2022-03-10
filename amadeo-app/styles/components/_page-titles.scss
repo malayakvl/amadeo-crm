@@ -14,7 +14,7 @@
   }
 
   .dashboard {
-    @apply inline-block text-3xl font-bold text-blue-350;
+    @apply ml-4 md:ml-0 inline-block text-3xl font-bold text-blue-350;
 
     span {
       @apply block text-gray-350 font-bold text-5xl -mt-4;

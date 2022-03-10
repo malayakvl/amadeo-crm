@@ -1,15 +1,7 @@
 import React, { useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { useDispatch } from 'react-redux';
-import {
-    FilterPayment,
-    FilterStatus,
-    FilterAmount,
-    FilterCountry,
-    FilterDelivery,
-    FilterNumber,
-    FilterDate
-} from './index';
+import { FilterAmount, FilterNumber, FilterDate } from './index';
 import { fetchFilerItems } from '../../redux/orders';
 
 const Filters: React.FC<any> = () => {
@@ -31,14 +23,6 @@ const Filters: React.FC<any> = () => {
                 <FilterDate />
 
                 <FilterAmount />
-
-                <FilterStatus />
-
-                <FilterPayment />
-
-                <FilterCountry />
-
-                <FilterDelivery />
             </div>
         </div>
     );

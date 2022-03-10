@@ -3,13 +3,17 @@ import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { itemsCountSelector } from '../../../redux/waitingList/selectors';
 import { useSelector } from 'react-redux';
+import { useRouter } from 'next/router';
 
 const SidebarFull: React.FC = () => {
     const t = useTranslations();
     const countWaiting = useSelector(itemsCountSelector);
+    const router = useRouter();
+    const currRoute = router.route.substring(1);
+
     return (
         <Fragment>
-            <li className="active">
+            <li className={currRoute === 'dashboard' ? 'active' : ''}>
                 <Link href={'/dashboard'}>
                     <a>
                         <i className="dashboard" />
@@ -17,7 +21,7 @@ const SidebarFull: React.FC = () => {
                     </a>
                 </Link>
             </li>
-            <li>
+            <li className={currRoute === 'liveselling' ? 'active' : ''}>
                 <Link href={'/liveselling'}>
                     <a>
                         <i className="selling" />
@@ -33,7 +37,7 @@ const SidebarFull: React.FC = () => {
                     </a>
                 </Link>
             </li>
-            <li>
+            <li className={currRoute === 'chatbot' ? 'active' : ''}>
                 <Link href={'/chatbot'}>
                     <a>
                         <i className="chatbot" />
@@ -44,7 +48,7 @@ const SidebarFull: React.FC = () => {
             <li className="separator-line">
                 <div className="separator" />
             </li>
-            <li>
+            <li className={currRoute === 'orders' ? 'active' : ''}>
                 <Link href={'/orders'}>
                     <a>
                         <i className="order" />
@@ -52,7 +56,7 @@ const SidebarFull: React.FC = () => {
                     </a>
                 </Link>
             </li>
-            <li>
+            <li className={currRoute === 'waiting-list' ? 'active' : ''}>
                 <Link href={'/waiting-list'}>
                     <a>
                         <i className="waiting-list" />
@@ -70,7 +74,7 @@ const SidebarFull: React.FC = () => {
                     </a>
                 </Link>
             </li>
-            <li>
+            <li className={currRoute === 'buyers' ? 'active' : ''}>
                 <Link href={'/buyers'}>
                     <a>
                         <i className="buyers" />
@@ -78,7 +82,7 @@ const SidebarFull: React.FC = () => {
                     </a>
                 </Link>
             </li>
-            <li>
+            <li className={currRoute === 'payments' ? 'active' : ''}>
                 <Link href={'/payments'}>
                     <a>
                         <i className="payments" />
@@ -86,7 +90,7 @@ const SidebarFull: React.FC = () => {
                     </a>
                 </Link>
             </li>
-            <li>
+            <li className={currRoute === 'support' ? 'active' : ''}>
                 <Link href={'/support'}>
                     <a>
                         <i className="support" />

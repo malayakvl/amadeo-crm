@@ -28,7 +28,7 @@ const ListTransactions: React.FC = () => {
     }, [dispatch]);
 
     return (
-        <div className="mt-7 min-w-max">
+        <div className="mt-7">
             <DataTable
                 hideBulk
                 paginationType={PaginationType.PAYMENTS}

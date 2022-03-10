@@ -63,9 +63,7 @@ const ListOrders: React.FC = () => {
                 </h2>
                 {filterOpen && <Filters />}
                 {showDatePopup && (
-                    <div
-                        className="absolute shadow-xl rounded-3xl"
-                        style={{ right: '29rem', zIndex: 10 }}>
+                    <div className="filters-calendar">
                         <DateRangePicker
                             onChange={(item) => {
                                 setState([item.selection]);
@@ -88,6 +86,7 @@ const ListOrders: React.FC = () => {
                                         }
                                     })
                                 );
+                                dispatch(showDateSelectorAction(false));
                             }}
                             // showSelectionPreview={true}
                             moveRangeOnFirstSelection={false}
@@ -161,17 +160,19 @@ const ListOrders: React.FC = () => {
                             </td>
                             <td>
                                 <div className="flex">
-                                    <Image
-                                        src={
-                                            item.buyer_photo
-                                                ? baseApiUrl + item.buyer_photo
-                                                : userProfileImg
-                                        }
-                                        width={24}
-                                        height={24}
-                                        className="rounded-full cursor-pointer"
-                                        alt=""
-                                    />
+                                    <div className="user-photo">
+                                        <Image
+                                            src={
+                                                item.buyer_photo
+                                                    ? baseApiUrl + item.buyer_photo
+                                                    : userProfileImg
+                                            }
+                                            width={24}
+                                            height={24}
+                                            className="rounded-full cursor-pointer"
+                                            alt=""
+                                        />
+                                    </div>
                                     <span className="pl-3">{item.buyer_first_name}</span>
                                 </div>
                             </td>

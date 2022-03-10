@@ -44,7 +44,7 @@ export default function AddMethod() {
                     return (
                         <form
                             onSubmit={props.handleSubmit}
-                            className="w-1/2 p-4 mt-10 bg-gray-100 rounded-lg shadow-inner mb-6">
+                            className="w-full md:w-1/2 p-4 mt-10 bg-gray-100 rounded-lg shadow-inner mb-6">
                             <label className="text-xs text-blue-350 font-bold">
                                 {t('Method name')}
                                 <InputText

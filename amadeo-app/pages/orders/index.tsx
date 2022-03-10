@@ -22,15 +22,12 @@ export default function Index({ session }: { session: any }) {
                 <div className="page-title">
                     <h1>{t('Orders')}</h1>
                 </div>
-                <div className="shadow-border relative mt-5">
-                    <i className="info absolute left-3 top-3.5" />
-                    <div
-                        className="pl-5 inline-block"
-                        dangerouslySetInnerHTML={{
-                            __html: t('orders_descr')
-                        }}
-                    />
-                </div>
+                <div
+                    className="text-gray-400"
+                    dangerouslySetInnerHTML={{
+                        __html: t('orders_descr')
+                    }}
+                />
             </div>
             <div className="block-white-8 mr-10 white-shadow-medium mt-10">
                 <ListOrders />

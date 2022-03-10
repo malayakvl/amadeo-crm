@@ -42,14 +42,23 @@ const SidebarHeader: React.FC = () => {
     }, []);
 
     const handleClick = (e: any) => {
-        if (node?.current?.contains(e.target)) {
+        // if (node?.current?.contains(e.target) || node?.current === null) {
+        //     console.log('here');
+        //     return;
+        // }
+        console.log(e.target.parentNode.classList);
+        if (
+            e.target.parentNode.classList.contains('profile-block') ||
+            e.target.parentNode.classList.contains('profile-name') ||
+            node?.current?.contains(e.target)
+        ) {
             return;
         }
         setShowProfileMenu(false);
     };
 
     return (
-        <div className="md:flex items-center align-middle">
+        <div className="shadow-bottom pr-4 pb-5 md:pb-0 md:pr-0 md:shadow-none md:flex items-center align-middle">
             <div className="hidden md:flex w-full sm:w-1/2 md:w-3/5 lg:w-3/5 xl:w-3/5 items-center">
                 <form>
                     <div className="relative">
@@ -58,15 +67,18 @@ const SidebarHeader: React.FC = () => {
                     </div>
                 </form>
             </div>
-            <div className="w-full sm:w-1/2 md:w-2/5 lg:w-2/5 xl:w-2/5 flex items-center justify-center md:justify-end">
+            <div className="w-full sm:w-1/2 md:w-2/5 lg:w-2/5 xl:w-2/5 flex items-center justify-end">
                 <NoticeCounter delay={120000} />
 
                 {/*<span className="divider" />*/}
                 <div className="relative ml-7">
                     <div
-                        className="inline-block cursor-pointer"
+                        className="profile-block inline-block cursor-pointer"
                         role="presentation"
-                        onClick={() => setShowProfileMenu(!showProfileMenu)}>
+                        onClick={() => {
+                            console.log(showProfileMenu);
+                            setShowProfileMenu(!showProfileMenu);
+                        }}>
                         <Image
                             src={userPhoto}
                             width={24}
@@ -75,7 +87,7 @@ const SidebarHeader: React.FC = () => {
                             alt=""
                         />
 
-                        <span className="profile-name inline-block">
+                        <span className="profile-name">
                             {user.first_name || user.last_name ? user.first_name : user.email}
                             <span className="text-blue-350 pl-2">ID: {user.id}</span>
                             <em>{user.company_name || t('No Company Name')}</em>
