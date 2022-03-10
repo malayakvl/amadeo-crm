@@ -18,7 +18,7 @@ export default function useWindowSize() {
 
     const debounced = useDebouncedCallback(
         () => {
-            setWindowSize((state: State) => ({
+            setWindowSize(() => ({
                 width: window.innerWidth,
                 height: window.innerHeight,
                 isMobile: window.innerWidth <= MaxMobileWidth

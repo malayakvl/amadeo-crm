@@ -66,7 +66,7 @@ const ListOrders: React.FC<{ orders: Orders.DataItem[] }> = ({ orders }) => {
                                         />
                                     )}
                                 </td>
-                                <td>
+                                <td style={{ minWidth: '150px' }}>
                                     <div className="text-right">
                                         {item.order_items.length}x{' '}
                                         <span className="red-yellow-gradient-text">

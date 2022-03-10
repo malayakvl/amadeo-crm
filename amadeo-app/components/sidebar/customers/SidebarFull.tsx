@@ -2,18 +2,27 @@ import React, { Fragment } from 'react';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { itemsCountSelector } from '../../../redux/waitingList/selectors';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
+import { sidebarCloseAction } from '../../../redux/layouts';
 
 const SidebarFull: React.FC = () => {
     const t = useTranslations();
+    const dispatch = useDispatch();
     const countWaiting = useSelector(itemsCountSelector);
     const router = useRouter();
     const currRoute = router.route.substring(1);
 
+    const closeMenu = () => {
+        dispatch(sidebarCloseAction());
+    };
+
     return (
         <Fragment>
-            <li className={currRoute === 'dashboard' ? 'active' : ''}>
+            <li
+                role="presentation"
+                className={currRoute === 'dashboard' ? 'active' : ''}
+                onClick={() => closeMenu()}>
                 <Link href={'/dashboard'}>
                     <a>
                         <i className="dashboard" />
@@ -21,7 +30,10 @@ const SidebarFull: React.FC = () => {
                     </a>
                 </Link>
             </li>
-            <li className={currRoute === 'liveselling' ? 'active' : ''}>
+            <li
+                role="presentation"
+                className={currRoute === 'liveselling' ? 'active' : ''}
+                onClick={() => closeMenu()}>
                 <Link href={'/liveselling'}>
                     <a>
                         <i className="selling" />
@@ -29,7 +41,7 @@ const SidebarFull: React.FC = () => {
                     </a>
                 </Link>
             </li>
-            <li>
+            <li role="presentation" onClick={() => closeMenu()}>
                 <Link href={'/inventory'}>
                     <a>
                         <i className="inventory" />
@@ -37,7 +49,10 @@ const SidebarFull: React.FC = () => {
                     </a>
                 </Link>
             </li>
-            <li className={currRoute === 'chatbot' ? 'active' : ''}>
+            <li
+                role="presentation"
+                className={currRoute === 'chatbot' ? 'active' : ''}
+                onClick={() => closeMenu()}>
                 <Link href={'/chatbot'}>
                     <a>
                         <i className="chatbot" />
@@ -45,10 +60,13 @@ const SidebarFull: React.FC = () => {
                     </a>
                 </Link>
             </li>
-            <li className="separator-line">
+            <li role="presentation" className="separator-line">
                 <div className="separator" />
             </li>
-            <li className={currRoute === 'orders' ? 'active' : ''}>
+            <li
+                role="presentation"
+                className={currRoute === 'orders' ? 'active' : ''}
+                onClick={() => closeMenu()}>
                 <Link href={'/orders'}>
                     <a>
                         <i className="order" />
@@ -56,7 +74,10 @@ const SidebarFull: React.FC = () => {
                     </a>
                 </Link>
             </li>
-            <li className={currRoute === 'waiting-list' ? 'active' : ''}>
+            <li
+                role="presentation"
+                className={currRoute === 'waiting-list' ? 'active' : ''}
+                onClick={() => closeMenu()}>
                 <Link href={'/waiting-list'}>
                     <a>
                         <i className="waiting-list" />
@@ -65,7 +86,7 @@ const SidebarFull: React.FC = () => {
                     </a>
                 </Link>
             </li>
-            <li>
+            <li role="presentation" onClick={() => closeMenu()}>
                 <Link href={'/shipping/list'}>
                     <a>
                         <i className="shipping" />
@@ -74,7 +95,10 @@ const SidebarFull: React.FC = () => {
                     </a>
                 </Link>
             </li>
-            <li className={currRoute === 'buyers' ? 'active' : ''}>
+            <li
+                role="presentation"
+                className={currRoute === 'buyers' ? 'active' : ''}
+                onClick={() => closeMenu()}>
                 <Link href={'/buyers'}>
                     <a>
                         <i className="buyers" />
@@ -82,7 +106,10 @@ const SidebarFull: React.FC = () => {
                     </a>
                 </Link>
             </li>
-            <li className={currRoute === 'payments' ? 'active' : ''}>
+            <li
+                role="presentation"
+                className={currRoute === 'payments' ? 'active' : ''}
+                onClick={() => closeMenu()}>
                 <Link href={'/payments'}>
                     <a>
                         <i className="payments" />
@@ -90,7 +117,10 @@ const SidebarFull: React.FC = () => {
                     </a>
                 </Link>
             </li>
-            <li className={currRoute === 'support' ? 'active' : ''}>
+            <li
+                role="presentation"
+                className={currRoute === 'support' ? 'active' : ''}
+                onClick={() => closeMenu()}>
                 <Link href={'/support'}>
                     <a>
                         <i className="support" />

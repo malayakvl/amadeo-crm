@@ -37,13 +37,6 @@ const SidebarCustomers: React.FC = () => {
         if (node?.current?.contains(e.target) || node?.current === null) {
             return;
         }
-        // console.log(e.target.classList);
-        // if (
-        //     e.target.classList.contains('s-caption') ||
-        //     e.target.classList.contains('sidebar-block-menu')
-        // ) {
-        //     return;
-        // }
         dispatch(sidebarCloseAction());
     };
 

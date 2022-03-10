@@ -42,8 +42,8 @@ export default function Index({ session, locale }: { session: any; locale: strin
             <div className="block-white-8 mr-10 white-shadow-big">
                 <div className="page-title">
                     <h1>{t('Inventory')}</h1>
-                    <div className="float-right text-right">
-                        <button className="btn-export" onClick={handleClick}>
+                    <div className="md:float-right md:text-right">
+                        <button className="mt-4 mb:0 btn-export" onClick={handleClick}>
                             <span>{t('upload_csv')}</span>
                         </button>
                         <input
@@ -53,7 +53,7 @@ export default function Index({ session, locale }: { session: any; locale: strin
                             style={{ display: 'none' }}
                         />
                         <span className="block text-gray-350 text-base font-bold pb-2">
-                            Read rules and download csv template here
+                            {t('Read rules and download csv template here')}
                         </span>
                     </div>
                     <div className="clear-both" />

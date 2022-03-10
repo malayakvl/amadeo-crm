@@ -139,7 +139,7 @@ const ListMessages: React.FC = () => {
                                     onClick={() => handleShowMore(item.product_configuration_id)}
                                 />
                             </td>
-                            <td style={{ width: '150px' }}>
+                            <td style={{ minWidth: '150px' }}>
                                 {item.configuration.previewphoto && (
                                     <img
                                         src={
@@ -195,7 +195,7 @@ const ListMessages: React.FC = () => {
                                 {item.configuration.size_name}
                             </td>
                             <td style={{ textAlign: 'center' }}>{item.total_quantity}</td>
-                            <td>{item.total_price} &euro;</td>
+                            <td style={{ minWidth: '150px' }}>{item.total_price} &euro;</td>
                             <td style={{ minWidth: '150px' }}>
                                 {item.item_buyers.length}x{' '}
                                 <span className="red-yellow-gradient-text">buyer (s)</span>

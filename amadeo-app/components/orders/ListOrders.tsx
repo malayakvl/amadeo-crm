@@ -203,7 +203,7 @@ const ListOrders: React.FC = () => {
                                     alt={''}
                                 />
                             </td>
-                            <td className="order-date">
+                            <td style={{ minWidth: '150px' }}>
                                 {item.order_items.length}x{' '}
                                 <span className="red-yellow-gradient-text">product (s)</span>
                             </td>

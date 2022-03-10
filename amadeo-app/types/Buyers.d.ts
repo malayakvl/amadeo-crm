@@ -24,6 +24,7 @@ declare namespace Buyers {
         country_name: string;
         total_count: number;
         total_amount: number;
+        buyer_address: string;
         order_items: OrderDataItem[];
     }
 

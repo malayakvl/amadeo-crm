@@ -43,16 +43,12 @@ export default function Index({ session }: { session: any }) {
                         <div className="md:flex">
                             <div className="md:shrink-0">
                                 <span className="text-blue-350 text-base max-w-[800px]">
-                                    A live selling session is a streaming session that merchant
-                                    conducts via Facebook account. The purpose of these sessions is
-                                    to sell products(cloths, goods, etc.). While this session
-                                    viewers (potential buyers) will write comments based on what the
-                                    merchant says.
+                                    {t('liveselling_descr')}
                                 </span>
                             </div>
                             <div className="md:justify-end">
                                 <button
-                                    className="btn-big"
+                                    className="mt-4 md:mt-0 btn-big"
                                     onClick={() => dispatch(showPopupAction(true))}>
                                     {t('Schedule new session')}
                                 </button>
