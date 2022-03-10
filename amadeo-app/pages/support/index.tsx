@@ -51,12 +51,12 @@ export default function Support() {
                                     )
                                 )
                             )
-                            .then(actions.resetForm())
+                            .then(() => actions.resetForm())
                     }
                     initialValues={initialValues}
                     validationSchema={validationSchema}
                     render={(props) => (
-                        <form className="w-1/2" onSubmit={props.handleSubmit}>
+                        <form className="w-full md:w-1/2" onSubmit={props.handleSubmit}>
                             <InputText
                                 icon={null}
                                 placeholder="user@domain.com"

@@ -8,7 +8,6 @@ import {
 import { PaginationType } from '../../constants';
 import { DataTable } from '../_common';
 import { fetchItemsAction } from '../../redux/waitingList';
-import Image from 'next/image';
 import moment from 'moment';
 import { baseApiUrl } from '../../constants';
 import { checkIdsAction, setPaginationAction } from '../../redux/layouts';
@@ -42,7 +41,6 @@ const ListMessages: React.FC = () => {
     const showDatePopup = useSelector(showDatePopupSelector);
 
     const [showMoreConfigs, setShowMoreConfigs] = useState<any>({});
-    const [filterOpen, setFilterOpen] = useState(false);
 
     const sendRequest = useCallback(() => {
         return dispatch(fetchItemsAction());
@@ -95,18 +93,18 @@ const ListMessages: React.FC = () => {
                         />
                     </div>
                 )}
-                <button
-                    onClick={() => setFilterOpen(!filterOpen)}
-                    className="absolute top-0 right-0 flex items-center text-sm border rounded-lg px-4 py-1">
-                    <Image width={16} height={16} src={'/images/filter.svg'} />
-                    <div className="font-medium text-gray-400 ml-2">{t('Filters')}</div>
-                    <div className="ml-2 font-bold rounded-full p-[2px] text-center bg-gray-400 text-xs h-5 w-5 text-white">
-                        {filters.country_id.length +
-                            filters.payment_id.length +
-                            filters.status.length +
-                            filters.country_id.length}
-                    </div>
-                </button>
+                {/*<button*/}
+                {/*    onClick={() => setFilterOpen(!filterOpen)}*/}
+                {/*    className="absolute top-0 right-0 flex items-center text-sm border rounded-lg px-4 py-1">*/}
+                {/*    <Image width={16} height={16} src={'/images/filter.svg'} />*/}
+                {/*    <div className="font-medium text-gray-400 ml-2">{t('Filters')}</div>*/}
+                {/*    <div className="ml-2 font-bold rounded-full p-[2px] text-center bg-gray-400 text-xs h-5 w-5 text-white">*/}
+                {/*        {filters.country_id.length +*/}
+                {/*            filters.payment_id.length +*/}
+                {/*            filters.status.length +*/}
+                {/*            filters.country_id.length}*/}
+                {/*    </div>*/}
+                {/*</button>*/}
             </div>
             <div className="mb-5">
                 <FilterValues />
@@ -198,7 +196,7 @@ const ListMessages: React.FC = () => {
                             </td>
                             <td style={{ textAlign: 'center' }}>{item.total_quantity}</td>
                             <td>{item.total_price} &euro;</td>
-                            <td className="order-date">
+                            <td style={{ minWidth: '150px' }}>
                                 {item.item_buyers.length}x{' '}
                                 <span className="red-yellow-gradient-text">buyer (s)</span>
                             </td>

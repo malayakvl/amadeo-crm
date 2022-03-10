@@ -192,7 +192,7 @@ export default function EditMethod() {
                                                 {values.countries.map(
                                                     (country: any, index: number) => (
                                                         <div key={index}>
-                                                            <div className="my-4 flex items-center justify-start w-1/2">
+                                                            <div className="w-full my-4 flex items-center justify-start md:w-1/2">
                                                                 <div className="w-full">
                                                                     <Field
                                                                         className="form-control"

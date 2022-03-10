@@ -15,7 +15,8 @@ import {
     setSwitchHeaderAction,
     showLoaderAction,
     setActivePageAction,
-    setSwitchToggleAction
+    setSwitchToggleAction,
+    sidebarCloseAction
 } from './actions';
 import { PaginationType, OrderStatus } from '../../constants';
 
@@ -74,8 +75,6 @@ const initialState: State.Layouts = {
             ...initPagination,
             column: 'total_orders',
             filters: {
-                // search_str: '',
-                // shipping_id: [],
                 country_id: [],
                 total_orders: [],
                 total_sessions: [],
@@ -109,7 +108,7 @@ const initialState: State.Layouts = {
             }
         }
     },
-    isSidebarOpen: true,
+    isSidebarOpen: false,
     isDataLoading: false,
     toasts: [],
     checkedIds: [],
@@ -196,6 +195,10 @@ const ACTION_HANDLERS: any = {
         ...state,
         isSidebarOpen: !state.isSidebarOpen
     }),
+    [sidebarCloseAction]: (state: State.Layouts): State.Layouts => ({
+        ...state,
+        isSidebarOpen: false
+    }),
     [showLoaderAction]: {
         next: (state: State.Layouts, action: Action<boolean>): State.Layouts => ({
             ...state,
@@ -270,7 +273,8 @@ export {
     setInfoToastAction,
     deleteToastAction,
     setModalConfirmationMetaAction,
-    setSwitchToggleAction
+    setSwitchToggleAction,
+    sidebarCloseAction
 };
 
 // ------------------------------------

@@ -30,7 +30,7 @@ const DefaultMessages: React.FC<any> = ({ user }) => {
                     <span className="text-gray-180 font-normal text-sm"> {t('Mandatory')}</span>
                 </h2>
             </div>
-            <div className="system-message">
+            <div className="system-message overflow-x-scroll">
                 <table className="w-full float-table">
                     <thead>
                         <tr>
@@ -44,6 +44,7 @@ const DefaultMessages: React.FC<any> = ({ user }) => {
                             {/*    <i className="message" />*/}
                             {/*    {t('Trigger')}*/}
                             {/*</th>*/}
+                            <th />
                             {/*<th />*/}
                             {/*<th />*/}
                             <th className="chat-eye sorting_disabled">

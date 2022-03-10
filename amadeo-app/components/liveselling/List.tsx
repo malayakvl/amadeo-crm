@@ -28,9 +28,11 @@ const ListMessages: React.FC = () => {
                 sendRequest={sendRequest}>
                 {items?.map((item: any) => (
                     <tr key={item.id}>
-                        <td>{moment(item.event_date).format('DD.MM.YYYY')}</td>
-                        <td>{item.event_time}</td>
-                        <td>
+                        <td style={{ minWidth: '150px' }}>
+                            {moment(item.event_date).format('DD.MM.YYYY')}
+                        </td>
+                        <td style={{ minWidth: '150px' }}>{item.event_time}</td>
+                        <td style={{ minWidth: '150px' }}>
                             {item.order_timer
                                 ? item.order_timer.days
                                     ? `${item.order_timer.days} day(s)`

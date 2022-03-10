@@ -55,9 +55,9 @@ export default function Payments({ session }: { session: any }) {
             </div>
 
             <div className="block-white-8 white-shadow-medium mt-8">
-                <div className="flex">
+                <div className="md:flex">
                     {user.role_id === 2 && (
-                        <div className="w-80 p-4 bg-gray-100 rounded-lg shadow-inner">
+                        <div className="mb-4 md:mb-0 w-80 p-4 bg-gray-100 rounded-lg shadow-inner">
                             <div className="font-bold text-gray-350 text-lg pb-4">
                                 {t('Payment Methods')}
                             </div>
@@ -65,17 +65,16 @@ export default function Payments({ session }: { session: any }) {
                         </div>
                     )}
 
-                    <div className="ml-8 flex-1">
-                        <div className="flex relative mb-8 font-bold text-gray-350 text-lg py-4 border-b border-gray-200">
-                            {t('Transactions')}
+                    <div className="md:ml-8 md:flex-1">
+                        <div className="flex border border-l-0 border-r-0 border-t-0 pb-5 mb-10 relative">
+                            {/*{t('Transactions')}*/}
+                            <h2 className="dark-blue-header">{t('Transactions')}</h2>
 
                             <FilterValues />
 
                             {filterOpen && <Filters />}
                             {showDatePopup && (
-                                <div
-                                    className="absolute shadow-xl rounded-3xl"
-                                    style={{ right: '29rem', zIndex: 10 }}>
+                                <div className="filters-calendar">
                                     <DateRangePicker
                                         // editableDateInputs={true}
                                         onChange={(item) => {
@@ -99,6 +98,7 @@ export default function Payments({ session }: { session: any }) {
                                                     }
                                                 })
                                             );
+                                            dispatch(showDateSelectorAction(false));
                                         }}
                                         moveRangeOnFirstSelection={false}
                                         months={1}

@@ -1,8 +1,9 @@
 .sidebar {
   background: #141A3C;
   border-radius: 0 24px 0 0;
-  @apply max-w-[240px] xl:min-w-[240px] h-screen
-  hidden md:fixed md:flex flex-col top-0 left-0 h-full text-white transition-all duration-300 border-none;
+  z-index: 999;
+  @apply hidden absolute  max-w-[240px] xl:min-w-[240px] h-screen
+   md:fixed md:flex flex-col top-0 left-0 h-full text-white transition-all duration-300 border-none;
 
   .go-back {
     @apply text-white text-base font-bold tracking-wide truncate cursor-pointer w-full text-right relative;
@@ -152,4 +153,9 @@
     font-size: 9px;
     @apply block uppercase font-bold;
   }
+}
+
+.mobile-open {
+  display: inherit !important;
+  transition: margin-left .3s ease-in-out,width .3s ease-in-out;
 }

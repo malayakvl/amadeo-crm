@@ -43,7 +43,7 @@
     @apply text-right;
   }
   td {
-    @apply px-3 py-1 text-sm font-bold text-left text-gray-350 align-top;
+    @apply md:min-w-0 px-3 py-1 text-sm font-bold text-left text-gray-350 align-top;
 
     .toggle-bg {
       width: 20px;
@@ -69,6 +69,10 @@
     }
     .form-check-input:checked {
       background-size: inherit;
+    }
+
+    .user-photo {
+      @apply w-[24px] h-[24px];
     }
   }
 
@@ -154,7 +158,7 @@ td.chat-eye {
 td.translations {
   padding-top: 10px;
   padding-bottom: 10px;
-  @apply border border-t-0 border-b-0 border-r-0 border-red-500 pt-4 pb-4;
+  @apply border-l pl-4 border-red-500 pt-4 pb-4;
 }
 .table-dropdown {
   width: 50px;
@@ -227,4 +231,15 @@ span.shipped {
 }
 span.canceled {
   @apply px-2 py-1 capitalize text-xs font-semibold rounded-lg border text-red-600 bg-red-100 border-red-600;
+}
+
+// start description class of table data for mobile version
+.tbl-icon {
+  @apply md:mr-1.5;
+}
+.ids {
+  @apply flex w-[30px];
+}
+.sortable-block {
+  @apply float-right ml-8 min-w-[15px];
 }

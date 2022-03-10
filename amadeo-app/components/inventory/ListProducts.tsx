@@ -259,7 +259,9 @@ const ListProducts: React.FC<any> = () => {
                             <td className="w-[300px]" colSpan={4} style={{ padding: '0' }}>
                                 {renderConfigurationColors(item.configuration, item.id)}
                             </td>
-                            <td className="text-right whitespace-nowrap">
+                            <td
+                                className="text-right whitespace-nowrap"
+                                style={{ minWidth: '150px' }}>
                                 <ButtonTableAction
                                     dataId={String(item.id)}
                                     localeKey="Edit"

@@ -2,6 +2,18 @@
   @apply mt-7 mb-7 font-bold text-[18px] text-gray-350;
 }
 
+.filters-calendar {
+  @apply absolute shadow-xl rounded-3xl md:right-9;
+  right: 29rem;
+  z-index: 10;
+
+  @media (max-width: 641px) {
+    right: -6rem;
+    transform: scale(0.8);
+    z-index: 999;
+  }
+}
+
 .filters {
   z-index: 99;
 

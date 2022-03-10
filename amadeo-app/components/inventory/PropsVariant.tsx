@@ -53,14 +53,14 @@ const RenderVariant: React.FC<any> = ({ colors, sizes, props, additional }) => {
     }
     attrs = attrs.reduce((a, b) => a.flatMap((d: any) => b.map((e: any) => ({ ...d, ...e }))));
     return (
-        <>
+        <div className="overflow-x-scroll md:overflow-x-visible">
             {(_colors.length > 0 || _sizes.length > 0) && (
                 <table className="min-w-full float-table mt-3 mb-3">
                     <thead>
                         <tr>
                             <th colSpan={5}>
                                 <button
-                                    className="action-dublicate action cursor-pointer"
+                                    className="float-left action-dublicate action cursor-pointer"
                                     onClick={() => setupIdent(attrs)}>
                                     <span>Replace all values with selected</span>
                                 </button>
@@ -132,7 +132,7 @@ const RenderVariant: React.FC<any> = ({ colors, sizes, props, additional }) => {
                     </tbody>
                 </table>
             )}
-        </>
+        </div>
     );
 };
 

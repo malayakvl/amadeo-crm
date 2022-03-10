@@ -82,7 +82,7 @@ export default function Index({ session }: { session: any }) {
                     {t('Welcome back')}, <span>{`${user.first_name} ${user.last_name}`}!</span>
                 </h1>
                 <button
-                    className="btn-big float-right mt-4"
+                    className="mb-4 ml-4 md:mb-0 md:ml-0 btn-big md:float-right mt-4"
                     onClick={() => {
                         dispatch(showPopupAction(true));
                         Router.push('/liveselling');
@@ -95,7 +95,7 @@ export default function Index({ session }: { session: any }) {
                 <div className="flex flex-row flex-wrap w-full">
                     <Totals totals={data.totals} roleId={user.role_id} />
 
-                    <div className="flex flex-col w-full lg:w-1/4 xl:w-2/5 justify-center align-middle pl-4 border border-b-0 border-t-0 border-r-0">
+                    <div className="w-1/2 flex flex-col md:w-full lg:w-1/4 xl:w-2/5 justify-center align-middle pl-4 border-l">
                         <span className="font-bold text-sm text-blue-350">{t('Period')}</span>
                         <div className="p-3 flex">
                             <Image src="/images/calendar.svg" width={20} height={18} />
@@ -149,14 +149,14 @@ export default function Index({ session }: { session: any }) {
                         <a className="view-all float-right mr-4">{t('See all')}</a>
                     </Link>
                 </div>
-                <div className="inline-block min-w-full overflow-hidden align-middle">
+                <div>
                     <ListOrders orders={data.orders} />
                 </div>
             </div>
 
             {(user.role_id !== 1) && (<div className="block-white-4 mr-10" onClick={reverseDatePopup}>   {/* eslint-disable-line */}
                     <div className="font-bold text-gray-350 text-base pb-4 mt-8 mb-2 border border-t-0 border-l-0 border-r-0">
-                        Clients{' '}
+                        {t('Clients')}
                         <span className="text-sm text-gray-180 font-normal">
                             (Last {data.buyers?.length} items)
                         </span>
@@ -164,7 +164,7 @@ export default function Index({ session }: { session: any }) {
                             <a className="view-all float-right mr-4">{t('See all')}</a>
                         </Link>
                     </div>
-                    <div className="inline-block min-w-full overflow-hidden align-middle">
+                    <div>
                         <ListBuyers buyers={data.buyers} />
                     </div>
                 </div>

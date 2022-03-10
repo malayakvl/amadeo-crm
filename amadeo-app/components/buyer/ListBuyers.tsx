@@ -31,7 +31,7 @@ const ListBuyers: React.FC = () => {
     }, [dispatch]);
 
     return (
-        <div className="mt-7 min-w-max">
+        <div className="mt-7">
             <DataTable
                 hideBulk
                 paginationType={PaginationType.BUYERS}
@@ -102,12 +102,12 @@ const ListBuyers: React.FC = () => {
                                             />
                                         )}
                                     </div>
-                                    <div className="ml-2" text-center font-medium>
+                                    <div className="ml-2 text-center font-medium">
                                         {item.buyer_phone}
                                     </div>
                                 </div>
                             </td>
-                            <td>
+                            <td style={{ minWidth: '150px' }}>
                                 <div className="font-medium">{item.buyer_address}</div>
                             </td>
                             <td>
@@ -115,7 +115,7 @@ const ListBuyers: React.FC = () => {
                                     {item.total_count}
                                 </div>
                             </td>
-                            <td>
+                            <td style={{ minWidth: '150px' }}>
                                 <div className="text-right">{item.total_amount}</div>
                             </td>
                         </tr>

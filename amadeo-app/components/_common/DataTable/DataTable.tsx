@@ -170,10 +170,10 @@ const DataTable: React.FC<Props> = ({
                         <div className="toggle-bg bg-gray-200 border border-gray-200 rounded-full dark:bg-gray-700 dark:border-gray-600" />
                     </label>
                 )}
-                {item.iconClass && <i className={item.iconClass} />}
+                {item.iconClass && <i className={`tbl-icon ${item.iconClass}`} />}
                 {item.titleKey ? t(item.titleKey) : ''}
                 {item.sortKey && (
-                    <>
+                    <div className="sortable-block">
                         <div
                             role="presentation"
                             data-name={item.sortKey}
@@ -192,7 +192,7 @@ const DataTable: React.FC<Props> = ({
                                 active: column === item.sortKey && sort === 'DESC'
                             })}
                         />
-                    </>
+                    </div>
                 )}
             </th>
         );
@@ -253,7 +253,7 @@ const DataTable: React.FC<Props> = ({
     };
 
     return (
-        <>
+        <div className="overflow-x-scroll">
             <table className="w-full float-table">
                 <thead>{renderTableHeader()}</thead>
                 <tbody>{renderTableBody()}</tbody>
@@ -286,7 +286,7 @@ const DataTable: React.FC<Props> = ({
                     </div>
                 </div>
             )}
-        </>
+        </div>
     );
 };
 

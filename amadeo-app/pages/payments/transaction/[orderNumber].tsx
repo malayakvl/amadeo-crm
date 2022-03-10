@@ -41,19 +41,19 @@ export default function Payments({ session }: { session: any }) {
 
             <div className="block-white-8 white-shadow-medium mt-8 flex">
                 <div className="flex flex-col w-full">
-                    <div className="flex justify-between mb-8 font-bold text-gray-350 text-lg py-4 border-b border-gray-200">
+                    <div className="md:flex justify-between mb-8 font-bold text-gray-350 text-lg py-4 border-b border-gray-200">
                         {t('Transaction details')}
 
                         <a
                             href={`/api/download-invoice/${orderNumber}`}
-                            className="flex px-5 py-3 rounded-lg text-base min-w-max align-middle border shadow-lg"
+                            className="mt-4 md:mt-0 flex px-5 py-3 rounded-lg text-base min-w-max align-middle border shadow-lg"
                             rel="noreferrer">
                             <Image width="20" height="18" src={'/images/download.svg'} />
                             <span className="pl-4 pt-px">{t('Download Invoice from emmisor')}</span>
                         </a>
                     </div>
 
-                    <div className="flex w-full">
+                    <div className="overflow-x-scroll flex w-full">
                         <div className="w-1/2 text-center hidden xl:block">
                             <Image
                                 width="280"

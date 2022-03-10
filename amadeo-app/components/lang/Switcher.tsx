@@ -25,7 +25,10 @@ export default function LangSwitcher() {
     }, []);
 
     const handleClick = (e: any) => {
-        if (e.target.parentNode.classList.contains('btn-langs')) {
+        if (
+            e.target.parentNode.classList.contains('btn-langs') ||
+            node?.current?.contains(e.target)
+        ) {
             return;
         }
         setShowLangMenu(false);

@@ -49,11 +49,9 @@ function Account({ locale, reqActiveTab }: { locale: string; reqActiveTab: strin
             </Head>
 
             <div className="page-title">
-                <h1>
-                    {t('Profile')} <em /> <span>{subTitle}</span>
-                </h1>
+                <h1>{subTitle}</h1>
             </div>
-            <div className="block-white-8 mr-10">
+            <div className="block-white-8 mr-10 white-shadow-medium mt-10">
                 <div className="block">
                     <nav className="float-tabs">
                         <button
@@ -89,7 +87,7 @@ function Account({ locale, reqActiveTab }: { locale: string; reqActiveTab: strin
                             </Fragment>
                         )}
                     </div>
-                    <div className={`w-96 ${activeTab !== 'password' ? 'hidden' : ''}`}>
+                    <div className={`w-full md:w-96 ${activeTab !== 'password' ? 'hidden' : ''}`}>
                         <Password />
                     </div>
                 </div>

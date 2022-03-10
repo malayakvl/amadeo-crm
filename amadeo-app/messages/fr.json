@@ -244,8 +244,9 @@
   "Message": "Message",
   "Send": "Send",
   "Schedule new session": "Schedule new session",
+  "seller_descr": "Sellers section should provide information for the merchant about his orders and their status. It should be a  table with filters so that merchant could search for needed orders and info. merchant should have bulk selection with checkboxes in order to change statuses of several orders at the same time.",
   "orders_descr": "Orders section should provide information for the merchant about his orders and their status. It should be a  table with filters so that merchant could search for needed orders and info. merchant should have bulk selection with checkboxes in order to change statuses of several orders at the same time.",
-  "waiting_descr": "Waiting list contains info about buyers who wanted to buy some item during the live session but the product ran out of stock. So the main reason why someone appears on the waiting list is that the item they wanted to buy is not available. \nAnd that’s why they are automatically put to the waiting list.",
+  "waiting_descr": "Waiting list contains info about buyers who wanted to buy some item during the live session but the product ran out of stock. So the main reason why someone appears on the waiting list is that the item they wanted to buy is not available. <br/>And that’s why they are automatically put to the waiting list.",
   "Orders": "Orders",
   "Pending orders": "Pending orders",
   "order_number": "Order number",
@@ -274,5 +275,12 @@
   "Search": "Search",
   "Count": "Count",
   "Input Password": "Input Password",
-  "Buyers section provides merchant information about his buyers": "Buyers section provides merchant information about his buyers"
+  "Buyers section provides merchant information about his buyers": "Buyers section provides merchant information about his buyers",
+  "Closed": "Closed",
+  "product (s)": "product (s)",
+  "Clients": "Clients",
+  "Must be at least 3 characters": "Must be at least 3 characters",
+  "payment_descr": "Payment section should allow merchant to view all payment<br/> transactions he had in our system.{pmk}Merchant should be able to:{endpmk}{listmk}{limk}choose a period using calendar and see transactions within this period{endlimk}{limk}download invoices of each transaction one by one or with bulk selection{endlimk}{limk}manage and adjust payment methods that will be seen and available for his buyers{endlimk}{endlistmk}",
+  "scheduled": "scheduled",
+  "live": "live"
 }

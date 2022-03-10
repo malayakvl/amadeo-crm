@@ -42,9 +42,15 @@ const SidebarHeader: React.FC = () => {
     }, []);
 
     const handleClick = (e: any) => {
+        // if (node?.current?.contains(e.target) || node?.current === null) {
+        //     console.log('here');
+        //     return;
+        // }
+        console.log(e.target.parentNode.classList);
         if (
             e.target.parentNode.classList.contains('profile-block') ||
-            e.target.parentNode.classList.contains('profile-name')
+            e.target.parentNode.classList.contains('profile-name') ||
+            node?.current?.contains(e.target)
         ) {
             return;
         }
