@@ -50,6 +50,38 @@ export const fetchItemsAction: any = createAction(
         }
 );
 
+export const fetchItemAction: any = createAction(
+    'buyers/FETCH_ITEM',
+    async (buyerId: string) =>
+        (
+            dispatch: Type.Dispatch,
+            getState: () => State.Root
+        ): Promise<{ item: Buyers.DataItem }> => {
+            const state = getState();
+            const filters = { buyer_id: [+buyerId] };
+            console.log('buyers filters = ', filters);
+            const queryFilter = JSON.stringify(filters);
+            dispatch(showLoaderAction(true));
+            return axios
+                .get(
+                    `${baseUrl}/buyers/fetch-item?${queryString.stringify({
+                        queryFilter
+                    })}`,
+                    {
+                        headers: {
+                            ...authHeader(state.user.user.email)
+                        }
+                    }
+                )
+                .then((res: any) => {
+                    dispatch(showLoaderAction(false));
+                    return {
+                        item: res.data.item
+                    };
+                });
+        }
+);
+
 // export const fetchOrdersAction: any = createAction(
 //     'buyers/FETCH_ORDERS_DETAILED',
 //     async () =>

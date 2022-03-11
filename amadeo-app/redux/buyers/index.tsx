@@ -1,6 +1,7 @@
 import { Action, handleActions } from 'redux-actions';
 import {
     fetchItemsAction,
+    fetchItemAction,
     // fetchOrdersAction,
     showPopupAction,
     fetchFilerItems,
@@ -14,6 +15,7 @@ const initialState: {
     loading: boolean;
     count: number;
     items: Buyers.DataItem[];
+    item: Buyers.DataItem | null;
     // orders: Orders.DataItem[][];
     // orders: Record<number, Orders.DataItem[]>;
     showPopup: boolean;
@@ -25,6 +27,7 @@ const initialState: {
     loading: false,
     count: 0,
     items: [],
+    item: null,
     // orders: [],
     showPopup: false,
     fileterData: {
@@ -41,6 +44,22 @@ const ACTION_HANDLERS: any = {
         next: (
             state: State.Buyers,
             action: Type.ReduxAction<Pick<State.Buyers, 'count' | 'items'>>
+        ): State.Buyers => ({
+            ...state,
+            ...action.payload,
+            loading: false,
+            isFetched: true
+        }),
+        throw: (state: State.Buyers): State.Buyers => ({
+            ...state,
+            loading: false,
+            isFetched: false
+        })
+    },
+    [fetchItemAction]: {
+        next: (
+            state: State.Buyers,
+            action: Type.ReduxAction<Pick<State.Buyers, 'item'>>
         ): State.Buyers => ({
             ...state,
             ...action.payload,
@@ -113,6 +132,7 @@ const ACTION_HANDLERS: any = {
 
 export {
     fetchItemsAction,
+    fetchItemAction,
     // fetchOrdersAction,
     showPopupAction,
     fetchFilerItems,

@@ -25,6 +25,16 @@ class BuyerController {
         // }
     }
 
+    async fetchItem(req, res) {
+        const { queryFilter } = req.query;
+        if (!req.user) {
+            return res.status(401).json('Access deny');
+        } else {
+            // console.log('req.query = ', req.query);
+            const data = await buyersModel.fetchItem(req.user, queryFilter);
+            return res.status(200).json(data);
+        }
+    }
        
     
     async fetchFilters (req, res) {

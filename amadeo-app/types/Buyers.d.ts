@@ -2,6 +2,7 @@ declare namespace Buyers {
     interface Root {
         count: number;
         items: DataItem[];
+        item: DataItem;
         // orders: { [index]: Orders.DataItem[] };
         methods: PaymentMethod[];
         isFetched: boolean;
@@ -17,6 +18,7 @@ declare namespace Buyers {
         buyer_id: number;
         buyer_email: string;
         buyer_first_name: string;
+        buyer_last_name: string;
         buyer_photo: string;
         buyer_phone: string;
         buyer_full_address: string;
