@@ -165,6 +165,7 @@ function ProductForm({
                 setSelectedSizes([...selectedSizes, selectedOption]);
             }
         }
+        showSizeHandler();
     };
     const removeSizeHandler = (id: number) => {
         setSelectedSizes(selectedSizes.filter((v: any) => v.value !== id));
