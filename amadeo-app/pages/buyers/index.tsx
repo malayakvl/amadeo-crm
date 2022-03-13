@@ -1,7 +1,7 @@
 import { getSession } from 'next-auth/client';
 import { useTranslations } from 'next-intl';
 import { useSelector } from 'react-redux';
-import { ListBuyers, Filters, FilterValues } from '../../components/buyer';
+import { InfoBuyers, ListBuyers, Filters, FilterValues } from '../../components/buyer';
 import { paginationSelectorFactory } from '../../redux/layouts/selectors';
 import { PaginationType } from '../../constants';
 import Image from 'next/image';
@@ -20,12 +20,7 @@ export default function Buyers({ session }: { session: any }) {
     return (
         <>
             <div className="block-white-8 mr-10 white-shadow-big mb-8">
-                <div className="page-title">
-                    <h1>{t('Shoppers')}</h1>
-                </div>
-                <div className="text-gray-400">
-                    {t('Buyers section provides merchant information about his buyers')}
-                </div>
+                <InfoBuyers />
             </div>
 
             <div className="block-white-8 white-shadow-big">

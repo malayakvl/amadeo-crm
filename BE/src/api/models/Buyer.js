@@ -48,7 +48,7 @@ class Buyer {
             if (process.env.NODE_ENV === 'development') {
                 logger.log(
                     'error',
-                    'Model error (Products getAll):',
+                    'Model error (Buyers.fetchItems):',
                     { message: e.message }
                 );
             }
@@ -56,7 +56,7 @@ class Buyer {
             const items = null;
             const error = {
                 code: 500,
-                message: 'Error get list of users'
+                message: 'Error get list of Buyers'
             };
             return {
                 items,
@@ -66,6 +66,57 @@ class Buyer {
             client.release();
         }
     }
+
+
+    async fetchItem (user, filters) {
+        const client = await pool.connect();
+        try {
+            // const sellerIds = [];
+            // const buyerIds = [];
+            // console.log('filters = ', filters);
+            const _filters = JSON.parse(filters);
+            // console.log(_filters);
+            // create main filters for sellet
+            if (user.role_id === 2) {
+                _filters.seller_id = [user.id];
+                delete _filters.userIds;
+            }
+
+            // console.log('_filters =', _filters);
+            const buyersQuery = `SELECT * FROM data.get_buyers(1, 0, '${JSON.stringify(_filters)}');`;
+            // console.log(buyersQuery);
+            const res = await client.query(buyersQuery);
+            const item = res.rows.length > 0 ? res.rows[0] : {};
+            const error = null;
+            
+            return {
+                item,
+                error
+            };
+
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error (Buyers.fetchItem):',
+                    { message: e.message }
+                );
+            }
+            console.log('[Buyers.fetchItem] e.message = ', e.message);
+            const item = null;
+            const error = {
+                code: 500,
+                message: 'Error get Buyer'
+            };
+            return {
+                item,
+                error
+            };
+        } finally {
+            client.release();
+        }
+    }
+
 
     async fetchFilters (userId) {
         const client = await pool.connect();

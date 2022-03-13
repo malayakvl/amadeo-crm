@@ -16,6 +16,10 @@ export const itemsCountSelector = createSelector(
     rootSelector,
     (buyers: State.Buyers): number => buyers.count
 );
+export const itemSelector = createSelector(
+    rootSelector,
+    (buyers: State.Buyers): any => buyers.item
+);
 // export const ordersSelector = createSelector(
 //     rootSelector,
 //     (buyers: State.Buyers): any => buyers.orders

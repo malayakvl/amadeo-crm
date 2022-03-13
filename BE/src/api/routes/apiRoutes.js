@@ -109,6 +109,7 @@ apiRoutes.route('/payments/fetch-filters').get(PaymentController.fetchFilters);
 apiRoutes.route('/payments/download-invoice/:orderNumber').get(PaymentController.downloadInvoice);
 
 apiRoutes.route('/buyers/fetch-items').get(BuyerController.fetchItems);
+apiRoutes.route('/buyers/fetch-item').get(BuyerController.fetchItem);
 apiRoutes.route('/buyers/fetch-filters').get(BuyerController.fetchFilters);
 
 apiRoutes.route('/sellers/fetch-items').get(SellerController.fetchItems);

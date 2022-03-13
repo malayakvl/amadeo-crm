@@ -1,5 +1,6 @@
 import React, { Fragment, useCallback, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import Link from 'next/link';
 import { itemsCountSelector, paginatedItemsSelector } from '../../redux/buyers/selectors';
 import { PaginationType, baseApiUrl } from '../../constants';
 import { DataTable } from '../_common';
@@ -64,37 +65,33 @@ const ListBuyers: React.FC = () => {
                                 ) : null}
                             </td>
                             <td>
-                                <div
-                                    className="flex cursor-pointer"
-                                    onClick={() => handlerShowMore(item.buyer_id)}
-                                    onKeyDown={(e) =>
-                                        (e.key === ' ' || e.key === 'Enter') &&
-                                        handlerShowMore(item.buyer_id)
-                                    }
-                                    role="switch"
-                                    tabIndex={0}
-                                    aria-checked={showMoreConfigs[item.buyer_id]}
-                                    aria-labelledby="showMore">
-                                    <div className="relative w-8 h-8">
-                                        <Image
-                                            src={
-                                                item.buyer_photo
-                                                    ? baseApiUrl + item.buyer_photo
-                                                    : userProfileImg
-                                            }
-                                            width={42}
-                                            height={42}
-                                            className="rounded-full cursor-pointer"
-                                            alt="buyer photo"
-                                        />
-                                    </div>
-                                    <div className="ml-2">
-                                        <div>{item.buyer_first_name}</div>
-                                        {/* <div className="font-normal text-xs">{item.username}</div> */}
-                                        <div className="font-medium text-xs text-orange-450">
-                                            {item.buyer_email}
-                                        </div>
-                                    </div>
+                                <div>
+                                    <Link href={`buyers/${item.buyer_id}`}>
+                                        <a className="flex cursor-pointer">
+                                            <div className="relative w-8 h-8">
+                                                <Image
+                                                    src={
+                                                        item.buyer_photo
+                                                            ? baseApiUrl + item.buyer_photo
+                                                            : userProfileImg
+                                                    }
+                                                    width={42}
+                                                    height={42}
+                                                    className="rounded-full cursor-pointer"
+                                                    alt="buyer photo"
+                                                />
+                                            </div>
+                                            <div className="ml-2">
+                                                <div>
+                                                    {item.buyer_first_name} {item.buyer_last_name}
+                                                </div>
+                                                {/* <div className="font-normal text-xs">{item.username}</div> */}
+                                                <div className="font-medium text-xs text-orange-450">
+                                                    {item.buyer_email}
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </Link>
                                 </div>
                             </td>
                             <td>
@@ -116,9 +113,6 @@ const ListBuyers: React.FC = () => {
                                 </div>
                             </td>
                             <td style={{ minWidth: '150px' }}>
-                                <div className="font-medium">{item.buyer_address}</div>
-                            </td>
-                            <td>
                                 <div className="font-medium">
                                     {item.buyer_full_address?.slice(0, -2)}
                                 </div>

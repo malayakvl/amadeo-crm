@@ -31,6 +31,7 @@ import { authHeader } from '../../lib/functions';
 import getConfig from 'next/config';
 import * as Yup from 'yup';
 import { getSession } from 'next-auth/client';
+import ConfirmDialog from './ConfirmDialog';
 
 const { publicRuntimeConfig } = getConfig();
 const url = `${publicRuntimeConfig.apiUrl}/api/shipping`;
@@ -38,9 +39,6 @@ const url = `${publicRuntimeConfig.apiUrl}/api/shipping`;
 export default function List() {
     const dispatch = useDispatch();
     const router = useRouter();
-    const sendRequest = useCallback(() => {
-        return dispatch(fetchShippingsAction());
-    }, [dispatch]);
     const items = useSelector(shippingsSelector);
     const checkedIds = useSelector(checkedIdsSelector);
     const t = useTranslations();
@@ -48,6 +46,27 @@ export default function List() {
     const user = useSelector(userSelector);
     const [threshold, setThreshold] = useState(false);
     const [dropDowns, setDropDowns] = useState<Array<boolean>>([]);
+
+    const [selectedItem, setSelectedItem] = useState<Shipping | null>();
+
+    const sendRequest = useCallback(() => {
+        return dispatch(fetchShippingsAction());
+    }, [dispatch]);
+
+    const handlerConfirm = useCallback(() => {
+        if (!selectedItem) return;
+
+        dispatch(checkIdsAction(selectedItem.id));
+        selectedItem.status = !selectedItem.status;
+
+        dispatch(changeShippingStatus(selectedItem.id, selectedItem.status));
+        dispatch(
+            setSuccessToastAction(
+                t('Status of the shipping {name} is changed', { name: selectedItem.name })
+            )
+        );
+        setSelectedItem(null);
+    }, [dispatch, selectedItem]);
 
     useEffect(() => {
         if (!items) {
@@ -218,19 +237,7 @@ export default function List() {
                                                 checkedIds.find((data: any) => data.id === item.id)
                                                     ?.checked || false
                                             }
-                                            onChange={() => {
-                                                dispatch(checkIdsAction(item.id));
-                                                const status = !item.status;
-                                                items[index].status = status;
-                                                dispatch(changeShippingStatus(item.id, status));
-                                                dispatch(
-                                                    setSuccessToastAction(
-                                                        t(
-                                                            `Status of the shipping '${item.name}' is changed`
-                                                        )
-                                                    )
-                                                );
-                                            }}
+                                            onChange={() => setSelectedItem(item)}
                                         />
                                         <div className="toggle-bg bg-gray-200 border border-gray-200 rounded-full dark:bg-gray-700 dark:border-gray-600" />
                                     </label>
@@ -298,6 +305,18 @@ export default function List() {
                     </DataTable>
                 </div>
             </div>
+
+            <ConfirmDialog
+                show={!!selectedItem}
+                text={t('Are you sure you want to {status} {name} method?', {
+                    status: selectedItem?.status ? t('disable') : t('enable'),
+                    name: selectedItem?.name
+                })}
+                titleConfirm={t('Yes')}
+                titleCancel={t('Cancel')}
+                onConfirm={handlerConfirm}
+                onClose={() => setSelectedItem(null)}
+            />
         </>
     );
 }
