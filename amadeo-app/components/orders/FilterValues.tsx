@@ -125,7 +125,7 @@ const FilterValues: React.FC<any> = () => {
     return (
         <>
             {dataFetched && (
-                <div className="flex">
+                <div className="flex flex-wrap">
                     {filters.order_number && (
                         <div className="filter-value">
                             {t('search_by', {

@@ -15,6 +15,10 @@ const FilterNumber: React.FC<any> = () => {
     const [numberSelected, setNumberSelected] = useState<any>(filters.order_number);
     const [showBlock, setShowBlock] = useState<boolean>(true);
 
+    const handleFocus = (e: any) => {
+        e.target.select();
+    };
+
     const clear = () => {
         setNumberSelected('');
         dispatch(
@@ -54,6 +58,7 @@ const FilterNumber: React.FC<any> = () => {
                             onChange={(e) => {
                                 setNumberSelected(e.target.value);
                             }}
+                            onFocus={handleFocus}
                             onKeyUp={() => {
                                 dispatch(
                                     setPaginationAction({

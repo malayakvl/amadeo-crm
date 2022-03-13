@@ -153,7 +153,6 @@ class User {
         } finally {
             client.release();
         }
-    
     }
 
     /**
@@ -251,10 +250,11 @@ class User {
             client.release();
         }
     }
-
+    
     /**
      *
-     * @param userData - json
+     * @param userData
+     * @param userId
      * @returns {Promise<{error: null, user}|{error: {code: number, message: string}, user: null}>}
      */
     async update(userData, userId) {
@@ -506,7 +506,12 @@ class User {
         }
     }
     
-    
+    /**
+     *
+     * @param searchStr - string
+     * @param roleId - numeric
+     * @returns {Promise<*|*[]|{success: boolean, error: {code: number, message: string}}>}
+     */
     async findUsersSuggestion(searchStr, roleId) {
         const client = await pool.connect();
         try {
@@ -528,6 +533,81 @@ class User {
         } finally {
             client.release();
         }
+    }
+    
+    
+    /**
+     * 
+     * @param userId
+     * @returns {Promise<*|[{order_timer: string, free_shipping_timer: string, updated_at: string, user_id, created_at: string, free_shipping_status: string, type: string}]|{success: boolean, error: {code: number, message: string}}>}
+     */
+    async fetchUserSettings(userId) {
+        const client = await pool.connect();
+        try {
+            const query = `SELECT order_timer, free_shipping_timer, free_shipping_status, user_id
+                            FROM data.seller_settings WHERE user_id=${userId};`;
+            const res = await client.query(query);
+            if (res.rows.length > 0) {
+                res.rows[0].order_timer = res.rows[0].order_timer.hours ? res.rows[0].order_timer.hours: res.rows[0].order_timer.days;
+                res.rows[0].type = res.rows[0].order_timer.hours ? 'h': 'd';
+                res.rows[0].free_shipping_timer = res.rows[0].free_shipping_timer.hours ? res.rows[0].free_shipping_timer.hours: res.rows[0].free_shipping_timer.days;
+            }
+            
+            return res.rows[0] ? res.rows : [{
+                user_id: userId,
+                order_timer: '',
+                type: '',
+                free_shipping_timer: '',
+                free_shipping_status: '',
+                created_at: '',
+                updated_at: ''}];
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model User (fetchUserSettings) error:',
+                    { message: e.message }
+                );
+            }
+            return { success: false, error: { code: 404, message: 'Users not found' } };
+        } finally {
+            client.release();
+        }
+    }
+    
+    
+    async updateSellerSettings(userId, data) {
+        const client = await pool.connect();
+        try {
+            let intervalDuration;
+            const free_shipping_timer = `${data.free_shipping_timer} hour${data.free_shipping_timer > 1 ? 's' : ''}`;
+            if (data.type === 'h') {
+                intervalDuration = `${data.cart_duration} hour${data.cart_duration > 1 ? 's' : ''}`;
+            } else {
+                intervalDuration = `${data.cart_duration} day${data.cart_duration > 1 ? 's' : ''}`;
+            }
+            const query = `INSERT INTO data.seller_settings(user_id, order_timer, free_shipping_timer, free_shipping_status)
+                VALUES (${userId}, '${intervalDuration}', '${free_shipping_timer}', '${data.free_shipping_status}')
+                ON CONFLICT ON CONSTRAINT seller_settings__pkey DO UPDATE SET
+                    order_timer = EXCLUDED.order_timer,
+                    free_shipping_timer = EXCLUDED.free_shipping_timer,
+                    free_shipping_status = EXCLUDED.free_shipping_status
+                ;`;
+            await client.query(query);
+            return { success: true };
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model User (updateUserSettings) error:',
+                    { message: e.message }
+                );
+            }
+            return { success: false, error: { code: 404, message: 'Users not found' } };
+        } finally {
+            client.release();
+        }
+        
     }
 
     /**

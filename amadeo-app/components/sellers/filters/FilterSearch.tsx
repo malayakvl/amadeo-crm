@@ -31,6 +31,10 @@ const FilterSearch: React.FC<any> = () => {
         );
     };
 
+    const handleFocus = (e: any) => {
+        e.target.select();
+    };
+
     return (
         <>
             <div
@@ -66,6 +70,7 @@ const FilterSearch: React.FC<any> = () => {
                                     })
                                 );
                             }}
+                            onFocus={handleFocus}
                             value={numberSelected}
                         />
                         <i

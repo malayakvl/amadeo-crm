@@ -43,7 +43,6 @@ const FilterNumber: React.FC<any> = () => {
         (newTag) => {
             const _sellers = [...tags, newTag];
             setTags([...tags, newTag]);
-            console.log(1);
             dispatch(
                 setPaginationAction({
                     type: PaginationType.BUYERS,

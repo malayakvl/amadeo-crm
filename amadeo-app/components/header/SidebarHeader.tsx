@@ -46,7 +46,6 @@ const SidebarHeader: React.FC = () => {
         //     console.log('here');
         //     return;
         // }
-        console.log(e.target.parentNode.classList);
         if (
             e.target.parentNode.classList.contains('profile-block') ||
             e.target.parentNode.classList.contains('profile-name') ||
@@ -76,7 +75,6 @@ const SidebarHeader: React.FC = () => {
                         className="profile-block inline-block cursor-pointer"
                         role="presentation"
                         onClick={() => {
-                            console.log(showProfileMenu);
                             setShowProfileMenu(!showProfileMenu);
                         }}>
                         <Image

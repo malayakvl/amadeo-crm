@@ -21,6 +21,8 @@ import waitingListReducer from '../redux/waitingList/index';
 import sellersReducer from '../redux/sellers/index';
 import buyersReducer from '../redux/buyers/index';
 import dashboardReducer from '../redux/dashboard';
+import settingsReducer from '../redux/settings';
+import paymentPlansReducer from '../redux/paymentPlans';
 
 const reducers = combineReducers({
     // address: addressReducer,
@@ -38,7 +40,9 @@ const reducers = combineReducers({
     waitingList: waitingListReducer,
     buyers: buyersReducer,
     sellers: sellersReducer,
-    dashboard: dashboardReducer
+    dashboard: dashboardReducer,
+    settings: settingsReducer,
+    paymentPlans: paymentPlansReducer
 });
 
 const initStore = (initialState = {}) => {

@@ -66,3 +66,13 @@ export const toggleModalPopup = (element: any) => {
     (modal as any).classList.toggle('pointer-events-none');
     (modal as any).classList.toggle('modal-active');
 };
+
+// export const isNumeric = (str: any) => {
+//     if (typeof str != 'string') return false;
+//     return (
+//         !isNaN(str) && // use type coercion to parse the _entirety_ of the string (`parseFloat` alone does not do this)...
+//         !isNaN(parseFloat(str));
+// }
+export function isNumber(value: string | number): boolean {
+    return value != null && value !== '' && !isNaN(Number(value.toString()));
+}

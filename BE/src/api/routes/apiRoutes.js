@@ -17,6 +17,7 @@ import PaymentController from "../controllers/PaymentController.js";
 import BuyerController from "../controllers/BuyerController.js";
 import SellerController from "../controllers/SellerController.js";
 import DashboardController from "../controllers/DashboardController.js";
+import PaymentPlanController from "../controllers/PaymentPlanController.js";
 
 
 const apiRoutes = express.Router();
@@ -124,6 +125,13 @@ apiRoutes.route('/livesession').post(LivesessionController.storeItem);
 apiRoutes.route('/livesession/stop/:id').get(LivesessionController.stopSession);
 apiRoutes.route('/livesession/fetch-items').get(LivesessionController.fetchItems);
 apiRoutes.route('/livesession/fetch-scenarios').get(LivesessionController.fetchScenarios);
+
+apiRoutes.route('/fetch-settings').get(UserController.fetchSettings);
+apiRoutes.route('/update-settings').post(UserController.updateSettings);
+
+apiRoutes.route('/payment-plans').get(PaymentPlanController.fetchItems);
+apiRoutes.route('/payment-plans').post(PaymentPlanController.updateStatus);
+
 
 //FB routes
 apiRoutes.route('/fb-authenticate').post(UserController.syncFb);

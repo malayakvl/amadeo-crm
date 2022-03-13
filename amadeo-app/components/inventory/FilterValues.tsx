@@ -107,7 +107,7 @@ const FilterValues: React.FC<any> = (locale: string) => {
     return (
         <>
             {dataFetched && (
-                <div className="flex">
+                <div className="flex flex-wrap">
                     {filters.product_name && (
                         <div className="filter-value">
                             {t('search_by', {

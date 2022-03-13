@@ -17,7 +17,7 @@ const SidebarCustomers: React.FC = () => {
 
     let CurrentSidebar = SidebarFull;
 
-    if (router.route.startsWith('/shipping')) {
+    if (router.route.startsWith('/shipping') || router.route.startsWith('/settings')) {
         CurrentSidebar = SidebarShipping;
     }
 

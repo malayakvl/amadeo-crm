@@ -110,7 +110,7 @@ const FilterValues: React.FC<any> = () => {
     return (
         <>
             {dataFetched && (
-                <div className="flex">
+                <div className="flex flex-wrap">
                     {filters.total_amount[1] && (
                         <div className="filter-value">
                             {t('Spent')}: {filters.total_amount[0]} - {filters.total_amount[1]}{' '}

@@ -92,6 +92,14 @@ const SidebarFull: React.FC = () => {
                     </a>
                 </Link>
             </li>
+            <li role="presentation" onClick={() => closeMenu()}>
+                <Link href={'/payment-plans'}>
+                    <a>
+                        <i className="payment-plans" />
+                        <span className="s-caption">{t('Payment Plans')}</span>
+                    </a>
+                </Link>
+            </li>
         </Fragment>
     );
 };

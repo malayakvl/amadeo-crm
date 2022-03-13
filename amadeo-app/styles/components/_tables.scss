@@ -76,6 +76,10 @@
     }
   }
 
+  .plan-status {
+    @apply w-full flex justify-center cursor-pointer;
+  }
+
   .button_table_action {
     text-indent: -99999px;
     white-space: nowrap;
