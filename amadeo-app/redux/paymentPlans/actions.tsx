@@ -1,0 +1,51 @@
+import { createAction } from 'redux-actions';
+import { authHeader } from '../../lib/functions';
+import axios from 'axios';
+import getConfig from 'next/config';
+const { publicRuntimeConfig } = getConfig();
+const baseUrl = `${publicRuntimeConfig.apiUrl}/api`;
+import { setErrorToastAction, setSuccessToastAction } from '../layouts';
+import { showLoaderAction } from '../layouts/actions';
+
+export const submitFormAction: any = createAction(
+    'payment-plans/ADD_UPDATE_DATA',
+    async (data: any) =>
+        (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
+            const state = getState();
+            dispatch(showLoaderAction(true));
+            return axios
+                .post(`${baseUrl}/payment-plans`, data, {
+                    headers: {
+                        ...authHeader(state.user.user.email)
+                    }
+                })
+                .then(async () => {
+                    dispatch(setSuccessToastAction('Record has been updated'));
+                    dispatch(showLoaderAction(false));
+                    dispatch(fetchFormAction());
+                })
+                .catch((e) => {
+                    dispatch(setErrorToastAction(e.response.data.error));
+                    dispatch(showLoaderAction(false));
+                });
+        }
+);
+export const fetchFormAction: any = createAction(
+    'payment-plans/FETCH_ITEMS',
+    async () =>
+        async (dispatch: Type.Dispatch, getState: () => State.Root): Promise<{ items: any }> => {
+            const state = getState();
+            dispatch(showLoaderAction(true));
+            const res = await axios.get(`${baseUrl}/payment-plans`, {
+                headers: {
+                    ...authHeader(state.user.user.email)
+                }
+            });
+            if (res.status) {
+                dispatch(showLoaderAction(false));
+            }
+            return {
+                items: res.data.items
+            };
+        }
+);

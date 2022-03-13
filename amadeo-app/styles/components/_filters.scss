@@ -94,7 +94,7 @@
 }
 
 .filter-value {
-  @apply rounded-lg bg-gray-100 border p-1.5 text-[9px] font-bold text-gray-450 uppercase relative pr-6 mr-1;
+  @apply rounded-lg bg-gray-100 border p-1.5 text-[9px] font-bold text-gray-450 uppercase relative pr-6 mr-1 mb-2;
 
   em {
     background-image: url("../../public/images/remove-filter.svg");

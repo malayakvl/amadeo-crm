@@ -31,6 +31,10 @@ const InputText: React.FC<Props> = ({
         props.setFieldValue(name, '');
     };
 
+    const handleFocus = (e: any) => {
+        e.target.select();
+    };
+
     return (
         <div className={`mb-4 ${style}`}>
             {label && (
@@ -46,6 +50,7 @@ const InputText: React.FC<Props> = ({
                     className={icon ? 'form-control-icon' : 'form-control'}
                     placeholder={placeholder ? t(placeholder) : ''}
                     type="text"
+                    onFocus={handleFocus}
                     onChange={onChange ? onChange : props.handleChange}
                     // value={inputValue || ''}
                     value={props.values[name]}

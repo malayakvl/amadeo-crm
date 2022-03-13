@@ -17,6 +17,8 @@ declare namespace State {
         buyers: Buyers;
         sellers: Sellers;
         dashboard: Dashboard;
+        settings: Settings;
+        paymentPlans: PaymentPlans;
     }
 
     type Address = Address.Root;
@@ -36,7 +38,9 @@ declare namespace State {
     type Orders = Orders.Root;
     type Payments = Payments.Root;
     type WaitingList = WaitingList.Root;
+    type PaymentPlans = PaymentPlans.Root;
     type Buyers = Buyers.Root;
     type Sellers = Sellers.Root;
     type Dashboard = Dashboard.Root;
+    type Settings = Settings.Root;
 }

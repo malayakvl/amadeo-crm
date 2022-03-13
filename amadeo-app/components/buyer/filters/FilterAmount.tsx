@@ -70,6 +70,10 @@ const FilterAmount: React.FC<any> = () => {
         changePriceDone();
     };
 
+    const handleFocus = (e: any) => {
+        e.target.select();
+    };
+
     return (
         <div className="mb-4">
             <div
@@ -120,6 +124,7 @@ const FilterAmount: React.FC<any> = () => {
                                     ]);
                                 }}
                                 onKeyUp={() => changePriceDone()}
+                                onFocus={handleFocus}
                                 value={amountRange[0]}
                             />
                         </div>
@@ -137,6 +142,7 @@ const FilterAmount: React.FC<any> = () => {
                                         e.target.value.replace(/[^0-9]/g, '')
                                     ]);
                                 }}
+                                onFocus={handleFocus}
                                 onKeyUp={() => changePriceDone()}
                                 value={amountRange[1]}
                             />

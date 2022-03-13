@@ -31,6 +31,10 @@ const FilterSearch: React.FC<any> = () => {
         );
     };
 
+    const handleFocus = (e: any) => {
+        e.target.select();
+    };
+
     return (
         <>
             <div
@@ -54,6 +58,7 @@ const FilterSearch: React.FC<any> = () => {
                             onChange={(e) => {
                                 setSearchSelected(e.target.value);
                             }}
+                            onFocus={handleFocus}
                             onKeyUp={() => {
                                 dispatch(
                                     setPaginationAction({

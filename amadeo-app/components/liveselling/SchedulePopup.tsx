@@ -12,7 +12,6 @@ import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { submitFormAction } from '../../redux/livesessions/actions';
 import InputMask from 'react-input-mask';
-import { InputSelect, InputText } from '../_form';
 
 const SchedulePopup: React.FC<any> = () => {
     const t = useTranslations();
@@ -42,8 +41,8 @@ const SchedulePopup: React.FC<any> = () => {
     //     setSelectedScenarios(_scenarios);
     // };
     const SubmitSchema = Yup.object().shape({
-        cart_duration: Yup.number().required(t('Required field')),
-        type: Yup.string().required(t('Required field'))
+        // cart_duration: Yup.number().required(t('Required field')),
+        // type: Yup.string().required(t('Required field'))
     });
 
     return (
@@ -129,69 +128,8 @@ const SchedulePopup: React.FC<any> = () => {
                                                                 />
                                                             </div>
                                                         </div>
-                                                        <div className="ml-5 max-w-[100px]">
-                                                            <InputText
-                                                                icon={null}
-                                                                label={'Duration Cart'}
-                                                                name={'cart_duration'}
-                                                                placeholder={'num_day_hour'}
-                                                                style={null}
-                                                                props={props}
-                                                                tips={null}
-                                                            />
-                                                        </div>
-                                                        <div className="ml-5">
-                                                            <InputSelect
-                                                                options={[
-                                                                    { id: 'h', name: 'Hour(s)' },
-                                                                    { id: 'd', name: 'Day(s)' }
-                                                                ]}
-                                                                label={'Type Interval'}
-                                                                name={'type'}
-                                                                style={null}
-                                                                props={props}
-                                                            />
-                                                        </div>
                                                     </div>
                                                 </div>
-                                                {/*<div>*/}
-                                                {/*    <span className="block text-gray-350 text-[18px] font-bold mb-5">*/}
-                                                {/*        Available scenarios*/}
-                                                {/*    </span>*/}
-                                                {/*    <table className="float-table overflow-auto">*/}
-                                                {/*        <tbody>*/}
-                                                {/*            {scenarios?.map(*/}
-                                                {/*                (*/}
-                                                {/*                    item: Livesessions.DataScenario*/}
-                                                {/*                ) => (*/}
-                                                {/*                    <tr*/}
-                                                {/*                        className="text-xs"*/}
-                                                {/*                        key={item.id}>*/}
-                                                {/*                        <td>*/}
-                                                {/*                            <label*/}
-                                                {/*                                htmlFor={`scen_${item.id}`}*/}
-                                                {/*                                className="flex items-center cursor-pointer relative mt-1">*/}
-                                                {/*                                <input*/}
-                                                {/*                                    type="checkbox"*/}
-                                                {/*                                    id={`scen_${item.id}`}*/}
-                                                {/*                                    className="sr-only"*/}
-                                                {/*                                    value={`switcher_${item.id}`}*/}
-                                                {/*                                    onChange={() =>*/}
-                                                {/*                                        updateScenarios(*/}
-                                                {/*                                            item.id*/}
-                                                {/*                                        )*/}
-                                                {/*                                    }*/}
-                                                {/*                                />*/}
-                                                {/*                                <div className="toggle-bg bg-gray-200 border border-gray-200 rounded-full dark:bg-gray-700 dark:border-gray-600]" />*/}
-                                                {/*                            </label>*/}
-                                                {/*                        </td>*/}
-                                                {/*                        <td>{item.name}</td>*/}
-                                                {/*                    </tr>*/}
-                                                {/*                )*/}
-                                                {/*            )}*/}
-                                                {/*        </tbody>*/}
-                                                {/*    </table>*/}
-                                                {/*</div>*/}
                                             </div>
                                             <div className="flex justify-center">
                                                 <button

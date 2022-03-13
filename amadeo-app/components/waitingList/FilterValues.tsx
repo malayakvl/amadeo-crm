@@ -107,13 +107,10 @@ const FilterValues: React.FC<any> = () => {
         );
     };
 
-    console.log(filterData.payments);
-    console.log(filters.payment_id);
-
     return (
         <>
             {dataFetched && (
-                <div className="flex">
+                <div className="flex flex-wrap">
                     {filters.order_number && (
                         <div className="filter-value">
                             {t('search_by', {

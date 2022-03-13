@@ -8,6 +8,7 @@ import Image from 'next/image';
 import { Range } from 'rc-slider';
 import 'rc-slider/assets/index.css';
 import { productAdditionalSelector } from '../../../redux/products/selectors';
+import { isNumber } from '../../../lib/functions';
 
 const FilterQuantity: React.FC<any> = () => {
     const t = useTranslations();
@@ -35,38 +36,43 @@ const FilterQuantity: React.FC<any> = () => {
     }, [filters.quantity]);
 
     const changePriceDone = () => {
-        if (quantityRange[0] !== quantityRange[1]) {
-            console.log(quantityRange);
-            dispatch(
-                setPaginationAction({
-                    type: PaginationType.PRODUCTS,
-                    modifier: {
-                        filters: {
-                            ...filters,
-                            quantity: quantityRange
-                        },
-                        offset: 0
-                    }
-                })
-            );
-        } else if (quantityRange[0] === quantityRange[1] && quantityRange[0] === 0) {
-            dispatch(
-                setPaginationAction({
-                    type: PaginationType.PRODUCTS,
-                    modifier: {
-                        filters: {
-                            ...filters,
-                            quantity: []
-                        },
-                        offset: 0
-                    }
-                })
-            );
+        if (isNumber(quantityRange[0]) && isNumber(quantityRange[1])) {
+            if (quantityRange[0] !== quantityRange[1]) {
+                dispatch(
+                    setPaginationAction({
+                        type: PaginationType.PRODUCTS,
+                        modifier: {
+                            filters: {
+                                ...filters,
+                                quantity: quantityRange
+                            },
+                            offset: 0
+                        }
+                    })
+                );
+            } else if (quantityRange[0] === quantityRange[1] && quantityRange[0] === 0) {
+                dispatch(
+                    setPaginationAction({
+                        type: PaginationType.PRODUCTS,
+                        modifier: {
+                            filters: {
+                                ...filters,
+                                quantity: []
+                            },
+                            offset: 0
+                        }
+                    })
+                );
+            }
         }
     };
 
     const onSliderAfterChange = () => {
         changePriceDone();
+    };
+
+    const handleFocus = (e: any) => {
+        e.target.select();
     };
 
     return (
@@ -117,6 +123,7 @@ const FilterQuantity: React.FC<any> = () => {
                                         quantityRange[1]
                                     ]);
                                 }}
+                                onFocus={handleFocus}
                                 onKeyUp={() => changePriceDone()}
                                 value={quantityRange[0]}
                             />
@@ -135,6 +142,7 @@ const FilterQuantity: React.FC<any> = () => {
                                         parseFloat(e.target.value)
                                     ]);
                                 }}
+                                onFocus={handleFocus}
                                 onKeyUp={() => changePriceDone()}
                                 value={quantityRange[1]}
                             />

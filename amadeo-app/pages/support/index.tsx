@@ -29,11 +29,7 @@ export default function Support() {
                 <div className="page-title">
                     <h1>{t('Support')}</h1>
                 </div>
-                <div className="text-gray-400">
-                    {t(
-                        'Support section allows merchants contact to Proshop admin in case of issue or questions'
-                    )}
-                </div>
+                <div className="text-gray-400">{t('support_descr')}</div>
             </div>
 
             <div className="mt-10 block-white-8 white-shadow-big">

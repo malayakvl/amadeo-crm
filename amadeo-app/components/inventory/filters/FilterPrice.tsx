@@ -8,6 +8,7 @@ import Image from 'next/image';
 import { Range } from 'rc-slider';
 import 'rc-slider/assets/index.css';
 import { productAdditionalSelector } from '../../../redux/products/selectors';
+import { isNumber } from '../../../lib/functions';
 
 const filterPrice: React.FC<any> = () => {
     const t = useTranslations();
@@ -35,38 +36,43 @@ const filterPrice: React.FC<any> = () => {
     }, [filters.price]);
 
     const changePriceDone = () => {
-        if (priceRange[0] !== priceRange[1]) {
-            console.log(priceRange);
-            dispatch(
-                setPaginationAction({
-                    type: PaginationType.PRODUCTS,
-                    modifier: {
-                        filters: {
-                            ...filters,
-                            price: priceRange
-                        },
-                        offset: 0
-                    }
-                })
-            );
-        } else if (priceRange[0] === priceRange[1] && priceRange[0] === 0) {
-            dispatch(
-                setPaginationAction({
-                    type: PaginationType.PRODUCTS,
-                    modifier: {
-                        filters: {
-                            ...filters,
-                            price: []
-                        },
-                        offset: 0
-                    }
-                })
-            );
+        if (isNumber(priceRange[0]) && isNumber(priceRange[1])) {
+            if (priceRange[0] !== priceRange[1]) {
+                dispatch(
+                    setPaginationAction({
+                        type: PaginationType.PRODUCTS,
+                        modifier: {
+                            filters: {
+                                ...filters,
+                                price: priceRange
+                            },
+                            offset: 0
+                        }
+                    })
+                );
+            } else if (priceRange[0] === priceRange[1] && priceRange[0] === 0) {
+                dispatch(
+                    setPaginationAction({
+                        type: PaginationType.PRODUCTS,
+                        modifier: {
+                            filters: {
+                                ...filters,
+                                price: []
+                            },
+                            offset: 0
+                        }
+                    })
+                );
+            }
         }
     };
 
     const onSliderAfterChange = () => {
         changePriceDone();
+    };
+
+    const handleFocus = (e: any) => {
+        e.target.select();
     };
 
     return (
@@ -118,6 +124,7 @@ const filterPrice: React.FC<any> = () => {
                                         priceRange[1]
                                     ]);
                                 }}
+                                onFocus={handleFocus}
                                 onKeyUp={() => changePriceDone()}
                                 value={priceRange[0]}
                             />
@@ -136,6 +143,7 @@ const filterPrice: React.FC<any> = () => {
                                         parseFloat(e.target.value)
                                     ]);
                                 }}
+                                onFocus={handleFocus}
                                 onKeyUp={() => changePriceDone()}
                                 value={priceRange[1]}
                             />

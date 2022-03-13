@@ -35,6 +35,23 @@ class UserController {
         return res.status(200).json(response);
     }
     
+    async fetchSettings (req, res) {
+        if (!req.user) {
+            return res.status(401).json('Access deny');
+        }
+        const data = await userModel.fetchUserSettings(req.user.id);
+        return res.status(200).json({ item: data[0]});
+    }
+    
+    async updateSettings (req, res) {
+        if (!req.user) {
+            return res.status(401).json('Access deny');
+        }
+        const data = await userModel.updateSellerSettings(req.user.id, req.body);
+        return res.status(200).json({ success: data.success });
+    }
+    
+    
     async fetchSellers (req, res) {
         if (!req.user) {
             return res.status(401).json('Access deny');

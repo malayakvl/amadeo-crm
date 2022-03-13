@@ -17,36 +17,6 @@ const FilterValues: React.FC<any> = () => {
 
     const dataFetched = true;
 
-    // const handleStatusDelete = (status: string) => {
-    //     dispatch(
-    //         setPaginationAction({
-    //             type: PaginationType.BUYERS,
-    //             modifier: {
-    //                 filters: {
-    //                     ...filters,
-    //                     status: filters.status.filter((id: any) => id !== status)
-    //                 },
-    //                 offset: 0
-    //             }
-    //         })
-    //     );
-    // };
-
-    // const handlePaymentDelete = (dataId: number) => {
-    //     dispatch(
-    //         setPaginationAction({
-    //             type: PaginationType.BUYERS,
-    //             modifier: {
-    //                 filters: {
-    //                     ...filters,
-    //                     payment_id: filters.payment_id.filter((id: any) => id !== dataId)
-    //                 },
-    //                 offset: 0
-    //             }
-    //         })
-    //     );
-    // };
-
     const handleCountryDelete = (dataId: number) => {
         dispatch(
             setPaginationAction({
@@ -61,21 +31,6 @@ const FilterValues: React.FC<any> = () => {
             })
         );
     };
-
-    // const handleShippingDelete = (dataId: number) => {
-    //     dispatch(
-    //         setPaginationAction({
-    //             type: PaginationType.BUYERS,
-    //             modifier: {
-    //                 filters: {
-    //                     ...filters,
-    //                     shipping_id: filters.shipping_id.filter((id: any) => id !== dataId)
-    //                 },
-    //                 offset: 0
-    //             }
-    //         })
-    //     );
-    // };
 
     const handleTotalAmountDelete = () => {
         dispatch(
@@ -107,13 +62,10 @@ const FilterValues: React.FC<any> = () => {
         );
     };
 
-    // console.log(filterData.payments);
-    // console.log(filters.payment_id);
-
     return (
         <>
             {dataFetched && (
-                <div className="flex ml-8">
+                <div className="flex flex-wrap ml-8">
                     {filters?.name && (
                         <div className="filter-value">
                             {t('search_by', {

@@ -15,6 +15,10 @@ const FilterName: React.FC<any> = () => {
     const [nameSelected, setNameSelected] = useState<any>(filters.name);
     const [showBlock, setShowBlock] = useState<boolean>(true);
 
+    const handleFocus = (e: any) => {
+        e.target.select();
+    };
+
     const clear = () => {
         setNameSelected('');
         dispatch(
@@ -52,6 +56,7 @@ const FilterName: React.FC<any> = () => {
                             onChange={(e) => {
                                 setNameSelected(e.target.value);
                             }}
+                            onFocus={handleFocus}
                             onKeyUp={() => {
                                 dispatch(
                                     setPaginationAction({

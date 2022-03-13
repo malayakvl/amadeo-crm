@@ -361,11 +361,15 @@ class Livesession {
         const client = await pool.connect();
         
         const scenariosRes = await client.query(`SELECT ARRAY_AGG(id) AS ids FROM data.chatbot_scenarios WHERE user_id = ${userId}`);
+        const settings = await client.query(`SELECT order_timer, free_shipping_timer, free_shipping_status, user_id
+                            FROM data.seller_settings WHERE user_id=${userId};`);
         let intervalDuration;
-        if (data.type === 'h') {
-            intervalDuration = `${data.cart_duration} hour${data.cart_duration > 1 ? 's' : ''}`;
+        const timeValue = settings.rows[0].order_timer.hours ? settings.rows[0].order_timer.hours: settings.rows[0].order_timer.days;
+        const type = settings.rows[0].order_timer.hours ? 'h': 'd';
+        if (type === 'h') {
+            intervalDuration = `${timeValue} hour${timeValue > 1 ? 's' : ''}`;
         } else {
-            intervalDuration = `${data.cart_duration} day${data.cart_duration > 1 ? 's' : ''}`;
+            intervalDuration = `${timeValue} day${timeValue > 1 ? 's' : ''}`;
         }
         
         const query =  `INSERT INTO data.live_sessions (user_id, event_date, event_time, scenarios, status, order_timer)
@@ -414,11 +418,6 @@ class Livesession {
                             WHERE id=${itemId} AND user_id=${userId}
                 `;
             await client.query(query);
-            // await client.query(`SELECT * FROM common__tools._update_table_by_where(
-            //     'data',
-            //     'chatbot_scenarios',
-            //     '${JSON.stringify(data)}',
-            //     'user_id = ''${userId}'' AND id = ''${itemId}''')`);
             return { success: true };
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
