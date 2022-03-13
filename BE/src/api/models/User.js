@@ -537,7 +537,7 @@ class User {
     
     
     /**
-     * 
+     *
      * @param userId
      * @returns {Promise<*|[{order_timer: string, free_shipping_timer: string, updated_at: string, user_id, created_at: string, free_shipping_status: string, type: string}]|{success: boolean, error: {code: number, message: string}}>}
      */
