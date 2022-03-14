@@ -31,7 +31,7 @@ import { authHeader } from '../../lib/functions';
 import getConfig from 'next/config';
 import * as Yup from 'yup';
 import { getSession } from 'next-auth/client';
-import ConfirmDialog from './ConfirmDialog';
+import ConfirmDialog from '../../components/_common/ConfirmDialog';
 
 const { publicRuntimeConfig } = getConfig();
 const url = `${publicRuntimeConfig.apiUrl}/api/shipping`;
