@@ -42,16 +42,16 @@ export default function List() {
     const items = useSelector(shippingsSelector);
     const checkedIds = useSelector(checkedIdsSelector);
     const t = useTranslations();
-    const countries = useSelector(countriesSelector);
     const user = useSelector(userSelector);
-    const [threshold, setThreshold] = useState(false);
+    const [threshold, setThreshold] = useState();
     const [dropDowns, setDropDowns] = useState<Array<boolean>>([]);
 
     const [selectedItem, setSelectedItem] = useState<Shipping | null>();
 
-    const sendRequest = useCallback(() => {
-        return dispatch(fetchShippingsAction());
-    }, [dispatch]);
+    const sendRequest = useCallback(
+        () => user.email && dispatch(fetchShippingsAction()),
+        [dispatch, user.email]
+    );
 
     const handlerConfirm = useCallback(() => {
         if (!selectedItem) return;
@@ -69,9 +69,8 @@ export default function List() {
     }, [dispatch, selectedItem]);
 
     useEffect(() => {
-        if (!items) {
-            return;
-        }
+        if (!items) return;
+
         const setupChecked: any = [];
         items.forEach((item: Shipping) => {
             setupChecked.push({ id: item.id, checked: item.status });
@@ -85,27 +84,20 @@ export default function List() {
     }, []);
 
     useEffect(() => {
-        if (user.role_id == 3) {
-            setThreshold(true);
-            return;
-        }
+        if (!user.email) return;
 
-        if (user.hasOwnProperty('email')) {
-            axios
-                .get(`${url}/threshold`, {
-                    headers: {
-                        ...authHeader(user.email)
-                    }
-                })
-                .then((result) => {
-                    setThreshold(result.data.threshold);
-                });
-        }
-    }, [user]);
+        axios
+            .get(`${url}/threshold`, {
+                headers: {
+                    ...authHeader(user.email)
+                }
+            })
+            .then((result) => {
+                setThreshold(result.data.threshold);
+            });
+    }, [user.email]);
 
-    if (!countries.length || !threshold) {
-        return <></>;
-    }
+    if (!user.email) return null;
 
     return (
         <>

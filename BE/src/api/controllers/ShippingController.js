@@ -93,6 +93,8 @@ export default new class ShippingController {
     }
 
     async fetchAll(req, res) {
+        if (!req.user) return res.status(401).json('Access deny');
+
         let shippings = []
 
         if (req.user.role_id !== 3) {
@@ -155,6 +157,8 @@ export default new class ShippingController {
     }
 
     async fetchThreshold(req, res) {
+        if (!req.user) return res.status(401).json('Access deny');
+
         const result = await shippingModel.fetchThreshold(req.user.id)
 
         if (!result) {
