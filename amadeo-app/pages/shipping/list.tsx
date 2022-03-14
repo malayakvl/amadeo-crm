@@ -13,8 +13,6 @@ import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { baseApiUrl } from '../../constants';
 import { useRouter } from 'next/router';
-import { fetchCountriesAction } from '../../redux/countries/actions';
-import { countriesSelector } from '../../redux/countries/selectors';
 import {
     checkAllIdsAction,
     checkIdsAction,
@@ -78,10 +76,6 @@ export default function List() {
         dispatch(initIdsAction(setupChecked));
         setDropDowns(items.map(() => false));
     }, [items]);
-
-    useEffect(() => {
-        dispatch(fetchCountriesAction());
-    }, []);
 
     useEffect(() => {
         if (!user.email) return;
