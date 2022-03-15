@@ -47,6 +47,7 @@ apiRoutes.route('/add-live-messages').post(ChatbotMessageController.addMessages)
 apiRoutes.route('/parse-live-messages').get(ChatbotMessageController.parseMessages);
 apiRoutes.route('/create-orders').get(OrderController.createOrders);
 
+apiRoutes.route('/payment-plans').get(PaymentPlanController.fetchItems);
 apiRoutes.route('/create-payment-intent').post(PaymentPlanController.stripeClientSecret);
 /** ===================================================================== */
 /** ================== AUTHENTIFICATED ROUTES =========================== */
@@ -131,7 +132,7 @@ apiRoutes.route('/livesession/fetch-scenarios').get(LivesessionController.fetchS
 apiRoutes.route('/fetch-settings').get(UserController.fetchSettings);
 apiRoutes.route('/update-settings').post(UserController.updateSettings);
 
-apiRoutes.route('/payment-plans').get(PaymentPlanController.fetchItems);
+// apiRoutes.route('/payment-plans').get(PaymentPlanController.fetchItems);
 apiRoutes.route('/payment-plans').post(PaymentPlanController.updateStatus);
 
 

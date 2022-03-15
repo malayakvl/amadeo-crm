@@ -1,8 +1,9 @@
 import { Action, handleActions } from 'redux-actions';
-import { fetchUserAction, setUserAction } from './actions';
+import { fetchUserAction, setUserAction, hideRegisterFormAction } from './actions';
 
 const initialState: State.User = {
-    user: {} as User.User
+    user: {} as User.User,
+    hideRegisterFrom: false
 };
 
 const ACTION_HANDLERS: any = {
@@ -17,10 +18,16 @@ const ACTION_HANDLERS: any = {
             ...state,
             user: action.payload
         })
+    },
+    [hideRegisterFormAction]: {
+        next: (state: State.User, action: Action<any>): State.User => ({
+            ...state,
+            hideRegisterFrom: action.payload
+        })
     }
 };
 
-export { fetchUserAction, setUserAction };
+export { fetchUserAction, setUserAction, hideRegisterFormAction };
 
 // ------------------------------------
 // Reducer

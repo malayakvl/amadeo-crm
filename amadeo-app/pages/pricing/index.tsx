@@ -1,7 +1,13 @@
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
-import Link from 'next/link';
-import { useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { userSelector } from '../../redux/user/selectors';
+import { getSession, useSession } from 'next-auth/client';
+import { showLoaderAction } from '../../redux/layouts/actions';
+import { fetchFormAction } from '../../redux/paymentPlans';
+import { itemsSelector } from '../../redux/paymentPlans/selectors';
+import { parseTranslation } from '../../lib/functions';
 
 type PriceProps = {
     name: string;
@@ -68,9 +74,18 @@ const Price = ({
     );
 };
 
-export default function Pricing() {
+export default function Pricing({ locale }: { locale: any }) {
     const [selected, setSelected] = useState('business');
+    const dispatch = useDispatch();
+    const plans = useSelector(itemsSelector);
+
+    useEffect(() => {
+        dispatch(showLoaderAction(true));
+        dispatch(fetchFormAction());
+    }, []);
+
     const t = useTranslations();
+
     const Tick = ({
         disabled,
         className,
@@ -94,10 +109,48 @@ export default function Pricing() {
         </div>
     );
 
+    const parsePlanValues = (plans: any, optionId: number, optionName: string) => {
+        return (
+            <>
+                {plans.map((option: any, index: number) => (
+                    <Fragment key={option.plan.id}>
+                        {option.value ? (
+                            <Tick selected={index === 1} />
+                        ) : (
+                            <Tick selected={index === 1} disabled />
+                        )}
+                    </Fragment>
+                ))}
+            </>
+        );
+    };
+
+    const parseOptions = (data: any, locale: string) => {
+        return (
+            <>
+                {data.map((data: any) => (
+                    <Fragment key={data.option.id}>
+                        <div className="space-x-0 lg:space-x-10 flex justify-between lg:justify-end items-stretch">
+                            <div className="flex-grow mb-4">
+                                {parseTranslation(data.option, 'name', locale)}
+                            </div>
+                            {parsePlanValues(
+                                data.values,
+                                data.option.id,
+                                parseTranslation(data.option, 'name', locale)
+                            )}
+                        </div>
+                    </Fragment>
+                ))}
+            </>
+        );
+    };
+
+
     return (
         <div className="text-gray-350 font-medium max-w-[1440px] mx-auto px-5 my-12 lg:my-16">
             <div className="text-center">
-                <div className="text-xs font-bold">{t('Pricing & Plans')}</div>
+                <div className="text-xs font-bold">{t('Pricing_And_Plans')}</div>
                 <div className="mb-3 font-bold text-4xl">{t('Pricing that fits your size')}</div>
                 <div>
                     {t(
@@ -106,11 +159,11 @@ export default function Pricing() {
                 </div>
             </div>
 
-            <div className="underline text-center my-8 lg:my-10">
-                <Link href="/dashboard">
-                    <a>{t('Skip for now (Take trial)')}</a>
-                </Link>
-            </div>
+            {/*<div className="underline text-center my-8 lg:my-10">*/}
+            {/*    <Link href="/dashboard">*/}
+            {/*        <a>{t('Skip for now (Take trial)')}</a>*/}
+            {/*    </Link>*/}
+            {/*</div>*/}
 
             <div className="lg:space-x-10 flex justify-end items-stretch text-center lg:text-left">
                 <Price
@@ -147,131 +200,55 @@ export default function Pricing() {
             </div>
 
             <div className="text-xs lg:text-sm">
-                <div className="space-x-0 lg:space-x-10 flex justify-between lg:justify-end items-stretch mt-4 lg:m-0">
-                    <div className="flex-grow font-bold text-2xl my-6 lg:mt-4">{t('Features')}</div>
-                    <div
-                        className={`min-w-[4rem] lg:min-w-[14rem] lg:w-56 relative p-3 lg:hidden ${
-                            false ? 'lg:border-l-2 lg:border-r-2 border-orange-450' : 'border-white'
-                        }`}>
-                        <Image
-                            src={'/images/box.png'}
-                            layout="responsive"
-                            width="36"
-                            height="36"
-                            className="object-contain object-center"
-                        />
-                    </div>
+                {plans.values.map((values: any) => (
+                    <Fragment key={values.group.id}>
+                        <div className="space-x-0 lg:space-x-10 flex justify-between lg:justify-end items-stretch">
+                            <div className="flex-grow font-bold text-2xl my-6 sm:mt-4">{parseTranslation(values.group, 'name', locale)}</div>
+                            <div
+                                className={`min-w-[4rem] sm:min-w-[14rem] sm:w-56 relative p-3 sm:hidden ${
+                                    false ? 'sm:border-l-2 sm:border-r-2 border-orange-450' : 'border-white'
+                                }`}>
+                                <Image
+                                    src={'/images/box.png'}
+                                    layout="responsive"
+                                    width="36"
+                                    height="36"
+                                    className="object-contain object-center"
+                                />
+                            </div>
 
-                    <div
-                        className={`min-w-[4rem] lg:min-w-[14rem] lg:w-56 p-3 relative lg:hidden ${
-                            true ? 'lg:border-l-2 lg:border-r-2 border-orange-450' : 'border-white'
-                        }`}>
-                        <Image
-                            src={'/images/store.png'}
-                            layout="responsive"
-                            width="36"
-                            height="36"
-                            className="object-contain object-center"
-                        />
-                    </div>
+                            <div
+                                className={`min-w-[4rem] sm:min-w-[14rem] sm:w-56 p-3 relative sm:hidden ${
+                                    true ? 'sm:border-l-2 sm:border-r-2 border-orange-450' : 'border-white'
+                                }`}>
+                                <Image
+                                    src={'/images/store.png'}
+                                    layout="responsive"
+                                    width="36"
+                                    height="36"
+                                    className="object-contain object-center"
+                                />
+                            </div>
 
-                    <div
-                        className={`min-w-[4rem] lg:min-w-[14rem] lg:w-56 p-3 relative lg:hidden ${
-                            false ? 'lg:border-l-2 lg:border-r-2 border-orange-450' : 'border-white'
-                        }`}>
-                        <Image
-                            src={'/images/briefcase.png'}
-                            layout="responsive"
-                            width="36"
-                            height="36"
-                            className="object-contain object-center"
-                        />
-                    </div>
-                    <Tick disabled className="hidden lg:block" />
-                    <Tick disabled selected className="hidden lg:block" />
-                    <Tick disabled className="hidden lg:block" />
-                </div>
-                <div className="space-x-0 lg:space-x-10 flex justify-between lg:justify-end items-stretch">
-                    <div className="flex-grow font-bold mb-4">{t('Base')}</div>
-                    <Tick disabled />
-                    <Tick disabled selected />
-                    <Tick disabled />
-                </div>
-                <div className="space-x-0 lg:space-x-10 flex justify-between lg:justify-end items-stretch">
-                    <div className="flex-grow mb-4">{t('Social Selling on Facebook')}</div>
-                    <Tick />
-                    <Tick selected />
-                    <Tick />
-
-                    {/* <div className="lg:mr-auto mb-4">{t('Facebook live sales schelduling')}</div>
-                    <Tick />
-                    <Tick />
-                    <Tick /> */}
-                    {/* <div className="mb-4">{t('Facebook live sales schelduling')}</div>
-                    <div className="mb-4">{t('Unlimited products')}</div>
-                    <div className="mb-4">{t('Unlimited staff accounts')}</div>
-                    <div className="mb-4">{t('Inventory management')}</div>
-                    <div className="mb-4">{t('Automatic Invoicing System')}</div>
-                    <div className="mb-4">{t('Payment method automation')}</div>
-                    <div className="mb-4">{t('Choose your shipping prices')}</div>
-                    <div className="mb-4">{t('Extended shipping rules and limits')}</div>
-                    <div className="mb-4">{t('Reporting & Statistics')}</div> */}
-                </div>
-                <div className="space-x-0 lg:space-x-10 flex justify-between lg:justify-end items-stretch">
-                    <div className="flex-grow mb-4">{t('Facebook live sales schelduling')}</div>
-                    <Tick disabled />
-                    <Tick selected />
-                    <Tick />
-                </div>
-                <div className="space-x-0 lg:space-x-10 flex justify-between lg:justify-end items-stretch">
-                    <div className="flex-grow mb-4">{t('Unlimited products')}</div>
-                    <Tick disabled />
-                    <Tick disabled selected />
-                    <Tick />
-                </div>
-                <div className="space-x-0 lg:space-x-10 flex justify-between lg:justify-end items-stretch">
-                    <div className="flex-grow mb-4">{t('Unlimited staff accounts')}</div>
-                    <Tick />
-                    <Tick disabled selected />
-                    <Tick />
-                </div>
-                <div className="space-x-0 lg:space-x-10 flex justify-between lg:justify-end items-stretch">
-                    <div className="flex-grow mb-4">{t('Inventory management')}</div>
-                    <Tick disabled />
-                    <Tick selected />
-                    <Tick />
-                </div>
-                <div className="space-x-0 lg:space-x-10 flex justify-between lg:justify-end items-stretch">
-                    <div className="flex-grow mb-4">{t('Automatic Invoicing System')}</div>
-                    <Tick disabled />
-                    <Tick selected />
-                    <Tick />
-                </div>
-                <div className="space-x-0 lg:space-x-10 flex justify-between lg:justify-end items-stretch">
-                    <div className="flex-grow mb-4">{t('Payment method automation')}</div>
-                    <Tick disabled />
-                    <Tick selected />
-                    <Tick />
-                </div>
-                {/* <div className="font-bold mt-8 mb-4">{t('Advensed Features')}</div>
-                <div className="">
-                    <div className="mb-4">{t('Custom car Expiration')}</div>
-                    <div className="mb-4">{t('Waiting list & Notifications')}</div>
-                    <div className="mb-4">{t('Prestashop or Shopify integration')}</div>
-                    <div className="mb-4">
-                        {t('Custom pricing and invoicing to fit your needs')}
-                    </div>
-                    <div className="mb-4">{t('Branded website')}</div>
-                    <div className="mb-4">
-                        {t('Pre-loaded Wallet funtionalities for New Customers')}
-                    </div>
-                </div>
-                <div className="font-bold mt-8 mb-4">{t('Support')}</div>
-                <div className="">
-                    <div className="mb-4">{t('Basic Email Support')}</div>
-                    <div className="mb-4">{t('You own dedicated account manager')}</div>
-                    <div className="mb-4">{t('Live Sale Coaching from our expert team')}</div>
-                </div> */}
+                            <div
+                                className={`min-w-[4rem] sm:min-w-[14rem] sm:w-56 p-3 relative sm:hidden ${
+                                    false ? 'sm:border-l-2 sm:border-r-2 border-orange-450' : 'border-white'
+                                }`}>
+                                <Image
+                                    src={'/images/briefcase.png'}
+                                    layout="responsive"
+                                    width="36"
+                                    height="36"
+                                    className="object-contain object-center"
+                                />
+                            </div>
+                            <Tick disabled className="hidden sm:block" />
+                            <Tick disabled selected className="hidden sm:block" />
+                            <Tick disabled className="hidden sm:block" />
+                        </div>
+                        {parseOptions(values.values, locale)}
+                    </Fragment>
+                ))}
 
                 <div className="space-x-0 lg:space-x-10 flex justify-between lg:justify-end items-stretch">
                     <div className="flex-grow font-bold text-2xl mb-4 lg:mt-8 mt-0">{''}</div>
@@ -303,128 +280,7 @@ export default function Pricing() {
             </div>
 
             <div className="">
-                {/* <div className="text-sm mt-8 mr-auto">
-                    <div className="font-bold text-2xl mb-4">{t('Features')}</div>
-                    <div className="font-bold mt-8 mb-4">{t('Base')}</div>
-                    <div className="">
-                        <div className="mb-4">{t('Social Selling on Facebook')}</div>
-                        <div className="mb-4">{t('Facebook live sales schelduling')}</div>
-                        <div className="mb-4">{t('Unlimited products')}</div>
-                        <div className="mb-4">{t('Unlimited staff accounts')}</div>
-                        <div className="mb-4">{t('Inventory management')}</div>
-                        <div className="mb-4">{t('Automatic Invoicing System')}</div>
-                        <div className="mb-4">{t('Payment method automation')}</div>
-                        <div className="mb-4">{t('Choose your shipping prices')}</div>
-                        <div className="mb-4">{t('Extended shipping rules and limits')}</div>
-                        <div className="mb-4">{t('Reporting & Statistics')}</div>
-                    </div>
-                    <div className="font-bold mt-8 mb-4">{t('Advensed Features')}</div>
-                    <div className="">
-                        <div className="mb-4">{t('Custom car Expiration')}</div>
-                        <div className="mb-4">{t('Waiting list & Notifications')}</div>
-                        <div className="mb-4">{t('Prestashop or Shopify integration')}</div>
-                        <div className="mb-4">
-                            {t('Custom pricing and invoicing to fit your needs')}
-                        </div>
-                        <div className="mb-4">{t('Branded website')}</div>
-                        <div className="mb-4">
-                            {t('Pre-loaded Wallet funtionalities for New Customers')}
-                        </div>
-                    </div>
-                    <div className="font-bold mt-8 mb-4">{t('Support')}</div>
-                    <div className="">
-                        <div className="mb-4">{t('Basic Email Support')}</div>
-                        <div className="mb-4">{t('You own dedicated account manager')}</div>
-                        <div className="mb-4">{t('Live Sale Coaching from our expert team')}</div>
-                    </div>
-                </div> */}
-                <div className="space-x-10 flex">
-                    {/* <Price
-                        onClick={() => setSelected('basic')}
-                        name={t('Basic')}
-                        selected={selected === 'basic'}
-                        price={49}
-                        desc="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor"
-                        sale={0}
-                        buttonText="Select"
-                        permissions={
-                            <>
-                                <Tick />
-                                <Tick />
-                                <Tick />
-                                <Tick />
-                                <Tick />
-                                <Tick />
-                                <Tick />
-                                <Tick />
-                                <Tick />
-                                <Tick />
-                                <Tick className="mt-12 mb-4" />
-                                <Tick />
-                            </>
-                        }
-                    />
-                    <Price
-                        onClick={() => setSelected('business')}
-                        name={t('Business')}
-                        selected={selected === 'business'}
-                        price={99}
-                        desc="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor"
-                        sale={5}
-                        buttonText="Select"
-                        permissions={
-                            <>
-                                <Tick />
-                                <Tick />
-                                <Tick />
-                                <Tick />
-                                <Tick />
-                                <Tick />
-                                <Tick />
-                                <Tick />
-                                <Tick />
-                                <Tick />
-                                <Tick className="mt-12 mb-4" />
-                                <Tick />
-                                <Tick />
-                                <Tick />
-                                <Tick className="mt-12 mb-4" />
-                                <Tick />
-                            </>
-                        }
-                    />
-                    <Price
-                        onClick={() => false}
-                        selected={selected === 'platinum'}
-                        disabled
-                        name={t('Platinum')}
-                        price={139}
-                        buttonText="Comming Soon"
-                        desc="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor"
-                        sale={3}
-                        permissions={
-                            <>
-                                <Tick />
-                                <Tick />
-                                <Tick />
-                                <Tick />
-                                <Tick />
-                                <Tick />
-                                <Tick />
-                                <Tick />
-                                <Tick />
-                                <Tick />
-                                <Tick className="mt-12 mb-4" />
-                                <Tick />
-                                <Tick />
-                                <Tick />
-                                <Tick className="mt-12 mb-4" />
-                                <Tick />
-                                <Tick />
-                            </>
-                        }
-                    /> */}
-                </div>
+                <div className="space-x-10 flex" />
             </div>
 
             <div className="mt-16 lg:mt-28 text-center">
@@ -551,6 +407,31 @@ export default function Pricing() {
     );
 }
 
-Pricing.Layout = ({ children }: { children: React.ReactNode }) => {
+export async function getServerSideProps(context: any) {
+    const { locale } = context;
+    const session = await getSession(context);
+
+    if (!session) {
+        return {
+            redirect: { destination: `/${locale === 'fr' ? '' : `${locale}/`}auth/signin` }
+        };
+    }
+
+    return {
+        props: {
+            session,
+            locale,
+            messages: {
+                ...require(`../../messages/${locale}.json`)
+            }
+        }
+    };
+}
+
+Pricing.Layout = ({ children }: { children: any }) => {
+    const user = useSelector(userSelector);
+    const [session] = useSession();
+    console.log('USER SESSION', session);
+    console.log('USER ', user);
     return children;
 };

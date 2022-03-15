@@ -310,5 +310,12 @@
   "settings_descr": "Settings section allows merchants contact to Proshop admin in case of issue or questions",
   "Payment Plans": "Payment Plans",
   "payed": "payed",
-  "shipped": "shipped"
+  "shipped": "shipped",
+  "Check confirmation link in your mailbox": "Check confirmation link in your mailbox",
+  "Pricing_And_Plans": "Pricing & Plans",
+  "Sing up today!": "Sing up today!",
+  "registr_descr": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+  "registr_descr_small": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+  "have_account_descr": "Already have an account? Sign in here!",
+  "I have read and accept the": "I have read and accept the"
 }
