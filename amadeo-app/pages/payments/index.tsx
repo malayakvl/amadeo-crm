@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslations } from 'next-intl';
 import { userSelector } from '../../redux/user/selectors';
@@ -43,6 +43,10 @@ export default function Payments({ session }: { session: any }) {
         paginationSelectorFactory(PaginationType.PAYMENTS)
     );
 
+    const handleHideFilter = useCallback(() => {
+        setFilterOpen(false);
+    }, []);
+
     return (
         <>
             <Head>
@@ -72,7 +76,7 @@ export default function Payments({ session }: { session: any }) {
 
                             <FilterValues />
 
-                            {filterOpen && <Filters />}
+                            {filterOpen && <Filters handleHideFilter={handleHideFilter} />}
                             {showDatePopup && (
                                 <div className="filters-calendar">
                                     <DateRangePicker

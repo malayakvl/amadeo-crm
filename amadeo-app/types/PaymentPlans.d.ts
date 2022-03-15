@@ -3,6 +3,7 @@ declare namespace PaymentPlans {
         items: { header: any[]; values: any[] };
         loading: boolean;
         isFetched: boolean;
+        clientSecret: string;
     }
 
     // interface SettingItem {

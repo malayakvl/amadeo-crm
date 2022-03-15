@@ -50,6 +50,10 @@ const ListSellers: React.FC = () => {
         return dispatch(fetchItemsAction());
     }, [dispatch]);
 
+    const handleHideFilter = useCallback(() => {
+        setFilterOpen(false);
+    }, []);
+
     return (
         <div className="mt-7">
             <div className="flex border border-l-0 border-r-0 border-t-0 pb-5 mb-10 relative">
@@ -57,7 +61,7 @@ const ListSellers: React.FC = () => {
                     {t('Sellers')}
                     <span className="text-gray-180 font-normal text-sm"> {count} items</span>
                 </h2>
-                {filterOpen && <Filters />}
+                {filterOpen && <Filters handleHideFilter={handleHideFilter} />}
                 {showDatePopup && (
                     <div className="filters-calendar">
                         <DateRangePicker

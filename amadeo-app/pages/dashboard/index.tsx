@@ -67,6 +67,7 @@ export default function Index({ session }: { session: any }) {
                 })
             );
             dispatch(fetchItemsAction());
+            dispatch(showDateSelectorAction(false));
         }
     }, [state, user]);
 

@@ -23,8 +23,7 @@ class Seller {
                 offset = (Number(page) - 1) * Number(perPage);
             }
             
-            const ordersQuery = `SELECT country_name, country_iso,
-                                    id, email, first_name, last_name, company_name, phone, full_address, photo, created_at, total_orders, total_buyers, total_amount, total_sessions
+            const ordersQuery = `SELECT *
                                  FROM data.get_sellers (${perPage}, ${offset}, '${JSON.stringify(_filters)}', '${column} ${sort}');`;
             const res = await client.query(ordersQuery);
             const items = res.rows.length > 0 ? res.rows : [];

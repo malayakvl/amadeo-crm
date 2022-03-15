@@ -49,3 +49,20 @@ export const fetchFormAction: any = createAction(
             };
         }
 );
+export const stripePaymentIntentAction: any = createAction(
+    'stripe/FETCH_SECRET',
+    async () =>
+        async (dispatch: Type.Dispatch): Promise<{ clientSecret: string }> => {
+            dispatch(showLoaderAction(true));
+            const data = { items: [{ id: 'prod_LJxk2nWsHvt13X' }] };
+            const res = await axios.post(`${baseUrl}/create-payment-intent`, data, {
+                headers: { 'Content-Type': 'application/json' }
+            });
+            if (res.status) {
+                dispatch(showLoaderAction(false));
+            }
+            return {
+                clientSecret: res.data.clientSecret
+            };
+        }
+);

@@ -1,12 +1,14 @@
 import { handleActions } from 'redux-actions';
-import { fetchFormAction } from './actions';
+import { fetchFormAction, stripePaymentIntentAction } from './actions';
 
 const initialState: {
     loading: boolean;
     items: { header: any[]; values: any[] };
+    clientSecret: string;
 } = {
     loading: false,
-    items: { header: [], values: [] }
+    items: { header: [], values: [] },
+    clientSecret: ''
 };
 
 const ACTION_HANDLERS: any = {
@@ -25,10 +27,26 @@ const ACTION_HANDLERS: any = {
             loading: false,
             isFetched: true
         })
+    },
+    [stripePaymentIntentAction]: {
+        next: (
+            state: State.PaymentPlans,
+            action: Type.ReduxAction<Pick<State.PaymentPlans, 'clientSecret'>>
+        ): State.PaymentPlans => ({
+            ...state,
+            ...action.payload,
+            loading: false,
+            isFetched: true
+        }),
+        throw: (state: State.PaymentPlans): State.PaymentPlans => ({
+            ...state,
+            loading: false,
+            isFetched: true
+        })
     }
 };
 
-export { fetchFormAction };
+export { fetchFormAction, stripePaymentIntentAction };
 
 // ------------------------------------
 // Reducer

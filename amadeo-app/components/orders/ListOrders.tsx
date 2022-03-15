@@ -18,7 +18,7 @@ import { Filters, FilterValues, ListItems } from './index';
 import { checkedIdsSelector, paginationSelectorFactory } from '../../redux/layouts/selectors';
 import { DateRangePicker } from 'react-date-range';
 import 'react-date-range/dist/styles.css'; // main css file
-import 'react-date-range/dist/theme/default.css'; // theme css file
+import 'react-date-range/dist/theme/default.css';
 
 const userProfileImg =
     'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80';
@@ -54,6 +54,10 @@ const ListOrders: React.FC = () => {
         setShowMoreConfigs(nextCheckedItems);
     };
 
+    const handleHideFilter = useCallback(() => {
+        setFilterOpen(false);
+    }, []);
+
     return (
         <div className="mt-7">
             <div className="flex border border-l-0 border-r-0 border-t-0 pb-5 mb-10 relative">
@@ -61,7 +65,7 @@ const ListOrders: React.FC = () => {
                     {t('Orders')}
                     <span className="text-gray-180 font-normal text-sm"> {count} items</span>
                 </h2>
-                {filterOpen && <Filters />}
+                {filterOpen && <Filters handleHideFilter={handleHideFilter} />}
                 {showDatePopup && (
                     <div className="filters-calendar">
                         <DateRangePicker

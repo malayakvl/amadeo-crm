@@ -68,6 +68,8 @@ const Price = ({
 export default function Pricing() {
     const [selected, setSelected] = useState('business');
     const t = useTranslations();
+
+
     const Tick = ({ disabled, className }: { disabled?: boolean; className?: string }) => (
         <div className={`mx-auto mb-4 w-5 h-5 relative ${className || ''}`}>
             {!disabled && <Image src="/images/tick.svg" layout="fill" />}
