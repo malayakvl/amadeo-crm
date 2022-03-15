@@ -146,7 +146,6 @@ export default function Pricing({ locale }: { locale: any }) {
         );
     };
 
-
     return (
         <div className="text-gray-350 font-medium max-w-[1440px] mx-auto px-5 my-12 lg:my-16">
             <div className="text-center">
@@ -203,7 +202,9 @@ export default function Pricing({ locale }: { locale: any }) {
                 {plans.values.map((values: any) => (
                     <Fragment key={values.group.id}>
                         <div className="space-x-0 lg:space-x-10 flex justify-between lg:justify-end items-stretch">
-                            <div className="flex-grow font-bold text-2xl my-6 sm:mt-4">{parseTranslation(values.group, 'name', locale)}</div>
+                            <div className="flex-grow font-bold text-2xl my-6 sm:mt-4">
+                                {parseTranslation(values.group, 'name', locale)}
+                            </div>
                             <div
                                 className={`min-w-[4rem] sm:min-w-[14rem] sm:w-56 relative p-3 sm:hidden ${
                                     false ? 'sm:border-l-2 sm:border-r-2 border-orange-450' : 'border-white'
