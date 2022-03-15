@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import { getSession } from 'next-auth/client';
-import React, { useEffect, Fragment } from 'react';
+import React, { useEffect, Fragment, useCallback, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { CheckIcon, BanIcon } from '@heroicons/react/solid';
 import { showLoaderAction } from '../../redux/layouts/actions';
@@ -9,12 +9,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import { itemsSelector } from '../../redux/paymentPlans/selectors';
 import { parseTranslation } from '../../lib/functions';
 import { submitFormAction } from '../../redux/paymentPlans/actions';
+import ConfirmDialog from '../../components/_common/ConfirmDialog';
 
 export default function Index({ session, locale }: { session: any; locale: any }) {
     if (!session) return <></>;
     const t = useTranslations();
     const dispatch = useDispatch();
     const plans = useSelector(itemsSelector);
+
+    const [selectedItem, setSelectedItem] = useState<any | null>();
 
     useEffect(() => {
         dispatch(showLoaderAction(true));
@@ -25,11 +28,12 @@ export default function Index({ session, locale }: { session: any; locale: any }
         dispatch(showLoaderAction(false));
     }, [plans?.header?.length]);
 
-    const changeStatus = (planId: number, optionId: number) => {
-        dispatch(submitFormAction({ optionId: optionId, planId: planId }));
+    const changeStatus = (planId: number, optionId: number, optionName: any, status: boolean) => {
+        setSelectedItem({ status: status, name: optionName, planId: planId, optionId: optionId });
+        // dispatch(submitFormAction({ optionId: optionId, planId: planId }));
     };
 
-    const parsePlanValues = (plans: any, optionId: number) => {
+    const parsePlanValues = (plans: any, optionId: number, optionName: string) => {
         return (
             <>
                 {plans.map((option: any) => (
@@ -37,7 +41,9 @@ export default function Index({ session, locale }: { session: any; locale: any }
                         <div
                             className="plan-status"
                             role="presentation"
-                            onClick={() => changeStatus(option.plan.id, optionId)}>
+                            onClick={() =>
+                                changeStatus(option.plan.id, optionId, optionName, option.value)
+                            }>
                             {option.value ? (
                                 <CheckIcon width={20} height={20} />
                             ) : (
@@ -57,13 +63,26 @@ export default function Index({ session, locale }: { session: any; locale: any }
                     <Fragment key={data.option.id}>
                         <tr>
                             <td>{parseTranslation(data.option, 'name', locale)}</td>
-                            {parsePlanValues(data.values, data.option.id)}
+                            {parsePlanValues(
+                                data.values,
+                                data.option.id,
+                                parseTranslation(data.option, 'name', locale)
+                            )}
                         </tr>
                     </Fragment>
                 ))}
             </>
         );
     };
+
+    const handlerConfirm = useCallback(() => {
+        if (!selectedItem) return;
+
+        dispatch(
+            submitFormAction({ optionId: selectedItem.optionId, planId: selectedItem.planId })
+        );
+        setSelectedItem(null);
+    }, [dispatch, selectedItem]);
 
     return (
         <>
@@ -108,6 +127,17 @@ export default function Index({ session, locale }: { session: any; locale: any }
                     </div>
                 )}
             </div>
+            <ConfirmDialog
+                show={!!selectedItem}
+                text={t('Are you sure you want to {status} {name} method?', {
+                    status: selectedItem?.status ? t('disable') : t('enable'),
+                    name: selectedItem?.name
+                })}
+                titleConfirm={t('Yes')}
+                titleCancel={t('Cancel')}
+                onConfirm={handlerConfirm}
+                onClose={() => setSelectedItem(null)}
+            />
         </>
     );
 }

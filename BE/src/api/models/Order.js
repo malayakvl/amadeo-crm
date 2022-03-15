@@ -340,10 +340,7 @@ class Order {
             } else {
             
             }
-            const ordersQuery = `SELECT id, live_sessions_id, shipping_id, country_id, payment_id, order_amount, discount_amount,
-                                    total_amount, order_number, status, created_at, updated_at, seller_id,
-                                    seller_first_name, seller_photo, buyer_id,
-                                    buyer_first_name, buyer_photo, flag_name, shipping_image, order_items
+            const ordersQuery = `SELECT *
                                 FROM data.get_orders (${perPage}, ${offset}, '${JSON.stringify(_filters)}', '${column} ${sort}');`;
             const res = await client.query(ordersQuery);
             const items = res.rows.length > 0 ? res.rows : [];

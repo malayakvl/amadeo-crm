@@ -1,5 +1,5 @@
 import { getSession } from 'next-auth/client';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from 'yup';
@@ -9,6 +9,7 @@ import { itemSelector } from '../../redux/settings/selectors';
 import { fetchFormAction } from '../../redux/settings';
 import { showLoaderAction } from '../../redux/layouts/actions';
 import { submitFormAction } from '../../redux/settings/actions';
+import ConfirmDialog from '../../components/_common/ConfirmDialog';
 
 export default function Index() {
     const t = useTranslations();
@@ -16,6 +17,7 @@ export default function Index() {
     const dispatch = useDispatch();
 
     const [showForm, setShowForm] = useState(false);
+    const [selectedItem, setSelectedItem] = useState<any | null>();
 
     const validationSchema = Yup.object({
         order_timer: Yup.number().required(t('Required field')),
@@ -33,6 +35,12 @@ export default function Index() {
             dispatch(showLoaderAction(false));
         }
     }, [initialValues]);
+
+    const handlerConfirm = useCallback(() => {
+        if (!selectedItem) return;
+        initialValues.free_shipping_status = !initialValues.free_shipping_status;
+        setSelectedItem(null);
+    }, [selectedItem]);
 
     return (
         <>
@@ -52,6 +60,15 @@ export default function Index() {
                             dispatch(submitFormAction(values));
                         }}>
                         {(props) => {
+                            const onChangeConfigured = () => {
+                                if (!selectedItem) {
+                                    setSelectedItem({
+                                        status: props.values.free_shipping_status,
+                                        name: t('Free Shipping Settings')
+                                    });
+                                    return false;
+                                }
+                            };
                             return (
                                 <form className="w-full md:w-1/2" onSubmit={props.handleSubmit}>
                                     <div className="font-bold text-gray-350 text-lg mb-8 border-gray-200">
@@ -90,7 +107,7 @@ export default function Index() {
                                         name={'free_shipping_status'}
                                         style={null}
                                         props={props}
-                                        onChange={props.handleChange}
+                                        onChange={onChangeConfigured}
                                     />
                                     <div className="max-w-[300px]">
                                         <InputText
@@ -104,7 +121,7 @@ export default function Index() {
                                         />
                                     </div>
                                     <button type="submit" className="w-32 mt-8 gradient-btn">
-                                        {t('Send')}
+                                        {t('Save')}
                                     </button>
                                 </form>
                             );
@@ -112,6 +129,17 @@ export default function Index() {
                     </Formik>
                 </div>
             )}
+            <ConfirmDialog
+                show={!!selectedItem}
+                text={t('Are you sure you want to {status} {name} method?', {
+                    status: selectedItem?.status ? t('disable') : t('enable'),
+                    name: selectedItem?.name
+                })}
+                titleConfirm={t('Yes')}
+                titleCancel={t('Cancel')}
+                onConfirm={handlerConfirm}
+                onClose={() => setSelectedItem(null)}
+            />
         </>
     );
 }

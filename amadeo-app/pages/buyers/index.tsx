@@ -5,7 +5,7 @@ import { InfoBuyers, ListBuyers, Filters, FilterValues } from '../../components/
 import { paginationSelectorFactory } from '../../redux/layouts/selectors';
 import { PaginationType } from '../../constants';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 
 export default function Buyers({ session }: { session: any }) {
     if (!session) return <></>;
@@ -17,6 +17,10 @@ export default function Buyers({ session }: { session: any }) {
         paginationSelectorFactory(PaginationType.BUYERS)
     );
 
+    const handleHideFilter = useCallback(() => {
+        setFilterOpen(false);
+    }, []);
+
     return (
         <>
             <div className="block-white-8 mr-10 white-shadow-big mb-8">
@@ -27,7 +31,7 @@ export default function Buyers({ session }: { session: any }) {
                 <div className="mb-14 relative">
                     <FilterValues />
 
-                    {filterOpen && <Filters />}
+                    {filterOpen && <Filters handleHideFilter={handleHideFilter} />}
 
                     <button
                         onClick={() => setFilterOpen(!filterOpen)}

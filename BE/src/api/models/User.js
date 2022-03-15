@@ -2,7 +2,9 @@ import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
 import pool from './connect.js';
 import { logger } from '../../common/logger.js';
-
+// import Stripe from 'stripe';
+//
+// const stripe = Stripe(process.env.STRIPE_API_KEY);
 /**
  * User model
  */

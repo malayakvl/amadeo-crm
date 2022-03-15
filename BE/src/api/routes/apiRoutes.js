@@ -47,6 +47,7 @@ apiRoutes.route('/add-live-messages').post(ChatbotMessageController.addMessages)
 apiRoutes.route('/parse-live-messages').get(ChatbotMessageController.parseMessages);
 apiRoutes.route('/create-orders').get(OrderController.createOrders);
 
+apiRoutes.route('/create-payment-intent').post(PaymentPlanController.stripeClientSecret);
 /** ===================================================================== */
 /** ================== AUTHENTIFICATED ROUTES =========================== */
 /** ===================================================================== */

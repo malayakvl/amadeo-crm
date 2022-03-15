@@ -26,7 +26,6 @@ class PaymentPlan {
         const client = await pool.connect();
         try {
             const query = `UPDATE data.subscription_plans_to_options SET value= NOT value WHERE option_id=${data.optionId} AND plan_id=${data.planId}`;
-            console.log(query);
             await client.query(query);
             
             return { success: true };

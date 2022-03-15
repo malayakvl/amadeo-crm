@@ -5,31 +5,32 @@ class Shipping {
     async fetchAll(userId) {
         const client = await pool.connect();
         try {
-            const query = `
-                SELECT
-                    s.id,
-                    s.name,
-                    s.image,
-                    s.status,
-                    s.created_at,
-                    s2c.shipping_to_country__info AS countries
-                    FROM data.shipping s LEFT JOIN LATERAL (
-                        SELECT
-                            s.id AS shipping_id,
-                            json_agg(
-                                json_build_object(
-                                    'country_id', s2c.country_id,
-                                    'price', s2c.price
-                                )
-                            ) AS shipping_to_country__info
-                        FROM data.shipping_to_country s2c
-                        WHERE TRUE
-                            AND (s2c.user_id = ${userId})
-                            AND (s2c.shipping_id = s.id)
-                        GROUP BY
-                            s.id
-                    ) s2c ON (s.id = s2c.shipping_id)
-            `
+            // const query = `
+            //     SELECT
+            //         s.id,
+            //         s.name,
+            //         s.image,
+            //         s.status,
+            //         s.created_at,
+            //         s2c.shipping_to_country__info AS countries
+            //         FROM data.shipping s LEFT JOIN LATERAL (
+            //             SELECT
+            //                 s.id AS shipping_id,
+            //                 json_agg(
+            //                     json_build_object(
+            //                         'country_id', s2c.country_id,
+            //                         'price', s2c.price
+            //                     )
+            //                 ) AS shipping_to_country__info
+            //             FROM data.shipping_to_country s2c
+            //             WHERE TRUE
+            //                 AND (s2c.user_id = ${userId})
+            //                 AND (s2c.shipping_id = s.id)
+            //             GROUP BY
+            //                 s.id
+            //         ) s2c ON (s.id = s2c.shipping_id)
+            // `
+            const query = `SELECT * FROM data.get_shipping_by_user(${userId})`;
             const res = await client.query(query);
             return res.rows.length ? res.rows : null;
         } catch (e) {
@@ -49,46 +50,49 @@ class Shipping {
     async fetchCustomerAll(userId) {
         const client = await pool.connect();
         try {
-            const query = `            
-                SELECT
-                s.id,
-                s.name,
-                s.image,
-                (
-                    s.status
-                    AND
-                    NOT EXISTS (
-                        SELECT
-                            cds.id
-                        FROM data.customer_disabled_shipping cds
-                        WHERE TRUE
-                            AND (cds.user_id = ${userId})
-                            AND (cds.shipping_id = s.id)
-                    )
-                ) AS status,
-                s.created_at,
-                COALESCE(s2c.shipping_to_country__info, '[]'::json) AS countries
-            FROM data.shipping s LEFT JOIN LATERAL (
-                SELECT
-                    s.id AS shipping_id,
-                    json_agg(
-                        json_build_object(
-                            'country_id', s2c.country_id,
-                            'price', s2c.price,
-                            'iso', c.iso
-                        )
-                    ) AS shipping_to_country__info
-                FROM data.shipping_to_country s2c
-                LEFT JOIN data.countries c
-                    ON c.id = s2c.country_id 
-                WHERE TRUE
-                    AND (s2c.user_id = ${userId})
-                    AND (s2c.shipping_id = s.id)
-                GROUP BY
-                    s.id
-            ) s2c ON (s.id = s2c.shipping_id)
-            ;
-            `
+            // const query = `
+            //     SELECT
+            //     s.id,
+            //     s.name,
+            //     s.image,
+            //     (
+            //         s.status
+            //         AND
+            //         NOT EXISTS (
+            //             SELECT
+            //                 cds.id
+            //             FROM data.customer_disabled_shipping cds
+            //             WHERE TRUE
+            //                 AND (cds.user_id = ${userId})
+            //                 AND (cds.shipping_id = s.id)
+            //         )
+            //     ) AS status,
+            //     s.created_at,
+            //     COALESCE(s2c.shipping_to_country__info, '[]'::json) AS countries
+            // FROM data.shipping s LEFT JOIN LATERAL (
+            //     SELECT
+            //         s.id AS shipping_id,
+            //         json_agg(
+            //             json_build_object(
+            //                 'country_id', s2c.country_id,
+            //                 'price', s2c.price,
+            //                 'iso', c.iso
+            //             )
+            //         ) AS shipping_to_country__info
+            //     FROM data.shipping_to_country s2c
+            //     LEFT JOIN data.countries c
+            //         ON c.id = s2c.country_id
+            //     WHERE TRUE
+            //         AND (s2c.user_id = ${userId})
+            //         AND (s2c.shipping_id = s.id)
+            //     GROUP BY
+            //         s.id
+            // ) s2c ON (s.id = s2c.shipping_id)
+            // ;
+            // `
+            const query = `SELECT
+                                id, name, image, status, status__customer_disabled_shipping, countries, created_at
+                            FROM data.get_shipping_by_user(${userId});`;
             const res = await client.query(query);
 
             return res.rows
@@ -199,7 +203,7 @@ class Shipping {
         try {
             const queryInsert =
                 `DELETE FROM data.shipping WHERE id = $1`;
-            const res = await client.query(queryInsert, [id]);
+            await client.query(queryInsert, [id]);
 
             return true;
         } catch (e) {
