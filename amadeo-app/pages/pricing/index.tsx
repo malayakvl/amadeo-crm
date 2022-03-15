@@ -36,13 +36,13 @@ const Price = ({
 
     return (
         <div
-            className={`sm:w-56 p-2 sm:p-4 flex flex-col border-2 sm:border-b-0 ${
-                selected ? 'rounded-xl sm:rounded-b-none border-orange-450' : 'border-white'
+            className={`lg:w-56 p-2 lg:p-4 flex flex-col border-2 lg:border-b-0 ${
+                selected ? 'rounded-xl lg:rounded-b-none border-orange-450' : 'border-white'
             }`}>
-            <div className="w-32 h-32 sm:w-36 sm:h-64 relative mx-auto">
+            <div className="w-32 h-32 lg:w-36 lg:h-64 relative mx-auto">
                 <Image src={imageSrc} layout="fill" className="object-contain object-center" />
             </div>
-            <div className="font-bold text-xl mb-2 flex flex-wrap items-center justify-center sm:justify-between">
+            <div className="font-bold text-xl mb-2 flex flex-wrap items-center justify-center lg:justify-between">
                 {name}
                 {name === 'Business' && (
                     <div className="text-[10px] border border-orange-450 rounded-lg p-1 text-orange-450">
@@ -51,7 +51,7 @@ const Price = ({
                 )}
             </div>
             <div className="h-full text-sm">{desc}</div>
-            <div className="text-2xl sm:text-4xl font-bold min-h-[6rem]">
+            <div className="text-2xl lg:text-4xl font-bold min-h-[6rem]">
                 € {price}
                 <span className="text-base"> /month</span>
                 {sale > 0 && <div className="text-xs font-bold">{sale}% of sale</div>}
@@ -85,6 +85,7 @@ export default function Pricing({ locale }: { locale: any }) {
     }, []);
 
     const t = useTranslations();
+
     const Tick = ({
         disabled,
         className,
@@ -95,11 +96,11 @@ export default function Pricing({ locale }: { locale: any }) {
         selected?: boolean;
     }) => (
         <div
-            className={`min-w-[4rem] sm:min-w-[14rem] sm:w-56 
-            ${selected ? 'sm:border-l-2 sm:border-r-2 border-orange-450' : 'border-white'}
+            className={`min-w-[4rem] lg:min-w-[14rem] lg:w-56 
+            ${selected ? 'lg:border-l-2 lg:border-r-2 border-orange-450' : 'border-white'}
             ${className || ''}`}>
             {!disabled ? (
-                <div className="w-4 h-4 sm:w-6 sm:h-6 relative mx-auto">
+                <div className="w-4 h-4 lg:w-6 lg:h-6 relative mx-auto">
                     <Image src="/images/tick.svg" layout="fill" />
                 </div>
             ) : (
@@ -108,7 +109,7 @@ export default function Pricing({ locale }: { locale: any }) {
         </div>
     );
 
-    const parsePlanValues = (plans: any) => {
+    const parsePlanValues = (plans: any, optionId: number, optionName: string) => {
         return (
             <>
                 {plans.map((option: any, index: number) => (
@@ -129,11 +130,15 @@ export default function Pricing({ locale }: { locale: any }) {
             <>
                 {data.map((data: any) => (
                     <Fragment key={data.option.id}>
-                        <div className="space-x-0 sm:space-x-10 flex justify-between sm:justify-end items-stretch">
+                        <div className="space-x-0 lg:space-x-10 flex justify-between lg:justify-end items-stretch">
                             <div className="flex-grow mb-4">
                                 {parseTranslation(data.option, 'name', locale)}
                             </div>
-                            {parsePlanValues(data.values)}
+                            {parsePlanValues(
+                                data.values,
+                                data.option.id,
+                                parseTranslation(data.option, 'name', locale)
+                            )}
                         </div>
                     </Fragment>
                 ))}
@@ -141,8 +146,9 @@ export default function Pricing({ locale }: { locale: any }) {
         );
     };
 
+
     return (
-        <div className="text-gray-350 font-medium max-w-[1440px] mx-auto px-5 my-12 sm:my-16">
+        <div className="text-gray-350 font-medium max-w-[1440px] mx-auto px-5 my-12 lg:my-16">
             <div className="text-center">
                 <div className="text-xs font-bold">{t('Pricing_And_Plans')}</div>
                 <div className="mb-3 font-bold text-4xl">{t('Pricing that fits your size')}</div>
@@ -153,17 +159,15 @@ export default function Pricing({ locale }: { locale: any }) {
                 </div>
             </div>
 
-            {/*<div className="underline text-center my-8 sm:my-10">*/}
+            {/*<div className="underline text-center my-8 lg:my-10">*/}
             {/*    <Link href="/dashboard">*/}
             {/*        <a>{t('Skip for now (Take trial)')}</a>*/}
             {/*    </Link>*/}
             {/*</div>*/}
 
-            <div className="sm:space-x-10 flex justify-end items-stretch text-center sm:text-left">
+            <div className="lg:space-x-10 flex justify-end items-stretch text-center lg:text-left">
                 <Price
-                    onClick={() => {
-                        setSelected('basic');
-                    }}
+                    onClick={() => setSelected('basic')}
                     name={t('Basic')}
                     selected={selected === 'basic'}
                     price={49}
@@ -195,11 +199,10 @@ export default function Pricing({ locale }: { locale: any }) {
                 />
             </div>
 
-            <div className="text-xs sm:text-sm">
+            <div className="text-xs lg:text-sm">
                 {plans.values.map((values: any) => (
                     <Fragment key={values.group.id}>
-                        <div className="space-x-0 sm:space-x-10 flex justify-between sm:justify-end items-stretch mt-4 sm:m-0">
-
+                        <div className="space-x-0 lg:space-x-10 flex justify-between lg:justify-end items-stretch">
                             <div className="flex-grow font-bold text-2xl my-6 sm:mt-4">{parseTranslation(values.group, 'name', locale)}</div>
                             <div
                                 className={`min-w-[4rem] sm:min-w-[14rem] sm:w-56 relative p-3 sm:hidden ${
@@ -247,29 +250,29 @@ export default function Pricing({ locale }: { locale: any }) {
                     </Fragment>
                 ))}
 
-                <div className="space-x-0 sm:space-x-10 flex justify-between sm:justify-end items-stretch">
-                    <div className="flex-grow font-bold text-2xl mb-4 sm:mt-8 mt-0">{''}</div>
+                <div className="space-x-0 lg:space-x-10 flex justify-between lg:justify-end items-stretch">
+                    <div className="flex-grow font-bold text-2xl mb-4 lg:mt-8 mt-0">{''}</div>
 
                     <div
-                        className={`min-w-[4rem] sm:min-w-[14rem] sm:w-56 w-3 ${
+                        className={`min-w-[4rem] lg:min-w-[14rem] lg:w-56 w-3 ${
                             false
-                                ? 'sm:border-2 sm:border-t-0 sm:rounded-b-xl border-orange-450'
+                                ? 'lg:border-2 lg:border-t-0 lg:rounded-b-xl border-orange-450'
                                 : 'border-white'
                         }`}
                     />
 
                     <div
-                        className={`min-w-[4rem] sm:min-w-[14rem] sm:w-56 w-3 ${
+                        className={`min-w-[4rem] lg:min-w-[14rem] lg:w-56 w-3 ${
                             selected
-                                ? 'sm:border-2 sm:border-t-0 sm:rounded-b-xl border-orange-450'
+                                ? 'lg:border-2 lg:border-t-0 lg:rounded-b-xl border-orange-450'
                                 : 'border-white'
                         }`}
                     />
 
                     <div
-                        className={`min-w-[4rem] sm:min-w-[14rem] sm:w-56 w-3 ${
+                        className={`min-w-[4rem] lg:min-w-[14rem] lg:w-56 w-3 ${
                             false
-                                ? 'sm:border-2 sm:border-t-0 sm:rounded-b-xl border-orange-450'
+                                ? 'lg:border-2 lg:border-t-0 lg:rounded-b-xl border-orange-450'
                                 : 'border-white'
                         }`}
                     />
@@ -280,7 +283,7 @@ export default function Pricing({ locale }: { locale: any }) {
                 <div className="space-x-10 flex" />
             </div>
 
-            <div className="mt-16 sm:mt-28 text-center">
+            <div className="mt-16 lg:mt-28 text-center">
                 <div className="text-xs font-bold">{t('Support')}</div>
                 <div className="mb-3 font-bold text-4xl">{t('Frequently asked questions')}</div>
                 <div>
@@ -290,7 +293,7 @@ export default function Pricing({ locale }: { locale: any }) {
                 </div>
             </div>
 
-            <div className="w-full mt-12 sm:mt-16 mb-20 sm:mb-28 grid grid-cols-1 gap-x-2 gap-y-12 sm:grid-cols-2 sm:gap-x-4 sm:gap-y-16 md:grid-cols-3">
+            <div className="w-full mt-12 lg:mt-16 mb-20 lg:mb-28 grid grid-cols-1 gap-x-2 gap-y-12 md:grid-cols-2 lg:gap-x-4 lg:gap-y-16 lg:grid-cols-3">
                 <div>
                     <div className="font-bold mb-6 text-lg">
                         {t('What is the differens between plans ?')}
@@ -390,13 +393,13 @@ export default function Pricing({ locale }: { locale: any }) {
                     {t('It only takes 30 second to get started')}
                 </div>
             </div>
-            <div className="flex flex-wrap sm:flex-nowrap mt-8 mb-16 sm:max-w-2xl mx-auto">
+            <div className="flex flex-wrap lg:flex-nowrap mt-8 mb-16 lg:max-w-2xl mx-auto">
                 <input
                     className="form-control i-email icon-close h-14"
                     placeholder={t('Enter contact email')}
                     type="text"
                 />
-                <button className="sm:ml-5 gradient-btn h-14 w-full sm:max-w-max mt-4 sm:mt-0">
+                <button className="lg:ml-5 gradient-btn h-14 w-full lg:max-w-max mt-4 lg:mt-0">
                     <span className="text-lg">{t('Demandez use demo')}</span>
                 </button>
             </div>
@@ -406,7 +409,6 @@ export default function Pricing({ locale }: { locale: any }) {
 
 export async function getServerSideProps(context: any) {
     const { locale } = context;
-    console.log('LOCALE', locale);
     const session = await getSession(context);
 
     if (!session) {
