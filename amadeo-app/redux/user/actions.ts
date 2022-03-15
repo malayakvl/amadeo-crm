@@ -26,14 +26,14 @@ export const inviteUserAction: any = createAction(
             return axios
                 .post(`${authUrl}/invite`, data)
                 .then(async () => {
-                    dispatch(setSuccessToastAction(`Sync success`));
+                    dispatch(setSuccessToastAction(`Check confirmation link in your mailbox`));
                     dispatch(showLoaderAction(false));
+                    dispatch(hideRegisterFormAction(true));
                 })
                 .catch((e) => {
                     // console.log('ERRROR', e.response);
                     dispatch(setErrorToastAction(e.response.data.message));
                     dispatch(showLoaderAction(false));
-                    console.log(e.message);
                 });
         }
 );
@@ -62,3 +62,4 @@ export const syncFbAction: any = createAction(
 );
 
 export const setUserAction: any = createAction('user/SET_USER');
+export const hideRegisterFormAction: any = createAction('user/HIDE_REGISTER_FORM');

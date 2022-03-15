@@ -13,6 +13,7 @@ import Select from 'react-select';
 import { useDispatch, useSelector } from 'react-redux';
 import { countriesSelector } from '../../redux/countries/selectors';
 import { fetchCountriesAction } from '../../redux/countries/actions';
+import { showLoaderAction } from '../../redux/layouts/actions';
 
 const { publicRuntimeConfig } = getConfig();
 const baseUrl = `${publicRuntimeConfig.apiUrl}/auth`;
@@ -95,6 +96,7 @@ export default function SellerRegistration({
     });
 
     const onSubmit = (values: any) => {
+        dispatch(showLoaderAction(true));
         fetch(`${baseUrl}/register`, {
             method: 'POST',
             body: JSON.stringify(values),

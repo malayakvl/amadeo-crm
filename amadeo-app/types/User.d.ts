@@ -1,6 +1,7 @@
 declare namespace User {
     interface Root {
         user: User;
+        hideRegisterFrom: boolean;
     }
 
     interface User {

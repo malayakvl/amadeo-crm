@@ -19,12 +19,14 @@ class PaymentPlanController {
      * @returns {Promise<*>}
      */
     async fetchItems (req, res) {
-        if (!req.user || req.user.role_id !== 3) {
-            return res.status(401).json('Access deny');
-        } else {
-            const items = await paymentPlanModel.fetchItems();
-            return res.status(200).json({ items: items });
-        }
+        const items = await paymentPlanModel.fetchItems();
+        return res.status(200).json({ items: items });
+        // if (!req.user || req.user.role_id !== 3) {
+        //     return res.status(401).json('Access deny');
+        // } else {
+        //     const items = await paymentPlanModel.fetchItems();
+        //     return res.status(200).json({ items: items });
+        // }
     }
     
     

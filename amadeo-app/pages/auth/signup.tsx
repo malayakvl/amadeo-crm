@@ -1,17 +1,19 @@
 import FullLayout from '../../components/layout/FullLayout';
 import { useTranslations } from 'next-intl';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { providers, getSession } from 'next-auth/client';
 import Link from 'next/link';
 import { Field, Formik, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { inviteUserAction } from '../../redux/user/actions';
 import Image from 'next/image';
 import { accountService } from '../../_services';
+import { hideRegisterFormSelector } from '../../redux/user/selectors';
 
 export default function Signup() {
     const dispatch = useDispatch();
+    const hideFormSelector = useSelector(hideRegisterFormSelector);
     type FormData = {
         email: string;
         acceptTerms: boolean;
@@ -21,6 +23,7 @@ export default function Signup() {
     const t = useTranslations();
     const [roleId, setRoleId] = useState(1);
     const [isFbClicked, setIsFbClicked] = useState(false);
+    const [hideForm, setHideForm] = useState(false);
 
     const validationSchema = Yup.object().shape({
         email: !isFbClicked
@@ -28,6 +31,10 @@ export default function Signup() {
             : Yup.string(),
         acceptTerms: Yup.bool().oneOf([true], t('Accept Terms is required'))
     });
+
+    useEffect(() => {
+        setHideForm(hideFormSelector);
+    }, [hideFormSelector]);
 
     const onSubmit = (values: FormData, actions: any) => {
         if (isFbClicked) {
@@ -55,138 +62,155 @@ export default function Signup() {
                             </div>
 
                             <div className="mb-4 text-2xl line-height-105percent w-72">
-                                {t('Lorem ipsum dolor sit amet, consectetur adipiscing elit.')}
+                                {t('registr_descr')}
                             </div>
 
                             <div className="font-normal mb-10 text-blue-350 w-60">
-                                {t('Lorem ipsum dolor sit amet, consectetur adipiscing elit.')}
+                                {t('registr_descr_small')}
                             </div>
 
                             <Link href={'/auth/signin'}>
                                 <a className="font-bold text-orange-450">
-                                    {t('Already have an account? Sign in here!')}
+                                    {t('have_account_descr')}
                                 </a>
                             </Link>
                         </div>
 
                         <div className="pl-12 border-l w-2/4">
-                            <div className="flex mb-14">
-                                <div className="w-16 leading-10 text-gray-200 font-bold text-5xl">
-                                    1.
-                                </div>
-                                <div>
-                                    <div className="font-bold mb-2.5">
-                                        {t('How would you like to Sign up as?')} :
-                                    </div>
-                                    <div className="text-gray-180 text-xs mb-4">
-                                        <Field
-                                            onClick={() => setRoleId(2)}
-                                            id="buyer-radio"
-                                            type="radio"
-                                            className="radio mr-2.5"
-                                            name="role_id"
-                                            value="1"
-                                        />
-                                        <label htmlFor="buyer-radio">{t('Shopper')}</label>
-                                    </div>
-                                    <div className="text-gray-180 text-xs">
-                                        <Field
-                                            onClick={() => setRoleId(2)}
-                                            id="seller-radio"
-                                            type="radio"
-                                            className="radio mr-2.5"
-                                            name="role_id"
-                                            value="2"
-                                        />
-                                        <label htmlFor="seller-radio">{t('Seller')}</label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="flex">
-                                <div className="w-16 leading-10 text-gray-200 font-bold text-5xl">
-                                    2.
-                                </div>
-                                <div className="flex flex-col">
-                                    <button
-                                        onClick={() => {
-                                            setIsFbClicked(true);
-                                        }}
-                                        className="image-btn bg-social-facebook text-white">
-                                        <Image
-                                            width={24}
-                                            height={24}
-                                            src="/images/social/facebook-solid.svg"
-                                            layout="fixed"
-                                            alt=""
-                                        />
-                                        <div className="text-sm  ml-2.5">
-                                            {t('Continue with Facebook')}
+                            {!hideForm && (
+                                <>
+                                    <div className="flex mb-14">
+                                        <div className="w-16 leading-10 text-gray-200 font-bold text-5xl">
+                                            1.
                                         </div>
-                                    </button>
-                                    <div
-                                        style={{ lineHeight: '0.1em' }}
-                                        className="text-center border-b my-5">
-                                        <span className="bg-white px-6">{t('or')}</span>
+                                        <div>
+                                            <div className="font-bold mb-2.5">
+                                                {t('How would you like to Sign up as?')} :
+                                            </div>
+                                            <div className="text-gray-180 text-xs mb-4">
+                                                <Field
+                                                    onClick={() => setRoleId(2)}
+                                                    id="buyer-radio"
+                                                    type="radio"
+                                                    className="radio mr-2.5"
+                                                    name="role_id"
+                                                    value="1"
+                                                />
+                                                <label htmlFor="buyer-radio">{t('Shopper')}</label>
+                                            </div>
+                                            <div className="text-gray-180 text-xs">
+                                                <Field
+                                                    onClick={() => setRoleId(2)}
+                                                    id="seller-radio"
+                                                    type="radio"
+                                                    className="radio mr-2.5"
+                                                    name="role_id"
+                                                    value="2"
+                                                />
+                                                <label htmlFor="seller-radio">{t('Seller')}</label>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div className="relative">
-                                        <i className="f-icon f-email" />
+                                    <div className="flex">
+                                        <div className="w-16 leading-10 text-gray-200 font-bold text-5xl">
+                                            2.
+                                        </div>
+                                        <div className="flex flex-col">
+                                            <button
+                                                onClick={() => {
+                                                    setIsFbClicked(true);
+                                                }}
+                                                className="image-btn bg-social-facebook text-white">
+                                                <Image
+                                                    width={24}
+                                                    height={24}
+                                                    src="/images/social/facebook-solid.svg"
+                                                    layout="fixed"
+                                                    alt=""
+                                                />
+                                                <div className="text-sm  ml-2.5">
+                                                    {t('Continue with Facebook')}
+                                                </div>
+                                            </button>
+                                            <div
+                                                style={{ lineHeight: '0.1em' }}
+                                                className="text-center border-b my-5">
+                                                <span className="bg-white px-6">{t('or')}</span>
+                                            </div>
+                                            <div className="relative">
+                                                <i className="f-icon f-email" />
 
-                                        <input
-                                            className="form-control-icon"
-                                            placeholder={t('Email')}
-                                            type="text"
-                                            onClick={() => setIsFbClicked(false)}
-                                            onChange={props.handleChange}
-                                            // value={inputValue || ''}
-                                            value={props.values['email']}
-                                            name="email"
-                                        />
-                                        <i
-                                            role="presentation"
-                                            className="input-close cursor-pointer"
-                                            onClick={() => props.setFieldValue('email', '')}
-                                        />
-                                        {props.errors.email && (
-                                            <div className="error-el">{props.errors.email}</div>
+                                                <input
+                                                    className="form-control-icon"
+                                                    placeholder={t('Email')}
+                                                    type="text"
+                                                    onClick={() => setIsFbClicked(false)}
+                                                    onChange={props.handleChange}
+                                                    // value={inputValue || ''}
+                                                    value={props.values['email']}
+                                                    name="email"
+                                                />
+                                                <i
+                                                    role="presentation"
+                                                    className="input-close cursor-pointer"
+                                                    onClick={() => props.setFieldValue('email', '')}
+                                                />
+                                                {props.errors.email && (
+                                                    <div className="error-el">
+                                                        {props.errors.email}
+                                                    </div>
+                                                )}
+                                            </div>
+                                            <div
+                                                style={{ lineHeight: '0.1em' }}
+                                                className="text-center border-b my-5"
+                                            />
+                                            <div>
+                                                <Field
+                                                    id="acceptTerms"
+                                                    name="acceptTerms"
+                                                    className="text-green-250 w-5 h-5 border-2 rounded mr-2.5"
+                                                    type="checkbox"
+                                                />
+                                                <label
+                                                    htmlFor="acceptTerms"
+                                                    className="text-xs font-medium">
+                                                    {t('I have read and accept the')}{' '}
+                                                    <span className="text-orange-450">
+                                                        <a
+                                                            href="https://www.liveproshop.com/terms-and-conditions"
+                                                            target="_blank"
+                                                            rel="noreferrer">
+                                                            {t('terms of use')}
+                                                        </a>
+                                                    </span>
+                                                </label>
+                                            </div>
+
+                                            <ErrorMessage
+                                                name="acceptTerms"
+                                                component="div"
+                                                className="error-el"
+                                            />
+
+                                            <button
+                                                type="submit"
+                                                className="gradient-btn w-full mt-4">
+                                                {t('Sign up')}
+                                            </button>
+                                        </div>
+                                    </div>
+                                </>
+                            )}
+                            {hideForm && (
+                                <div className="grid content-center min-h-[400px]">
+                                    <div className="mb-4 font-bold text-2xl line-height-105percent w-72 text-green-500">
+                                        {t(
+                                            'We send you confirmation link, please check your mailbox'
                                         )}
                                     </div>
-                                    <div
-                                        style={{ lineHeight: '0.1em' }}
-                                        className="text-center border-b my-5"
-                                    />
-                                    <div>
-                                        <Field
-                                            id="acceptTerms"
-                                            name="acceptTerms"
-                                            className="text-green-250 w-5 h-5 border-2 rounded mr-2.5"
-                                            type="checkbox"
-                                        />
-                                        <label
-                                            htmlFor="acceptTerms"
-                                            className="text-xs font-medium">
-                                            {t('I have read and accept the')}{' '}
-                                            <span className="text-orange-450">
-                                                <a
-                                                    href="https://www.liveproshop.com/terms-and-conditions"
-                                                    target="_blank"
-                                                    rel="noreferrer">
-                                                    {t('terms of use')}
-                                                </a>
-                                            </span>
-                                        </label>
-                                    </div>
-
-                                    <ErrorMessage
-                                        name="acceptTerms"
-                                        component="div"
-                                        className="error-el"
-                                    />
-
-                                    <button type="submit" className="gradient-btn w-full mt-4">
-                                        {t('Sign up')}
-                                    </button>
                                 </div>
-                            </div>
+                            )}
                         </div>
                     </form>
                 )}
