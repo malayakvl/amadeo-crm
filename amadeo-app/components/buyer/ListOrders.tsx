@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { baseApiUrl } from '../../constants';
 import moment from 'moment';
+import { formatCurrency } from '../../lib/functions';
 // import { ListOrdersItems } from './';
 
 // const userProfileImg =
@@ -136,7 +137,9 @@ const ListOrders: React.FC<{ orders: Buyers.OrderDataItem[]; className?: string 
                                 {item.order_items_count}x{' '}
                                 <span className="red-yellow-gradient-text">product (s)</span>
                             </td>
-                            <td style={{ textAlign: 'right' }}>{item.total_amount} &euro;</td>
+                            <td style={{ textAlign: 'right' }}>
+                                {formatCurrency(item.total_amount)}
+                            </td>
                         </tr>
                         {/* <tr className={!showMoreConfigs[item.id] ? 'hidden' : ''}>
                             <td />

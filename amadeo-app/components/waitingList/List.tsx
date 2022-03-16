@@ -18,6 +18,7 @@ import { DateRange } from 'react-date-range';
 import 'react-date-range/dist/styles.css'; // main css file
 import 'react-date-range/dist/theme/default.css';
 import { BanIcon } from '@heroicons/react/solid'; // theme css file
+import { formatCurrency } from '../../lib/functions';
 
 const userProfileImg =
     'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80';
@@ -195,7 +196,9 @@ const ListMessages: React.FC = () => {
                                 {item.configuration.size_name}
                             </td>
                             <td style={{ textAlign: 'center' }}>{item.total_quantity}</td>
-                            <td style={{ minWidth: '150px' }}>{item.total_price} &euro;</td>
+                            <td style={{ minWidth: '150px' }}>
+                                {formatCurrency(item.total_price)}
+                            </td>
                             <td style={{ minWidth: '150px' }}>
                                 {item.item_buyers.length}x{' '}
                                 <span className="red-yellow-gradient-text">buyer (s)</span>

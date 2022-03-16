@@ -2,6 +2,7 @@ import React from 'react';
 import { useTranslations } from 'next-intl';
 import { baseApiUrl } from '../../constants';
 import { BanIcon } from '@heroicons/react/solid';
+import { formatCurrency } from '../../lib/functions';
 
 const ProductDetails: React.FC<{ product: any; className: string }> = ({ product, className }) => {
     const t = useTranslations();
@@ -63,7 +64,7 @@ const ProductDetails: React.FC<{ product: any; className: string }> = ({ product
                     </td>
                     <td className="whitespace-nowrap">{product.size_name}</td>
                     <td style={{ textAlign: 'center' }}>{product.quantity}</td>
-                    <td style={{ textAlign: 'center' }}>{product.price} &euro;</td>
+                    <td style={{ textAlign: 'center' }}>{formatCurrency(product.price)}</td>
                 </tr>
             </tbody>
         </table>

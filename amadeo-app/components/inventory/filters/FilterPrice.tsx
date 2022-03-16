@@ -8,7 +8,7 @@ import Image from 'next/image';
 import { Range } from 'rc-slider';
 import 'rc-slider/assets/index.css';
 import { productAdditionalSelector } from '../../../redux/products/selectors';
-import { isNumber } from '../../../lib/functions';
+import { formatCurrency, isNumber } from '../../../lib/functions';
 
 const filterPrice: React.FC<any> = () => {
     const t = useTranslations();
@@ -117,7 +117,7 @@ const filterPrice: React.FC<any> = () => {
                             <input
                                 className="w-full form-control"
                                 type="text"
-                                placeholder={'0 €'}
+                                placeholder={formatCurrency(0)}
                                 onChange={(e) => {
                                     onSliderPriceChange([
                                         parseFloat(e.target.value),
@@ -136,7 +136,7 @@ const filterPrice: React.FC<any> = () => {
                             <input
                                 className="w-full form-control"
                                 type="text"
-                                placeholder={`${filterData.price[1]} €`}
+                                placeholder={formatCurrency(filterData.price[1])}
                                 onChange={(e) => {
                                     onSliderPriceChange([
                                         priceRange[0],

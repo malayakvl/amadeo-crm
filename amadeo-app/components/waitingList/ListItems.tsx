@@ -2,6 +2,7 @@ import React from 'react';
 import { baseApiUrl } from '../../constants';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
+import { formatCurrency } from '../../lib/functions';
 
 const ListItems: React.FC<any> = ({ items, productId, userProfileImg }) => {
     const t = useTranslations();
@@ -46,7 +47,7 @@ const ListItems: React.FC<any> = ({ items, productId, userProfileImg }) => {
                                 </div>
                             </td>
                             <td style={{ textAlign: 'center' }}>{item.quantity}</td>
-                            <td>{item.price} &euro;</td>
+                            <td>{formatCurrency(item.price)}</td>
                         </tr>
                     ))}
                 </tbody>

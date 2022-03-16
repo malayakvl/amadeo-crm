@@ -2,6 +2,7 @@ import React from 'react';
 import { baseApiUrl } from '../../constants';
 import { BanIcon } from '@heroicons/react/solid';
 import { useTranslations } from 'next-intl';
+import { formatCurrency } from '../../lib/functions';
 
 const ListItems: React.FC<any> = ({ items }) => {
     const t = useTranslations();
@@ -80,7 +81,7 @@ const ListItems: React.FC<any> = ({ items }) => {
                             </td>
                             <td className="whitespace-nowrap">{item.size_name}</td>
                             <td style={{ textAlign: 'center' }}>{item.quantity}</td>
-                            <td>{item.price} &euro;</td>
+                            <td>{formatCurrency(item.price)}</td>
                         </tr>
                     ))}
                 </tbody>

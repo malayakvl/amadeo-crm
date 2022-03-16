@@ -23,6 +23,7 @@ import { paginationSelectorFactory } from '../../redux/layouts/selectors';
 import { DateRangePicker } from 'react-date-range';
 import 'react-date-range/dist/styles.css'; // main css file
 import 'react-date-range/dist/theme/default.css'; // theme css file
+import { formatCurrency } from '../../lib/functions';
 
 const userProfileImg =
     'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80';
@@ -162,7 +163,7 @@ const ListSellers: React.FC = () => {
                             <td>{item.total_sessions}</td>
                             <td>{item.total_orders}</td>
                             <td>{item.total_buyers}</td>
-                            <td>{item.total_amount} &euro;</td>
+                            <td>{formatCurrency(item.total_amount)}</td>
                             <td className="order-date">
                                 {moment(item.created_at).format('DD/MM/YYYY')}
                             </td>

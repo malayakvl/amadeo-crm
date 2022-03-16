@@ -2,6 +2,7 @@
 import Image from 'next/image';
 import moment from 'moment';
 import { baseApiUrl } from '../../constants';
+import { formatCurrency } from '../../lib/functions';
 
 const userProfileImg =
     'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80';
@@ -25,7 +26,7 @@ const TransactionDetailsPanel: React.FC<{ item: Payments.DataItemDetailed }> = (
 
             <div className="text-gray-350 text-4xl flex justify-between min-w-max">
                 ID # {item?.order_number}
-                <span className="ml-14">{item?.total_amount} &euro;</span>
+                <span className="ml-14">{formatCurrency(item?.total_amount)}</span>
             </div>
 
             <div className="flex my-7 min-w-max">
