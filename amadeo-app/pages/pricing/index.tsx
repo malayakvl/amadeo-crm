@@ -109,15 +109,16 @@ export default function Pricing({ locale }: { locale: any }) {
         </div>
     );
 
-    const parsePlanValues = (plans: any, optionId: number, optionName: string) => {
+    const parsePlanValues = (plans: any) => {
+        const selectedIndex = selected === 'basic' ? 0 : selected === 'business' ? 1 : 2;
         return (
             <>
                 {plans.map((option: any, index: number) => (
                     <Fragment key={option.plan.id}>
                         {option.value ? (
-                            <Tick selected={index === 1} />
+                            <Tick selected={index === selectedIndex} />
                         ) : (
-                            <Tick selected={index === 1} disabled />
+                            <Tick selected={index === selectedIndex} disabled />
                         )}
                     </Fragment>
                 ))}
@@ -135,9 +136,9 @@ export default function Pricing({ locale }: { locale: any }) {
                                 {parseTranslation(data.option, 'name', locale)}
                             </div>
                             {parsePlanValues(
-                                data.values,
-                                data.option.id,
-                                parseTranslation(data.option, 'name', locale)
+                                data.values
+                                // data.option.id,
+                                // parseTranslation(data.option, 'name', locale)
                             )}
                         </div>
                     </Fragment>
@@ -158,13 +159,13 @@ export default function Pricing({ locale }: { locale: any }) {
                 </div>
             </div>
 
-            {/*<div className="underline text-center my-8 lg:my-10">*/}
+            {/*<div className="underline text-center mt-8 lg:mt-10">*/}
             {/*    <Link href="/dashboard">*/}
             {/*        <a>{t('Skip for now (Take trial)')}</a>*/}
             {/*    </Link>*/}
             {/*</div>*/}
 
-            <div className="lg:space-x-10 flex justify-end items-stretch text-center lg:text-left">
+            <div className="lg:space-x-10 flex justify-end items-stretch text-center lg:text-left mt-8 lg:mt-10">
                 <Price
                     onClick={() => setSelected('basic')}
                     name={t('Basic')}
@@ -207,7 +208,9 @@ export default function Pricing({ locale }: { locale: any }) {
                             </div>
                             <div
                                 className={`min-w-[4rem] sm:min-w-[14rem] sm:w-56 relative p-3 sm:hidden ${
-                                    false ? 'sm:border-l-2 sm:border-r-2 border-orange-450' : 'border-white'
+                                    selected === 'basic'
+                                        ? 'sm:border-l-2 sm:border-r-2 border-orange-450'
+                                        : 'border-white'
                                 }`}>
                                 <Image
                                     src={'/images/box.png'}
@@ -220,7 +223,9 @@ export default function Pricing({ locale }: { locale: any }) {
 
                             <div
                                 className={`min-w-[4rem] sm:min-w-[14rem] sm:w-56 p-3 relative sm:hidden ${
-                                    true ? 'sm:border-l-2 sm:border-r-2 border-orange-450' : 'border-white'
+                                    selected === 'business'
+                                        ? 'sm:border-l-2 sm:border-r-2 border-orange-450'
+                                        : 'border-white'
                                 }`}>
                                 <Image
                                     src={'/images/store.png'}
@@ -233,7 +238,9 @@ export default function Pricing({ locale }: { locale: any }) {
 
                             <div
                                 className={`min-w-[4rem] sm:min-w-[14rem] sm:w-56 p-3 relative sm:hidden ${
-                                    false ? 'sm:border-l-2 sm:border-r-2 border-orange-450' : 'border-white'
+                                    selected === 'platinum'
+                                        ? 'sm:border-l-2 sm:border-r-2 border-orange-450'
+                                        : 'border-white'
                                 }`}>
                                 <Image
                                     src={'/images/briefcase.png'}
@@ -243,9 +250,21 @@ export default function Pricing({ locale }: { locale: any }) {
                                     className="object-contain object-center"
                                 />
                             </div>
-                            <Tick disabled className="hidden sm:block" />
-                            <Tick disabled selected className="hidden sm:block" />
-                            <Tick disabled className="hidden sm:block" />
+                            <Tick
+                                disabled
+                                selected={selected === 'basic'}
+                                className="hidden sm:block"
+                            />
+                            <Tick
+                                disabled
+                                selected={selected === 'business'}
+                                className="hidden sm:block"
+                            />
+                            <Tick
+                                disabled
+                                selected={selected === 'platinum'}
+                                className="hidden sm:block"
+                            />
                         </div>
                         {parseOptions(values.values, locale)}
                     </Fragment>
@@ -256,7 +275,7 @@ export default function Pricing({ locale }: { locale: any }) {
 
                     <div
                         className={`min-w-[4rem] lg:min-w-[14rem] lg:w-56 w-3 ${
-                            false
+                            selected === 'basic'
                                 ? 'lg:border-2 lg:border-t-0 lg:rounded-b-xl border-orange-450'
                                 : 'border-white'
                         }`}
@@ -264,7 +283,7 @@ export default function Pricing({ locale }: { locale: any }) {
 
                     <div
                         className={`min-w-[4rem] lg:min-w-[14rem] lg:w-56 w-3 ${
-                            selected
+                            selected === 'business'
                                 ? 'lg:border-2 lg:border-t-0 lg:rounded-b-xl border-orange-450'
                                 : 'border-white'
                         }`}
@@ -272,7 +291,7 @@ export default function Pricing({ locale }: { locale: any }) {
 
                     <div
                         className={`min-w-[4rem] lg:min-w-[14rem] lg:w-56 w-3 ${
-                            false
+                            selected === 'platinum'
                                 ? 'lg:border-2 lg:border-t-0 lg:rounded-b-xl border-orange-450'
                                 : 'border-white'
                         }`}
