@@ -18,9 +18,10 @@ import { PaginationType } from '../../constants';
 
 interface Props {
     handleHideFilter: () => void;
+    locale: string;
 }
 
-const Filters: React.FC<Props> = ({ handleHideFilter }) => {
+const Filters: React.FC<Props> = ({ handleHideFilter, locale }) => {
     const t = useTranslations();
     const dispatch = useDispatch();
     const user = useSelector(userSelector);
@@ -89,7 +90,7 @@ const Filters: React.FC<Props> = ({ handleHideFilter }) => {
 
                 <FilterPayment />
 
-                <FilterCountry />
+                <FilterCountry locale={locale} />
 
                 <FilterDelivery />
             </div>

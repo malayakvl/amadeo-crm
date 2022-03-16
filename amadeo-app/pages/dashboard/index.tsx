@@ -19,7 +19,7 @@ import moment from 'moment';
 import 'react-date-range/dist/styles.css'; // main css file
 import 'react-date-range/dist/theme/default.css'; // theme css file
 
-export default function Index({ session }: { session: any }) {
+export default function Index({ session, locale }: { session: any; locale: string }) {
     if (!session) return <></>;
     const t = useTranslations();
 
@@ -151,7 +151,7 @@ export default function Index({ session }: { session: any }) {
                     </Link>
                 </div>
                 <div>
-                    <ListOrders orders={data.orders} />
+                    <ListOrders orders={data.orders} locale={locale} />
                 </div>
             </div>
 

@@ -1,4 +1,5 @@
 export function parseTranslation(option: any, field: string, locale: string) {
+    if (!option) return;
     if (option.translations) {
         const findedOption = option.translations.find(
             (data: any) => Object.keys(data)[0] === locale

@@ -23,12 +23,12 @@ import { paginationSelectorFactory } from '../../redux/layouts/selectors';
 import { DateRangePicker } from 'react-date-range';
 import 'react-date-range/dist/styles.css'; // main css file
 import 'react-date-range/dist/theme/default.css'; // theme css file
-import { formatCurrency } from '../../lib/functions';
+import { formatCurrency, parseTranslation } from '../../lib/functions';
 
 const userProfileImg =
     'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80';
 
-const ListSellers: React.FC = () => {
+const ListSellers: React.FC<{ locale: string }> = ({ locale }) => {
     const t = useTranslations();
     const dispatch = useDispatch();
     const items = useSelector(paginatedItemsSelector);
@@ -62,7 +62,7 @@ const ListSellers: React.FC = () => {
                     {t('Sellers')}
                     <span className="text-gray-180 font-normal text-sm"> {count} items</span>
                 </h2>
-                {filterOpen && <Filters handleHideFilter={handleHideFilter} />}
+                {filterOpen && <Filters handleHideFilter={handleHideFilter} locale={locale} />}
                 {showDatePopup && (
                     <div className="filters-calendar">
                         <DateRangePicker
@@ -151,13 +151,14 @@ const ListSellers: React.FC = () => {
                             </td>
                             <td>{item.phone}</td>
                             <td>
-                                {item.country_iso && (
-                                    <img
-                                        src={`/images/flags/${item.country_iso.toLowerCase()}.svg`}
-                                        className="fill-current text-black"
-                                        alt={''}
-                                    />
-                                )}
+                                {parseTranslation(item.country_json, 'name', locale)}
+                                {/*{item.country_iso && (*/}
+                                {/*    <img*/}
+                                {/*        src={`/images/flags/${item.country_iso.toLowerCase()}.svg`}*/}
+                                {/*        className="fill-current text-black"*/}
+                                {/*        alt={''}*/}
+                                {/*    />*/}
+                                {/*)}*/}
                             </td>
                             <td>{item.full_address?.slice(0, -2)}</td>
                             <td>{item.total_sessions}</td>

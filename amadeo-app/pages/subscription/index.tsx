@@ -74,7 +74,7 @@ const Price = ({
     );
 };
 
-export default function Pricing({ locale }: { locale: any }) {
+export default function Subscription({ locale }: { locale: any }) {
     const [selected, setSelected] = useState('business');
     const dispatch = useDispatch();
     const plans = useSelector(itemsSelector);
@@ -298,131 +298,6 @@ export default function Pricing({ locale }: { locale: any }) {
                     />
                 </div>
             </div>
-
-            <div className="">
-                <div className="space-x-10 flex" />
-            </div>
-
-            <div className="mt-16 lg:mt-28 text-center">
-                <div className="text-xs font-bold">{t('Support')}</div>
-                <div className="mb-3 font-bold text-4xl">{t('Frequently asked questions')}</div>
-                <div>
-                    {t(
-                        'Have some questions before you get started? Check out our FAQ below. If you still have questions, book a call with one of our experts'
-                    )}
-                </div>
-            </div>
-
-            <div className="w-full mt-12 lg:mt-16 mb-20 lg:mb-28 grid grid-cols-1 gap-x-2 gap-y-12 md:grid-cols-2 lg:gap-x-4 lg:gap-y-16 lg:grid-cols-3">
-                <div>
-                    <div className="font-bold mb-6 text-lg">
-                        {t('What is the differens between plans ?')}
-                    </div>
-                    <div className="text-blue-350 text-base">
-                        {t(
-                            'The differences between the two plans are:The monthly cost and commission rate. The Basic Plan is $49/month + 5% of sales, and the Business Plan is $149/month + 3% of sales.'
-                        )}
-                    </div>
-                </div>
-                <div>
-                    <div className="font-bold mb-6 text-lg">
-                        {t(
-                            'Does CommentSold integrate with Shopify/How does the Shopify integration work?'
-                        )}
-                    </div>
-                    <div className="text-blue-350 text-base">
-                        {t(
-                            'The Shopify Integration allows you to have the same products & inventory on both Shopify & CommentSold. If you sell on one platform, it’ll update the inventory on the other platform as well.'
-                        )}
-                    </div>
-                </div>
-                <div>
-                    <div className="font-bold mb-6 text-lg">{t('How do I cancel my account')}</div>
-                    <div className="text-blue-350 text-base">
-                        {t(
-                            'You will need to log into your CommentSold dashboard and submit a formal request through chat with our Customer Success Team by clicking the green icon in the bottom right.'
-                        )}
-                    </div>
-                </div>
-                <div>
-                    <div className="font-bold mb-6 text-lg">
-                        {t('How does the free trial work?')}
-                    </div>
-                    <div className="text-blue-350 text-base">
-                        {t(
-                            'The trial period will give you access to all CommentSold features for 30 days before charging for the plan you choose when you register. You can cancel at any time before then to avoid the charge. (This does not include the transaction fees)'
-                        )}
-                    </div>
-                </div>
-                <div>
-                    <div className="font-bold mb-6 text-lg">
-                        {t('I’m just starting my business - Which plan should I get?')}
-                    </div>
-                    <div className="text-blue-350 text-base">
-                        {t(
-                            'We recommend the Basic Plan if you are just starting your business, which is $49/month + 5% of sales. If you end up growing your business you can always change to the Business Plan at any time.'
-                        )}
-                    </div>
-                </div>
-                <div>
-                    <div className="font-bold mb-6 text-lg">
-                        {t(
-                            'Do you integrate with other website providers (Wix, Square Online, GoDaddy, etc)'
-                        )}
-                    </div>
-                    <div className="text-blue-350 text-base">
-                        {t(
-                            'CommentSold does not integrate with other website hosts. However, all of our plans come with customizable website called the CommentSold Webstore.'
-                        )}
-                    </div>
-                </div>
-                <div>
-                    <div className="font-bold mb-6 text-lg">
-                        {t('Is CommentSold available in Canada?')}
-                    </div>
-                    <div className="text-blue-350 text-base">
-                        {t(
-                            'At this time, CommentSold does not offer services outside of the United States. However, we do plan to expand outside of the US in the future, so stay tuned! If you’d like to follow along with CommentSold updates to see when we expand to Canada, you can subscribe to our Company blog or follow us on Facebook.'
-                        )}
-                    </div>
-                </div>
-                <div>
-                    <div className="font-bold mb-6 text-lg">
-                        {t('Do you integrate with a POS system?')}
-                    </div>
-                    <div className="text-blue-350 text-base">
-                        {t(
-                            'We do not currently integrate with a POS system. However, we are working towards this!  If you’d like to follow along with CommentSold updates, you can subscribe to our Company blog or follow us on Facebook.We do integrate with Shopify. Shopify has the integration for some POS systems, which makes it a great workaround in the meantime.'
-                        )}
-                    </div>
-                </div>
-                <div>
-                    <div className="font-bold mb-6 text-lg">
-                        {t('How does the Facebook integration work?')}
-                    </div>
-                    <div className="text-blue-350 text-base">
-                        {t(
-                            'The Facebook integration will allow you to sell directly on Facebook through social media comments. Once your customer registers, all they have to do is comment sold + the identifier number, our system will pick it up. The software will send them an email or Facebook Messenger message where they can view their cart and check out.'
-                        )}
-                    </div>
-                </div>
-            </div>
-            <div className="text-center">
-                <div className="font-bold text-5xl">{t('Try it for free today!')}</div>
-                <div className="font-semibold text-3xl">
-                    {t('It only takes 30 second to get started')}
-                </div>
-            </div>
-            <div className="flex flex-wrap lg:flex-nowrap mt-8 mb-16 lg:max-w-2xl mx-auto">
-                <input
-                    className="form-control i-email icon-close h-14"
-                    placeholder={t('Enter contact email')}
-                    type="text"
-                />
-                <button className="lg:ml-5 gradient-btn h-14 w-full lg:max-w-max mt-4 lg:mt-0">
-                    <span className="text-lg">{t('Demandez use demo')}</span>
-                </button>
-            </div>
         </div>
     );
 }
@@ -430,12 +305,6 @@ export default function Pricing({ locale }: { locale: any }) {
 export async function getServerSideProps(context: any) {
     const { locale } = context;
     const session = await getSession(context);
-
-    // if (!session) {
-    //     return {
-    //         redirect: { destination: `/${locale === 'fr' ? '' : `${locale}/`}auth/signin` }
-    //     };
-    // }
 
     return {
         props: {
@@ -448,10 +317,10 @@ export async function getServerSideProps(context: any) {
     };
 }
 
-Pricing.Layout = ({ children }: { children: any }) => {
+Subscription.Layout = ({ children }: { children: any }) => {
     const user = useSelector(userSelector);
     const [session] = useSession();
-    console.log('USER SESSION', session);
-    console.log('USER ', user);
+    console.log(user);
+    console.log(session);
     return children;
 };

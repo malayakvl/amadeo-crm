@@ -28,6 +28,7 @@ declare namespace Buyers {
         total_amount: number;
         buyer_address: string;
         order_items: OrderDataItem[];
+        country_json: any;
     }
 
     interface OrderDataItem extends Orders.DataItem {
