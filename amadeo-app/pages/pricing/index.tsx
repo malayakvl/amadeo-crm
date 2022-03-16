@@ -39,7 +39,7 @@ const Price = ({
             className={`lg:w-56 p-2 lg:p-4 flex flex-col border-2 lg:border-b-0 ${
                 selected ? 'rounded-xl lg:rounded-b-none border-orange-450' : 'border-white'
             }`}>
-            <div className="w-32 h-32 lg:w-36 lg:h-64 relative mx-auto">
+            <div className="w-full h-32 lg:h-64 relative mx-auto">
                 <Image src={imageSrc} layout="fill" className="object-contain object-center" />
             </div>
             <div className="font-bold text-xl mb-2 flex flex-wrap items-center justify-center lg:justify-between">
