@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { ProductDetails } from './';
+import { formatCurrency } from '../../lib/functions';
 
 const ListProductsBought: React.FC<{ item: Payments.DataItemDetailed }> = ({ item }) => {
     const { order_items = [], order_amount, total_amount, shipping_amount } = item ?? {};
@@ -39,7 +40,9 @@ const ListProductsBought: React.FC<{ item: Payments.DataItemDetailed }> = ({ ite
                             {product.name}
                         </div>
 
-                        <div className="text-right">{product.price * product.quantity} &euro;</div>
+                        <div className="text-right">
+                            {formatCurrency(product.price * product.quantity)}
+                        </div>
                     </div>
 
                     <ProductDetails
@@ -52,21 +55,21 @@ const ListProductsBought: React.FC<{ item: Payments.DataItemDetailed }> = ({ ite
             <div className="mt-4 pt-4 text-gray-350 text-lg text-right border-t border-gray-200">
                 + VAT (20%)
                 <span className="inline-block ml-4 font-bold min-w-[3rem]">
-                    {+(order_amount * 0.2).toFixed(2)} &euro;
+                    {formatCurrency(order_amount * 0.2)}
                 </span>
             </div>
 
             <div className="py-1 text-gray-350 text-lg text-right">
                 + Shipping
                 <span className="inline-block ml-4 font-bold min-w-[3rem]">
-                    {+Number(shipping_amount).toFixed(2)} &euro;
+                    {formatCurrency(shipping_amount)}
                 </span>
             </div>
 
             <div className="text-gray-350 text-2xl text-right">
                 Order total
                 <span className="inline-block ml-4 font-bold min-w-[5rem]">
-                    {+Number(total_amount).toFixed(2)} &euro;
+                    {formatCurrency(total_amount)}
                 </span>
             </div>
         </div>

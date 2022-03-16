@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import { useTranslations } from 'next-intl';
+import { formatCurrency } from '../../lib/functions';
 
 const ListBuyers: React.FC<{ buyers: Buyers.DataItem[] }> = ({ buyers }) => {
     const t = useTranslations();
@@ -24,7 +25,7 @@ const ListBuyers: React.FC<{ buyers: Buyers.DataItem[] }> = ({ buyers }) => {
                                 <td className="red-yellow-gradient-text">{item.buyer_id}</td>
                                 <td>{item.buyer_first_name}</td>
                                 <td>{item.total_count}</td>
-                                <td>{item.total_amount} €</td>
+                                <td>{formatCurrency(item.total_amount)}</td>
                                 <td>
                                     {item.country_iso && (
                                         <img
