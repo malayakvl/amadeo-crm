@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
+import { formatCurrency } from '../../lib/functions';
 
 const Totals: React.FC<{ totals: Dashboard.Totals; roleId: number }> = ({
     totals = {},
@@ -14,7 +15,7 @@ const Totals: React.FC<{ totals: Dashboard.Totals; roleId: number }> = ({
                 <div className="">
                     <Image src="/images/dashboard-card.svg" width={20} height={18} />
                     <span className="ml-3 font-bold text-gray-350 text-2xl">
-                        {totals.total_amount} €
+                        {formatCurrency(totals.total_amount ?? 0)}
                     </span>
                 </div>
             </div>

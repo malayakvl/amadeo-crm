@@ -28,6 +28,7 @@ import { BanIcon } from '@heroicons/react/solid';
 import { setActivePageAction } from '../../redux/layouts/actions';
 import Image from 'next/image';
 import { Filters, FilterValues } from './index';
+import { formatCurrency } from '../../lib/functions';
 
 const ListProducts: React.FC<any> = () => {
     const t = useTranslations();
@@ -143,7 +144,7 @@ const ListProducts: React.FC<any> = () => {
                                                     {_config.quantity}
                                                 </td>
                                                 <td style={{ textAlign: 'right' }}>
-                                                    {_config.price}&euro;
+                                                    {formatCurrency(_config.price)}
                                                 </td>
                                             </tr>
                                         ))}

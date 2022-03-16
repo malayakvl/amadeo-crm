@@ -8,6 +8,7 @@ import { ListOrders } from './';
 
 import { fetchItemsAction } from '../../redux/buyers';
 import Image from 'next/image';
+import { formatCurrency } from '../../lib/functions';
 
 const userProfileImg =
     'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80';
@@ -123,7 +124,9 @@ const ListBuyers: React.FC = () => {
                                 </div>
                             </td>
                             <td style={{ minWidth: '150px' }}>
-                                <div className="text-right">{item.total_amount}</div>
+                                <div className="text-right">
+                                    {formatCurrency(item.total_amount)}
+                                </div>
                             </td>
                         </tr>
                         <tr>

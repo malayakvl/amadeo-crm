@@ -76,3 +76,16 @@ export const toggleModalPopup = (element: any) => {
 export function isNumber(value: string | number): boolean {
     return value != null && value !== '' && !isNaN(Number(value.toString()));
 }
+
+// export function formatCurrency(value: number): string {
+//     return typeof value === 'number' ? +value.toFixed(2) + ' €' : ;
+// }
+
+export function formatCurrency(value: number): string {
+    return new Intl.NumberFormat('fr', {
+        style: 'currency',
+        currency: 'EUR',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2
+    }).format(value);
+}

@@ -7,7 +7,7 @@ import { getSession, useSession } from 'next-auth/client';
 import { showLoaderAction } from '../../redux/layouts/actions';
 import { fetchFormAction } from '../../redux/paymentPlans';
 import { itemsSelector } from '../../redux/paymentPlans/selectors';
-import { parseTranslation } from '../../lib/functions';
+import { formatCurrency, parseTranslation } from '../../lib/functions';
 
 type PriceProps = {
     name: string;
@@ -52,7 +52,7 @@ const Price = ({
             </div>
             <div className="h-full text-sm">{desc}</div>
             <div className="text-2xl lg:text-4xl font-bold min-h-[6rem]">
-                € {price}
+                {formatCurrency(price)}
                 <span className="text-base"> /month</span>
                 {sale > 0 && <div className="text-xs font-bold">{sale}% of sale</div>}
             </div>
