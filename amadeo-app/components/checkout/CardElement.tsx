@@ -55,6 +55,7 @@ const CardElement = () => {
 
     return (
         <form onSubmit={handleSubmit}>
+            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label>
                 Card number
                 <CardNumberElement
@@ -73,6 +74,7 @@ const CardElement = () => {
                     }}
                 />
             </label>
+            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label>
                 Expiration date
                 <CardExpiryElement
@@ -91,6 +93,7 @@ const CardElement = () => {
                     }}
                 />
             </label>
+            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label>
                 CVC
                 <CardCvcElement
@@ -117,4 +120,3 @@ const CardElement = () => {
 };
 
 export default CardElement;
-
