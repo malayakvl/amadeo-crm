@@ -584,9 +584,9 @@ class User {
             let intervalDuration;
             const free_shipping_timer = `${data.free_shipping_timer} hour${data.free_shipping_timer > 1 ? 's' : ''}`;
             if (data.type === 'h') {
-                intervalDuration = `${data.cart_duration} hour${data.cart_duration > 1 ? 's' : ''}`;
+                intervalDuration = `${data.free_shipping_timer} hour${data.free_shipping_timer > 1 ? 's' : ''}`;
             } else {
-                intervalDuration = `${data.cart_duration} day${data.cart_duration > 1 ? 's' : ''}`;
+                intervalDuration = `${data.free_shipping_timer} day${data.free_shipping_timer > 1 ? 's' : ''}`;
             }
             const query = `INSERT INTO data.seller_settings(user_id, order_timer, free_shipping_timer, free_shipping_status)
                 VALUES (${userId}, '${intervalDuration}', '${free_shipping_timer}', '${data.free_shipping_status}')

@@ -10,7 +10,7 @@ const initialState: {
         user_id: 0,
         cart_duration: '',
         type: '',
-        free_shipping_timer: '',
+        free_shipping_timer: false,
         free_shipping_status: '',
         created_at: '',
         updated_at: ''
