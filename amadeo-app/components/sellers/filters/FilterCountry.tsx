@@ -6,8 +6,9 @@ import { PaginationType } from '../../../constants';
 import { setPaginationAction } from '../../../redux/layouts';
 import Image from 'next/image';
 import { filterDataSelector } from '../../../redux/sellers/selectors';
+import { parseTranslation } from '../../../lib/functions';
 
-const FilterCountry: React.FC<any> = () => {
+const FilterCountry: React.FC<{ locale: string }> = ({ locale }) => {
     const t = useTranslations();
     const dispatch = useDispatch();
     const { filters }: Layouts.Pagination = useSelector(
@@ -92,7 +93,7 @@ const FilterCountry: React.FC<any> = () => {
                                                 src={`/images/flags/${item.iso.toLowerCase()}.svg`}
                                             />
                                             <span className="inline-block text-sm ml-2">
-                                                {item.name}
+                                                {parseTranslation(item, 'name', locale)}
                                             </span>
                                         </label>
                                     </span>

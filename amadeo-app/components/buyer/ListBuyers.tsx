@@ -8,12 +8,16 @@ import { ListOrders } from './';
 
 import { fetchItemsAction } from '../../redux/buyers';
 import Image from 'next/image';
-import { formatCurrency } from '../../lib/functions';
+import { formatCurrency, parseTranslation } from '../../lib/functions';
 
 const userProfileImg =
     'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80';
 
-const ListBuyers: React.FC = () => {
+type Props = {
+    locale: string;
+};
+
+const ListBuyers: React.FC<Props> = ({ locale }) => {
     const dispatch = useDispatch();
 
     const items: Buyers.DataItem[] = useSelector(paginatedItemsSelector);
@@ -97,16 +101,17 @@ const ListBuyers: React.FC = () => {
                             </td>
                             <td>
                                 <div className="flex">
-                                    <div className="relative w-8">
-                                        {item.country_iso && (
-                                            <img
-                                                width={35}
-                                                height={24}
-                                                src={`/images/flags/${item.country_iso.toLowerCase()}.svg`}
-                                                className="fill-current text-black"
-                                                alt={''}
-                                            />
-                                        )}
+                                    <div className="relative">
+                                        {parseTranslation(item.country_json, 'name', locale)}
+                                        {/*{item.country_iso && (*/}
+                                        {/*    <img*/}
+                                        {/*        width={35}*/}
+                                        {/*        height={24}*/}
+                                        {/*        src={`/images/flags/${item.country_iso.toLowerCase()}.svg`}*/}
+                                        {/*        className="fill-current text-black"*/}
+                                        {/*        alt={''}*/}
+                                        {/*    />*/}
+                                        {/*)}*/}
                                     </div>
                                     <div className="ml-2 text-center font-medium">
                                         {item.buyer_phone}

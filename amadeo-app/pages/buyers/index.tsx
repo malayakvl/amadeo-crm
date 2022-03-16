@@ -7,7 +7,7 @@ import { PaginationType } from '../../constants';
 import Image from 'next/image';
 import { useCallback, useState } from 'react';
 
-export default function Buyers({ session }: { session: any }) {
+export default function Buyers({ session, locale }: { session: any; locale: any }) {
     if (!session) return <></>;
     const t = useTranslations();
 
@@ -31,7 +31,7 @@ export default function Buyers({ session }: { session: any }) {
                 <div className="mb-14 relative">
                     <FilterValues />
 
-                    {filterOpen && <Filters handleHideFilter={handleHideFilter} />}
+                    {filterOpen && <Filters handleHideFilter={handleHideFilter} locale={locale} />}
 
                     <button
                         onClick={() => setFilterOpen(!filterOpen)}
@@ -46,7 +46,7 @@ export default function Buyers({ session }: { session: any }) {
                     </button>
                 </div>
 
-                <ListBuyers />
+                <ListBuyers locale={locale} />
             </div>
         </>
     );

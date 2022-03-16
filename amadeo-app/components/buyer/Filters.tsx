@@ -10,9 +10,10 @@ import { userSelector } from '../../redux/user/selectors';
 
 interface Props {
     handleHideFilter: () => void;
+    locale: string;
 }
 
-const Filters: React.FC<Props> = ({ handleHideFilter }) => {
+const Filters: React.FC<Props> = ({ handleHideFilter, locale }) => {
     const t = useTranslations();
     const dispatch = useDispatch();
     const user = useSelector(userSelector);
@@ -72,7 +73,7 @@ const Filters: React.FC<Props> = ({ handleHideFilter }) => {
 
                 {user.role_id === 3 && <FilterBuyer />}
 
-                <FilterCountry />
+                <FilterCountry locale={locale} />
             </div>
         </div>
     );

@@ -35,6 +35,7 @@ declare namespace Orders {
         flag_name: string | null;
         shipping_image: string | null;
         order_items: any;
+        country_json: any;
         // user_id: number;
         // user_name: string;
         // photo: string;

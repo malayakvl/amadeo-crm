@@ -19,12 +19,16 @@ import { checkedIdsSelector, paginationSelectorFactory } from '../../redux/layou
 import { DateRangePicker } from 'react-date-range';
 import 'react-date-range/dist/styles.css'; // main css file
 import 'react-date-range/dist/theme/default.css';
-import { formatCurrency } from '../../lib/functions';
+import { formatCurrency, parseTranslation } from '../../lib/functions';
 
 const userProfileImg =
     'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80';
 
-const ListOrders: React.FC = () => {
+type Props = {
+    locale: string;
+};
+
+const ListOrders: React.FC<Props> = ({ locale }) => {
     const t = useTranslations();
     const dispatch = useDispatch();
     const items = useSelector(paginatedItemsSelector);
@@ -66,7 +70,7 @@ const ListOrders: React.FC = () => {
                     {t('Orders')}
                     <span className="text-gray-180 font-normal text-sm"> {count} items</span>
                 </h2>
-                {filterOpen && <Filters handleHideFilter={handleHideFilter} />}
+                {filterOpen && <Filters handleHideFilter={handleHideFilter} locale={locale} />}
                 {showDatePopup && (
                     <div className="filters-calendar">
                         <DateRangePicker
@@ -182,13 +186,14 @@ const ListOrders: React.FC = () => {
                                 </div>
                             </td>
                             <td>
-                                {item.flag_name && (
-                                    <img
-                                        src={`/images/flags/${item.flag_name.toLowerCase()}.svg`}
-                                        className="fill-current text-black"
-                                        alt={''}
-                                    />
-                                )}
+                                {parseTranslation(item.country_json, 'name', locale)}
+                                {/*{item.flag_name && (*/}
+                                {/*    <img*/}
+                                {/*        src={`/images/flags/${item.flag_name.toLowerCase()}.svg`}*/}
+                                {/*        className="fill-current text-black"*/}
+                                {/*        alt={''}*/}
+                                {/*    />*/}
+                                {/*)}*/}
                             </td>
                             <td>
                                 {item.shipping_image && (

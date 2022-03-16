@@ -7,7 +7,7 @@ import { ListOrders } from '../../components/orders';
 // import { showFormSelector } from '../../redux/chatbot/selectors';
 // import { setEmptyFormAction, showFormAction } from '../../redux/chatbot';
 
-export default function Index({ session }: { session: any }) {
+export default function Index({ session, locale }: { session: any; locale: string }) {
     if (!session) return <></>;
     const t = useTranslations();
 
@@ -30,7 +30,7 @@ export default function Index({ session }: { session: any }) {
                 />
             </div>
             <div className="block-white-8 mr-10 white-shadow-medium mt-10">
-                <ListOrders />
+                <ListOrders locale={locale} />
             </div>
         </>
     );
