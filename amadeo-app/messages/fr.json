@@ -115,6 +115,7 @@
   "Buyers": "Buyers",
   "Buyer name": "Buyer name",
   "Buyer details": "Shopper details",
+  "Payment": "Payment",
   "Payments": "Payments",
   "Payment Methods": "Payment Methods",
   "Payment methods saved": "Payment methods saved",
@@ -317,5 +318,12 @@
   "registr_descr": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
   "registr_descr_small": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
   "have_account_descr": "Already have an account? Sign in here!",
-  "I have read and accept the": "I have read and accept the"
+  "I have read and accept the": "I have read and accept the",
+  "Credit card": "Credit card",
+  "Credit card number is invalid": "Credit card number is invalid",
+  "Credit card expiration date is invalid": "Credit card expiration date is invalid",
+  "Credit card CCV is invalid": "Credit card CCV is invalid",
+  "You will be redirected to the PayPal website after submitting your order": "You will be redirected to the PayPal website after submitting your order",
+  "Review your order": "Review your order",
+  "Order complete!": "Order complete!"
 }
