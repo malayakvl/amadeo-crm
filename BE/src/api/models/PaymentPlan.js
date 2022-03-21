@@ -1,5 +1,8 @@
 import pool from './connect.js';
 import { logger } from '../../common/logger.js';
+import Stripe from 'stripe';
+
+const stripe = Stripe(process.env.STRIPE_API_KEY);
 
 class PaymentPlan {
     async fetchItems () {
@@ -43,7 +46,41 @@ class PaymentPlan {
         } finally {
             client.release();
         }
-        
+    }
+    
+    async fetchInfo(planId) {
+        const client = await pool.connect();
+        try {
+            const query = `SELECT * FROM data.subscription_plans WHERE id=${planId}`;
+            const res = await client.query(query);
+            if (res.rows.length > 0) {
+              if (res.rows[0].stripe_id) {
+                  const price = await stripe.prices.retrieve(
+                      res.rows[0].stripe_id
+                  );
+                  res.rows[0].stripeInfo = price;
+                  return { success: true, planInfo: res.rows[0] };
+              } else {
+                  return { success: false, planInfo: null };
+              }
+            } else {
+                return { success: false, planInfo: null };
+            }
+            
+            // const res = await client.query(query);
+            // return res.rows.length ? res.rows[0].fields_json : [];
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error:',
+                    { message: e.message }
+                );
+            }
+            return { success: false, error: { code: 404, message: 'Country Not found' } };
+        } finally {
+            client.release();
+        }
     }
 }
 

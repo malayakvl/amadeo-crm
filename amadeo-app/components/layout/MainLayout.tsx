@@ -9,8 +9,6 @@ export default function MainLayout({ children }: { children: any }) {
     const dispatch = useDispatch();
     const user = useSelector(userSelector);
 
-    console.log('MAIN LAYOUT SESSION', session);
-
     useEffect(
         function () {
             if (session?.user?.email && !window.localStorage.getItem('user')) {

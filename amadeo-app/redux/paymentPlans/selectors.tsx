@@ -17,3 +17,8 @@ export const clientSecretSelector = createSelector(
     rootSelector,
     (paymentPlans: State.PaymentPlans): any => paymentPlans.clientSecret
 );
+
+export const planInfoSelector = createSelector(
+    rootSelector,
+    (paymentPlans: State.PaymentPlans): any => paymentPlans.planInfo
+);

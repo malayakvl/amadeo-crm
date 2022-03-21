@@ -1,15 +1,22 @@
 import { SidebarCustomer, SidebarBuyer, SidebarAdmin } from '../sidebar/index';
 import SidebarHeader from '../header/SidebarHeader';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { userSelector } from '../../redux/user/selectors';
 import { isDataLoadingSelector } from '../../redux/layouts/selectors';
 import { toggleSidebarAction } from '../../redux/layouts';
+import Router from 'next/router';
 
 export default function SidebarLayout({ children }: { children: any }) {
     const user = useSelector(userSelector);
     const showLoader = useSelector(isDataLoadingSelector);
     const dispatch = useDispatch();
+
+    useEffect(() => {
+        if (user.subscription_expired) {
+            Router.push(`/pricing`);
+        }
+    }, [user?.email]);
 
     return (
         <div className="relative min-h-screen">

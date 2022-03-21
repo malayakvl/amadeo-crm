@@ -47,7 +47,10 @@ apiRoutes.route('/add-live-messages').post(ChatbotMessageController.addMessages)
 apiRoutes.route('/parse-live-messages').get(ChatbotMessageController.parseMessages);
 apiRoutes.route('/create-orders').get(OrderController.createOrders);
 
+apiRoutes.route('/check-payment-status').post(UserController.checkPaymentStatus);
+apiRoutes.route('/subscription').post(UserController.createUserFromSubscription);
 apiRoutes.route('/payment-plans').get(PaymentPlanController.fetchItems);
+apiRoutes.route('/get-plan-info').get(PaymentPlanController.fetchPlanInfo);
 apiRoutes.route('/create-payment-intent').post(PaymentPlanController.stripeClientSecret);
 /** ===================================================================== */
 /** ================== AUTHENTIFICATED ROUTES =========================== */
@@ -66,6 +69,7 @@ apiRoutes.use(async (req, res, next) => {
     }
 });
 apiRoutes.post('/changePassword', UserController.changePassword);
+apiRoutes.get('/profile/subscription', UserController.getSubscription);
 apiRoutes.route('/profile')
     .post(UserController.updateProfile)
     .get(UserController.getProfile);
@@ -139,6 +143,7 @@ apiRoutes.route('/payment-plans').post(PaymentPlanController.updateStatus);
 //FB routes
 apiRoutes.route('/fb-authenticate').post(UserController.syncFb);
 
+apiRoutes.route('/exist-user-subscription').post(UserController.createExistUserSubscription);
 
 apiRoutes.route('/shipping/create').post(ShippingController.create)
 apiRoutes.route('/shipping/fetch-all').get(ShippingController.fetchAll)

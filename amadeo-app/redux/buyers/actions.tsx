@@ -59,7 +59,6 @@ export const fetchItemAction: any = createAction(
         ): Promise<{ item: Buyers.DataItem }> => {
             const state = getState();
             const filters = { buyer_id: [+buyerId] };
-            console.log('buyers filters = ', filters);
             const queryFilter = JSON.stringify(filters);
             dispatch(showLoaderAction(true));
             return axios

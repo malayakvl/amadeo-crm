@@ -4,10 +4,10 @@ import moment from 'moment';
 
 export default function Footer() {
     return (
-        <footer className="w-full h-370">
-            <div className="tracking-wide text-sm text-blue-350 bg-blue-550 flex h-full justify-between flex-col py-16 px-32">
-                <div className="flex justify-between">
-                    <div className="cursor-pointer">
+        <footer className="w-full md:h-370">
+            <div className="px-4 px-4 pb-4 tracking-wide text-sm text-blue-350 bg-blue-550 flex h-full justify-between flex-col md:py-16 md:px-32">
+                <div className="flex flex-col md:flex-row justify-between">
+                    <div className="cursor-pointer mt-3 md:mt-0">
                         <Link href={'/'}>
                             <a>
                                 <Image
@@ -19,11 +19,11 @@ export default function Footer() {
                             </a>
                         </Link>
                     </div>
-                    <div className="flex">
+                    <div className="mb-4 flex flex-com md:flex-row md:mb-0">
                         <div className="mr-9">
                             <div className="mb-2 font-bold text-white">Get started</div>
                             <div className="mb-2">
-                                <Link href={'/'}>Pricing</Link>
+                                <Link href={'/pricing'}>Pricing</Link>
                             </div>
                             <div>
                                 <Link href={'/'}>Start your free trial</Link>
@@ -47,9 +47,9 @@ export default function Footer() {
                     </div>
                 </div>
 
-                <div className="pt-8 flex justify-between border-t border-blue-450">
+                <div className="pt-8 flex-col md:flex-row justify-between border-t border-blue-450">
                     <div className="flex">
-                        <div className="mr-10">
+                        <div className="md:mr-10">
                             <Image
                                 src="/images/social/facebook.svg"
                                 width={15}
@@ -81,7 +81,7 @@ export default function Footer() {
                         </div>
                     </div>
 
-                    <div className="flex">
+                    <div className="flex flex-col">
                         <div className="mr-5">
                             <Link href={'/'}>About Liveproshop</Link>
                         </div>

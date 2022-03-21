@@ -17,3 +17,17 @@ export const hideRegisterFormSelector = createSelector(
     rootSelector,
     (user: State.User): boolean => user.hideRegisterFrom
 );
+
+export const userSubscriptionSelector = createSelector(
+    rootSelector,
+    (user: State.User): any => user.subscription
+);
+
+export const clientSecretSelector = createSelector(
+    rootSelector,
+    (user: State.User): any => user.clientSecret
+);
+export const paymentIntentSelector = createSelector(
+    rootSelector,
+    (user: State.User): any => user.paymentIntent
+);

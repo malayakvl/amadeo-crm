@@ -12,8 +12,8 @@ const Header: React.FC = () => {
 
     return (
         <header>
-            <nav className="bg-white flex items-center justify-between px-32 h-144">
-                <div className="relative -top-2 cursor-pointer">
+            <nav className="px-4 bg-white flex items-center justify-between md:px-32 md:h-144 md:flex">
+                <div className="relative md:-top-2 cursor-pointer">
                     <Link href={'/'}>
                         <a>
                             <Image src="/images/logo.svg" width={175} height={52} alt="" />
@@ -36,11 +36,13 @@ const Header: React.FC = () => {
                     />
                 </svg>
 
-                <div className="font-bold text-sm flex items-center justify-end" id="menu">
+                <div
+                    className="hidden md:flex font-bold text-sm flex items-center justify-end"
+                    id="menu">
                     <Link href={'/'}>
                         <a className="hover:text-purple-400">Features</a>
                     </Link>
-                    <Link href={'/pages/price'}>
+                    <Link href={'/pricing'}>
                         <a className="ml-14 hover:text-purple-400">Pricing</a>
                     </Link>
                     <Link href={'/'}>

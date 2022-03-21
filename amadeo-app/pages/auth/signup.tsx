@@ -46,7 +46,7 @@ export default function Signup() {
     };
 
     return (
-        <div className="flex justify-center h-[580px]">
+        <div className="flex justify-center md:h-[580px]">
             <Formik
                 enableReinitialize
                 initialValues={{ email: '', acceptTerms: false, role_id: '1' }}
@@ -55,8 +55,8 @@ export default function Signup() {
                 {(props) => (
                     <form
                         onSubmit={props.handleSubmit}
-                        className="rounded-lg border shadow-xl mt-10 flex w-[1000px] bg-white px-20 py-14">
-                        <div className="font-bold mt-8 pr-12 w-2/4">
+                        className="flex-col w-full px-4 rounded-lg border shadow-xl mt-10 flex md:flex-row md:w-[1000px] bg-white md:px-20 py-14 md:mr-0 md:ml-0">
+                        <div className="w-full font-bold mt-8 md:pr-12 md:w-2/4">
                             <div className="text-5xl line-height-105percent mb-9 w-48">
                                 {t('Sing up today!')}
                             </div>
@@ -76,7 +76,7 @@ export default function Signup() {
                             </Link>
                         </div>
 
-                        <div className="pl-12 border-l w-2/4">
+                        <div className="w-full md:pl-12 md:border-l md:w-2/4">
                             {!hideForm && (
                                 <>
                                     <div className="flex mb-14">
@@ -128,7 +128,7 @@ export default function Signup() {
                                                     layout="fixed"
                                                     alt=""
                                                 />
-                                                <div className="text-sm  ml-2.5">
+                                                <div className="text-[12px] md:text-sm  ml-2.5">
                                                     {t('Continue with Facebook')}
                                                 </div>
                                             </button>

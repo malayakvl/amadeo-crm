@@ -4,6 +4,7 @@ declare namespace PaymentPlans {
         loading: boolean;
         isFetched: boolean;
         clientSecret: string;
+        planInfo: any;
     }
 
     // interface SettingItem {

@@ -1,15 +1,17 @@
 import { useTranslations } from 'next-intl';
+import Router from 'next/router';
 import Image from 'next/image';
 import React, { Fragment, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { userSelector } from '../../redux/user/selectors';
-import { useSession } from 'next-auth/client';
+import { getSession, session, useSession } from 'next-auth/client';
 import { showLoaderAction } from '../../redux/layouts/actions';
 import { fetchFormAction } from '../../redux/paymentPlans';
 import { itemsSelector } from '../../redux/paymentPlans/selectors';
 import { formatCurrency, parseTranslation } from '../../lib/functions';
 
 type PriceProps = {
+    planId: number;
     name: string;
     price: number;
     desc: string;
@@ -19,9 +21,11 @@ type PriceProps = {
     disabled?: boolean;
     selected: boolean;
     onClick: any;
+    session: any;
 };
 
 const Price = ({
+    planId,
     name,
     price,
     desc,
@@ -29,11 +33,10 @@ const Price = ({
     buttonText,
     imageSrc,
     disabled,
-    selected,
-    onClick
+    selected
 }: PriceProps) => {
     const t = useTranslations();
-
+    const user = useSelector(userSelector);
     return (
         <div
             className={`lg:w-56 p-2 lg:p-4 flex flex-col border-2 lg:border-b-0 ${
@@ -58,11 +61,31 @@ const Price = ({
             </div>
 
             <button
-                onClick={onClick}
+                onClick={() => {
+                    if (user?.email) {
+                        Router.push(`/subscription?planId=${planId}`);
+                    } else {
+                        Router.push(`/auth/subscription?planId=${planId}`);
+                    }
+                }}
                 className={`${
                     disabled ? 'disabled-btn' : 'gradient-btn'
                 } w-full mt-7 justify-self-end`}>
                 {buttonText}
+            </button>
+
+            <button
+                onClick={() => {
+                    if (user?.email) {
+                        Router.push(`/subscription?planId=${planId}&type=trial`);
+                    } else {
+                        Router.push(`/auth/subscription?planId=${planId}&type=trial`);
+                    }
+                }}
+                className={`${
+                    disabled ? 'disabled-btn' : 'gradient-btn'
+                } w-full mt-7 justify-self-end`}>
+                {t('Select Trial')}
             </button>
             {/* <div className="mt-7 mb-auto">{permissions}</div>
             <button
@@ -167,31 +190,37 @@ export default function Pricing({ locale }: { locale: any }) {
 
             <div className="lg:space-x-10 flex justify-end items-stretch text-center lg:text-left mt-8 lg:mt-10">
                 <Price
+                    planId={1}
                     onClick={() => setSelected('basic')}
                     name={t('Basic')}
                     selected={selected === 'basic'}
                     price={49}
                     desc="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor"
                     sale={0}
+                    session={session}
                     buttonText="Select"
                     imageSrc={'/images/box.png'}
                 />
                 <Price
+                    planId={2}
                     onClick={() => setSelected('business')}
                     name={t('Business')}
                     selected={selected === 'business'}
                     price={99}
                     desc="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor"
+                    session={session}
                     sale={5}
                     buttonText="Select"
                     imageSrc={'/images/store.png'}
                 />
                 <Price
+                    planId={3}
                     onClick={() => false}
                     selected={selected === 'platinum'}
                     disabled
                     name={t('Platinum')}
                     price={139}
+                    session={session}
                     buttonText="Soon"
                     desc="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor"
                     sale={3}

@@ -8,9 +8,18 @@ interface Props {
     label: string | null;
     placeholder: string | null;
     props: any;
+    onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const InputPassword: React.FC<Props> = ({ style, icon, name, label, placeholder, props }) => {
+const InputPassword: React.FC<Props> = ({
+    style,
+    icon,
+    name,
+    label,
+    placeholder,
+    props,
+    onChange
+}) => {
     const t = useTranslations();
     return (
         <div className={`mb-4 ${style} relative`}>
@@ -20,7 +29,7 @@ const InputPassword: React.FC<Props> = ({ style, icon, name, label, placeholder,
                 className={icon ? 'form-control-icon' : 'form-control'}
                 placeholder={placeholder ? t(placeholder) : ''}
                 type="password"
-                onChange={props.handleChange}
+                onChange={onChange ? onChange : props.handleChange}
                 value={props.values[name] || ''}
                 name={name}
             />

@@ -14,7 +14,6 @@ import { accountService } from '../../_services';
 function Signin({ locale }: { locale: string }) {
     const t = useTranslations();
     const { query } = useRouter();
-    console.log(query.message);
 
     const SubmitSchema = Yup.object().shape({
         email: Yup.string().email(t('Must be a valid email')).required(t('Required field')),
