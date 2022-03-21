@@ -458,7 +458,7 @@ export default function Pricing({ locale }: { locale: any }) {
 
 export async function getServerSideProps(context: any) {
     const { locale } = context;
-    const session = await getSession(context);
+    // const session = await getSession(context);
 
     // if (!session) {
     //     return {
@@ -468,7 +468,7 @@ export async function getServerSideProps(context: any) {
 
     return {
         props: {
-            session,
+            // session,
             locale,
             messages: {
                 ...require(`../../messages/${locale}.json`)
