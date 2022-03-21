@@ -3,7 +3,7 @@ import Image from 'next/image';
 import React, { Fragment, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { userSelector } from '../../redux/user/selectors';
-import { getSession, useSession } from 'next-auth/client';
+import { useSession } from 'next-auth/client';
 import { showLoaderAction } from '../../redux/layouts/actions';
 import { fetchFormAction } from '../../redux/paymentPlans';
 import { itemsSelector } from '../../redux/paymentPlans/selectors';
@@ -429,7 +429,7 @@ export default function Pricing({ locale }: { locale: any }) {
 
 export async function getServerSideProps(context: any) {
     const { locale } = context;
-    const session = await getSession(context);
+    // const session = await getSession(context);
 
     // if (!session) {
     //     return {
@@ -439,7 +439,7 @@ export async function getServerSideProps(context: any) {
 
     return {
         props: {
-            session,
+            // session,
             locale,
             messages: {
                 ...require(`../../messages/${locale}.json`)
