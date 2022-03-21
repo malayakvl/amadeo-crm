@@ -108,13 +108,15 @@ const SidebarHeader: React.FC = () => {
                                     </Link>
                                 </li>
                                 <li>
-                                    {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                                    <a
-                                        role="presentation"
-                                        onClick={() => setShowProfileMenu(!showProfileMenu)}>
-                                        <i className="plan" />
-                                        <span className="s-caption">{t('My Plan')}</span>
-                                    </a>
+                                    <Link href={`/account/plan`}>
+                                        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                                        <a
+                                            role="presentation"
+                                            onClick={() => setShowProfileMenu(!showProfileMenu)}>
+                                            <i className="plan" />
+                                            <span className="s-caption">{t('My Plan')}</span>
+                                        </a>
+                                    </Link>
                                 </li>
                                 <li>
                                     <Link href={`/notifications`}>

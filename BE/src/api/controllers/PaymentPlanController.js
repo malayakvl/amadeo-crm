@@ -4,7 +4,7 @@ import Stripe from 'stripe';
 const stripe = Stripe(process.env.STRIPE_API_KEY);
 // const stripe = require("stripe")('sk_test_26PHem9AhJZvU623DfE1x4sd');
 
-const calculateOrderAmount = (items) => {
+const calculateOrderAmount = () => {
     // Replace this constant with a calculation of the order's amount
     // Calculate the order total on the server to prevent
     // people from directly manipulating the amount on the client
@@ -42,8 +42,8 @@ class PaymentPlanController {
     
     async stripeClientSecret(req, res) {
         const { items } = req.body;
-        console.log('ITEMS', items);
-        console.log('AMOUNT', calculateOrderAmount(items));
+        // console.log('ITEMS', items);
+        // console.log('AMOUNT', calculateOrderAmount(items));
     
         const paymentIntent = await stripe.paymentIntents.create({
             amount: calculateOrderAmount(items),
@@ -55,6 +55,16 @@ class PaymentPlanController {
         // console.log(paymentIntent);
     
         return res.status(200).json({ clientSecret: paymentIntent.client_secret });
+    }
+    
+    
+    async fetchPlanInfo (req, res) {
+        const planInfo = await paymentPlanModel.fetchInfo(req.query.planId);
+        if (planInfo.success) {
+            return res.status(200).json({ planInfo: planInfo.planInfo });
+        } else {
+            return res.status(301).json('Access deny');
+        }
     }
 }
 

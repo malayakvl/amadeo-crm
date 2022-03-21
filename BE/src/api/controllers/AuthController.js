@@ -35,6 +35,7 @@ class AuthController {
     
     authSellerLogin(req, res, next) {
         const { seller_email } = req.body;
+        
         passport.authenticate('local', { session: false },
             (err, authUser, info) => {
                 if (err) {
@@ -50,7 +51,6 @@ class AuthController {
                     const sellerUser = await userModel.findUserByEmail(seller_email);
                     if (sellerUser) {
                         getTokensAndSetCookies(req, res, sellerUser.id, sellerUser.email);
-                        console.log('SELLER USER', sellerUser);
                         res.status(200).json({ user: sellerUser });
                     } else {
                         getTokensAndSetCookies(req, res, authUser.id, authUser.email);
@@ -83,6 +83,14 @@ class AuthController {
         }
         res.status(200).json({ user: user });
     }
+    
+    async authSubscriptionLogin(req, res) {
+        const user = await userModel.findUserByEmail(req.body.seller_email);
+        if (!user) {
+            return res.status(400).json('Not found user');
+        }
+        res.status(200).json({ user: user });
+    }
 
     /**
      * Register new user via form data
@@ -103,7 +111,6 @@ class AuthController {
 
         if (!invitation.active) {
             return res.status(403).json({ message: "Your invitation isn't active" });
-
         }
 
         const _user = await userModel.findUserByEmail(email);

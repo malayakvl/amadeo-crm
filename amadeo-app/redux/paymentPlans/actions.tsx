@@ -54,7 +54,7 @@ export const stripePaymentIntentAction: any = createAction(
     async () =>
         async (dispatch: Type.Dispatch): Promise<{ clientSecret: string }> => {
             dispatch(showLoaderAction(true));
-            const data = { items: [{ id: 'prod_LJxk2nWsHvt13X' }] };
+            const data = { items: [{ plan: 'prod_LJxk2nWsHvt13X' }] };
             const res = await axios.post(`${baseUrl}/create-payment-intent`, data, {
                 headers: { 'Content-Type': 'application/json' }
             });
@@ -63,6 +63,21 @@ export const stripePaymentIntentAction: any = createAction(
             }
             return {
                 clientSecret: res.data.clientSecret
+            };
+        }
+);
+
+export const paymentPlanInfoAction: any = createAction(
+    'stripe/FETCH_PLAN_INFO',
+    async (planId: number) =>
+        async (dispatch: Type.Dispatch): Promise<{ planInfo: any }> => {
+            dispatch(showLoaderAction(true));
+            const res = await axios.get(`${baseUrl}/get-plan-info?planId=${planId}`);
+            if (res.status) {
+                dispatch(showLoaderAction(false));
+            }
+            return {
+                planInfo: res.data.planInfo
             };
         }
 );

@@ -10,6 +10,7 @@ authRoute.use(express.json({
 }));
 
 authRoute.post('/login', authController.authLogin);
+authRoute.post('/subscription-login', authController.authSubscriptionLogin);
 authRoute.post('/admin-seller', authController.authSellerLogin);
 authRoute.post('/register', authController.authRegister);
 authRoute.post('/invite', authController.authInvite);

@@ -71,6 +71,9 @@
   display: table;
   margin: 0 auto;
 }
+.StripeElement .p-FieldLabel {
+  display: none !important;
+}
 
 @import "components/buttons";
 @import "components/alerts";

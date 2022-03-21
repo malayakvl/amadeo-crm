@@ -223,6 +223,9 @@ span.live {
 span.scheduled {
   @apply text-[10px] bg-green-200 rounded-lg p-1.5 bg-yellow-200 cursor-pointer;
 }
+span.active-subscription {
+  @apply px-2 py-1 capitalize text-xs font-semibold rounded-lg border text-yellow-600 bg-yellow-100 border-yellow-600;
+}
 
 span.new {
   @apply px-2 py-1 capitalize text-xs font-semibold rounded-lg border;

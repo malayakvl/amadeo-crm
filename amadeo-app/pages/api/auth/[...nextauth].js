@@ -42,6 +42,22 @@ export default NextAuth({
             }
         }),
         CredentialsProvider({
+            id: 'credentials_subscription_login',
+            async authorize(credentials) {
+                const res = await fetch(`${baseUrl}/subscription-login`, {
+                    method: 'POST',
+                    body: JSON.stringify(credentials),
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                const resp = await res.json();
+                if (res.ok && resp.user) {
+                    return resp.user;
+                }
+                throw `/auth/signin?message=${resp.message}`;
+                // return null
+            }
+        }),
+        CredentialsProvider({
             id: 'credentials_seller_login',
             async authorize(credentials) {
                 const res = await fetch(`${baseUrl}/admin-seller`, {

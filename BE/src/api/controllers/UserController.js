@@ -137,6 +137,64 @@ class UserController {
         }
         return res.status(402).json('Something wend wrong');
     }
+    
+    async createUserFromSubscription (req, res) {
+        const data = await userModel.createUserFromSubscription(req.body.userData, req.body.planId, req.body.type);
+        if (data.subscription) {
+            // console.log('DATA SUBSCRIPTION', data.subscription);
+            return res.status(200).json({
+                user: null,
+                subscription: data.subscription,
+                clientSecret: data.subscription.status === 'trialing' ? null : data.subscription.latest_invoice.payment_intent.client_secret
+            });
+        } else {
+            return res.status(402).json('Something wend wrong');
+        }
+    }
+    
+    async getSubscription(req, res) {
+        if (req.user) {
+            const data = await userModel.getSubscriptionInfo(req.user.subscription_id);
+            if (data.subscription) {
+                return res.status(200).json({
+                    subscription: data.subscription,
+                });
+            } else {
+                return res.status(402).json('Something wend wrong');
+            }
+        } else {
+            return res.status(402).json('Something wend wrong');
+        }
+    }
+    
+    async createExistUserSubscription (req, res) {
+        if (req.user) {
+            const data = await userModel.createExistUserSubscription(req.body, req.user);
+            const user = await userModel.findUserByEmail(req.user.email);
+            if (data.subscription) {
+                // console.log(data.subscription);
+                return res.status(200).json({
+                    user: user,
+                    subscription: data.subscription,
+                    clientSecret: data.subscription.status === 'trialing' ? null : data.subscription.latest_invoice.payment_intent.client_secret
+                });
+            } else {
+                return res.status(402).json('Something wend wrong');
+            }
+        }
+        return res.status(402).json('Something wend wrong');
+    }
+    
+    
+    async checkPaymentStatus (req, res) {
+        const data = await userModel.checkPayment(req.body.paymentIntent, req.body.paymentIntentSecret);
+        if (data.paymentIntent) {
+            return res.status(200).json({
+                paymentIntent: data.paymentIntent
+            });
+        }
+        return res.status(200).json('Something wend wrong');
+    }
 }
 
 export default new UserController();
