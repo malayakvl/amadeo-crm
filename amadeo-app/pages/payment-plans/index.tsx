@@ -98,33 +98,60 @@ export default function Index({ session, locale }: { session: any; locale: any }
             </div>
             <div className="block-white-8 mr-10 white-shadow-medium mt-10">
                 {plans?.header.length > 0 && (
-                    <div className="overflow-x-scroll">
-                        <table className="w-full float-table">
-                            <thead>
-                                <tr>
-                                    <th />
-                                    {plans.header.map((header: any) => (
-                                        <th key={header.id}>{header.name}</th>
-                                    ))}
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {plans.values.map((values: any) => (
-                                    <Fragment key={values.group.id}>
-                                        <tr>
-                                            <td
-                                                colSpan={4}
-                                                className="bg-gray-300"
-                                                style={{ paddingLeft: '8px' }}>
-                                                {parseTranslation(values.group, 'name', locale)}
-                                            </td>
-                                        </tr>
-                                        {parseOptions(values.values, locale)}
-                                    </Fragment>
+                    <>
+                        <div className="mb-4">
+                            <label className="control-label" htmlFor="trial_period">
+                                {t('Tial period')}
+                            </label>
+                            <div className="relative">
+                                <input
+                                    className="form-control"
+                                    placeholder={t('Tial period')}
+                                    type="text"
+                                    // onFocus={handleFocus}
+                                    // onChange={onChange ? onChange : props.handleChange}
+                                    // value={inputValue || ''}
+                                    value={20}
+                                    name="trial_period"
+                                />
+                            </div>
+                            <table className="w-full float-table">
+                                {plans.header.map((header: any) => (
+                                    <tr key={header.id}>
+                                        <td>{header.name}</td>
+                                        <td />
+                                    </tr>
                                 ))}
-                            </tbody>
-                        </table>
-                    </div>
+                            </table>
+                        </div>
+                        <div className="overflow-x-scroll">
+                            <table className="w-full float-table">
+                                <thead>
+                                    <tr>
+                                        <th />
+                                        {plans.header.map((header: any) => (
+                                            <th key={header.id}>{header.name}</th>
+                                        ))}
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {plans.values.map((values: any) => (
+                                        <Fragment key={values.group.id}>
+                                            <tr>
+                                                <td
+                                                    colSpan={4}
+                                                    className="bg-gray-300"
+                                                    style={{ paddingLeft: '8px' }}>
+                                                    {parseTranslation(values.group, 'name', locale)}
+                                                </td>
+                                            </tr>
+                                            {parseOptions(values.values, locale)}
+                                        </Fragment>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    </>
                 )}
             </div>
             <ConfirmDialog

@@ -191,7 +191,6 @@ class User {
             const resPlan = await client.query(`SELECT * FROM data.subscription_plans WHERE id = '${userData.planId}'`);
             if (resPlan.rows.length) {
                 if (resPlan.rows[0].stripe_id) {
-                    // const productId = resPlan.rows[0].stripe_id;
                     let customerId;
                     // check customer id from stripe
                     if (!userData.user.customer_id) {
@@ -201,28 +200,52 @@ class User {
                         });
                         // console.log('CUSTOMER', customer);
                         customerId = customer.id;
-                    }
-                    let subscription;
-                    if (!userData.user.subscription_id) {
-                        const subscriptionObject = {
-                            customer: customerId,
-                            items: [{
-                                plan: resPlan.rows[0].stripe_id
-                            }],
-                            payment_behavior: 'default_incomplete',
-                            expand: ['latest_invoice.payment_intent'],
-                        };
-                        if (userData.type === 'trial') {
-                            subscriptionObject.trial_period_days = 2;
-                        }
-                        subscription = await stripe.subscriptions.create(subscriptionObject);
-                        // console.log('SUBSCRIPTION', subscription);
                     } else {
-                        subscription = await stripe.subscriptions.retrieve(
-                            userData.user.subscription_id
-                        );
+                        customerId = userData.user.customer_id;
                     }
-                    console.log('SUBSCRIPTION DB', user);
+                    
+                    // generate subscription always new for receive secret key for payment form;
+                    const subscriptionObject = {
+                        customer: customerId,
+                        items: [{
+                            plan: resPlan.rows[0].stripe_id
+                        }],
+                        payment_behavior: 'default_incomplete',
+                        expand: ['latest_invoice.payment_intent'],
+                    };
+                    if (userData.type === 'trial') {
+                        subscriptionObject.trial_period_days = 2;
+                    }
+                    const subscription = await stripe.subscriptions.create(subscriptionObject);
+                    // if (!userData.user.subscription_id) {
+                    //     const subscriptionObject = {
+                    //         customer: customerId,
+                    //         items: [{
+                    //             plan: resPlan.rows[0].stripe_id
+                    //         }],
+                    //         payment_behavior: 'default_incomplete',
+                    //         expand: ['latest_invoice.payment_intent'],
+                    //     };
+                    //     if (userData.type === 'trial') {
+                    //         subscriptionObject.trial_period_days = 2;
+                    //     }
+                    //     subscription = await stripe.subscriptions.create(subscriptionObject);
+                    //     // console.log('SUBSCRIPTION', subscription);
+                    // } else {
+                    //     const subscriptionObject = {
+                    //         customer: customerId,
+                    //         items: [{
+                    //             plan: resPlan.rows[0].stripe_id
+                    //         }],
+                    //         payment_behavior: 'default_incomplete',
+                    //         expand: ['latest_invoice.payment_intent'],
+                    //     };
+                    //     subscription = await stripe.subscriptions.create(subscriptionObject);
+                    //     // subscription = await stripe.subscriptions.retrieve(
+                    //     //     userData.user.subscription_id
+                    //     // );
+                    //     console.log(subscription);
+                    // }
                     // save subascription
                     const dbSubscription = {
                         user_id: user.id,
@@ -234,9 +257,10 @@ class User {
                         period_end: subscription.current_period_end,
                         is_trial: userData.type === 'trial'
                     }
-                    console.log('SUBSCRIPTION DB', dbSubscription);
+                    // console.log('SUBSCRIPTION DB', subscription);
+                    // return { subscription: null, error: { code: 404, message: 'User Not found' } };
                     const querySubscription = `SELECT * FROM data.set_subscriptions('${JSON.stringify(dbSubscription)}');`;
-                    console.log(querySubscription);
+                    // console.log(querySubscription);
                     await client.query(querySubscription);
                     return { subscription: subscription };
                 }
@@ -283,7 +307,7 @@ class User {
         const client = await pool.connect();
         try {
             const res = await client.query(`SELECT * FROM data.users WHERE email = '${userData.email.toLowerCase()}'`);
-            if (!res.rows.length) {
+            if (res.rows.length) {
                 return { user: null, subscription: null, error: { code: 404, message: 'User present' } };
             }
             const userQuery = `
@@ -292,7 +316,7 @@ class User {
                 ) VALUES ('${userData.email.toLowerCase()}', '${hash}', '${salt}', 2, $$${userData.first_name}$$, $$${userData.last_name}$$);`;
             await client.query(userQuery);
             const resUser = await client.query(`SELECT * FROM data.users WHERE email = '${userData.email.toLowerCase()}'`);
-            if (resUser.rows.length) {
+            if (!resUser.rows.length) {
                 return { subscription: null, error: { code: 404, message: 'User Not found' } };
             } else {
                 return await this.createExistUserSubscription({ user: userData, type: type, planId:planId }, resUser.rows[0]);
