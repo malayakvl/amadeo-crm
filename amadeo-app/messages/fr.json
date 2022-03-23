@@ -335,5 +335,8 @@
   "You will be redirected to the PayPal website after submitting your order": "You will be redirected to the PayPal website after submitting your order",
   "We protect your payment information using encryption to provide bank-level security.": "We protect your payment information using encryption to provide bank-level security.",
   "Review your order": "Review your order",
-  "Order complete!": "Order complete!"
+  "Order complete!": "Order complete!",
+  "The terms and conditions must be accepted.": "The terms and conditions must be accepted.",
+  "Your order is complete!": "Your order is complete!",
+  "You’ll receive a confirmation e-mail with your order details soon!": "You’ll receive a confirmation e-mail with your order details soon!"
 }
