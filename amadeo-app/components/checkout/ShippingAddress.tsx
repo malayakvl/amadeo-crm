@@ -153,7 +153,7 @@ const ShippingAddress = ({ locale }: { locale: string }) => {
                 <Field
                     type="checkbox"
                     name="isEqualAddresses"
-                    id="isEqualAddress"
+                    id="isEqualAddresses"
                     className="focus:ring-indigo-500 h-5 w-5 text-indigo-600 border-gray-300 rounded"
                 />
                 <label

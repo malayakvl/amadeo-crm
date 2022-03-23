@@ -128,7 +128,7 @@ export default function Index({ session, locale }: { session: any; locale: any }
                         {t('Let’s check you out!')}
                     </div>
 
-                    <div className="flex-auto p-4 lg:p-8">
+                    <div className="flex-1 p-4 lg:p-8">
                         <ol className="list-reset flex items-center text-gray-300 font-bold">
                             <li className="self-center flex-none mr-1 sd:mr-2 sd:pr-4 min-w-max h-1 background-gradient">
                                 <div className="w-8 h-8 -mt-4 mr-2 sd:mr-4 rounded-full background-gradient shadow-2xl"></div>
@@ -176,7 +176,7 @@ export default function Index({ session, locale }: { session: any; locale: any }
                     }}>
                     <Form>
                         <div className="flex flex-wrap justify-between">
-                            <div className="flex-none">
+                            <div className="flex-1">
                                 <div className="white-shadow-medium bg-white rounded-lg p-3 lg:p-6 ml-4 lg:ml-8 mt-8">
                                     <div className="text-2xl font-bold text-gray-350 mb-6">
                                         {t('Shipping Address')}
