@@ -14,7 +14,13 @@ export default function SidebarLayout({ children }: { children: any }) {
 
     useEffect(() => {
         if (user.subscription_expired) {
-            Router.push(`/pricing`);
+            if (user.status === 'incomplete') {
+                Router.push(`/subscription?planId=${user.plan_id}`);
+            } else {
+                Router.push(`/pricing`);
+            }
+            console.log('USER', user);
+            // Router.push(`/pricing`);
         }
     }, [user?.email]);
 

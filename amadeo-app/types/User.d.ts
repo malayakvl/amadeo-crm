@@ -21,7 +21,9 @@ declare namespace User {
         subscription_id: string | null;
         vat: string | null;
         phone: string | null;
+        status: string | null;
         created_at: any;
         updated_at: any;
+        plan_id: number | null;
     }
 }
