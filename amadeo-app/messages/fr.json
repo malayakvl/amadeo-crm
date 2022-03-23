@@ -115,6 +115,7 @@
   "Buyers": "Buyers",
   "Buyer name": "Buyer name",
   "Buyer details": "Shopper details",
+  "Pay": "Pay",
   "Payment": "Payment",
   "Payments": "Payments",
   "Payment Methods": "Payment Methods",
@@ -325,11 +326,14 @@
   "Selected plan Price": "Selected plan Price",
   "Confirm Payment": "Confirm Payment",
   "Payment Confirmation": "Payment Confirmation",
+  "CCV": "CCV",
+  "MM/YY": "MM/YY",
   "Credit card": "Credit card",
   "Credit card number is invalid": "Credit card number is invalid",
   "Credit card expiration date is invalid": "Credit card expiration date is invalid",
   "Credit card CCV is invalid": "Credit card CCV is invalid",
   "You will be redirected to the PayPal website after submitting your order": "You will be redirected to the PayPal website after submitting your order",
+  "We protect your payment information using encryption to provide bank-level security.": "We protect your payment information using encryption to provide bank-level security.",
   "Review your order": "Review your order",
   "Order complete!": "Order complete!"
 }

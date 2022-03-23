@@ -18,6 +18,7 @@ import BuyerController from "../controllers/BuyerController.js";
 import SellerController from "../controllers/SellerController.js";
 import DashboardController from "../controllers/DashboardController.js";
 import PaymentPlanController from "../controllers/PaymentPlanController.js";
+import CheckoutController from "../controllers/CheckoutController.js";
 
 
 const apiRoutes = express.Router();
@@ -139,6 +140,8 @@ apiRoutes.route('/update-settings').post(UserController.updateSettings);
 // apiRoutes.route('/payment-plans').get(PaymentPlanController.fetchItems);
 apiRoutes.route('/payment-plans').post(PaymentPlanController.updateStatus);
 
+apiRoutes.route('/checkout').get(CheckoutController.fetch);
+apiRoutes.route('/checkout/fetch-shipping-methods').get(CheckoutController.fetchShippingMethodsByCountry);
 
 //FB routes
 apiRoutes.route('/fb-authenticate').post(UserController.syncFb);

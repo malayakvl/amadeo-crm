@@ -1,10 +1,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-// import { useTranslations } from 'next-intl';
 import { InputText } from '../_form';
 
 const RadioCreditCard = ({ field, title, form }: any) => {
-    // const t = useTranslations();
-
     return (
         <label
             className={`flex flex-col justify-items-stretch border border-solid box-border rounded-lg pt-6 pb-2 px-5 mb-4

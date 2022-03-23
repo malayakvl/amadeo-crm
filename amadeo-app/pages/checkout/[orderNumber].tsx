@@ -1,46 +1,39 @@
 import Head from 'next/head';
 import { getSession } from 'next-auth/client';
-// import React, { useEffect, Fragment, useCallback, useState, useMemo } from 'react';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 import { useTranslations } from 'next-intl';
-// import { CheckIcon, BanIcon } from '@heroicons/react/solid';
-// import { showLoaderAction } from '../../redux/layouts/actions';
-// import { fetchFormAction } from '../../redux/paymentPlans';
-// import { useDispatch, useSelector } from 'react-redux';
-// import { itemsSelector } from '../../redux/paymentPlans/selectors';
-// import { parseTranslation } from '../../lib/functions';
-// import { submitFormAction } from '../../redux/paymentPlans/actions';
-// import ConfirmDialog from '../../components/_common/ConfirmDialog';
-import { ShippingAddress, ShippingMethod, PaymentMethod } from '../../components/checkout';
+import { fetchCheckoutAction } from '../../redux/checkout';
+import { useDispatch, useSelector } from 'react-redux';
+import { addressCheckoutSelector } from '../../redux/checkout/selectors';
+import { userSelector } from '../../redux/user/selectors';
+import {
+    ShippingAddress,
+    ShippingMethod,
+    PaymentMethod,
+    OrderSummary
+} from '../../components/checkout';
 
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import CardValidator from 'card-validator';
 
 export default function Index({ session, locale }: { session: any; locale: any }) {
-    if (!session) return <></>;
+    if (!session) return null;
     const t = useTranslations();
-    // const dispatch = useDispatch();
-    // const plans = useSelector(itemsSelector);
 
-    // const [selectedItem, setSelectedItem] = useState<any | null>();
+    const {
+        query: { orderNumber }
+    } = useRouter();
 
-    // useEffect(() => {
-    //     dispatch(showLoaderAction(true));
-    //     dispatch(fetchFormAction());
-    // }, []);
+    const dispatch = useDispatch();
 
-    // useEffect(() => {
-    //     dispatch(showLoaderAction(false));
-    // }, [plans?.header?.length]);
+    const user = useSelector(userSelector);
+    const address = useSelector(addressCheckoutSelector);
 
-    // const handlerConfirm = useCallback(() => {
-    //     if (!selectedItem) return;
-
-    //     dispatch(
-    //         submitFormAction({ optionId: selectedItem.optionId, planId: selectedItem.planId })
-    //     );
-    //     setSelectedItem(null);
-    // }, [dispatch, selectedItem]);
+    useEffect(() => {
+        dispatch(fetchCheckoutAction(orderNumber));
+    }, []);
 
     const validationSchema = Yup.object({
         first_name: Yup.string()
@@ -81,6 +74,7 @@ export default function Index({ session, locale }: { session: any; locale: any }
             .trim(t('Cannot include leading and trailing spaces'))
             .required(t('You must enter your phone number'))
             .min(5, t('Phone must be at least 5 characters')),
+        isAgreeTerms: Yup.bool().oneOf([true], 'The terms and conditions must be accepted.'),
 
         card_number: Yup.string()
             .strict(true)
@@ -156,10 +150,22 @@ export default function Index({ session, locale }: { session: any; locale: any }
                     </div>
                 </div>
                 <Formik
+                    enableReinitialize
                     initialValues={{
                         isEqualAddresses: true,
-                        shippingMethod: 'dhl',
-                        paymentMethod: 'paypal'
+                        isAgreeTerms: false,
+                        paymentMethod: 'paypal',
+
+                        first_name: user?.first_name,
+                        last_name: user?.last_name,
+                        phone: user?.phone,
+
+                        country_id: address?.country_id,
+                        post_code: address?.post_code,
+                        state: address?.state,
+                        city: address?.city,
+                        address_line_1: address?.address_line_1,
+                        address_line_2: address?.address_line_2
                     }}
                     validationSchema={validationSchema}
                     onSubmit={(values, actions) => {
@@ -170,7 +176,7 @@ export default function Index({ session, locale }: { session: any; locale: any }
                     }}>
                     <Form>
                         <div className="flex flex-wrap justify-between">
-                            <div className="flex-auto">
+                            <div className="flex-none">
                                 <div className="white-shadow-medium bg-white rounded-lg p-3 lg:p-6 ml-4 lg:ml-8 mt-8">
                                     <div className="text-2xl font-bold text-gray-350 mb-6">
                                         {t('Shipping Address')}
@@ -178,12 +184,10 @@ export default function Index({ session, locale }: { session: any; locale: any }
                                     <ShippingAddress locale={locale} />
                                 </div>
 
-                                <div className="white-shadow-medium bg-white rounded-lg p-3 lg:p-6 ml-4 lg:ml-8 mt-10">
-                                    <div className="text-2xl font-bold text-gray-350 mb-6">
-                                        {t('Shipping  Method')}
-                                    </div>
-                                    <ShippingMethod />
-                                </div>
+                                <ShippingMethod
+                                    title={t('Shipping  Method')}
+                                    className="white-shadow-medium bg-white rounded-lg p-3 lg:p-6 ml-4 lg:ml-8 mt-10"
+                                />
 
                                 <div className="white-shadow-medium bg-white rounded-lg p-3 lg:p-6 ml-4 lg:ml-8 mt-10">
                                     <div className="text-2xl font-bold text-gray-350 mb-6">
@@ -193,16 +197,12 @@ export default function Index({ session, locale }: { session: any; locale: any }
                                 </div>
                             </div>
 
-                            <div className="flex-auto white-shadow-medium bg-white rounded-lg p-3 lg:p-6 ml-4 lg:ml-8 mt-10 shadow-inner">
+                            <div className="flex-1 white-shadow-medium bg-white rounded-lg p-3 lg:p-6 ml-4 lg:ml-8 mt-10 shadow-inner">
                                 <div className="text-2xl font-bold text-gray-350 mb-6">
                                     {t('Order summary')}
                                 </div>
 
-                                <button
-                                    type="submit"
-                                    className="uppercase pt-9 gradient-btn w-full">
-                                    {t('Pay 999,999.99 €')}
-                                </button>
+                                <OrderSummary />
                             </div>
                         </div>
                     </Form>

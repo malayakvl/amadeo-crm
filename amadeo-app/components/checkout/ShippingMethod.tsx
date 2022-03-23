@@ -1,56 +1,38 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-// import { useEffect, useMemo } from 'react';
-// import { useDispatch, useSelector } from 'react-redux';
-import { Field } from 'formik';
-// import { useTranslations } from 'next-intl';
-// import { countriesSelector } from '../../redux/countries/selectors';
-// import { fetchCountriesAction } from '../../redux/countries/actions';
-// import { prepareCountriesDropdown } from '../../lib/functions';
+import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { useFormikContext, Field } from 'formik';
+import { shippingMethodsCheckoutSelector } from '../../redux/checkout/selectors';
 import { Radio } from './';
+import { formatCurrency } from '../../lib/functions';
 
-const ShippingMethod = () => {
-    // const t = useTranslations();
-    // const dispatch = useDispatch();
+const ShippingMethod = ({ title, className }: { title: string; className: string }) => {
+    const { setFieldValue }: any = useFormikContext();
 
-    // const props = useFormikContext();
+    const shippingMethods = useSelector(shippingMethodsCheckoutSelector);
 
-    // const countries = useSelector(countriesSelector);
+    useEffect(
+        () => setFieldValue('shippingMethodId', String(shippingMethods[0]?.id ?? ''), false),
+        [shippingMethods]
+    );
 
-    // useEffect(() => {
-    //     dispatch(fetchCountriesAction());
-    // }, []);
-
-    return (
-        <div role="group" aria-labelledby="shipping-method-radio-group">
-            <Field
-                type="radio"
-                name="shippingMethod"
-                value="dhl"
-                title="10.00 $"
-                text="DHL 1st Class With Tracking (5 - 13 days) COVID19 Delay"
-                img="dhl"
-                component={Radio}
-            />
-
-            <Field
-                type="radio"
-                name="shippingMethod"
-                value="fedex"
-                title="8.00 $"
-                text="Fedex PRIORITY With Tracking (5 - 10 days) COVID19 Delay"
-                img="fedex"
-                component={Radio}
-            />
-
-            <Field
-                type="radio"
-                name="shippingMethod"
-                value="ups"
-                title="8.50 $"
-                text="UPS PRIORITY With Tracking (5 - 10 days)"
-                img="ups"
-                component={Radio}
-            />
+    return !shippingMethods.length ? null : (
+        <div className={className}>
+            <div className="text-2xl font-bold text-gray-350 mb-6">{title}</div>
+            <div role="group" aria-labelledby="shipping-method-radio-group">
+                {shippingMethods.map((shippingMethod) => (
+                    <Field
+                        key={shippingMethod.id}
+                        type="radio"
+                        name="shippingMethodId"
+                        value={String(shippingMethod.id)}
+                        title={formatCurrency(shippingMethod.price)}
+                        text={shippingMethod.name}
+                        img={shippingMethod.image}
+                        component={Radio}
+                    />
+                ))}
+            </div>
         </div>
     );
 };

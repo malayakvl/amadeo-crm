@@ -4,7 +4,13 @@ import Select from 'react-select';
 import { useFormikContext, Field } from 'formik';
 import { useTranslations } from 'next-intl';
 import { countriesSelector } from '../../redux/countries/selectors';
+import {
+    orderCheckoutSelector,
+    firstShippingMethodCheckoutSelector
+} from '../../redux/checkout/selectors';
 import { fetchCountriesAction } from '../../redux/countries/actions';
+import { fetchShippingMethodsByCountryCheckoutAction } from '../../redux/checkout';
+
 import { prepareCountriesDropdown } from '../../lib/functions';
 import { InputText } from '../_form';
 
@@ -12,18 +18,26 @@ const ShippingAddress = ({ locale }: { locale: string }) => {
     const t = useTranslations();
     const dispatch = useDispatch();
 
-    const props = useFormikContext() as any;
+    const props = useFormikContext<any>();
 
     const countries = useSelector(countriesSelector);
+    const order = useSelector(orderCheckoutSelector);
+    const firstShippingMethod = useSelector(firstShippingMethodCheckoutSelector);
 
     const preparedCountriesDropdown = useMemo(
         () => prepareCountriesDropdown(countries, locale),
-        [countries]
+        [countries, locale]
     );
 
     useEffect(() => {
         dispatch(fetchCountriesAction());
     }, []);
+
+    useEffect(() => {
+        if (firstShippingMethod && firstShippingMethod.id) {
+            props.setFieldValue('shippingMethodId', String(firstShippingMethod.id), false);
+        }
+    }, [firstShippingMethod]);
 
     return (
         <div className="grid grid-cols-2 gap-2 lg:gap-4">
@@ -70,9 +84,15 @@ const ShippingAddress = ({ locale }: { locale: string }) => {
                     value={preparedCountriesDropdown?.find(
                         (option: any) => option.value === props.values.country_id
                     )}
-                    onChange={(selectedOption) =>
-                        props.setFieldValue('country_id', selectedOption.value)
-                    }
+                    onChange={(selectedOption) => {
+                        props.setFieldValue('country_id', selectedOption.value, false);
+                        dispatch(
+                            fetchShippingMethodsByCountryCheckoutAction(
+                                order.id,
+                                selectedOption.value
+                            )
+                        );
+                    }}
                 />
                 {props.errors.country_id && (
                     <div className="error-el">{props.errors.country_id}</div>

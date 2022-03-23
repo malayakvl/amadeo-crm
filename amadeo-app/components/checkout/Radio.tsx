@@ -19,7 +19,7 @@ const Radio = ({ field, title, text, img }: any) => (
         <div className={`flex-auto ${!field.checked ? 'text-gray-450' : ''}`}>{text}</div>
 
         <div className="flex-none">
-            <img width="46" height="32" src={`/images/deliveries/${img}.svg`} alt={img} />
+            <img width="46" height="32" src={img} alt={text} />
         </div>
     </label>
 );
