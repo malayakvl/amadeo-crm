@@ -4,7 +4,7 @@ import Image from 'next/image';
 import React, { Fragment, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { userSelector } from '../../redux/user/selectors';
-import { getSession, session, useSession } from 'next-auth/client';
+import { session, useSession } from 'next-auth/client';
 import { showLoaderAction } from '../../redux/layouts/actions';
 import { fetchFormAction } from '../../redux/paymentPlans';
 import { itemsSelector } from '../../redux/paymentPlans/selectors';

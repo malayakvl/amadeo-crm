@@ -5,3 +5,11 @@ interface Shipping {
     image: string;
     status: boolean;
 }
+
+interface ShippingMethod {
+    id: number;
+    name: string;
+    price: number;
+    image: string;
+    status: boolean;
+}

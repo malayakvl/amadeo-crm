@@ -19,6 +19,7 @@ declare namespace State {
         dashboard: Dashboard;
         settings: Settings;
         paymentPlans: PaymentPlans;
+        checkout: Checkout;
     }
 
     type Address = Address.Root;
@@ -43,4 +44,5 @@ declare namespace State {
     type Sellers = Sellers.Root;
     type Dashboard = Dashboard.Root;
     type Settings = Settings.Root;
+    type Checkout = Checkout.Root;
 }
