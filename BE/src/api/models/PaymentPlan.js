@@ -82,6 +82,41 @@ class PaymentPlan {
             client.release();
         }
     }
+    
+    async syncPrices(data, sripeProducts, stripePrices) {
+        console.log('DATA', data);
+        const client = await pool.connect();
+        try {
+            const query = `SELECT * FROM data.subscription_plans`;
+            const res = await client.query(query);
+            const promisesQuery = [];
+            if (res.rows.length) {
+                res.rows.forEach(plan => {
+                    if (data[`plan_stripe_${plan.id}`]) {
+                        const price = (stripePrices.data.filter(price => price.product === data[`plan_stripe_${plan.id}`]));
+                        if (price.length) {
+                            promisesQuery.push(client.query(`UPDATE data.subscription_plans SET stripe_id='${price[0].id}' WHERE id=${plan.id}`));
+                        }
+                        // console.log(data[`plan_stripe_${plan.id}`], `price:${stripePrices.data.filter(price => price.product === data[`plan_stripe_${plan.id}`])}`);
+                    }
+                });
+                await Promise.all(promisesQuery);
+                return { success: true };
+            }
+            return { success: false, error: { code: 404, message: 'Country Not found' } };
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error:',
+                    { message: e.message }
+                );
+            }
+            return { success: false, error: { code: 404, message: 'Country Not found' } };
+        } finally {
+            client.release();
+        }
+    }
 }
 
 export default new PaymentPlan();

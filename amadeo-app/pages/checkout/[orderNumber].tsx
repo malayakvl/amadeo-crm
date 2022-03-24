@@ -3,6 +3,13 @@ import { getSession } from 'next-auth/client';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { useTranslations } from 'next-intl';
+import { fetchCheckoutAction, submitCheckoutAction } from '../../redux/checkout';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+    addressCheckoutSelector,
+    redirectMerchantUrlSelector
+} from '../../redux/checkout/selectors';
+import { userSelector } from '../../redux/user/selectors';
 import { fetchCheckoutAction } from '../../redux/checkout';
 import { useDispatch } from 'react-redux';
 import {
@@ -14,7 +21,7 @@ import {
 
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
-import CardValidator from 'card-validator';
+// import CardValidator from 'card-validator';
 
 export default function Index({ session, locale }: { session: any; locale: any }) {
     if (!session) return null;
@@ -26,9 +33,19 @@ export default function Index({ session, locale }: { session: any; locale: any }
 
     const dispatch = useDispatch();
 
+    const user = useSelector(userSelector);
+    const address = useSelector(addressCheckoutSelector);
+    const redirectMerchantUrl = useSelector(redirectMerchantUrlSelector);
+
     useEffect(() => {
         dispatch(fetchCheckoutAction(orderNumber));
     }, []);
+
+    useEffect(() => {
+        if (redirectMerchantUrl) {
+            window.location.href = redirectMerchantUrl;
+        }
+    }, [redirectMerchantUrl]);
 
     const validationSchema = Yup.object({
         first_name: Yup.string()
@@ -69,45 +86,45 @@ export default function Index({ session, locale }: { session: any; locale: any }
             .trim(t('Cannot include leading and trailing spaces'))
             .required(t('You must enter your phone number'))
             .min(5, t('Phone must be at least 5 characters')),
-        isAgreeTerms: Yup.bool().oneOf([true], 'The terms and conditions must be accepted.'),
+        isAgreeTerms: Yup.bool().oneOf([true], 'The terms and conditions must be accepted.')
 
-        card_number: Yup.string()
-            .strict(true)
-            .when('paymentMethod', {
-                is: (val: string) => val === 'card',
-                then: Yup.string()
-                    .test(
-                        'test-card-number',
-                        t('Credit card number is invalid'),
-                        (value) => CardValidator.number(value).isValid
-                    ) // return true false based on validation
-                    .required(t('Required field'))
-                // otherwise: Yup.required(),
-            }),
-        card_expire_date: Yup.string()
-            .strict(true)
-            .when('paymentMethod', {
-                is: (val: string) => val === 'card',
-                then: Yup.string()
-                    .test(
-                        'test-card-exp',
-                        t('Credit card expiration date is invalid'),
-                        (value) => CardValidator.expirationDate(value).isValid
-                    )
-                    .required(t('Required field'))
-            }),
-        card_ccv: Yup.string()
-            .strict(true)
-            .when('paymentMethod', {
-                is: (val: string) => val === 'card',
-                then: Yup.string()
-                    .test(
-                        'test-card-ccv',
-                        t('Credit card CCV is invalid'),
-                        (value) => CardValidator.cvv(value).isValid
-                    )
-                    .required(t('Required field'))
-            })
+        // card_number: Yup.string()
+        //     .strict(true)
+        //     .when('paymentMethod', {
+        //         is: (val: string) => val === 'card',
+        //         then: Yup.string()
+        //             .test(
+        //                 'test-card-number',
+        //                 t('Credit card number is invalid'),
+        //                 (value) => CardValidator.number(value).isValid
+        //             ) // return true false based on validation
+        //             .required(t('Required field'))
+        //         // otherwise: Yup.required(),
+        //     }),
+        // card_expire_date: Yup.string()
+        //     .strict(true)
+        //     .when('paymentMethod', {
+        //         is: (val: string) => val === 'card',
+        //         then: Yup.string()
+        //             .test(
+        //                 'test-card-exp',
+        //                 t('Credit card expiration date is invalid'),
+        //                 (value) => CardValidator.expirationDate(value).isValid
+        //             )
+        //             .required(t('Required field'))
+        //     }),
+        // card_ccv: Yup.string()
+        //     .strict(true)
+        //     .when('paymentMethod', {
+        //         is: (val: string) => val === 'card',
+        //         then: Yup.string()
+        //             .test(
+        //                 'test-card-ccv',
+        //                 t('Credit card CCV is invalid'),
+        //                 (value) => CardValidator.cvv(value).isValid
+        //             )
+        //             .required(t('Required field'))
+        //     })
     });
 
     return (
@@ -120,25 +137,25 @@ export default function Index({ session, locale }: { session: any; locale: any }
             <div className="lg:white-shadow-medium bg-white rounded-lg pr-4 pb-4 lg:pr-8 lg:pb-8 lg:mr-4 mt-10">
                 <div className="flex flex-wrap items-center">
                     <div className="text-3xl font-bold text-gray-350 p-4 lg:p-8 mr-4 lg:mr-8">
-                        {t('Let’s check you out!')}
+                        {t('lets_check_out')}
                     </div>
 
                     <div className="flex-1 p-4 lg:p-8">
                         <ol className="list-reset flex items-center text-gray-300 font-bold">
                             <li className="self-center flex-none mr-1 sd:mr-2 sd:pr-4 min-w-max h-1 background-gradient">
-                                <div className="w-8 h-8 -mt-4 mr-2 sd:mr-4 rounded-full background-gradient shadow-2xl"></div>
+                                <div className="w-8 h-8 -mt-4 mr-2 sd:mr-4 rounded-full background-gradient shadow-2xl" />
                             </li>
                             <li className="bg-clip-text text-transparent background-gradient">
                                 {t('Review your order')}
                             </li>
 
                             <li className="self-center flex-1 mx-2 sd:px-4 min-w-max h-1 bg-gray-300">
-                                <div className="w-8 h-8 -mt-4 ml-auto mr-2 sd:mr-4 rounded-full bg-gray-300"></div>
+                                <div className="w-8 h-8 -mt-4 ml-auto mr-2 sd:mr-4 rounded-full bg-gray-300" />
                             </li>
                             <li>{t('Payment')}</li>
 
                             <li className="self-center flex-1 mx-2 sd:px-4 min-w-max h-1 bg-gray-300 hidden sm:block">
-                                <div className="w-8 h-8 -mt-4 ml-auto mr-2 sd:mr-4 rounded-full bg-gray-300"></div>
+                                <div className="w-8 h-8 -mt-4 ml-auto mr-2 sd:mr-4 rounded-full bg-gray-300" />
                             </li>
                             <li className="hidden sm:block">{t('Order complete!')}</li>
                         </ol>
@@ -153,7 +170,8 @@ export default function Index({ session, locale }: { session: any; locale: any }
                     validationSchema={validationSchema}
                     onSubmit={(values, actions) => {
                         setTimeout(() => {
-                            alert(JSON.stringify(values, null, 2));
+                            // alert(JSON.stringify(values, null, 2));
+                            dispatch(submitCheckoutAction(values));
                             actions.setSubmitting(false);
                         }, 500);
                     }}>

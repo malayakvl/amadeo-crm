@@ -36,6 +36,19 @@ class CheckoutController {
             shippingMethods: shippingMethodsData.shippingMethods
         });
     }
+    
+    
+    async chechoutSubmit(req, res) {
+        if (!req.user) return res.status(401).json('Access deny');
+
+        const data = await checkoutModel.checkoutSubmit(req.body);
+        
+        if (data.redirectUrl) {
+            return res.status(200).json({ redirectUrl: data.redirectUrl });
+        } else {
+            return res.status(401).json('Access deny');
+        }
+    }
 }
 
 export default new CheckoutController();

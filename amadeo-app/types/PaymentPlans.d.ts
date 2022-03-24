@@ -5,6 +5,7 @@ declare namespace PaymentPlans {
         isFetched: boolean;
         clientSecret: string;
         planInfo: any;
+        stripeItems: any;
     }
 
     // interface SettingItem {

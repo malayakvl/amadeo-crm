@@ -4,24 +4,29 @@ import React, { useEffect, Fragment, useCallback, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { CheckIcon, BanIcon } from '@heroicons/react/solid';
 import { showLoaderAction } from '../../redux/layouts/actions';
-import { fetchFormAction } from '../../redux/paymentPlans';
+import { fetchFormAction, fetchStripeProductAction } from '../../redux/paymentPlans';
 import { useDispatch, useSelector } from 'react-redux';
-import { itemsSelector } from '../../redux/paymentPlans/selectors';
+import { itemsSelector, stripeItemsSelector } from '../../redux/paymentPlans/selectors';
 import { parseTranslation } from '../../lib/functions';
-import { submitFormAction } from '../../redux/paymentPlans/actions';
+import { submitFormAction, syncStripeParameterAction } from '../../redux/paymentPlans/actions';
 import ConfirmDialog from '../../components/_common/ConfirmDialog';
+import { InputSelect, InputText } from '../../components/_form';
+import { Formik } from 'formik';
+import * as Yup from 'yup';
 
 export default function Index({ session, locale }: { session: any; locale: any }) {
     if (!session) return <></>;
     const t = useTranslations();
     const dispatch = useDispatch();
     const plans = useSelector(itemsSelector);
+    const stripeProducts = useSelector(stripeItemsSelector);
 
     const [selectedItem, setSelectedItem] = useState<any | null>();
 
     useEffect(() => {
         dispatch(showLoaderAction(true));
         dispatch(fetchFormAction());
+        dispatch(fetchStripeProductAction());
     }, []);
 
     useEffect(() => {
@@ -84,6 +89,32 @@ export default function Index({ session, locale }: { session: any; locale: any }
         setSelectedItem(null);
     }, [dispatch, selectedItem]);
 
+    const parseStripeProduct = (planId: number, props: any) => {
+        return (
+            <>
+                <InputSelect
+                    options={stripeProducts}
+                    label={null}
+                    name={`plan_stripe_${planId}`}
+                    style={null}
+                    props={props}
+                />
+                {/*<select className="form-control w-[200px]">*/}
+                {/*    <option value="">-----</option>*/}
+                {/*    {stripeProducts.map((product: any) => (*/}
+                {/*        <option key={product.id} value={product.id}>*/}
+                {/*            {product.name} {product.price[0].unit_amount / 100} EUR*/}
+                {/*        </option>*/}
+                {/*    ))}*/}
+                {/*</select>*/}
+            </>
+        );
+    };
+
+    const SubmitSchema = Yup.object().shape({
+        trial_period: Yup.number()
+    });
+
     return (
         <>
             <Head>
@@ -97,32 +128,65 @@ export default function Index({ session, locale }: { session: any; locale: any }
                 </div>
             </div>
             <div className="block-white-8 mr-10 white-shadow-medium mt-10">
-                {plans?.header.length > 0 && (
-                    <>
+                {plans?.header.length > 0 && stripeProducts && (
+                    <div className="w-full md:w-1/2">
+                        <Formik
+                            enableReinitialize
+                            initialValues={{}}
+                            validationSchema={SubmitSchema}
+                            onSubmit={(values) => {
+                                dispatch(syncStripeParameterAction(values));
+                            }}>
+                            {(props) => (
+                                <form onSubmit={props.handleSubmit} className="mb-4">
+                                    <InputText
+                                        style={'w-[150px]'}
+                                        icon={null}
+                                        label={t('Tial period')}
+                                        name={'trial_period'}
+                                        placeholder={'Tial period'}
+                                        props={props}
+                                        tips={null}
+                                    />
+
+                                    <table className="float-table w-full md:w-1/2 mt-4">
+                                        <tbody>
+                                            {plans.header.map((header: any) => (
+                                                <tr key={header.id}>
+                                                    <td>{header.name}</td>
+                                                    <td>{parseStripeProduct(header.id, props)}</td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+
+                                    <div className="mt-6">
+                                        <button
+                                            className="gradient-btn px-3 py-4 text-white bg-indigo-500 rounded-md
+                                    hover:bg-indigo-600
+                                    focus:outline-none duration-100 ease-in-out">
+                                            {t('Save')}
+                                        </button>
+                                    </div>
+                                </form>
+                            )}
+                        </Formik>
                         <div className="mb-4">
-                            <label className="control-label" htmlFor="trial_period">
-                                {t('Tial period')}
-                            </label>
-                            <div className="relative">
-                                <input
-                                    className="form-control"
-                                    placeholder={t('Tial period')}
-                                    type="text"
-                                    // onFocus={handleFocus}
-                                    // onChange={onChange ? onChange : props.handleChange}
-                                    // value={inputValue || ''}
-                                    value={20}
-                                    name="trial_period"
-                                />
-                            </div>
-                            <table className="w-full float-table">
-                                {plans.header.map((header: any) => (
-                                    <tr key={header.id}>
-                                        <td>{header.name}</td>
-                                        <td />
-                                    </tr>
-                                ))}
-                            </table>
+                            {/*<label className="control-label" htmlFor="trial_period">*/}
+                            {/*    {t('Tial period')}*/}
+                            {/*</label>*/}
+                            {/*<div className="relative">*/}
+                            {/*    <input*/}
+                            {/*        className="form-control"*/}
+                            {/*        placeholder={t('Tial period')}*/}
+                            {/*        type="text"*/}
+                            {/*        onFocus={handleFocus}*/}
+                            {/*        onChange={(e) => console.log(e.target.value)}*/}
+                            {/*        // value={inputValue || ''}*/}
+                            {/*        value={20}*/}
+                            {/*        name="trial_period"*/}
+                            {/*    />*/}
+                            {/*</div>*/}
                         </div>
                         <div className="overflow-x-scroll">
                             <table className="w-full float-table">
@@ -151,7 +215,7 @@ export default function Index({ session, locale }: { session: any; locale: any }
                                 </tbody>
                             </table>
                         </div>
-                    </>
+                    </div>
                 )}
             </div>
             <ConfirmDialog

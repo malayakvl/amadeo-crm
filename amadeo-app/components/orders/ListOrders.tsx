@@ -20,6 +20,7 @@ import { DateRangePicker } from 'react-date-range';
 import 'react-date-range/dist/styles.css'; // main css file
 import 'react-date-range/dist/theme/default.css';
 import { formatCurrency, parseTranslation } from '../../lib/functions';
+import { userSelector } from '../../redux/user/selectors';
 
 const userProfileImg =
     'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80';
@@ -37,6 +38,7 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
     const { filters }: Layouts.Pagination = useSelector(
         paginationSelectorFactory(PaginationType.ORDERS)
     );
+    const user = useSelector(userSelector);
     const [state, setState] = useState<any>([
         {
             startDate: new Date(),
@@ -157,9 +159,16 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                                 />
                             </td>
                             <td className="order-number">
-                                <Link href={`/orders/${item.order_number}`}>
-                                    <a>{item.order_number}</a>
-                                </Link>
+                                {user.role_id === 2 && (
+                                    <Link href={`/orders/${item.order_number}`}>
+                                        <a>{item.order_number}</a>
+                                    </Link>
+                                )}
+                                {user.role_id === 1 && item.status === 'new' && (
+                                    <Link href={`/checkout/${item.order_number}`}>
+                                        <a>{item.order_number}</a>
+                                    </Link>
+                                )}
                             </td>
                             <td className="order-status">
                                 <span className={item.status}>{item.status}</span>
