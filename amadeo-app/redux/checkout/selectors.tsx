@@ -21,3 +21,8 @@ export const firstShippingMethodCheckoutSelector = createSelector(
     rootSelector,
     ({ shippingMethods }) => shippingMethods[0]
 );
+
+export const redirectMerchantUrlSelector = createSelector(
+    rootSelector,
+    (checkout: State.Checkout): any => checkout.redirectUrl
+);

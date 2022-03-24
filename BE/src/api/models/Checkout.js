@@ -1,5 +1,6 @@
 import pool from './connect.js';
 import { logger } from '../../common/logger.js';
+import MSPClient from '@multisafepay/api-wrapper';
 
 class Checkout {
 
@@ -77,6 +78,53 @@ class Checkout {
         } finally {
             client.release();
             return { shippingMethods, error };
+        }
+    }
+    
+    async checkoutSubmit(data) {
+        try {
+            console.log('CHECKOUT FORM DATA', data);
+            // const multiSafePayClient = new MSPClient(apiKey, { environment: 'test' });
+            const multiSafePayClient = new MSPClient('e142b8a6c282eae7130a5a417e899eff4c66b3de', { environment: 'test' });
+    
+            const dataMerchant =  await multiSafePayClient.orders.create({
+                type: 'redirect',
+                order_id: "my-order-id-1",
+                gateway: 'iDEAL',
+                currency: 'EUR',
+                amount: '1000',
+                description: 'Test Order Description',
+                payment_options: {
+                    notification_url:
+                        'http://www.example.com/client/notification?type=notification',
+                    redirect_url:
+                        'http://www.example.com/client/notification?type=redirect',
+                    cancel_url: 'http://www.example.com/client/notification?type=cancel',
+                    close_window: '',
+                },
+                customer: {
+                    locale: 'en_US',
+                },
+                second_chance: {
+                    send_email: true,
+                },
+            });
+    
+            return {redirectUrl: dataMerchant.data.payment_url}
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error:',
+                    { message: e.message }
+                );
+            }
+            const error = {
+                code: 500,
+                message: e.message
+            };
+            return {
+                redirectUrl: 'https://testpayv2.multisafepay.com/connect/827vbNQNNUvma3T1JrB3ZanahymNIVRozBB/?lang=en_GB', error: error}
         }
     }
 }

@@ -139,25 +139,31 @@ apiRoutes.route('/update-settings').post(UserController.updateSettings);
 
 // apiRoutes.route('/payment-plans').get(PaymentPlanController.fetchItems);
 apiRoutes.route('/payment-plans').post(PaymentPlanController.updateStatus);
+apiRoutes.route('/payment-stripe-plans').get(PaymentPlanController.fetchStripeProducts);
+apiRoutes.route('/sync-stripe').post(PaymentPlanController.syncStripe);
 
 apiRoutes.route('/checkout').get(CheckoutController.fetch);
 apiRoutes.route('/checkout/fetch-shipping-methods').get(CheckoutController.fetchShippingMethodsByCountry);
+apiRoutes.route('/checkout').post(CheckoutController.chechoutSubmit);
 
 //FB routes
 apiRoutes.route('/fb-authenticate').post(UserController.syncFb);
 
 apiRoutes.route('/exist-user-subscription').post(UserController.createExistUserSubscription);
 
-apiRoutes.route('/shipping/create').post(ShippingController.create)
-apiRoutes.route('/shipping/fetch-all').get(ShippingController.fetchAll)
-apiRoutes.route('/shipping/fetch/:id').get(ShippingController.fetch)
-apiRoutes.route('/shipping/update/:id').post(ShippingController.update)
-apiRoutes.route('/shipping/delete/:id').delete(ShippingController.delete)
-apiRoutes.route('/shipping/save-countries/:id').post(ShippingController.saveCountries)
-apiRoutes.route('/shipping/change-statuses').put(ShippingController.changeStatuses)
-apiRoutes.route('/shipping/change-status/:id').put(ShippingController.changeStatus)
-apiRoutes.route('/shipping/threshold').post(ShippingController.setThreshold)
-apiRoutes.route('/shipping/threshold').get(ShippingController.fetchThreshold)
+apiRoutes.route('/shipping/create').post(ShippingController.create);
+apiRoutes.route('/shipping/fetch-all').get(ShippingController.fetchAll);
+apiRoutes.route('/shipping/fetch/:id').get(ShippingController.fetch);
+apiRoutes.route('/shipping/update/:id').post(ShippingController.update);
+apiRoutes.route('/shipping/delete/:id').delete(ShippingController.delete);
+apiRoutes.route('/shipping/save-countries/:id').post(ShippingController.saveCountries);
+apiRoutes.route('/shipping/change-statuses').put(ShippingController.changeStatuses);
+apiRoutes.route('/shipping/change-status/:id').put(ShippingController.changeStatus);
+apiRoutes.route('/shipping/threshold').post(ShippingController.setThreshold);
+apiRoutes.route('/shipping/threshold').get(ShippingController.fetchThreshold);
+
+
+
 
 apiRoutes.get('/*', defaultHandler);
 

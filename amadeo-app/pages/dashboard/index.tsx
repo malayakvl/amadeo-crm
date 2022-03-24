@@ -82,14 +82,16 @@ export default function Index({ session, locale }: { session: any; locale: strin
                 <h1 className="dashboard">
                     {t('Welcome back')}, <span>{`${user.first_name} ${user.last_name}`}!</span>
                 </h1>
-                <button
-                    className="mb-4 ml-4 md:mb-0 md:ml-0 btn-big md:float-right mt-4"
-                    onClick={() => {
-                        dispatch(showPopupAction(true));
-                        Router.push('/liveselling');
-                    }}>
-                    {t('Schedule new session')}
-                </button>
+                {user.role_id === 2 && (
+                    <button
+                        className="mb-4 ml-4 md:mb-0 md:ml-0 btn-big md:float-right mt-4"
+                        onClick={() => {
+                            dispatch(showPopupAction(true));
+                            Router.push('/liveselling');
+                        }}>
+                        {t('Schedule new session')}
+                    </button>
+                )}
             </div>
 
             <div className="block-white-4 mr-10" onClick={reverseDatePopup}>    {/* eslint-disable-line */}

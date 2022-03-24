@@ -25,7 +25,7 @@ import { ErrorMessage, Field, Formik } from 'formik';
 import { Form } from 'react-bootstrap';
 import { userSelector } from '../../redux/user/selectors';
 import axios from 'axios';
-import { authHeader } from '../../lib/functions';
+import { authHeader, formatCurrency, parseTranslation } from '../../lib/functions';
 import getConfig from 'next/config';
 import * as Yup from 'yup';
 import { getSession } from 'next-auth/client';
@@ -34,7 +34,7 @@ import ConfirmDialog from '../../components/_common/ConfirmDialog';
 const { publicRuntimeConfig } = getConfig();
 const url = `${publicRuntimeConfig.apiUrl}/api/shipping`;
 
-export default function List() {
+export default function List({ locale }: { locale: string }) {
     const dispatch = useDispatch();
     const router = useRouter();
     const items = useSelector(shippingsSelector);
@@ -238,11 +238,12 @@ export default function List() {
                                                             <div
                                                                 key={country.id}
                                                                 className="flex mb-1">
-                                                                <Image
-                                                                    width="34"
-                                                                    height="24"
-                                                                    src={`/images/flags/${country.iso.toLowerCase()}.svg`}
-                                                                />
+                                                                {/*<Image*/}
+                                                                {/*    width="34"*/}
+                                                                {/*    height="24"*/}
+                                                                {/*    src={`/images/flags/${country.iso.toLowerCase()}.svg`}*/}
+                                                                {/*/>*/}
+                                                                {country.iso}
                                                                 <div className="ml-auto">
                                                                     {country.price}
                                                                 </div>
@@ -251,13 +252,22 @@ export default function List() {
                                                     })
                                                 ) : (
                                                     <div className="flex mb-1">
-                                                        <Image
-                                                            width="34"
-                                                            height="24"
-                                                            src={`/images/flags/${item.countries[0].iso.toLowerCase()}.svg`}
-                                                        />
+                                                        {/*<Image*/}
+                                                        {/*    width="34"*/}
+                                                        {/*    height="24"*/}
+                                                        {/*    src={`/images/flags/${item.countries[0].iso.toLowerCase()}.svg`}*/}
+                                                        {/*/>*/}
                                                         <div className="ml-auto">
-                                                            {item.countries[0].price}
+                                                            <span className="inline-block mr-2">
+                                                                {parseTranslation(
+                                                                    item.countries[0].country_name,
+                                                                    'name',
+                                                                    locale
+                                                                )}
+                                                            </span>
+                                                            {formatCurrency(
+                                                                item.countries[0].price
+                                                            )}
                                                         </div>
                                                     </div>
                                                 )}
