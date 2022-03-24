@@ -10,8 +10,6 @@ import {
     redirectMerchantUrlSelector
 } from '../../redux/checkout/selectors';
 import { userSelector } from '../../redux/user/selectors';
-import { fetchCheckoutAction } from '../../redux/checkout';
-import { useDispatch } from 'react-redux';
 import {
     ShippingAddress,
     ShippingMethod,
