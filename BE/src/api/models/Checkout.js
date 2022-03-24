@@ -43,17 +43,23 @@ class Checkout {
         }
     }
 
-    async fetchShippingMethodsByCountry(orderId, countryId) {
+    async fetchShippingMethodsByCountry(orderId, countryId, checkFreeShipping = false) {
         const client = await pool.connect();
 
         let shippingMethods = null;
         let error = null;
 
         try {
-            const query = 'SELECT id, name, price, image, status FROM data.get_shipping_by_country($1, $2) ORDER BY price ASC';
-            const res = await client.query(query, [orderId, countryId]);
-            
-            shippingMethods = res.rows;
+            let query = 'SELECT is_free FROM data.get_shipping_is_free($1)';
+            let res = checkFreeShipping && (await client.query(query, [orderId])).rows[0].is_free;
+
+            if (res) {
+                shippingMethods = []
+            } else {
+                query = 'SELECT id, name, price, image, status FROM data.get_shipping_by_country($1, $2) ORDER BY price ASC';
+                res = await client.query(query, [orderId, countryId]);
+                shippingMethods = res.rows;
+            }
 
         } catch (e) {
 

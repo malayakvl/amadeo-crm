@@ -5,11 +5,7 @@ import { useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { fetchCheckoutAction, submitCheckoutAction } from '../../redux/checkout';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-    addressCheckoutSelector,
-    redirectMerchantUrlSelector
-} from '../../redux/checkout/selectors';
-import { userSelector } from '../../redux/user/selectors';
+import { redirectMerchantUrlSelector } from '../../redux/checkout/selectors';
 import {
     ShippingAddress,
     ShippingMethod,
@@ -31,8 +27,6 @@ export default function Index({ session, locale }: { session: any; locale: any }
 
     const dispatch = useDispatch();
 
-    const user = useSelector(userSelector);
-    const address = useSelector(addressCheckoutSelector);
     const redirectMerchantUrl = useSelector(redirectMerchantUrlSelector);
 
     useEffect(() => {
