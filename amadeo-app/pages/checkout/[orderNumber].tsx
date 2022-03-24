@@ -10,6 +10,8 @@ import {
     redirectMerchantUrlSelector
 } from '../../redux/checkout/selectors';
 import { userSelector } from '../../redux/user/selectors';
+import { fetchCheckoutAction } from '../../redux/checkout';
+import { useDispatch } from 'react-redux';
 import {
     ShippingAddress,
     ShippingMethod,
@@ -160,22 +162,10 @@ export default function Index({ session, locale }: { session: any; locale: any }
                     </div>
                 </div>
                 <Formik
-                    enableReinitialize
                     initialValues={{
                         isEqualAddresses: true,
                         isAgreeTerms: false,
-                        paymentMethod: 'paypal',
-
-                        first_name: user?.first_name,
-                        last_name: user?.last_name,
-                        phone: user?.phone,
-
-                        country_id: address?.country_id,
-                        post_code: address?.post_code,
-                        state: address?.state,
-                        city: address?.city,
-                        address_line_1: address?.address_line_1,
-                        address_line_2: address?.address_line_2
+                        paymentMethod: 'paypal'
                     }}
                     validationSchema={validationSchema}
                     onSubmit={(values, actions) => {
