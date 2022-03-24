@@ -55,7 +55,7 @@ const ShippingAddress = ({ locale }: { locale: string }) => {
                 style={null}
                 label={null}
                 name={'last_name'}
-                placeholder={t('Sername')}
+                placeholder={t('Surname')}
                 props={props}
                 tips={null}
             />
