@@ -190,7 +190,7 @@ function Profile() {
                         icon={'f-lname'}
                         label={null}
                         name={'last_name'}
-                        placeholder={t('Sername')}
+                        placeholder={t('Surname')}
                         style={'lg:w-1/4'}
                         props={props}
                         tips={null}

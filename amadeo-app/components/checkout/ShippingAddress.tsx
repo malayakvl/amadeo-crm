@@ -6,8 +6,10 @@ import { useTranslations } from 'next-intl';
 import { countriesSelector } from '../../redux/countries/selectors';
 import {
     orderCheckoutSelector,
-    firstShippingMethodCheckoutSelector
+    firstShippingMethodCheckoutSelector,
+    addressCheckoutSelector
 } from '../../redux/checkout/selectors';
+import { userSelector } from '../../redux/user/selectors';
 import { fetchCountriesAction } from '../../redux/countries/actions';
 import { fetchShippingMethodsByCountryCheckoutAction } from '../../redux/checkout';
 
@@ -23,6 +25,8 @@ const ShippingAddress = ({ locale }: { locale: string }) => {
     const countries = useSelector(countriesSelector);
     const order = useSelector(orderCheckoutSelector);
     const firstShippingMethod = useSelector(firstShippingMethodCheckoutSelector);
+    const user = useSelector(userSelector);
+    const address = useSelector(addressCheckoutSelector);
 
     const preparedCountriesDropdown = useMemo(
         () => prepareCountriesDropdown(countries, locale),
@@ -32,6 +36,25 @@ const ShippingAddress = ({ locale }: { locale: string }) => {
     useEffect(() => {
         dispatch(fetchCountriesAction());
     }, []);
+
+    useEffect(() => {
+        if (user && user.id) {
+            props.setFieldValue('first_name', user.first_name, false);
+            props.setFieldValue('last_name', user.last_name, false);
+            props.setFieldValue('phone', user.phone, false);
+        }
+    }, [user]);
+
+    useEffect(() => {
+        if (address && address.id) {
+            props.setFieldValue('country_id', address.country_id, false);
+            props.setFieldValue('post_code', address.post_code, false);
+            props.setFieldValue('state', address.state, false);
+            props.setFieldValue('city', address.city, false);
+            props.setFieldValue('address_line_1', address.address_line_1, false);
+            props.setFieldValue('address_line_2', address.address_line_2, false);
+        }
+    }, [address]);
 
     useEffect(() => {
         if (firstShippingMethod && firstShippingMethod.id) {
@@ -55,7 +78,7 @@ const ShippingAddress = ({ locale }: { locale: string }) => {
                 style={null}
                 label={null}
                 name={'last_name'}
-                placeholder={t('Sername')}
+                placeholder={t('Surname')}
                 props={props}
                 tips={null}
             />
