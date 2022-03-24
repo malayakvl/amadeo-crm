@@ -161,11 +161,8 @@ export default function Index({ session, locale }: { session: any; locale: any }
                     }}
                     validationSchema={validationSchema}
                     onSubmit={(values, actions) => {
-                        setTimeout(() => {
-                            // alert(JSON.stringify(values, null, 2));
-                            dispatch(submitCheckoutAction(values));
-                            actions.setSubmitting(false);
-                        }, 500);
+                        dispatch(submitCheckoutAction(values));
+                        actions.setSubmitting(false);
                     }}>
                     <Form>
                         <div className="flex flex-wrap justify-between">
