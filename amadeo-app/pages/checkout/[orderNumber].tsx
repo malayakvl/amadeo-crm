@@ -4,9 +4,7 @@ import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { fetchCheckoutAction } from '../../redux/checkout';
-import { useDispatch, useSelector } from 'react-redux';
-import { addressCheckoutSelector } from '../../redux/checkout/selectors';
-import { userSelector } from '../../redux/user/selectors';
+import { useDispatch } from 'react-redux';
 import {
     ShippingAddress,
     ShippingMethod,
@@ -27,9 +25,6 @@ export default function Index({ session, locale }: { session: any; locale: any }
     } = useRouter();
 
     const dispatch = useDispatch();
-
-    const user = useSelector(userSelector);
-    const address = useSelector(addressCheckoutSelector);
 
     useEffect(() => {
         dispatch(fetchCheckoutAction(orderNumber));
@@ -150,22 +145,10 @@ export default function Index({ session, locale }: { session: any; locale: any }
                     </div>
                 </div>
                 <Formik
-                    enableReinitialize
                     initialValues={{
                         isEqualAddresses: true,
                         isAgreeTerms: false,
-                        paymentMethod: 'paypal',
-
-                        first_name: user?.first_name,
-                        last_name: user?.last_name,
-                        phone: user?.phone,
-
-                        country_id: address?.country_id,
-                        post_code: address?.post_code,
-                        state: address?.state,
-                        city: address?.city,
-                        address_line_1: address?.address_line_1,
-                        address_line_2: address?.address_line_2
+                        paymentMethod: 'paypal'
                     }}
                     validationSchema={validationSchema}
                     onSubmit={(values, actions) => {
