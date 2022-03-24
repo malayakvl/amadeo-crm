@@ -324,8 +324,13 @@ class Order {
             }
 
             if (_filters.status?.length === 0) {
-                _filters.status = [OrderStatus.PAYED, OrderStatus.SHIPPED, OrderStatus.CANCELED];
+                if (user.role_id === UserRole.BUYER) {
+                    _filters.status = [OrderStatus.PAYED, OrderStatus.SHIPPED, OrderStatus.CANCELED, OrderStatus.NEW];
+                } else {
+                    _filters.status = [OrderStatus.PAYED, OrderStatus.SHIPPED, OrderStatus.CANCELED];
+                }
             }
+            console.log(_filters);
 
             const _total = await client.query(`SELECT count FROM data.get_orders_count('${JSON.stringify(_filters)}');`);
             const size = _total.rows[0].count;

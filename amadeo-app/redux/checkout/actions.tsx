@@ -5,7 +5,7 @@ import getConfig from 'next/config';
 const { publicRuntimeConfig } = getConfig();
 const baseUrl = `${publicRuntimeConfig.apiUrl}/api`;
 import queryString from 'query-string';
-import { showLoaderAction } from '../layouts/actions';
+import { setErrorToastAction, showLoaderAction } from '../layouts/actions';
 
 export const fetchCheckoutAction: any = createAction(
     'checkout/FETCH',
@@ -71,5 +71,35 @@ export const fetchShippingMethodsByCountryCheckoutAction: any = createAction(
                         shippingMethods: res.data.shippingMethods
                     };
                 });
+        }
+);
+export const submitCheckoutAction: any = createAction(
+    'checkout/SUBMIT_CHECKOUT',
+    async (data: any) =>
+        async (
+            dispatch: Type.Dispatch,
+            getState: () => State.Root
+        ): Promise<{ redirectUrl: string | null }> => {
+            dispatch(showLoaderAction(true));
+            const state = getState();
+            try {
+                const res = await axios.post(`${baseUrl}/checkout`, data, {
+                    headers: {
+                        ...authHeader(state.user.user.email)
+                    }
+                });
+                if (res.status) {
+                    dispatch(showLoaderAction(false));
+                }
+                return {
+                    redirectUrl: res.data.redirectUrl
+                };
+            } catch (e) {
+                dispatch(showLoaderAction(false));
+                dispatch(setErrorToastAction(`Email present`));
+                return {
+                    redirectUrl: null
+                };
+            }
         }
 );

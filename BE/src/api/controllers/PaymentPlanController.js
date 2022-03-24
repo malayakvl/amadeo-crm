@@ -29,8 +29,43 @@ class PaymentPlanController {
         // }
     }
     
+    async fetchStripeProducts(req, res) {
+        try {
+            const products = await stripe.products.list({
+                limit: 10,
+            });
+            const prices =  await stripe.prices.list({
+                limit: 10,
+            });
+            products.data.forEach(product => {
+                product.price = prices.data.filter(price => price.product === product.id);
+            });
+            return res.status(200).json({ items: products.data });
+        } catch (e) {
+            return res.status(401).json({ items: null });
+        }
+    }
     
-    async updateStatus(req, res) {
+    async syncStripe (req, res) {
+        try {
+            const products = await stripe.products.list({
+                limit: 10,
+            });
+            const prices =  await stripe.prices.list({
+                limit: 10,
+            });
+            const data = await paymentPlanModel.syncPrices(req.body, products, prices);
+            if (data.success) {
+                return res.status(200).json({ success: true });
+            } else {
+                return res.status(301).json('Access deny');
+            }
+        } catch (e) {
+            return res.status(301).json({ message: 'Something wend wrong' });
+        }
+    }
+    
+    async updateStatus (req, res) {
         if (!req.user || req.user.role_id !== 3) {
             return res.status(401).json('Access deny');
         } else {

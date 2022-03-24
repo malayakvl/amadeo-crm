@@ -33,7 +33,7 @@ const PaymentMethod = () => {
 
                 <div>
                     {t(
-                        'We protect your payment information using encryption to provide bank-level security.'
+                        'We protect your payment information using encryption to provide bank-level security'
                     )}
                 </div>
             </div>

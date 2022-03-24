@@ -22,3 +22,8 @@ export const planInfoSelector = createSelector(
     rootSelector,
     (paymentPlans: State.PaymentPlans): any => paymentPlans.planInfo
 );
+
+export const stripeItemsSelector = createSelector(
+    rootSelector,
+    (paymentPlans: State.PaymentPlans): any => paymentPlans.stripeItems
+);

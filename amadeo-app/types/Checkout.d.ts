@@ -5,5 +5,6 @@ declare namespace Checkout {
         shippingMethods: ShippingMethod[];
         isFetched: boolean;
         loading: boolean;
+        redirectUrl: string | null;
     }
 }

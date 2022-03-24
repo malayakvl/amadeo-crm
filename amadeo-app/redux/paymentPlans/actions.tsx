@@ -30,6 +30,29 @@ export const submitFormAction: any = createAction(
                 });
         }
 );
+
+export const fetchStripeProductAction: any = createAction(
+    'payment-plans/FETCH_STRIPE_ITEMS',
+    async () =>
+        async (
+            dispatch: Type.Dispatch,
+            getState: () => State.Root
+        ): Promise<{ stripeItems: any }> => {
+            const state = getState();
+            dispatch(showLoaderAction(true));
+            const res = await axios.get(`${baseUrl}/payment-stripe-plans`, {
+                headers: {
+                    ...authHeader(state.user.user.email)
+                }
+            });
+            if (res.status) {
+                dispatch(showLoaderAction(false));
+            }
+            return {
+                stripeItems: res.data.items
+            };
+        }
+);
 export const fetchFormAction: any = createAction(
     'payment-plans/FETCH_ITEMS',
     async () =>
@@ -64,6 +87,34 @@ export const stripePaymentIntentAction: any = createAction(
             return {
                 clientSecret: res.data.clientSecret
             };
+        }
+);
+export const syncStripeParameterAction: any = createAction(
+    'stripe/SYNC_STRIPE',
+    async (data: any) =>
+        (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
+            const state = getState();
+            dispatch(showLoaderAction(true));
+            return axios
+                .post(`${baseUrl}/sync-stripe`, data, {
+                    headers: {
+                        ...authHeader(state.user.user.email)
+                    }
+                })
+                .then(async () => {
+                    dispatch(setSuccessToastAction(`Data was successfully sync with stripe`));
+                })
+                .catch((error) => {
+                    dispatch(
+                        setErrorToastAction(
+                            error.response.data.message ||
+                                error.request ||
+                                error.message ||
+                                'Sync fail'
+                        )
+                    );
+                })
+                .finally(() => dispatch(showLoaderAction(false)));
         }
 );
 

@@ -333,10 +333,19 @@
   "Credit card expiration date is invalid": "Credit card expiration date is invalid",
   "Credit card CCV is invalid": "Credit card CCV is invalid",
   "You will be redirected to the PayPal website after submitting your order": "You will be redirected to the PayPal website after submitting your order",
-  "We protect your payment information using encryption to provide bank-level security.": "We protect your payment information using encryption to provide bank-level security.",
   "Review your order": "Review your order",
   "Order complete!": "Order complete!",
   "The terms and conditions must be accepted.": "The terms and conditions must be accepted.",
   "Your order is complete!": "Your order is complete!",
-  "You’ll receive a confirmation e-mail with your order details soon!": "You’ll receive a confirmation e-mail with your order details soon!"
+  "You’ll receive a confirmation e-mail with your order details soon!": "You’ll receive a confirmation e-mail with your order details soon!",
+  "Tial period": "Tial period",
+  "Shipping Address": "Shipping Address",
+  "0000 0000 0000 0000": "0000 0000 0000 0000",
+  "Phone Number": "Phone Number",
+  "Order summary": "Order summary",
+  "Payment  Method": "Payment  Method",
+  "Shipping  Method": "Shipping  Method",
+  "Address must be at least 5 characters": "Address must be at least 5 characters",
+  "We protect your payment information using encryption to provide bank-level security": "We protect your payment information using encryption to provide bank-level security.",
+  "lets_check_out": "Let’s check you out!"
 }

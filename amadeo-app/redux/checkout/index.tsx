@@ -1,5 +1,9 @@
 import { handleActions } from 'redux-actions';
-import { fetchCheckoutAction, fetchShippingMethodsByCountryCheckoutAction } from './actions';
+import {
+    fetchCheckoutAction,
+    fetchShippingMethodsByCountryCheckoutAction,
+    submitCheckoutAction
+} from './actions';
 
 const initialState: {
     isFetched: boolean;
@@ -7,12 +11,14 @@ const initialState: {
     order: Orders.DataItem | null;
     address: Profile.Address | null;
     shippingMethods: ShippingMethod[];
+    redirectUrl: any;
 } = {
     isFetched: false,
     loading: false,
     order: null,
     address: null,
-    shippingMethods: []
+    shippingMethods: [],
+    redirectUrl: null
 };
 
 const ACTION_HANDLERS: any = {
@@ -48,10 +54,27 @@ const ACTION_HANDLERS: any = {
             loading: false,
             isFetched: false
         })
+    },
+
+    [submitCheckoutAction]: {
+        next: (
+            state: State.Checkout,
+            action: Type.ReduxAction<Pick<State.Checkout, 'redirectUrl'>>
+        ): State.Checkout => ({
+            ...state,
+            ...action.payload,
+            loading: false,
+            isFetched: true
+        }),
+        throw: (state: State.Checkout): State.Checkout => ({
+            ...state,
+            loading: false,
+            isFetched: false
+        })
     }
 };
 
-export { fetchCheckoutAction, fetchShippingMethodsByCountryCheckoutAction };
+export { fetchCheckoutAction, fetchShippingMethodsByCountryCheckoutAction, submitCheckoutAction };
 
 // ------------------------------------
 // Reducer
