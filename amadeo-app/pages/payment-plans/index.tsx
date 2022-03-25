@@ -22,6 +22,8 @@ export default function Index({ session, locale }: { session: any; locale: any }
     const stripeProducts = useSelector(stripeItemsSelector);
 
     const [selectedItem, setSelectedItem] = useState<any | null>();
+    const [stripeInitData, setStripeInitData] = useState({});
+    const [priceDropDown, setPriceDropDown] = useState([]);
 
     useEffect(() => {
         dispatch(showLoaderAction(true));
@@ -31,7 +33,22 @@ export default function Index({ session, locale }: { session: any; locale: any }
 
     useEffect(() => {
         dispatch(showLoaderAction(false));
+        const initValues: any = {};
+        plans.header.forEach((plan: any) => {
+            initValues[`plan_stripe_${plan.id}`] = plan.stripe_id;
+        });
+        setStripeInitData(initValues);
     }, [plans?.header?.length]);
+
+    useEffect(() => {
+        if (stripeProducts) {
+            const priceSelect: any = [];
+            stripeProducts.forEach((product: any) => {
+                priceSelect.push({ id: product.price[0].id, name: product.name });
+            });
+            setPriceDropDown(priceSelect);
+        }
+    }, [stripeProducts]);
 
     const changeStatus = (planId: number, optionId: number, optionName: any, status: boolean) => {
         setSelectedItem({ status: status, name: optionName, planId: planId, optionId: optionId });
@@ -93,20 +110,12 @@ export default function Index({ session, locale }: { session: any; locale: any }
         return (
             <>
                 <InputSelect
-                    options={stripeProducts}
+                    options={priceDropDown}
                     label={null}
                     name={`plan_stripe_${planId}`}
                     style={null}
                     props={props}
                 />
-                {/*<select className="form-control w-[200px]">*/}
-                {/*    <option value="">-----</option>*/}
-                {/*    {stripeProducts.map((product: any) => (*/}
-                {/*        <option key={product.id} value={product.id}>*/}
-                {/*            {product.name} {product.price[0].unit_amount / 100} EUR*/}
-                {/*        </option>*/}
-                {/*    ))}*/}
-                {/*</select>*/}
             </>
         );
     };
@@ -132,7 +141,7 @@ export default function Index({ session, locale }: { session: any; locale: any }
                     <div className="w-full md:w-1/2">
                         <Formik
                             enableReinitialize
-                            initialValues={{}}
+                            initialValues={stripeInitData}
                             validationSchema={SubmitSchema}
                             onSubmit={(values) => {
                                 dispatch(syncStripeParameterAction(values));
