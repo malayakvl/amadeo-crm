@@ -59,23 +59,32 @@ function Restore({ locale }: { locale: string }) {
                     onSubmit={(values) => {
                         dispatch(restorePasswordAction(values));
                     }}>
-                    {(props) => (
-                        <form onSubmit={props.handleSubmit}>
-                            <InputText
-                                style={null}
-                                icon={'f-email'}
-                                label={null}
-                                name={'email'}
-                                placeholder={'Email'}
-                                props={props}
-                                tips={null}
-                            />
+                    {(props) =>
+                        validEmail === 'yes' ? (
+                            <div className="mb-4 font-bold text-2xl line-height-105percent w-72 text-green-500">
+                                {t('We send you recovery link, please check your mailbox')}
+                            </div>
+                        ) : (
+                            <form onSubmit={props.handleSubmit}>
+                                <InputText
+                                    style={null}
+                                    icon={'f-email'}
+                                    label={null}
+                                    name={'email'}
+                                    placeholder={'Email'}
+                                    props={props}
+                                    tips={null}
+                                />
 
-                            <button type="submit" className="mt-6 gradient-btn w-full">
-                                Send me a Recovery Link
-                            </button>
-                        </form>
-                    )}
+                                <button
+                                    type="submit"
+                                    disabled={props.isSubmitting}
+                                    className="mt-6 gradient-btn w-full">
+                                    Send me a Recovery Link
+                                </button>
+                            </form>
+                        )
+                    }
                 </Formik>
             </div>
         </div>
