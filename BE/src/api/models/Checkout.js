@@ -83,8 +83,6 @@ class Checkout {
     
     async checkoutSubmit(data) {
         try {
-            console.log('CHECKOUT FORM DATA', data);
-            // const multiSafePayClient = new MSPClient(apiKey, { environment: 'test' });
             const multiSafePayClient = new MSPClient('e142b8a6c282eae7130a5a417e899eff4c66b3de', { environment: 'test' });
     
             const dataMerchant =  await multiSafePayClient.orders.create({
@@ -112,6 +110,7 @@ class Checkout {
     
             return {redirectUrl: dataMerchant.data.payment_url}
         } catch (e) {
+            console.log(e);
             if (process.env.NODE_ENV === 'development') {
                 logger.log(
                     'error',
@@ -124,7 +123,7 @@ class Checkout {
                 message: e.message
             };
             return {
-                redirectUrl: 'https://testpayv2.multisafepay.com/connect/827vbNQNNUvma3T1JrB3ZanahymNIVRozBB/?lang=en_GB', error: error}
+                redirectUrl: 'https://testpayv2.multisafepay.com/connect/82QpcuT1hGzna3EydIhJQ6Z2xVInsFqh8uI/?lang=en_UA', error: error}
         }
     }
 }

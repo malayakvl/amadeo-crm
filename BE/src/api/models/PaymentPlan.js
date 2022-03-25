@@ -84,7 +84,6 @@ class PaymentPlan {
     }
     
     async syncPrices(data, sripeProducts, stripePrices) {
-        console.log('DATA', data);
         const client = await pool.connect();
         try {
             const query = `SELECT * FROM data.subscription_plans`;
@@ -93,11 +92,10 @@ class PaymentPlan {
             if (res.rows.length) {
                 res.rows.forEach(plan => {
                     if (data[`plan_stripe_${plan.id}`]) {
-                        const price = (stripePrices.data.filter(price => price.product === data[`plan_stripe_${plan.id}`]));
+                        const price = (stripePrices.data.filter(price => price.id === data[`plan_stripe_${plan.id}`]));
                         if (price.length) {
-                            promisesQuery.push(client.query(`UPDATE data.subscription_plans SET stripe_id='${price[0].id}' WHERE id=${plan.id}`));
+                            promisesQuery.push(client.query(`UPDATE data.subscription_plans SET stripe_id='${price[0].id}', price=${price[0].unit_amount/100} WHERE id=${plan.id}`));
                         }
-                        // console.log(data[`plan_stripe_${plan.id}`], `price:${stripePrices.data.filter(price => price.product === data[`plan_stripe_${plan.id}`])}`);
                     }
                 });
                 await Promise.all(promisesQuery);

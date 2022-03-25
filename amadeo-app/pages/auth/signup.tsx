@@ -57,7 +57,7 @@ export default function Signup() {
                         onSubmit={props.handleSubmit}
                         className="flex-col w-full px-4 rounded-lg border shadow-xl mt-10 flex md:flex-row md:w-[1000px] bg-white md:px-20 py-14 md:mr-0 md:ml-0">
                         <div className="w-full font-bold mt-8 md:pr-12 md:w-2/4">
-                            <div className="text-5xl line-height-105percent mb-9 w-48">
+                            <div className="text-5xl line-height-105percent mb-9">
                                 {t('Sing up today!')}
                             </div>
 

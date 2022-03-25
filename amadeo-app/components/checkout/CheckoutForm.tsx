@@ -3,6 +3,9 @@ import { useStripe, useElements, PaymentElement } from '@stripe/react-stripe-js'
 import { useTranslations } from 'next-intl';
 import { showLoaderAction } from '../../redux/layouts/actions';
 import { useDispatch } from 'react-redux';
+import getConfig from 'next/config';
+const { publicRuntimeConfig } = getConfig();
+const siteUrl = publicRuntimeConfig.siteUrl;
 
 const CheckoutUnregisteredForm = () => {
     const stripe = useStripe();
@@ -25,7 +28,7 @@ const CheckoutUnregisteredForm = () => {
             //`Elements` instance that was used to create the Payment Element
             elements,
             confirmParams: {
-                return_url: `http://localhost:3000/completePayment`
+                return_url: `${siteUrl}/completePayment`
             }
         });
 

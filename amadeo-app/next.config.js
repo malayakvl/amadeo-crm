@@ -21,7 +21,9 @@ module.exports = {
         localeDetection: false
     },
     publicRuntimeConfig: {
-        apiUrl: process.env.API_URL
+        apiUrl: process.env.API_URL,
+        siteUrl: process.env.API_SITE_URL,
+        stripeKey: process.env.API_STRIPE
     },
     sassOptions: {
         includePaths: [path.join(__dirname, 'styles')]
