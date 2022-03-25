@@ -13,11 +13,9 @@ import { loadStripe, StripeElementsOptions } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
 import { CheckoutForm } from '../../components/checkout';
 
-import getConfig from 'next/config';
-const { publicRuntimeConfig } = getConfig();
-const stripeKey = publicRuntimeConfig.stripeKey;
-
-const stripePromise = loadStripe(stripeKey);
+const stripePromise = loadStripe(
+    'pk_test_51KVgrtDBSh7ykoyWbEIYSADVKagIP8DCzx1kLlwZbcCc9XFlvEcQGWZ2kIwJ5JhA6u0mps4WY82kiN634aKbxG8r00uGxWTloi'
+);
 
 export default function Signup({
     planId,
