@@ -35,7 +35,7 @@ export default function LangSwitcher() {
     };
 
     return (
-        <div className="relative">
+        <div className="relative min-w-max">
             <div className="language-block inline-block text-right dropdown">
                 <button
                     className="btn-langs"

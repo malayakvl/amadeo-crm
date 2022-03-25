@@ -87,7 +87,9 @@ const SidebarHeader: React.FC = () => {
 
                         <span className="profile-name">
                             {user.first_name || user.last_name ? user.first_name : user.email}
-                            <span className="text-blue-350 pl-2">ID: {user.id}</span>
+                            <span className="text-blue-350 pl-2 inline-block min-w-max">
+                                ID: {user.id}
+                            </span>
                             <em>{user.company_name || t('No Company Name')}</em>
                         </span>
                     </div>
@@ -156,7 +158,7 @@ const SidebarHeader: React.FC = () => {
                 </div>
                 <LangSwitcher />
                 {/*<span className="divider" />*/}
-                <span className="mt-1 ml-3">
+                <span className="mt-1 ml-3 min-w-max">
                     <a
                         href={`/api/auth/signout`}
                         title={t('Logout')}
@@ -170,7 +172,7 @@ const SidebarHeader: React.FC = () => {
                             src="/images/icon-logout.svg"
                             width={14}
                             height={20}
-                            alt=""
+                            alt={t('Logout')}
                         />
                     </a>
                 </span>

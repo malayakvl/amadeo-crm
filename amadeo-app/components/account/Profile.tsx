@@ -66,17 +66,13 @@ function Profile() {
             .strict(true)
             .required(t('You must enter your email')),
         last_name: Yup.string()
-            .trim(t('Cannot include leading and trailing spaces'))
-            .required(t('You must enter your family name'))
-            .min(3, t('Must be at least 3 characters'))
             .strict(true)
-            .matches(/^[aA-zZ\s]+$/, 'Only alphabets are allowed for this field '),
+            .trim(t('Cannot include leading and trailing spaces'))
+            .required(t('You must enter your family name')),
         first_name: Yup.string()
-            .trim(t('Cannot include leading and trailing spaces'))
-            .required(t('You must enter your first name'))
             .strict(true)
-            .min(3, t('Must be at least 3 characters'))
-            .matches(/^[aA-zZ\s]+$/, 'Only alphabets are allowed for this field '),
+            .trim(t('Cannot include leading and trailing spaces'))
+            .required(t('You must enter your first name')),
         identification_number: Yup.string()
             .trim(t('Cannot include leading and trailing spaces'))
             .strict(true)

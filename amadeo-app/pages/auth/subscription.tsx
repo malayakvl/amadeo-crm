@@ -68,13 +68,11 @@ export default function Signup({
         first_name: Yup.string()
             .strict(true)
             .trim(t('Cannot include leading and trailing spaces'))
-            .required(t('You must enter your first name'))
-            .matches(/^[aA-zZ\s]+$/, t('Only alphabets are allowed for this field')),
+            .required(t('You must enter your first name')),
         last_name: Yup.string()
             .strict(true)
             .trim(t('Cannot include leading and trailing spaces'))
-            .required(t('You must enter your family name'))
-            .matches(/^[aA-zZ\s]+$/, t('Only alphabets are allowed for this field')),
+            .required(t('You must enter your family name')),
         email: Yup.string().email(t('Must be a valid email')).required(t('Required field')),
         acceptTerms: Yup.bool().oneOf([true], t('Accept Terms is required')),
         password: Yup.string()

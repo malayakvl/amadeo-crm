@@ -43,13 +43,11 @@ export default function SellerRegistration({
         first_name: Yup.string()
             .strict(true)
             .trim(t('Cannot include leading and trailing spaces'))
-            .required(t('You must enter your first name'))
-            .matches(/^[aA-zZ\s]+$/, t('Only alphabets are allowed for this field')),
+            .required(t('You must enter your first name')),
         last_name: Yup.string()
             .strict(true)
             .trim(t('Cannot include leading and trailing spaces'))
-            .required(t('You must enter your family name'))
-            .matches(/^[aA-zZ\s]+$/, t('Only alphabets are allowed for this field')),
+            .required(t('You must enter your family name')),
         country_id: Yup.number().required(t('You must select country')),
         post_code: Yup.string()
             .strict(true)

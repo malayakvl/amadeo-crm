@@ -347,5 +347,6 @@
   "Shipping  Method": "Shipping  Method",
   "Address must be at least 5 characters": "Address must be at least 5 characters",
   "We protect your payment information using encryption to provide bank-level security": "We protect your payment information using encryption to provide bank-level security.",
-  "lets_check_out": "Let’s check you out!"
+  "lets_check_out": "Let’s check you out!",
+  "We send you recovery link, please check your mailbox": "We send you recovery link, please check your mailbox"
 }
