@@ -25,14 +25,16 @@ export default function Signup({
     }, [paymentIntent]);
 
     useEffect(() => {
-        if (stripePaymentIntent && !user?.email) {
-            signIn('credentials_subscription_login', {
-                email: stripePaymentIntent?.email,
-                seller_email: stripePaymentIntent?.email,
-                callbackUrl: `${window.location.origin}/dashboard`
-            });
-        } else {
-            location.href = `${window.location.origin}/dashboard`;
+        if (stripePaymentIntent) {
+            if (!user?.email) {
+                signIn('credentials_subscription_login', {
+                    email: stripePaymentIntent?.email,
+                    seller_email: stripePaymentIntent?.email,
+                    callbackUrl: `${window.location.origin}/dashboard`
+                });
+            } else {
+                location.href = `${window.location.origin}/dashboard`;
+            }
         }
     }, [stripePaymentIntent?.email]);
 
