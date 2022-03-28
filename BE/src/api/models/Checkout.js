@@ -13,11 +13,11 @@ class Checkout {
         try {
             const filter = JSON.stringify({
                 // status: ["payed"],
-                buyer_id: userId,
+                buyer_id: [userId],
                 order_number: orderNumber
             });
 
-            const ordersQuery = `SELECT * FROM data.get_orders (1, 0, '${filter}');`;
+            const ordersQuery = `SELECT * FROM data.get_orders(1, 0, '${filter}');`;
             const res = await client.query(ordersQuery);
             order = res.rows.length > 0 ? res.rows[0] : [];
 
