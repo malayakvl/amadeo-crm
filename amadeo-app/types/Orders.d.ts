@@ -31,9 +31,15 @@ declare namespace Orders {
         seller_photo: string;
         buyer_id: number;
         buyer_first_name: string;
+        buyer_last_name: string;
         buyer_photo: string;
         flag_name: string | null;
         shipping_image: string | null;
+        shipping_address?: string | null;
+        post_code?: string | null;
+        city?: string | null;
+        state?: string | null;
+        phone?: string | null;
         order_items: any;
         country_json: any;
         // user_id: number;
