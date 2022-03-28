@@ -93,7 +93,7 @@ class Checkout {
                                         city=$$${data.city}$$,
                                         post_code=$$${data.post_code}$$,
                                         phone=$$${data.phone}$$,
-                                        shipping_address=$$${data.address_line_1}$$
+                                        shipping_address=$$${data.shipping_address}$$
                                         WHERE order_number='${data.orderNumber}' AND user_id='${user.id}'`);
                 console.log(data);
                 const dataOrder = {
