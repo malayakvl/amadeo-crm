@@ -1,7 +1,7 @@
 import { useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Select from 'react-select';
-import { useFormikContext, Field } from 'formik';
+import { useFormikContext } from 'formik';
 import { useTranslations } from 'next-intl';
 import { countriesSelector } from '../../redux/countries/selectors';
 import {
@@ -38,22 +38,35 @@ const ShippingAddress = ({ locale }: { locale: string }) => {
     }, []);
 
     useEffect(() => {
+        if (order && order.id) {
+            props.values.first_name = order.buyer_first_name || props.values.first_name;
+            props.values.last_name = order.buyer_last_name || props.values.last_name;
+            props.values.phone = order.phone || props.values.phone;
+            props.values.country_id = order.country_id || props.values.country_id;
+            props.values.state = order.state || props.values.state;
+            props.values.post_code = order.post_code || props.values.post_code;
+            props.values.city = order.city || props.values.city;
+            props.values.shipping_address = order.shipping_address || props.values.shipping_address;
+        }
+    }, [order]);
+
+    useEffect(() => {
         if (user && user.id) {
-            props.setFieldValue('first_name', user.first_name, false);
-            props.setFieldValue('last_name', user.last_name, false);
-            props.setFieldValue('phone', user.phone, false);
+            props.values.first_name = props.values.first_name || user.first_name;
+            props.values.last_name = props.values.last_name || user.last_name;
+            props.values.phone = props.values.phone || user.phone;
         }
     }, [user]);
 
     useEffect(() => {
         if (address && address.id) {
-            props.setFieldValue('country_id', address.country_id, false);
-            props.setFieldValue('post_code', address.post_code, false);
-            props.setFieldValue('state', address.state, false);
-            props.setFieldValue('city', address.city, false);
-            // props.setFieldValue('address_line_1', address.address_line_1, false);
-            props.setFieldValue('shipping_address', address.address_line_1, false);
-            props.setFieldValue('address_line_2', address.address_line_2, false);
+            props.values.country_id = props.values.country_id || address.country_id;
+            props.values.post_code = props.values.post_code || address.post_code;
+            props.values.state = props.values.state || address.state;
+            props.values.city = props.values.city || address.city;
+            props.values.shipping_address =
+                props.values.shipping_address ||
+                address.address_line_1 + ' ' + address.address_line_2;
         }
     }, [address]);
 
@@ -156,14 +169,15 @@ const ShippingAddress = ({ locale }: { locale: string }) => {
             <InputText
                 label={null}
                 icon={'f-location'}
-                name={'address_line_1'}
+                // name={'address_line_1'}
+                name={'shipping_address'}
                 placeholder={t('Address Line 1')}
                 style={'col-span-2'}
                 props={props}
                 tips={null}
             />
 
-            <InputText
+            {/* <InputText
                 label={null}
                 icon={'f-location'}
                 name={'address_line_2'}
@@ -171,9 +185,9 @@ const ShippingAddress = ({ locale }: { locale: string }) => {
                 style={'col-span-2'}
                 props={props}
                 tips={null}
-            />
+            /> */}
 
-            <div className="col-span-2">
+            {/* <div className="col-span-2">
                 <Field
                     type="checkbox"
                     name="isEqualAddresses"
@@ -185,7 +199,7 @@ const ShippingAddress = ({ locale }: { locale: string }) => {
                     className="ml-3 text-sm font-medium text-gray-700">
                     My shipping and billing address are the same
                 </label>
-            </div>
+            </div> */}
         </div>
     );
 };
