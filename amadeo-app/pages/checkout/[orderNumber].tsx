@@ -24,7 +24,7 @@ export default function Index({ session, locale }: { session: any; locale: any }
 
     const redirectMerchantUrl = useSelector(redirectMerchantUrlSelector);
     const orderData = useSelector(orderCheckoutSelector);
-    const [formData, setFormData] = useState<any>();
+    const [formData, setFormData] = useState<any>({});
 
     useEffect(() => {
         dispatch(fetchCheckoutAction(orderNumber));
