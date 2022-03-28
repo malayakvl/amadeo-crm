@@ -86,7 +86,6 @@ class Checkout {
         try {
             const orderRes = await client.query(`SELECT * FROM data.orders WHERE order_number='${data.orderNumber}' AND user_id='${user.id}'`);
             if (orderRes.rows.length) {
-                console.log('ORDER', orderRes.rows[0]);
                 await client.query(`UPDATE data.orders SET
                                         country_id=${data.country_id},
                                         state=$$${data.state}$$,
@@ -95,13 +94,14 @@ class Checkout {
                                         phone=$$${data.phone}$$,
                                         shipping_address=$$${data.address_line_1}$$
                                         WHERE order_number='${data.orderNumber}' AND user_id='${user.id}'`);
-                console.log(data);
+                // fetch seller and system settings for receive api keys
+                const sellerSettingsRes = await client.query(`SELECT * FROM data.get_seller_settings(${orderRes.rows[0].id});`);
                 const dataOrder = {
                     type: 'redirect',
                     order_id: `amadeo-order-id-${orderRes.rows[0].id}`,
-                    gateway: orderRes.rows[0].total_amount*100,
+                    gateway: '',
                     currency: 'EUR',
-                    amount: '1',
+                    amount: orderRes.rows[0].total_amount*100,
                     description: `Payment for Order ${data.orderNumber}`,
                     payment_options: {
                         notification_url:
@@ -125,21 +125,22 @@ class Checkout {
                             {
                                 "merchant":90312708,
                                 "percentage":3.5,
-                                "description":"Percentage fee"
+                                "description":`Percentage fee for order: ${data.orderNumber}`
                             }
                         ]
                     }
                 }
+                console.log('MERCHANT DATA', dataOrder);
     
                 const multiSafePayClientRes = await axios
-                    .post(`https://testapi.multisafepay.com/v1/json/orders?api_key=e142b8a6c282eae7130a5a417e899eff4c66b3de`, dataOrder, {
+                    .post(`https://testapi.multisafepay.com/v1/json/orders?api_key=4fa335f6ae2234c6247384193143d9c18f5e219e`, dataOrder, {
                         headers: { 'Content-Type': 'application/json' }
                     })
                     .then(async (res) => {
                         console.log(res.data);
                         return {redirectUrl: res.data.data.payment_url, error: null}
                     }).catch(error => {
-                        console.log(error);
+                        console.log(error.message)
                         return {redirectUrl: null, error: error.message}
                     });
                 return {redirectUrl: multiSafePayClientRes.redirectUrl, error: multiSafePayClientRes.error}

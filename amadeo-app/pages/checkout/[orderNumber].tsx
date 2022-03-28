@@ -49,7 +49,7 @@ export default function Index({ session, locale }: { session: any; locale: any }
     const validationSchema = Yup.object({
         first_name: Yup.string()
             .strict(true)
-            .trim(t('Cannot include leading and trailing spaces'))
+            // .trim(t('Cannot include leading and trailing spaces'))
             .required(t('You must enter your first name')),
         last_name: Yup.string()
             .strict(true)
