@@ -6,7 +6,10 @@ import {
     showPopupAction,
     fetchFilerItems,
     showDateSelectorAction,
-    setSelectedSellerAction
+    setSelectedSellerAction,
+    showPersentFormAction,
+    showPersentConfirmFormAction,
+    setSellerPercentAction
 } from './actions';
 
 const initialState: {
@@ -20,6 +23,9 @@ const initialState: {
     showDateSelector: boolean;
     showLoginForm: boolean;
     selectedSeller: string;
+    showPersentForm: boolean;
+    showPersentConfirmForm: boolean;
+    sellerPercent: number | null;
 } = {
     isFetched: false,
     loading: false,
@@ -37,7 +43,10 @@ const initialState: {
     },
     showDateSelector: false,
     showLoginForm: false,
-    selectedSeller: ''
+    showPersentForm: false,
+    showPersentConfirmForm: false,
+    selectedSeller: '',
+    sellerPercent: null
 };
 
 const ACTION_HANDLERS: any = {
@@ -101,6 +110,18 @@ const ACTION_HANDLERS: any = {
             showLoginForm: action.payload
         })
     },
+    [showPersentFormAction]: {
+        next: (state: State.Sellers, action: Action<boolean>): State.Sellers => ({
+            ...state,
+            showPersentForm: action.payload
+        })
+    },
+    [showPersentConfirmFormAction]: {
+        next: (state: State.Sellers, action: Action<boolean>): State.Sellers => ({
+            ...state,
+            showPersentConfirmForm: action.payload
+        })
+    },
     [showDateSelectorAction]: {
         next: (state: State.Sellers, action: Action<boolean>): State.Sellers => ({
             ...state,
@@ -112,6 +133,12 @@ const ACTION_HANDLERS: any = {
             ...state,
             selectedSeller: action.payload
         })
+    },
+    [setSellerPercentAction]: {
+        next: (state: State.Sellers, action: Action<number | null>): State.Sellers => ({
+            ...state,
+            sellerPercent: action.payload
+        })
     }
 };
 
@@ -122,7 +149,10 @@ export {
     showLoginFormAction,
     fetchFilerItems,
     showDateSelectorAction,
-    setSelectedSellerAction
+    setSelectedSellerAction,
+    showPersentFormAction,
+    showPersentConfirmFormAction,
+    setSellerPercentAction
 };
 
 // ------------------------------------

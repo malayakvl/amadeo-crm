@@ -1,6 +1,6 @@
 import pool from './connect.js';
 import { logger } from '../../common/logger.js';
-import MSPClient from '@multisafepay/api-wrapper';
+import axios from "axios";
 
 class Checkout {
 
@@ -17,7 +17,7 @@ class Checkout {
                 order_number: orderNumber
             });
 
-            const ordersQuery = `SELECT id, order_items, order_number, order_amount, shipping_amount, total_amount, status FROM data.get_orders (1, 0, '${filter}');`;
+            const ordersQuery = `SELECT * FROM data.get_orders (1, 0, '${filter}');`;
             const res = await client.query(ordersQuery);
             order = res.rows.length > 0 ? res.rows[0] : [];
 
@@ -81,36 +81,72 @@ class Checkout {
         }
     }
     
-    async checkoutSubmit(data) {
+    async checkoutSubmit(data, user) {
+        const client = await pool.connect();
         try {
-            const multiSafePayClient = new MSPClient('e142b8a6c282eae7130a5a417e899eff4c66b3de', { environment: 'test' });
+            const orderRes = await client.query(`SELECT * FROM data.orders WHERE order_number='${data.orderNumber}' AND user_id='${user.id}'`);
+            if (orderRes.rows.length) {
+                console.log('ORDER', orderRes.rows[0]);
+                await client.query(`UPDATE data.orders SET
+                                        country_id=${data.country_id},
+                                        state=$$${data.state}$$,
+                                        city=$$${data.city}$$,
+                                        post_code=$$${data.post_code}$$,
+                                        phone=$$${data.phone}$$,
+                                        shipping_address=$$${data.address_line_1}$$
+                                        WHERE order_number='${data.orderNumber}' AND user_id='${user.id}'`);
+                console.log(data);
+                const dataOrder = {
+                    type: 'redirect',
+                    order_id: `amadeo-order-id-${orderRes.rows[0].id}`,
+                    gateway: orderRes.rows[0].total_amount*100,
+                    currency: 'EUR',
+                    amount: '1',
+                    description: `Payment for Order ${data.orderNumber}`,
+                    payment_options: {
+                        notification_url:
+                            `${process.env.APPLICATION_BASE_URL}/payment?type=notification`,
+                        redirect_url:
+                            `${process.env.APPLICATION_BASE_URL}/payment?type=redirect`,
+                        cancel_url: `${process.env.APPLICATION_BASE_URL}/payment?type=cancel`,
+                        close_window: true,
+                    },
+                    // "payment_options":{
+                    //     "notification_url":"https://www.example.com/client/notification?type=notification",
+                    //     "redirect_url":"https://www.example.com/client/notification?type=redirect",
+                    //     "cancel_url":"https://www.example.com/client/notification?type=cancel",
+                    //     "close_window":true
+                    // },
+                    customer: {
+                        locale: 'en_US',
+                    },
+                    affiliate: {
+                        "split_payments":[
+                            {
+                                "merchant":90312708,
+                                "percentage":3.5,
+                                "description":"Percentage fee"
+                            }
+                        ]
+                    }
+                }
     
-            const dataMerchant =  await multiSafePayClient.orders.create({
-                type: 'redirect',
-                order_id: "my-order-id-1",
-                gateway: 'iDEAL',
-                currency: 'EUR',
-                amount: '1000',
-                description: 'Test Order Description',
-                payment_options: {
-                    notification_url:
-                        'http://www.example.com/client/notification?type=notification',
-                    redirect_url:
-                        'http://www.example.com/client/notification?type=redirect',
-                    cancel_url: 'http://www.example.com/client/notification?type=cancel',
-                    close_window: '',
-                },
-                customer: {
-                    locale: 'en_US',
-                },
-                second_chance: {
-                    send_email: true,
-                },
-            });
-    
-            return {redirectUrl: dataMerchant.data.payment_url}
+                const multiSafePayClientRes = await axios
+                    .post(`https://testapi.multisafepay.com/v1/json/orders?api_key=e142b8a6c282eae7130a5a417e899eff4c66b3de`, dataOrder, {
+                        headers: { 'Content-Type': 'application/json' }
+                    })
+                    .then(async (res) => {
+                        console.log(res.data);
+                        return {redirectUrl: res.data.data.payment_url, error: null}
+                    }).catch(error => {
+                        console.log(error);
+                        return {redirectUrl: null, error: error.message}
+                    });
+                return {redirectUrl: multiSafePayClientRes.redirectUrl, error: multiSafePayClientRes.error}
+            } else {
+                return {redirectUrl: null, error: 'No find order'}
+            }
         } catch (e) {
-            console.log(e);
             if (process.env.NODE_ENV === 'development') {
                 logger.log(
                     'error',
@@ -123,7 +159,9 @@ class Checkout {
                 message: e.message
             };
             return {
-                redirectUrl: 'https://testpayv2.multisafepay.com/connect/82QpcuT1hGzna3EydIhJQ6Z2xVInsFqh8uI/?lang=en_UA', error: error}
+                redirectUrl: null, error: error}
+        } finally {
+            client.release();
         }
     }
 }

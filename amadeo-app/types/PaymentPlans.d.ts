@@ -6,6 +6,7 @@ declare namespace PaymentPlans {
         clientSecret: string;
         planInfo: any;
         stripeItems: any;
+        settings: any;
     }
 
     // interface SettingItem {

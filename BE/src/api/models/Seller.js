@@ -60,10 +60,6 @@ class Seller {
         const client = await pool.connect();
         try {
             const res = {};
-            // const shipping = await client.query('SELECT * FROM data.get_orders_shipping();');
-            // res.shippings = shipping.rows[0].shipping ? shipping.rows[0].shipping : [];
-            // const payments = await client.query('SELECT * FROM data.get_orders_payments();');
-            // res.payments = payments.rows[0].payments ? payments.rows[0].payments : [];
             const countries = await client.query('SELECT * FROM data.get_sellers_countries();');
             res.countries = countries.rows[0].countries ? countries.rows[0].countries : [];
             const amounts = await client.query('SELECT total_amount_range FROM data.get_sellers_total_amount_range();');
@@ -74,19 +70,52 @@ class Seller {
             res.total_buyers = buyer.rows[0].total_buyers_range.max ? [buyer.rows[0].total_buyers_range.min, buyer.rows[0].total_buyers_range.max] : [];
             const orders = await client.query('SELECT total_orders_range FROM data.get_sellers_total_orders_range();');
             res.total_orders = orders.rows[0].total_orders_range.max ? [orders.rows[0].total_orders_range.min, orders.rows[0].total_orders_range.max] : [];
-            // SELECT total_sessions_range FROM data.get_sellers_total_sessions_range();
-            //
-            // SELECT total_count_range FROM data.get_sellers_total_count_range();
-            //
-            // SELECT total_buyers_range FROM data.get_sellers_total_buyers_range();
-            //
-            // SELECT total_amount_range FROM data.get_sellers_total_amount_range();
-            // res.total_orders = [];
-            // res.total_buyers = [];
             const error = null;
             return {
                 res,
                 error
+            };
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error (Products getAll):',
+                    { message: e.message }
+                );
+            }
+            const items = null;
+            const error = {
+                code: 500,
+                message: 'Error get list of users'
+            };
+            return {
+                items,
+                error
+            };
+        } finally {
+            client.release();
+        }
+    }
+    
+    
+    async updatePercent(data) {
+        const client = await pool.connect();
+        try {
+            console.log(data);
+            let res = false;
+            const resUser = await client.query(`SELECT id FROM data.users WHERE email='${data.email.toLowerCase()}'`);
+            if (resUser.rows.length > 0) {
+                const query = `INSERT INTO data.seller_settings(user_id, transaction_percent)
+                                    VALUES (${resUser.rows[0].id}, '${data.transaction_percent}')
+                                    ON CONFLICT ON CONSTRAINT seller_settings__pkey DO UPDATE SET
+                                        transaction_percent = EXCLUDED.transaction_percent
+                                    ;`;
+                await client.query(query);
+                res = true;
+            }
+            
+            return {
+                res
             };
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {

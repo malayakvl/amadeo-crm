@@ -51,7 +51,8 @@ const ShippingAddress = ({ locale }: { locale: string }) => {
             props.setFieldValue('post_code', address.post_code, false);
             props.setFieldValue('state', address.state, false);
             props.setFieldValue('city', address.city, false);
-            props.setFieldValue('address_line_1', address.address_line_1, false);
+            // props.setFieldValue('address_line_1', address.address_line_1, false);
+            props.setFieldValue('shipping_address', address.address_line_1, false);
             props.setFieldValue('address_line_2', address.address_line_2, false);
         }
     }, [address]);

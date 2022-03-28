@@ -176,6 +176,26 @@ export const fetchUserSubscriptionAction: any = createAction(
                 });
         }
 );
+export const unsubscribeAction: any = createAction(
+    'user/UNSUBSCRIPTION',
+    async () =>
+        (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
+            const state = getState();
+            dispatch(showLoaderAction(true));
+            return axios
+                .get(`${baseUrl}/profile/unsubscription`, {
+                    headers: {
+                        ...authHeader(state.user.user.email)
+                    }
+                })
+                .then(() => {
+                    dispatch(showLoaderAction(false));
+                    // return {
+                    //     subscription: res.data.subscription
+                    // };
+                });
+        }
+);
 // http://localhost:3000/complete?payment_intent=pi_3KfQDVDBSh7ykoyW1UZ7i0GM&payment_intent_client_secret=pi_3KfQDVDBSh7ykoyW1UZ7i0GM_secret_O7RljPcB3glQMv9zlLgOV1mui&redirect_status=succeeded
 
 export const setUserAction: any = createAction('user/SET_USER');

@@ -246,3 +246,7 @@ input:checked + .toggle-bg {
 .form-subtitle {
   @apply w-full text-gray-450 text-sm mb-3 font-bold;
 }
+
+.InputContainer .InputElement {
+  border:solid 1px red;
+}

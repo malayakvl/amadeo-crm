@@ -35,8 +35,7 @@ class AuthController {
     
     authSellerLogin(req, res, next) {
         const { seller_email } = req.body;
-        
-        passport.authenticate('local', { session: false },
+        passport.authenticate('custom', { session: false },
             (err, authUser, info) => {
                 if (err) {
                     return res.status(500).json({ code: 500, message: err.message });
@@ -194,7 +193,11 @@ class AuthController {
         invitation = await invitationModel.create(data);
 
         let link = `${process.env.APPLICATION_BASE_URL}/auth/registration?hash=${invitation.hash}`;
-
+        const welcomeEmail = welcomeEmailHtml(data.emai, link, '');
+        sendMail(
+            'malaya.kvl@gmail.com',
+            'Proshop',
+            welcomeEmail);
         sendMail(
             data.email,
             'Proshop',

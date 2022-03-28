@@ -5,9 +5,8 @@ import { providers, signIn } from 'next-auth/client';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 import { checkPaymentStatusAction } from '../../redux/user';
-import { paymentIntentSelector } from '../../redux/user/selectors';
+import { paymentIntentSelector, userSelector } from '../../redux/user/selectors';
 
-// http://localhost:3000/completePayment?email=ddddd@1.com&payment_intent=pi_3KfWqYDBSh7ykoyW0jA6yT1L&payment_intent_client_secret=pi_3KfWqYDBSh7ykoyW0jA6yT1L_secret_fbAk6c8DHMCO0ZkbMyH7lBt2C&redirect_status=succeeded
 export default function Signup({
     paymentIntentSecret,
     paymentIntent
@@ -18,6 +17,7 @@ export default function Signup({
     const dispatch = useDispatch();
     const t = useTranslations();
     const { query } = useRouter();
+    const user = useSelector(userSelector);
     const stripePaymentIntent = useSelector(paymentIntentSelector);
 
     useEffect(() => {
@@ -25,12 +25,14 @@ export default function Signup({
     }, [paymentIntent]);
 
     useEffect(() => {
-        if (stripePaymentIntent) {
+        if (stripePaymentIntent && !user?.email) {
             signIn('credentials_subscription_login', {
                 email: stripePaymentIntent?.email,
                 seller_email: stripePaymentIntent?.email,
                 callbackUrl: `${window.location.origin}/dashboard`
             });
+        } else {
+            location.href = `${window.location.origin}/dashboard`;
         }
     }, [stripePaymentIntent?.email]);
 

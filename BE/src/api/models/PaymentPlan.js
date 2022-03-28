@@ -25,6 +25,27 @@ class PaymentPlan {
         }
     }
     
+    
+    async fetchSettings () {
+        const client = await pool.connect();
+        try {
+            const query = 'SELECT * FROM data.system_settings WHERe id=1';
+            const res = await client.query(query);
+            return res.rows.length ? res.rows[0] : [];
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error(fetchSettings):',
+                    { message: e.message }
+                );
+            }
+            return { success: false, error: { code: 404, message: 'Settings not found' } };
+        } finally {
+            client.release();
+        }
+    }
+    
     async changeStatus(data) {
         const client = await pool.connect();
         try {
@@ -87,6 +108,10 @@ class PaymentPlan {
         const client = await pool.connect();
         try {
             const query = `SELECT * FROM data.subscription_plans`;
+            await client.query(`UPDATE data.system_settings SET trial_period='${data.trial_period}',
+                                    multisafe_api_key=$$${data.multisafe_api_key}$$,
+                                    multisafe_account=$$${data.multisafe_account}$$ WHERE id='1'`);
+            
             const res = await client.query(query);
             const promisesQuery = [];
             if (res.rows.length) {

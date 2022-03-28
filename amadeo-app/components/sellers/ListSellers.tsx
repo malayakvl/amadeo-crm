@@ -11,14 +11,16 @@ import {
     fetchItemsAction,
     showDateSelectorAction,
     showLoginFormAction,
-    setSelectedSellerAction
+    setSelectedSellerAction,
+    showPersentConfirmFormAction,
+    setSellerPercentAction
 } from '../../redux/sellers';
 import moment from 'moment';
 import Image from 'next/image';
 import { baseApiUrl } from '../../constants';
 import { setPaginationAction } from '../../redux/layouts';
 import { useTranslations } from 'next-intl';
-import { Filters, FilterValues, SellerLogin } from './index';
+import { Filters, FilterValues, SellerLogin, SellerPersent, SellerPersentConfirm } from './index';
 import { paginationSelectorFactory } from '../../redux/layouts/selectors';
 import { DateRangePicker } from 'react-date-range';
 import 'react-date-range/dist/styles.css'; // main css file
@@ -149,6 +151,24 @@ const ListSellers: React.FC<{ locale: string }> = ({ locale }) => {
                                     </span>
                                 </div>
                             </td>
+                            <td>
+                                <span
+                                    role="presentation"
+                                    className="cursor-pointer"
+                                    onClick={() => {
+                                        dispatch(
+                                            setSellerPercentAction(
+                                                item.transaction_percent > 0
+                                                    ? item.transaction_percent
+                                                    : 0
+                                            )
+                                        );
+                                        dispatch(setSelectedSellerAction(item.email));
+                                        dispatch(showPersentConfirmFormAction(true));
+                                    }}>
+                                    {item.transaction_percent > 0 ? item.transaction_percent : 0}%
+                                </span>
+                            </td>
                             <td>{item.phone}</td>
                             <td>
                                 {parseTranslation(item.country_json, 'name', locale)}
@@ -184,6 +204,8 @@ const ListSellers: React.FC<{ locale: string }> = ({ locale }) => {
                 ))}
             </DataTable>
             <SellerLogin />
+            <SellerPersentConfirm />
+            <SellerPersent />
         </div>
     );
 };

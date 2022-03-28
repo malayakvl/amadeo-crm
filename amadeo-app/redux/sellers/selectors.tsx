@@ -36,3 +36,15 @@ export const selectedSellerSelector = createSelector(
     rootSelector,
     (sellers: State.Sellers): string => sellers.selectedSeller
 );
+export const showPersentFormSelector = createSelector(
+    rootSelector,
+    (sellers: State.Sellers): boolean => sellers.showPersentForm
+);
+export const showPersentConfirmFormSelector = createSelector(
+    rootSelector,
+    (sellers: State.Sellers): boolean => sellers.showPersentConfirmForm
+);
+export const sellerPrcentSelector = createSelector(
+    rootSelector,
+    (sellers: State.Sellers): number | null => sellers.sellerPercent
+);

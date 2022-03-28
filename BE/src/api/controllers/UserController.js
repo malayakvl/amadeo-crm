@@ -154,7 +154,7 @@ class UserController {
     
     async getSubscription(req, res) {
         if (req.user) {
-            const data = await userModel.getSubscriptionInfo(req.user.subscription_id);
+            const data = await userModel.getSubscriptionInfo(req.user.subscription_id, req.user.customer_id);
             if (data.subscription) {
                 return res.status(200).json({
                     subscription: data.subscription,
@@ -194,6 +194,10 @@ class UserController {
             });
         }
         return res.status(200).json('Something wend wrong');
+    }
+    
+    async unsubscribe (req, res) {
+        return res.status(200).json({success: true});
     }
 }
 

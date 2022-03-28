@@ -1,17 +1,12 @@
 import Head from 'next/head';
 import { getSession } from 'next-auth/client';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { fetchCheckoutAction, submitCheckoutAction } from '../../redux/checkout';
 import { useDispatch, useSelector } from 'react-redux';
-import { redirectMerchantUrlSelector } from '../../redux/checkout/selectors';
-import {
-    ShippingAddress,
-    ShippingMethod,
-    PaymentMethod,
-    OrderSummary
-} from '../../components/checkout';
+import { orderCheckoutSelector, redirectMerchantUrlSelector } from '../../redux/checkout/selectors';
+import { ShippingAddress, ShippingMethod, OrderSummary } from '../../components/checkout';
 
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
@@ -28,6 +23,8 @@ export default function Index({ session, locale }: { session: any; locale: any }
     const dispatch = useDispatch();
 
     const redirectMerchantUrl = useSelector(redirectMerchantUrlSelector);
+    const orderData = useSelector(orderCheckoutSelector);
+    const [formData, setFormData] = useState<any>();
 
     useEffect(() => {
         dispatch(fetchCheckoutAction(orderNumber));
@@ -38,6 +35,16 @@ export default function Index({ session, locale }: { session: any; locale: any }
             window.location.href = redirectMerchantUrl;
         }
     }, [redirectMerchantUrl]);
+
+    useEffect(() => {
+        if (orderData) {
+            const tmpData: any = orderData;
+            tmpData.isEqualAddresses = true;
+            tmpData.isAgreeTerms = false;
+            tmpData.paymentMethod = 'paypal';
+            setFormData(tmpData);
+        }
+    }, [orderData]);
 
     const validationSchema = Yup.object({
         first_name: Yup.string()
@@ -53,17 +60,17 @@ export default function Index({ session, locale }: { session: any; locale: any }
             .strict(true)
             .trim(t('Cannot include leading and trailing spaces'))
             .required(t('Required field')),
-        state: Yup.string()
-            .strict(true)
-            .trim(t('Cannot include leading and trailing spaces'))
-            .required(t('Required field'))
-            .min(3, t('State must be at least 3 characters')),
+        // state: Yup.string()
+        //     .strict(true)
+        //     .trim(t('Cannot include leading and trailing spaces'))
+        //     .required(t('Required field'))
+        //     .min(3, t('State must be at least 3 characters')),
         city: Yup.string()
             .strict(true)
             .trim(t('Cannot include leading and trailing spaces'))
             .required(t('Required field'))
             .min(3, t('City must be at least 3 characters')),
-        address_line_1: Yup.string()
+        shipping_address: Yup.string()
             .strict(true)
             .trim(t('Cannot include leading and trailing spaces'))
             .required(t('Required field'))
@@ -152,14 +159,11 @@ export default function Index({ session, locale }: { session: any; locale: any }
                     </div>
                 </div>
                 <Formik
-                    initialValues={{
-                        isEqualAddresses: true,
-                        isAgreeTerms: false,
-                        paymentMethod: 'paypal'
-                    }}
+                    enableReinitialize
+                    initialValues={formData}
                     validationSchema={validationSchema}
                     onSubmit={(values, actions) => {
-                        dispatch(submitCheckoutAction(values));
+                        dispatch(submitCheckoutAction(values, orderNumber));
                         actions.setSubmitting(false);
                     }}>
                     <Form>
@@ -177,12 +181,12 @@ export default function Index({ session, locale }: { session: any; locale: any }
                                     className="white-shadow-medium bg-white rounded-lg p-3 lg:p-6 ml-4 lg:ml-8 mt-10"
                                 />
 
-                                <div className="white-shadow-medium bg-white rounded-lg p-3 lg:p-6 ml-4 lg:ml-8 mt-10">
-                                    <div className="text-2xl font-bold text-gray-350 mb-6">
-                                        {t('Payment  Method')}
-                                    </div>
-                                    <PaymentMethod />
-                                </div>
+                                {/*<div className="white-shadow-medium bg-white rounded-lg p-3 lg:p-6 ml-4 lg:ml-8 mt-10">*/}
+                                {/*    <div className="text-2xl font-bold text-gray-350 mb-6">*/}
+                                {/*        {t('Payment  Method')}*/}
+                                {/*    </div>*/}
+                                {/*    <PaymentMethod />*/}
+                                {/*</div>*/}
                             </div>
 
                             <div className="flex-1 white-shadow-medium bg-white rounded-lg p-3 lg:p-6 ml-4 lg:ml-8 mt-10 shadow-inner">

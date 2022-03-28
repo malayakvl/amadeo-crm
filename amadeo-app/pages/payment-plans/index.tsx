@@ -6,7 +6,11 @@ import { CheckIcon, BanIcon } from '@heroicons/react/solid';
 import { showLoaderAction } from '../../redux/layouts/actions';
 import { fetchFormAction, fetchStripeProductAction } from '../../redux/paymentPlans';
 import { useDispatch, useSelector } from 'react-redux';
-import { itemsSelector, stripeItemsSelector } from '../../redux/paymentPlans/selectors';
+import {
+    itemsSelector,
+    settingsSelector,
+    stripeItemsSelector
+} from '../../redux/paymentPlans/selectors';
 import { parseTranslation } from '../../lib/functions';
 import { submitFormAction, syncStripeParameterAction } from '../../redux/paymentPlans/actions';
 import ConfirmDialog from '../../components/_common/ConfirmDialog';
@@ -20,6 +24,7 @@ export default function Index({ session, locale }: { session: any; locale: any }
     const dispatch = useDispatch();
     const plans = useSelector(itemsSelector);
     const stripeProducts = useSelector(stripeItemsSelector);
+    const settings = useSelector(settingsSelector);
 
     const [selectedItem, setSelectedItem] = useState<any | null>();
     const [stripeInitData, setStripeInitData] = useState({});
@@ -34,11 +39,16 @@ export default function Index({ session, locale }: { session: any; locale: any }
     useEffect(() => {
         dispatch(showLoaderAction(false));
         const initValues: any = {};
-        plans.header.forEach((plan: any) => {
-            initValues[`plan_stripe_${plan.id}`] = plan.stripe_id;
-        });
-        setStripeInitData(initValues);
-    }, [plans?.header?.length]);
+        if (settings) {
+            plans.header.forEach((plan: any) => {
+                initValues[`plan_stripe_${plan.id}`] = plan.stripe_id;
+            });
+            initValues['trial_period'] = settings.trial_period;
+            initValues['multisafe_api_key'] = settings.multisafe_api_key;
+            initValues['multisafe_account'] = settings.multisafe_account;
+            setStripeInitData(initValues);
+        }
+    }, [plans?.header?.length, settings]);
 
     useEffect(() => {
         if (stripeProducts) {
@@ -121,7 +131,9 @@ export default function Index({ session, locale }: { session: any; locale: any }
     };
 
     const SubmitSchema = Yup.object().shape({
-        trial_period: Yup.number()
+        trial_period: Yup.number(),
+        multisafe_api_key: Yup.string().required(t('Required field')),
+        multisafe_account: Yup.string().required(t('Required field'))
     });
 
     return (
@@ -151,9 +163,28 @@ export default function Index({ session, locale }: { session: any; locale: any }
                                     <InputText
                                         style={'w-[150px]'}
                                         icon={null}
-                                        label={t('Tial period')}
+                                        label={t('Trial period')}
                                         name={'trial_period'}
-                                        placeholder={'Tial period'}
+                                        placeholder={'Trial period'}
+                                        props={props}
+                                        tips={null}
+                                    />
+
+                                    <InputText
+                                        style={'w-1/2'}
+                                        icon={null}
+                                        label={t('Multisafepay API')}
+                                        name={'multisafe_api_key'}
+                                        placeholder={'Multisafepay API'}
+                                        props={props}
+                                        tips={null}
+                                    />
+                                    <InputText
+                                        style={'w-1/2'}
+                                        icon={null}
+                                        label={t('Multisafepay Account')}
+                                        name={'multisafe_account'}
+                                        placeholder={'Multisafepay Account'}
                                         props={props}
                                         tips={null}
                                     />

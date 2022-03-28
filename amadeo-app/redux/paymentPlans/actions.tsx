@@ -56,7 +56,10 @@ export const fetchStripeProductAction: any = createAction(
 export const fetchFormAction: any = createAction(
     'payment-plans/FETCH_ITEMS',
     async () =>
-        async (dispatch: Type.Dispatch, getState: () => State.Root): Promise<{ items: any }> => {
+        async (
+            dispatch: Type.Dispatch,
+            getState: () => State.Root
+        ): Promise<{ items: any; settings: any }> => {
             const state = getState();
             dispatch(showLoaderAction(true));
             const res = await axios.get(`${baseUrl}/payment-plans`, {
@@ -68,7 +71,8 @@ export const fetchFormAction: any = createAction(
                 dispatch(showLoaderAction(false));
             }
             return {
-                items: res.data.items
+                items: res.data.items,
+                settings: res.data.settings
             };
         }
 );

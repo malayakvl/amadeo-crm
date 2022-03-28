@@ -71,6 +71,7 @@ apiRoutes.use(async (req, res, next) => {
 });
 apiRoutes.post('/changePassword', UserController.changePassword);
 apiRoutes.get('/profile/subscription', UserController.getSubscription);
+apiRoutes.get('/profile/unsubscription', UserController.unsubscribe);
 apiRoutes.route('/profile')
     .post(UserController.updateProfile)
     .get(UserController.getProfile);
@@ -122,6 +123,7 @@ apiRoutes.route('/buyers/fetch-filters').get(BuyerController.fetchFilters);
 
 apiRoutes.route('/sellers/fetch-items').get(SellerController.fetchItems);
 apiRoutes.route('/sellers/fetch-filters').get(SellerController.fetchFilters);
+apiRoutes.route('/sellers/update-percent').post(SellerController.updatePercent);
 
 apiRoutes.route('/users/find-seller').get(UserController.fetchSellers);
 apiRoutes.route('/users/find-buyer').get(UserController.fetchBuyers);

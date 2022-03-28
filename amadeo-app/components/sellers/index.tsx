@@ -9,3 +9,5 @@ export { default as FilterOrdersCnt } from './filters/FilterOrdersCnt';
 export { default as FilterSessionsCnt } from './filters/FilterSessionsCnt';
 export { default as FilterSeller } from './filters/FilterSeller';
 export { default as SellerLogin } from './SellerLogin';
+export { default as SellerPersent } from './SellerPersent';
+export { default as SellerPersentConfirm } from './SellerPersentConfirm';

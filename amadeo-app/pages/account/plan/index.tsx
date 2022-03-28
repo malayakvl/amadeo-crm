@@ -4,11 +4,26 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { userSelector, userSubscriptionSelector } from '../../../redux/user/selectors';
 import { fetchUserSubscriptionAction } from '../../../redux/user';
+import { unsubscribeAction } from '../../../redux/user/actions';
 import moment from 'moment';
+import getConfig from 'next/config';
+const { publicRuntimeConfig } = getConfig();
+const stripeKey = publicRuntimeConfig.stripeKey;
+import { Elements } from '@stripe/react-stripe-js';
+import { loadStripe, StripeElementsOptions } from '@stripe/stripe-js';
+import { CardForm } from '../../../components/checkout';
+const stripePromise = loadStripe(stripeKey);
 
 export default function Index({ session }: { session: any }) {
     if (!session) return <></>;
     const dispatch = useDispatch();
+
+    const appearance: any = {
+        theme: 'stripe'
+    };
+    const options: StripeElementsOptions = {
+        appearance
+    };
 
     const user = useSelector(userSelector);
     const subscriptionInfo = useSelector(userSubscriptionSelector);
@@ -69,6 +84,11 @@ export default function Index({ session }: { session: any }) {
                 </div>
             </div>
             <div className="mt-10 block-white-8 white-shadow-big">
+                <div className={`w-1/5`}>
+                    <Elements options={options} stripe={stripePromise}>
+                        <CardForm />
+                    </Elements>
+                </div>
                 {subscriptionInfo && (
                     <div className="overflow-x-scroll">
                         <table className="w-full float-table">
@@ -79,6 +99,7 @@ export default function Index({ session }: { session: any }) {
                                     <th>Created</th>
                                     <th>Period</th>
                                     <th>Days left</th>
+                                    <th>&nbsp;</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -94,6 +115,16 @@ export default function Index({ session }: { session: any }) {
                                     </td>
                                     <td style={{ textAlign: 'center' }}>{preparePeriod()}</td>
                                     <td style={{ textAlign: 'center' }}>{prepareDayLeft()}</td>
+                                    <td style={{ textAlign: 'center' }}>
+                                        <span
+                                            role="presentation"
+                                            className="cursor-pointer border border-gray-300 text-gray-300 py-1.5 rounded-lg px-1"
+                                            onClick={() => {
+                                                dispatch(unsubscribeAction());
+                                            }}>
+                                            Unsubscribe
+                                        </span>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>

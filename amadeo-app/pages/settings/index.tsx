@@ -21,7 +21,8 @@ export default function Index() {
 
     const validationSchema = Yup.object({
         order_timer: Yup.number().required(t('Required field')),
-        type: Yup.string().required(t('Required field'))
+        type: Yup.string().required(t('Required field')),
+        multisafe_api_key: Yup.string().required(t('Required field'))
     });
 
     useEffect(() => {
@@ -120,6 +121,15 @@ export default function Index() {
                                             tips={null}
                                         />
                                     </div>
+                                    <InputText
+                                        style={'w-1/2'}
+                                        icon={null}
+                                        label={t('Multisafepay API')}
+                                        name={'multisafe_api_key'}
+                                        placeholder={'Multisafepay API'}
+                                        props={props}
+                                        tips={null}
+                                    />
                                     <button type="submit" className="w-32 mt-8 gradient-btn">
                                         {t('Save')}
                                     </button>

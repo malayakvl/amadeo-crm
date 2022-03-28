@@ -12,19 +12,21 @@ const initialState: {
     clientSecret: string;
     planInfo: any;
     stripeItems: any;
+    settings: any;
 } = {
     loading: false,
     items: { header: [], values: [] },
     clientSecret: '',
     planInfo: null,
-    stripeItems: null
+    stripeItems: null,
+    settings: null
 };
 
 const ACTION_HANDLERS: any = {
     [fetchFormAction]: {
         next: (
             state: State.PaymentPlans,
-            action: Type.ReduxAction<Pick<State.PaymentPlans, 'items'>>
+            action: Type.ReduxAction<Pick<State.PaymentPlans, 'items' | 'settings'>>
         ): State.PaymentPlans => ({
             ...state,
             ...action.payload,
