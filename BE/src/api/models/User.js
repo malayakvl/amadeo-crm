@@ -756,7 +756,7 @@ class User {
     async fetchUserSettings(userId) {
         const client = await pool.connect();
         try {
-            const query = `SELECT order_timer, free_shipping_timer, free_shipping_status, user_id
+            const query = `SELECT *
                             FROM data.seller_settings WHERE user_id=${userId};`;
             const res = await client.query(query);
             if (res.rows.length > 0) {
