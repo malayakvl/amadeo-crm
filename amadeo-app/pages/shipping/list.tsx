@@ -11,7 +11,7 @@ import {
 import { shippingsSelector } from '../../redux/shipping/selectors';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
-import { baseApiUrl } from '../../constants';
+import { baseApiUrl, UserRole } from '../../constants';
 import { useRouter } from 'next/router';
 import {
     checkAllIdsAction,
@@ -71,7 +71,13 @@ export default function List({ locale }: { locale: string }) {
 
         const setupChecked: any = [];
         items.forEach((item: Shipping) => {
-            setupChecked.push({ id: item.id, checked: item.status });
+            setupChecked.push({
+                id: item.id,
+                checked:
+                    user?.role_id === UserRole.ADMIN
+                        ? item.status
+                        : item.status__customer_disabled_shipping
+            });
         });
         dispatch(initIdsAction(setupChecked));
         setDropDowns(items.map(() => false));

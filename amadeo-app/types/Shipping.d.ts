@@ -4,6 +4,7 @@ interface Shipping {
     name: string;
     image: string;
     status: boolean;
+    status__customer_disabled_shipping: boolean;
 }
 
 interface ShippingMethod {
