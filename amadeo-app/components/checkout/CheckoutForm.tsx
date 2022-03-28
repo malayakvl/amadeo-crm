@@ -34,7 +34,7 @@ const CheckoutUnregisteredForm = () => {
 
         if (result.error) {
             // Show error to your customer (for example, payment details incomplete)
-            console.log(result.error.message);
+            dispatch(showLoaderAction(false));
         }
     };
 
@@ -49,4 +49,3 @@ const CheckoutUnregisteredForm = () => {
 };
 
 export default CheckoutUnregisteredForm;
-// http://localhost:3000/complete?payment_intent=pi_3KfSI7DBSh7ykoyW1gVE9PYB&payment_intent_client_secret=pi_3KfSI7DBSh7ykoyW1gVE9PYB_secret_4TEHqYGEFBgtZhKMADW9cf3vn&redirect_status=succeeded
