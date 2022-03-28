@@ -1,11 +1,11 @@
 import Head from 'next/head';
 import { getSession } from 'next-auth/client';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { fetchCheckoutAction, submitCheckoutAction } from '../../redux/checkout';
 import { useDispatch, useSelector } from 'react-redux';
-import { orderCheckoutSelector, redirectMerchantUrlSelector } from '../../redux/checkout/selectors';
+import { redirectMerchantUrlSelector } from '../../redux/checkout/selectors';
 import { ShippingAddress, ShippingMethod, OrderSummary } from '../../components/checkout';
 
 import { Formik, Form } from 'formik';
@@ -23,8 +23,6 @@ export default function Index({ session, locale }: { session: any; locale: any }
     const dispatch = useDispatch();
 
     const redirectMerchantUrl = useSelector(redirectMerchantUrlSelector);
-    const orderData = useSelector(orderCheckoutSelector);
-    const [formData, setFormData] = useState<any>({});
 
     useEffect(() => {
         dispatch(fetchCheckoutAction(orderNumber));
@@ -35,16 +33,6 @@ export default function Index({ session, locale }: { session: any; locale: any }
             window.location.href = redirectMerchantUrl;
         }
     }, [redirectMerchantUrl]);
-
-    useEffect(() => {
-        if (orderData) {
-            const tmpData: any = orderData;
-            tmpData.isEqualAddresses = true;
-            tmpData.isAgreeTerms = false;
-            tmpData.paymentMethod = 'paypal';
-            setFormData(tmpData);
-        }
-    }, [orderData]);
 
     const validationSchema = Yup.object({
         first_name: Yup.string()
@@ -75,9 +63,9 @@ export default function Index({ session, locale }: { session: any; locale: any }
             .trim(t('Cannot include leading and trailing spaces'))
             .required(t('Required field'))
             .min(5, t('Address must be at least 5 characters')),
-        address_line_2: Yup.string()
-            .strict(true)
-            .trim(t('Cannot include leading and trailing spaces')),
+        // address_line_2: Yup.string()
+        //     .strict(true)
+        //     .trim(t('Cannot include leading and trailing spaces')),
         phone: Yup.string()
             .strict(true)
             .trim(t('Cannot include leading and trailing spaces'))
@@ -159,8 +147,12 @@ export default function Index({ session, locale }: { session: any; locale: any }
                     </div>
                 </div>
                 <Formik
-                    enableReinitialize
-                    initialValues={formData}
+                    // enableReinitialize
+                    initialValues={{
+                        // isEqualAddresses: true,
+                        // paymentMethod: 'paypal',
+                        isAgreeTerms: false
+                    }}
                     validationSchema={validationSchema}
                     onSubmit={(values, actions) => {
                         dispatch(submitCheckoutAction(values, orderNumber));
