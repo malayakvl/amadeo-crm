@@ -307,11 +307,11 @@ class Shipping {
         const client = await pool.connect();
         try {
             let query =
-                `DELETE FROM data.customer_disabled_shipping WHERE user_id = $1 AND shipping_id = $2`;
+                'DELETE FROM data.customer_disabled_shipping WHERE user_id = $1 AND shipping_id = $2';
 
             if (!status) {
                 query =
-                    `INSERT INTO data.customer_disabled_shipping (user_id, shipping_id) VALUES($1, $2)`;
+                    'INSERT INTO data.customer_disabled_shipping(user_id, shipping_id) VALUES($1, $2)';
             }
 
             await client.query(query, [customerId, shippingId]);
