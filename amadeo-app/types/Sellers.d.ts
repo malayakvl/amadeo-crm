@@ -10,7 +10,10 @@ declare namespace Sellers {
         showDateSelector: boolean;
         orderFetched: boolean;
         showLoginForm: boolean;
+        showPersentForm: boolean;
+        showPersentConfirmForm: boolean;
         selectedSeller: string;
+        sellerPercent: number | null;
     }
 
     interface DataItem {
@@ -25,6 +28,7 @@ declare namespace Sellers {
         total_count: number;
         total_buyers: number;
         total_amount: number;
+        transaction_percent: number;
         created_at: any;
         updated_at: any;
     }

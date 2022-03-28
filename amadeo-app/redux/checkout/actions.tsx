@@ -75,13 +75,14 @@ export const fetchShippingMethodsByCountryCheckoutAction: any = createAction(
 );
 export const submitCheckoutAction: any = createAction(
     'checkout/SUBMIT_CHECKOUT',
-    async (data: any) =>
+    async (data: any, orderNumber: string) =>
         async (
             dispatch: Type.Dispatch,
             getState: () => State.Root
         ): Promise<{ redirectUrl: string | null }> => {
             dispatch(showLoaderAction(true));
             const state = getState();
+            data.orderNumber = orderNumber;
             try {
                 const res = await axios.post(`${baseUrl}/checkout`, data, {
                     headers: {

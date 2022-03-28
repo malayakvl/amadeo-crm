@@ -41,7 +41,7 @@ class CheckoutController {
     async chechoutSubmit(req, res) {
         if (!req.user) return res.status(401).json('Access deny');
 
-        const data = await checkoutModel.checkoutSubmit(req.body);
+        const data = await checkoutModel.checkoutSubmit(req.body, req.user);
         
         if (data.redirectUrl) {
             return res.status(200).json({ redirectUrl: data.redirectUrl });

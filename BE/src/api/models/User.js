@@ -282,11 +282,16 @@ class User {
         }
     }
     
-    async getSubscriptionInfo(subscriptionId) {
+    async getSubscriptionInfo(subscriptionId, customerId) {
         try {
             const subscription = await stripe.subscriptions.retrieve(
                 subscriptionId
             );
+            const cards = await stripe.customers.listSources(
+                customerId,
+                {object: 'card', limit: 10}
+            );
+            console.log(cards);
             return { subscription: subscription };
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
@@ -793,12 +798,13 @@ class User {
             } else {
                 intervalDuration = `${data.order_timer} day${data.order_timer > 1 ? 's' : ''}`;
             }
-            const query = `INSERT INTO data.seller_settings(user_id, order_timer, free_shipping_timer, free_shipping_status)
-                VALUES (${userId}, '${intervalDuration}', '${free_shipping_timer}', '${data.free_shipping_status}')
+            const query = `INSERT INTO data.seller_settings(user_id, order_timer, free_shipping_timer, free_shipping_status, multisafe_api_key)
+                VALUES (${userId}, '${intervalDuration}', '${free_shipping_timer}', '${data.free_shipping_status}', $$${data.multisafe_api_key}$$)
                 ON CONFLICT ON CONSTRAINT seller_settings__pkey DO UPDATE SET
                     order_timer = EXCLUDED.order_timer,
                     free_shipping_timer = EXCLUDED.free_shipping_timer,
-                    free_shipping_status = EXCLUDED.free_shipping_status
+                    free_shipping_status = EXCLUDED.free_shipping_status,
+                    multisafe_api_key = EXCLUDED.multisafe_api_key
                 ;`;
             await client.query(query);
             return { success: true };

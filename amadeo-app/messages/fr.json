@@ -338,7 +338,7 @@
   "The terms and conditions must be accepted.": "The terms and conditions must be accepted.",
   "Your order is complete!": "Your order is complete!",
   "You’ll receive a confirmation e-mail with your order details soon!": "You’ll receive a confirmation e-mail with your order details soon!",
-  "Tial period": "Tial period",
+  "Trial period": "Trial period",
   "Shipping Address": "Shipping Address",
   "0000 0000 0000 0000": "0000 0000 0000 0000",
   "Phone Number": "Phone Number",
@@ -348,5 +348,11 @@
   "Address must be at least 5 characters": "Address must be at least 5 characters",
   "We protect your payment information using encryption to provide bank-level security": "We protect your payment information using encryption to provide bank-level security.",
   "lets_check_out": "Let’s check you out!",
-  "We send you recovery link, please check your mailbox": "We send you recovery link, please check your mailbox"
+  "We send you recovery link, please check your mailbox": "We send you recovery link, please check your mailbox",
+  "Percent Sales": "Percent Sales",
+  "Are you sure you want change persent for this seller?": "Are you sure you want change persent for this seller?",
+  "Change": "Change",
+  "Transaction Persent": "Transaction Persent",
+  "Multisafepay API": "Multisafepay API",
+  "Multisafepay Account": "Multisafepay Account"
 }

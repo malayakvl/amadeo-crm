@@ -27,3 +27,7 @@ export const stripeItemsSelector = createSelector(
     rootSelector,
     (paymentPlans: State.PaymentPlans): any => paymentPlans.stripeItems
 );
+export const settingsSelector = createSelector(
+    rootSelector,
+    (paymentPlans: State.PaymentPlans): any => paymentPlans.settings
+);

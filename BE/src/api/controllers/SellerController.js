@@ -27,6 +27,15 @@ class SellerController {
         }
     }
     
+    async updatePercent(req, res) {
+        if (!req.user) {
+            return res.status(401).json('Access deny');
+        } else {
+            const items = await sellerModel.updatePercent(req.body);
+            return res.status(200).json({ success: items.res });
+        }
+    }
+    
     async generateInvoice (req, res) {
         if (!req.user) {
             return res.status(401).json('Access deny');
