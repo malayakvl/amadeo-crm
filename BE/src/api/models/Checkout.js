@@ -13,11 +13,11 @@ class Checkout {
         try {
             const filter = JSON.stringify({
                 // status: ["payed"],
-                buyer_id: userId,
+                buyer_id: [userId],
                 order_number: orderNumber
             });
 
-            const ordersQuery = `SELECT * FROM data.get_orders (1, 0, '${filter}');`;
+            const ordersQuery = `SELECT * FROM data.get_orders(1, 0, '${filter}');`;
             const res = await client.query(ordersQuery);
             order = res.rows.length > 0 ? res.rows[0] : [];
 
@@ -93,7 +93,7 @@ class Checkout {
                                         city=$$${data.city}$$,
                                         post_code=$$${data.post_code}$$,
                                         phone=$$${data.phone}$$,
-                                        shipping_address=$$${data.address_line_1}$$
+                                        shipping_address=$$${data.shipping_address}$$
                                         WHERE order_number='${data.orderNumber}' AND user_id='${user.id}'`);
                 console.log(data);
                 const dataOrder = {
