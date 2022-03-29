@@ -95,11 +95,46 @@ export const submitCheckoutAction: any = createAction(
                 return {
                     redirectUrl: res.data.redirectUrl
                 };
-            } catch (e) {
+            } catch (e: any) {
                 dispatch(showLoaderAction(false));
-                dispatch(setErrorToastAction(`Email present`));
+                dispatch(setErrorToastAction(e.response.data.error));
                 return {
                     redirectUrl: null
+                };
+            }
+        }
+);
+export const checkPaymentStatusAction: any = createAction(
+    'checkout/CHECK_PAYMENT_STATUS',
+    async (hash: string, type: string) =>
+        async (
+            dispatch: Type.Dispatch,
+            getState: () => State.Root
+        ): Promise<{ paymentStatus: string | null }> => {
+            dispatch(showLoaderAction(true));
+            const state = getState();
+
+            try {
+                const res = await axios.post(
+                    `${baseUrl}/checkout/confirm`,
+                    { hash: hash, type: type },
+                    {
+                        headers: {
+                            ...authHeader(state.user.user.email)
+                        }
+                    }
+                );
+                if (res.status) {
+                    dispatch(showLoaderAction(false));
+                }
+                return {
+                    paymentStatus: res.data.paymentStatus
+                };
+            } catch (e: any) {
+                dispatch(showLoaderAction(false));
+                dispatch(setErrorToastAction(e.response.data.error));
+                return {
+                    paymentStatus: null
                 };
             }
         }

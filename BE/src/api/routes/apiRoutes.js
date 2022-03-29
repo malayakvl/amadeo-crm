@@ -147,6 +147,7 @@ apiRoutes.route('/sync-stripe').post(PaymentPlanController.syncStripe);
 apiRoutes.route('/checkout').get(CheckoutController.fetch);
 apiRoutes.route('/checkout/fetch-shipping-methods').get(CheckoutController.fetchShippingMethodsByCountry);
 apiRoutes.route('/checkout').post(CheckoutController.chechoutSubmit);
+apiRoutes.route('/checkout/confirm').post(CheckoutController.chechoutComfirmation);
 
 //FB routes
 apiRoutes.route('/fb-authenticate').post(UserController.syncFb);

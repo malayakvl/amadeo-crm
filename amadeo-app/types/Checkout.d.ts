@@ -6,5 +6,6 @@ declare namespace Checkout {
         isFetched: boolean;
         loading: boolean;
         redirectUrl: string | null;
+        paymentStatus: string | null;
     }
 }
