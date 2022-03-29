@@ -4,6 +4,7 @@ import invitationModel from '../models/Invitation.js'
 import countryModel from '../models/Country.js';
 import { getTokensAndSetCookies } from '../lib/token.js';
 import { sendMail } from '../lib/sendMail.js';
+import { welcomeEmailHtml } from '../sender/templates.js'
 
 class AuthController {
     /**
@@ -195,19 +196,19 @@ class AuthController {
         let link = `${process.env.APPLICATION_BASE_URL}/auth/registration?hash=${invitation.hash}`;
         const welcomeEmail = welcomeEmailHtml(data.emai, link, '');
         sendMail(
-            'malaya.kvl@gmail.com',
-            'Proshop',
-            welcomeEmail);
-        sendMail(
             data.email,
             'Proshop',
-            `
-            Welcome at Proshop, (${data.email})! \n
-            Here’s the verification link - <a href='${link}'>${link}</a> \n
-            Please, complete the registration via this link \n
-            Regards, Proshop Team
-            `
-        );
+            welcomeEmail);
+        // sendMail(
+        //     data.email,
+        //     'Proshop',
+        //     `
+        //     Welcome at Proshop, (${data.email})! \n
+        //     Here’s the verification link - <a href='${link}'>${link}</a> \n
+        //     Please, complete the registration via this link \n
+        //     Regards, Proshop Team
+        //     `
+        // );
 
         return res.status(200).json({ status: 'success' });
     }
