@@ -1,5 +1,6 @@
 import { handleActions } from 'redux-actions';
 import {
+    checkPaymentStatusAction,
     fetchCheckoutAction,
     fetchShippingMethodsByCountryCheckoutAction,
     submitCheckoutAction
@@ -12,13 +13,15 @@ const initialState: {
     address: Profile.Address | null;
     shippingMethods: ShippingMethod[];
     redirectUrl: any;
+    paymentStatus: string | null;
 } = {
     isFetched: false,
     loading: false,
     order: null,
     address: null,
     shippingMethods: [],
-    redirectUrl: null
+    redirectUrl: null,
+    paymentStatus: null
 };
 
 const ACTION_HANDLERS: any = {
@@ -71,10 +74,31 @@ const ACTION_HANDLERS: any = {
             loading: false,
             isFetched: false
         })
+    },
+    [checkPaymentStatusAction]: {
+        next: (
+            state: State.Checkout,
+            action: Type.ReduxAction<Pick<State.Checkout, 'paymentStatus'>>
+        ): State.Checkout => ({
+            ...state,
+            ...action.payload,
+            loading: false,
+            isFetched: true
+        }),
+        throw: (state: State.Checkout): State.Checkout => ({
+            ...state,
+            loading: false,
+            isFetched: false
+        })
     }
 };
 
-export { fetchCheckoutAction, fetchShippingMethodsByCountryCheckoutAction, submitCheckoutAction };
+export {
+    fetchCheckoutAction,
+    fetchShippingMethodsByCountryCheckoutAction,
+    submitCheckoutAction,
+    checkPaymentStatusAction
+};
 
 // ------------------------------------
 // Reducer

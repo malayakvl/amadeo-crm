@@ -46,7 +46,19 @@ class CheckoutController {
         if (data.redirectUrl) {
             return res.status(200).json({ redirectUrl: data.redirectUrl });
         } else {
-            return res.status(401).json('Access deny');
+            return res.status(401).json({ redirectUrl: data.redirectUrl, error: data.error });
+        }
+    }
+    
+    async chechoutComfirmation(req, res) {
+        if (!req.user) return res.status(401).json('Access deny');
+        
+        const data = await checkoutModel.updateOrderStatus(req.body, req.user);
+        
+        if (data.paymentStatus) {
+            return res.status(200).json({ paymentStatus: data.paymentStatus, error: data.error });
+        } else {
+            return res.status(401).json({ paymentStatus: data.paymentStatus, error: data.error });
         }
     }
 }

@@ -1,6 +1,7 @@
 import pool from './connect.js';
 import { logger } from '../../common/logger.js';
 import axios from "axios";
+import crypto from "crypto";
 
 class Checkout {
 
@@ -81,59 +82,113 @@ class Checkout {
         }
     }
     
+    async updateOrderStatus(data, user) {
+        const client = await pool.connect();
+        let error;
+        try {
+            const orderRes = await client.query(`SELECT id FROM data.orders WHERE hash='${data.hash}' AND user_id='${user.id}'`);
+            if (orderRes.rows.length) {
+                if (data.type === 'redirect') {
+                    await client.query(`UPDATE data.orders SET status='payed' WHERE id=${orderRes.rows[0].id}`);
+                    return { paymentStatus: 'success', error: null };
+                } else if (data.type === 'cancel') {
+                    return { paymentStatus: 'cancel', error: 'Client cancel payment' };
+                }
+            } else {
+                error = {
+                    code: 500,
+                    message: 'Order not found'
+                };
+                return { paymentStatus: 'error', error: error };
+            }
+        } catch (e) {
+    
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error:',
+                    { message: e.message }
+                );
+            }
+            error = {
+                code: 500,
+                message: 'Error get list of shippingMethods'
+            };
+            return { paymentStatus: 'error', error: error };
+        } finally {
+            client.release();
+            
+        }
+    }
+    
     async checkoutSubmit(data, user) {
         const client = await pool.connect();
         try {
             const orderRes = await client.query(`SELECT * FROM data.orders WHERE order_number='${data.orderNumber}' AND user_id='${user.id}'`);
             if (orderRes.rows.length) {
+                // fetch seller and system settings for receive api keys
+                // const sellerSettingsRes = await client.query(`SELECT multisafe_api_key FROM data.get_seller_settings(${orderRes.rows[0].id});`);
+                const systemSettingsRes = await client.query('SELECT multisafe_account FROM data.system_settings WHERE id=1;');
+                const sellerSettingsRes = await client.query(`SELECT * FROM data.get_seller_settings(${orderRes.rows[0].id});`);
+                if (sellerSettingsRes.rows.length === 0) {
+                    return {redirectUrl: null, error: 'No key for payment'}
+                }
+                let shippingPrice = 0;
+                if (data.shippingMethodId) {
+                    const shippingRes = await client.query(`SELECT * FROM data.shipping_to_country
+                        WHERE user_id=${sellerSettingsRes.rows[0].user_id}
+                            AND shipping_id=${data.shippingMethodId}
+                            AND country_id=${data.country_id}`);
+                    shippingPrice = parseFloat(shippingRes.rows[0].price);
+                }
+                // generate unique code for check redirect from merchant
+                const hash = crypto.randomBytes(25).toString('hex');
+                const totalPayment = shippingPrice + parseFloat(orderRes.rows[0].order_amount);
                 await client.query(`UPDATE data.orders SET
                                         country_id=${data.country_id},
                                         state=$$${data.state}$$,
                                         city=$$${data.city}$$,
                                         post_code=$$${data.post_code}$$,
+                                        shipping_id=${data.shippingMethodId ? data.shippingMethodId : null},
                                         phone=$$${data.phone}$$,
-                                        shipping_address=$$${data.address_line_1}$$
+                                        shipping_amount=${shippingPrice},
+                                        shipping_address=$$${data.address_line_1}$$,
+                                        hash='${hash}',
+                                        total_amount='${totalPayment}'
                                         WHERE order_number='${data.orderNumber}' AND user_id='${user.id}'`);
-                // fetch seller and system settings for receive api keys
-                const sellerSettingsRes = await client.query(`SELECT * FROM data.get_seller_settings(${orderRes.rows[0].id});`);
+                // return {redirectUrl: null, error: 'No find order'}
                 const dataOrder = {
                     type: 'redirect',
                     order_id: `amadeo-order-id-${orderRes.rows[0].id}`,
                     gateway: '',
                     currency: 'EUR',
-                    amount: orderRes.rows[0].total_amount*100,
+                    amount: (totalPayment)*100,
                     description: `Payment for Order ${data.orderNumber}`,
                     payment_options: {
                         notification_url:
-                            `${process.env.APPLICATION_BASE_URL}/payment?type=notification`,
+                            `${process.env.APPLICATION_BASE_URL}/checkout/confirmation?hash=${hash}&type=notification`,
                         redirect_url:
-                            `${process.env.APPLICATION_BASE_URL}/payment?type=redirect`,
-                        cancel_url: `${process.env.APPLICATION_BASE_URL}/payment?type=cancel`,
+                            `${process.env.APPLICATION_BASE_URL}/checkout/confirmation?hash=${hash}&type=redirect`,
+                        cancel_url: `${process.env.APPLICATION_BASE_URL}/checkout/confirmation?hash=${hash}&type=cancel`,
                         close_window: true,
                     },
-                    // "payment_options":{
-                    //     "notification_url":"https://www.example.com/client/notification?type=notification",
-                    //     "redirect_url":"https://www.example.com/client/notification?type=redirect",
-                    //     "cancel_url":"https://www.example.com/client/notification?type=cancel",
-                    //     "close_window":true
-                    // },
                     customer: {
                         locale: 'en_US',
                     },
                     affiliate: {
                         "split_payments":[
                             {
-                                "merchant":90312708,
-                                "percentage":3.5,
+                                "merchant":systemSettingsRes.rows[0].multisafe_account,
+                                "percentage":sellerSettingsRes.rows[0].transaction_percent,
                                 "description":`Percentage fee for order: ${data.orderNumber}`
                             }
                         ]
                     }
                 }
-                console.log('MERCHANT DATA', dataOrder);
-    
+                // redirect url after payment
+                // http://localhost:3000/payment?hash=001449ec4c910310c9367dd69354d24165e1d78436940ce036&type=redirect&transactionid=amadeo-order-id-1182
                 const multiSafePayClientRes = await axios
-                    .post(`https://testapi.multisafepay.com/v1/json/orders?api_key=4fa335f6ae2234c6247384193143d9c18f5e219e`, dataOrder, {
+                    .post(`https://testapi.multisafepay.com/v1/json/orders?api_key=${sellerSettingsRes.rows[0].multisafe_api_key}`, dataOrder, {
                         headers: { 'Content-Type': 'application/json' }
                     })
                     .then(async (res) => {

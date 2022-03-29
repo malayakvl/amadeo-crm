@@ -345,7 +345,9 @@ class User {
                 if (paymentIntentResult.status === 'succeeded') {
                     await client.query(querySubscription);
                 }
-                const subscriptionRes = await client.query(`SELECT email FROM data.users LEFT JOIN data.subscriptions ON data.subscriptions.user_id=data.users.id WHERE customer_id='${paymentIntentResult.customer}'`);
+                const subscriptionRes = await client.query(`SELECT email FROM data.users
+                    LEFT JOIN data.subscriptions ON data.subscriptions.user_id=data.users.id
+                    WHERE customer_id='${paymentIntentResult.customer}'`);
                 
                 if (subscriptionRes.rows.length) {
                     paymentIntentResult.email = subscriptionRes.rows[0].email;
@@ -759,16 +761,25 @@ class User {
             const query = `SELECT *
                             FROM data.seller_settings WHERE user_id=${userId};`;
             const res = await client.query(query);
+            console.log('Hours', res.rows[0].order_timer);
             if (res.rows.length > 0) {
-                res.rows[0].order_timer = res.rows[0].order_timer.hours ? res.rows[0].order_timer.hours: res.rows[0].order_timer.days;
-                res.rows[0].type = res.rows[0].order_timer.hours ? 'h': 'd';
-                res.rows[0].free_shipping_timer = res.rows[0].free_shipping_timer.hours ? res.rows[0].free_shipping_timer.hours: res.rows[0].free_shipping_timer.days;
+                if (res.rows[0].order_timer) {
+                    res.rows[0].order_timer = res.rows[0].order_timer.hours ? res.rows[0].order_timer.hours: res.rows[0].order_timer.days;
+                    res.rows[0].type = res.rows[0].order_timer.hours ? 'h': 'd';
+                } else {
+                    res.rows[0].order_time = '';
+                    res.rows[0].type = 'h';
+                }
+                if (res.rows[0].free_shipping_timer) {
+                    res.rows[0].free_shipping_timer = res.rows[0].free_shipping_timer.hours ? res.rows[0].free_shipping_timer.hours: res.rows[0].free_shipping_timer.days;
+                } else {
+                    res.rows[0].free_shipping_timer = '';
+                }
             }
-            
             return res.rows[0] ? res.rows : [{
                 user_id: userId,
                 order_timer: '',
-                type: '',
+                type: 'h',
                 free_shipping_timer: '',
                 free_shipping_status: '',
                 created_at: '',
@@ -792,14 +803,17 @@ class User {
         const client = await pool.connect();
         try {
             let intervalDuration;
-            const free_shipping_timer = `${data.free_shipping_timer} hour${data.free_shipping_timer > 1 ? 's' : ''}`;
+            let free_shipping_timer = '0 hour';
+            if (data.free_shipping_status) {
+                free_shipping_timer = `${data.free_shipping_timer} hour${data.free_shipping_timer > 1 ? 's' : ''}`;
+            }
             if (data.type === 'h') {
                 intervalDuration = `${data.order_timer} hour${data.order_timer > 1 ? 's' : ''}`;
             } else {
                 intervalDuration = `${data.order_timer} day${data.order_timer > 1 ? 's' : ''}`;
             }
             const query = `INSERT INTO data.seller_settings(user_id, order_timer, free_shipping_timer, free_shipping_status, multisafe_api_key)
-                VALUES (${userId}, '${intervalDuration}', '${free_shipping_timer}', '${data.free_shipping_status}', $$${data.multisafe_api_key}$$)
+                VALUES (${userId}, '${intervalDuration}', '${free_shipping_timer}', ${data.free_shipping_status ? data.free_shipping_status : false}, $$${data.multisafe_api_key}$$)
                 ON CONFLICT ON CONSTRAINT seller_settings__pkey DO UPDATE SET
                     order_timer = EXCLUDED.order_timer,
                     free_shipping_timer = EXCLUDED.free_shipping_timer,

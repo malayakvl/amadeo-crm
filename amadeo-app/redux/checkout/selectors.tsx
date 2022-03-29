@@ -26,3 +26,7 @@ export const redirectMerchantUrlSelector = createSelector(
     rootSelector,
     (checkout: State.Checkout): any => checkout.redirectUrl
 );
+export const paymentStatusSelector = createSelector(
+    rootSelector,
+    (checkout: State.Checkout): any => checkout.paymentStatus
+);

@@ -31,7 +31,7 @@ export default function Index() {
     }, []);
 
     useEffect(() => {
-        if (initialValues.user_id > 0) {
+        if (initialValues?.user_id > 0) {
             setShowForm(true);
             dispatch(showLoaderAction(false));
         }
