@@ -154,8 +154,7 @@ class Checkout {
                                         shipping_amount=${shippingPrice},
                                         shipping_address=$$${data.address_line_1}$$,
                                         hash='${hash}',
-                                        total_amount='${totalPayment}',
-                                        shipping_address=$$${data.shipping_address}$$
+                                        total_amount='${totalPayment}'
                                         WHERE order_number='${data.orderNumber}' AND user_id='${user.id}'`);
                 // return {redirectUrl: null, error: 'No find order'}
                 const dataOrder = {
