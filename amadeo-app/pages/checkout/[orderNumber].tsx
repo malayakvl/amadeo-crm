@@ -160,7 +160,7 @@ export default function Index({ session, locale }: { session: any; locale: any }
                     }}>
                     <Form>
                         <div className="flex flex-wrap justify-between">
-                            <div className="flex-1">
+                            <div className="flex-auto lg:flex-1">
                                 <div className="white-shadow-medium bg-white rounded-lg p-3 lg:p-6 ml-4 lg:ml-8 mt-8">
                                     <div className="text-2xl font-bold text-gray-350 mb-6">
                                         {t('Shipping Address')}
@@ -181,7 +181,7 @@ export default function Index({ session, locale }: { session: any; locale: any }
                                 {/*</div>*/}
                             </div>
 
-                            <div className="flex-1 white-shadow-medium bg-white rounded-lg p-3 lg:p-6 ml-4 lg:ml-8 mt-10 shadow-inner">
+                            <div className="flex-auto lg:flex-1 white-shadow-medium bg-white rounded-lg p-3 lg:p-6 ml-4 lg:ml-8 mt-10 shadow-inner">
                                 <div className="text-2xl font-bold text-gray-350 mb-6">
                                     {t('Order summary')}
                                 </div>
