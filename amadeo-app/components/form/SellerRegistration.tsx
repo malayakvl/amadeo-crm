@@ -95,7 +95,7 @@ export default function SellerRegistration({
 
     const onSubmit = (values: any) => {
         dispatch(showLoaderAction(true));
-        fetch(`${baseUrl}/register`, {
+        fetch(`${baseUrl}/register?locale=${locale}`, {
             method: 'POST',
             body: JSON.stringify(values),
             headers: { 'Content-Type': 'application/json' }
@@ -303,7 +303,7 @@ export async function getServerSideProps(context: any) {
 
     return {
         props: {
-            locale: locale,
+            locale,
             messages: {
                 ...require(`../../messages/${locale}.json`)
             }

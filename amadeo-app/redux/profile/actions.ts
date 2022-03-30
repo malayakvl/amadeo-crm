@@ -91,10 +91,10 @@ export const changePasswordInvitationAction: any = createAction(
 
 export const restorePasswordAction: any = createAction(
     'profile/RESTORE_PASSWORD',
-    (data: any) =>
+    (data: any, locale: string) =>
         async (dispatch: Type.Dispatch): Promise<any> => {
             dispatch(showLoaderAction(true));
-            const res = await fetch(`${baseAuthUrl}/restorePassword`, {
+            const res = await fetch(`${baseAuthUrl}/restorePassword?locale=${locale}`, {
                 method: 'post',
                 body: JSON.stringify(data),
                 headers: { 'Content-Type': 'application/json' }

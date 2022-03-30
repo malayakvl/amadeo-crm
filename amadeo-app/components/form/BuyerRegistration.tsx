@@ -10,7 +10,7 @@ import { signIn } from 'next-auth/client';
 const { publicRuntimeConfig } = getConfig();
 const baseUrl = `${publicRuntimeConfig.apiUrl}/auth`;
 
-export default function BuyerRegistration({ email }: { email: string }) {
+export default function BuyerRegistration({ email, locale }: { email: string; locale: string }) {
     const t = useTranslations();
 
     const validationSchema = Yup.object().shape({
@@ -26,7 +26,7 @@ export default function BuyerRegistration({ email }: { email: string }) {
     });
 
     const onSubmit = (values: any) => {
-        fetch(`${baseUrl}/register`, {
+        fetch(`${baseUrl}/register?locale=${locale}`, {
             method: 'POST',
             body: JSON.stringify(values),
             headers: { 'Content-Type': 'application/json' }

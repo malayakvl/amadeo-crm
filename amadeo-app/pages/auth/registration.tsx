@@ -7,11 +7,11 @@ import SellerRegistration from '../../components/form/SellerRegistration';
 const { publicRuntimeConfig } = getConfig();
 const baseUrl = `${publicRuntimeConfig.apiUrl}/auth`;
 
-function Registration(invitation: any) {
+function Registration(invitation: any, locale: string) {
     let Form = <></>;
 
     if (invitation.role_id === 1) {
-        Form = <BuyerRegistration email={invitation.email} />;
+        Form = <BuyerRegistration email={invitation.email} locale={locale} />;
     }
 
     if (invitation.role_id === 2) {
@@ -25,7 +25,10 @@ Registration.Layout = FullLayout;
 export default Registration;
 
 export async function getServerSideProps(context: any) {
-    const { hash } = context.query;
+    const {
+        query: { hash },
+        locale
+    } = context;
     const res = await fetch(`${baseUrl}/invitation/${hash}`);
 
     if (res.status !== 200) {
@@ -38,6 +41,7 @@ export async function getServerSideProps(context: any) {
 
     if (!json.active) {
         return {
+            locale,
             invitation: json,
             redirect: { destination: '/' }
         };
