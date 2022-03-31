@@ -262,6 +262,10 @@ function ProductForm({
                                     style={null}
                                     props={props}
                                     tips={t('count_characters', { charNumber: 140 })}
+                                    onChange={(event) => {
+                                        event.target.value = event.target.value.trimStart();
+                                        props.handleChange(event);
+                                    }}
                                 />
 
                                 <div className="mb-4">
@@ -312,6 +316,10 @@ function ProductForm({
                                             style={null}
                                             props={props}
                                             tips={t('count_characters', { charNumber: 5 })}
+                                            onChange={(event) => {
+                                                event.target.value = event.target.value.trimStart();
+                                                props.handleChange(event);
+                                            }}
                                         />
 
                                         <InputText
