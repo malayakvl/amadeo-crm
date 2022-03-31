@@ -32,7 +32,7 @@ function Account({ locale, reqActiveTab }: { locale: string; reqActiveTab: strin
             case 'profile':
                 setSubTitle(t('Personal Information'));
                 break;
-            case 'addressess':
+            case 'addresses':
                 setSubTitle(t('Addresses'));
                 break;
             case 'password':
@@ -62,10 +62,10 @@ function Account({ locale, reqActiveTab }: { locale: string; reqActiveTab: strin
                         </button>
                         {profileData.role_id === 2 && (
                             <button
-                                id="addressess"
+                                id="addresses"
                                 onClick={handleTabClick}
-                                className={`tabs ${activeTab === 'addressess' ? 'active' : ''}`}>
-                                {t('Addressess')}
+                                className={`tabs ${activeTab === 'addresses' ? 'active' : ''}`}>
+                                {t('Addresses')}
                             </button>
                         )}
                         <button
@@ -80,7 +80,7 @@ function Account({ locale, reqActiveTab }: { locale: string; reqActiveTab: strin
                     <div className={`w-full ${activeTab !== 'profile' ? 'hidden' : ''}`}>
                         {profileData.email && <Profile />}
                     </div>
-                    <div className={`w-full ${activeTab !== 'addressess' ? 'hidden' : ''}`}>
+                    <div className={`w-full ${activeTab !== 'addresses' ? 'hidden' : ''}`}>
                         {profileData.role_id === 2 && (
                             <Fragment>
                                 <Address address={profileData.address} locale={locale} />
