@@ -181,13 +181,13 @@ function ProductForm({
         // description: Yup.string().required(t('Required field')),
         price: Yup.number().when('configured', {
             is: false,
-            then: Yup.number().required(t('Required field')),
-            otherwise: Yup.number().min(0)
+            then: Yup.number().required(t('Required field')).min(0),
+            // otherwise: Yup.number().min(0)
         }),
         quantity: Yup.number().when('configured', {
             is: false,
-            then: Yup.number().required(t('Required field')),
-            otherwise: Yup.number().min(0)
+            then: Yup.number().required(t('Required field')).min(0),
+            // otherwise: Yup.number().min(0)
         }),
         color:
             selectedSizes.length === 0 && selectedColors.length === 0
@@ -340,6 +340,13 @@ function ProductForm({
                                             style={null}
                                             props={props}
                                             tips={t('Select one')}
+                                            onChange={(event) => {
+                                                let num = Math.round(+event.target.value);
+                                                num = Math.abs(num);
+                                                if (!Number.isInteger(num)) num = 0;
+                                                event.target.value = String(num);
+                                                props.handleChange(event);
+                                            }}
                                         />
                                     </>
                                 )}
