@@ -160,7 +160,7 @@ function ProductForm({
             setSelectedSizes(selectedOption);
         } else {
             const _sizes: any = selectedSizes;
-            setSelectedSizes([]);
+            // setSelectedSizes([]);
             if (!_sizes.find((v: any) => v.value === selectedOption.value)) {
                 setSelectedSizes([...selectedSizes, selectedOption]);
             }
@@ -400,7 +400,7 @@ function ProductForm({
                                                 sizes={selectedSizes}
                                                 configured={props.values.configured}
                                                 removeSizeHandler={removeSizeHandler}
-                                                showSizeHandler={showSizeHandler}
+                                                // showSizeHandler={showSizeHandler}
                                             />
                                         }
                                         {showSizeTable && (
