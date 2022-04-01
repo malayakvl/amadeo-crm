@@ -29,7 +29,7 @@ class PaymentPlan {
     async fetchSettings () {
         const client = await pool.connect();
         try {
-            const query = 'SELECT * FROM data.system_settings WHERe id=1';
+            const query = 'SELECT * FROM data.system_settings WHERE id=1';
             const res = await client.query(query);
             return res.rows.length ? res.rows[0] : [];
         } catch (e) {
@@ -109,6 +109,7 @@ class PaymentPlan {
         try {
             const query = `SELECT * FROM data.subscription_plans`;
             await client.query(`UPDATE data.system_settings SET trial_period='${data.trial_period}',
+                                    support_email=$$${data.support_email}$$,
                                     multisafe_api_key=$$${data.multisafe_api_key}$$,
                                     multisafe_account=$$${data.multisafe_account}$$ WHERE id='1'`);
             

@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import pool from './connect.js';
 import { logger } from '../../common/logger.js';
 import Stripe from 'stripe';
+import moment from "moment";
 
 const stripe = Stripe(process.env.STRIPE_API_KEY);
 /**
@@ -26,29 +27,29 @@ class User {
                 if (res1.rows[0].fields_json.role_id === 2) {
                     if (res1.rows[0].fields_json.customer_id && (res1.rows[0].fields_json.period_left === null || res1.rows[0].fields_json.period_left < 0)) {
                         try {
-                            const subscription = await stripe.customers.retrieve(res1.rows[0].fields_json.customer_id);
-                            console.log(subscription);
-                            // await client.query(`UPDATE ${process.env.USERS_FOREIGN_SCHEMA}.subscriptions
-                            //         SET current_period_end = to_timestamp(${subscription.subscriptions.data[0].current_period_end}),
-                            //         updated_at=NOW(),
-                            //         status='${subscription.subscriptions.data[0].status}'
-                            //         WHERE customer_id='${res.rows[0].customer_id}'`);
-                            // // eslint-disable-next-line eqeqeq
-                            // if (subscription.subscriptions.data[0].status !== 'active') {
-                            //     res.rows[0].subscription_expired = true;
-                            // }
+                            const subscription = await stripe.subscriptions.retrieve(res1.rows[0].fields_json.subscription_id);
+                            // update subscription period
+                            // await client.query(`SELECT
+                            //                         *
+                            //                     FROM data.set_subscriptions_period_end(
+                            //                         '${subscription.status}',
+                            //                         ${subscription.current_period_end},
+                            //                         '${JSON.stringify({subscription_id: subscription.id})}'
+                            //                     );`);
+                            if (subscription.current_period_end > moment().unix()) {
+                                res1.rows[0].fields_json.subscription_expired = true;
+                            }
                         } catch (e) {
-                            res1.rows[0].subscription_expired = true;
+                            res1.rows[0].fields_json.subscription_expired = true;
                         }
                     } else {
-                        if (!['active', 'trialing'].includes(res1.rows[0].fields_json.status)) {
+                        if (!['active', 'trialing', 'cancel_at_period_end'].includes(res1.rows[0].fields_json.status)) {
                             res1.rows[0].fields_json.subscription_expired = true;
                         }
                     }
                 } else {
                     res1.rows[0].fields_json.subscription_expired = false;
                 }
-                
                 delete res1.rows[0].fields_json.auth_provider_name;
                 delete res1.rows[0].fields_json.auth_provider_id;
                 return res1.rows[0].fields_json;
@@ -189,6 +190,7 @@ class User {
         const client = await pool.connect();
         try {
             const resPlan = await client.query(`SELECT * FROM data.subscription_plans WHERE id = '${userData.planId}'`);
+            const resSettings = await client.query('SELECT * FROM data.system_settings WHERE id=1');
             if (resPlan.rows.length) {
                 if (resPlan.rows[0].stripe_id) {
                     let customerId;
@@ -214,39 +216,9 @@ class User {
                         expand: ['latest_invoice.payment_intent'],
                     };
                     if (userData.type === 'trial') {
-                        subscriptionObject.trial_period_days = 2;
+                        subscriptionObject.trial_period_days = resSettings.rows[0].trial_period;
                     }
                     const subscription = await stripe.subscriptions.create(subscriptionObject);
-                    // if (!userData.user.subscription_id) {
-                    //     const subscriptionObject = {
-                    //         customer: customerId,
-                    //         items: [{
-                    //             plan: resPlan.rows[0].stripe_id
-                    //         }],
-                    //         payment_behavior: 'default_incomplete',
-                    //         expand: ['latest_invoice.payment_intent'],
-                    //     };
-                    //     if (userData.type === 'trial') {
-                    //         subscriptionObject.trial_period_days = 2;
-                    //     }
-                    //     subscription = await stripe.subscriptions.create(subscriptionObject);
-                    //     // console.log('SUBSCRIPTION', subscription);
-                    // } else {
-                    //     const subscriptionObject = {
-                    //         customer: customerId,
-                    //         items: [{
-                    //             plan: resPlan.rows[0].stripe_id
-                    //         }],
-                    //         payment_behavior: 'default_incomplete',
-                    //         expand: ['latest_invoice.payment_intent'],
-                    //     };
-                    //     subscription = await stripe.subscriptions.create(subscriptionObject);
-                    //     // subscription = await stripe.subscriptions.retrieve(
-                    //     //     userData.user.subscription_id
-                    //     // );
-                    //     console.log(subscription);
-                    // }
-                    // save subascription
                     const dbSubscription = {
                         user_id: user.id,
                         plan_id: userData.planId,
@@ -283,15 +255,19 @@ class User {
     }
     
     async getSubscriptionInfo(subscriptionId, customerId) {
+        const client = await pool.connect();
         try {
             const subscription = await stripe.subscriptions.retrieve(
                 subscriptionId
             );
-            const cards = await stripe.customers.listSources(
-                customerId,
-                {object: 'card', limit: 10}
-            );
-            console.log(cards);
+            // const cards = await stripe.customers.listSources(
+            //     customerId,
+            //     {object: 'card', limit: 10}
+            // );
+            const resSubscription = await client.query(`SELECT name FROM data.subscription_plans
+                    LEFT JOIN data.subscriptions ON data.subscriptions.plan_id=data.subscription_plans.id
+                    WHERE subscription_id='${subscriptionId}'`);
+            subscription.DBName = resSubscription.rows[0].name;
             return { subscription: subscription };
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
@@ -789,6 +765,35 @@ class User {
                 logger.log(
                     'error',
                     'Model User (fetchUserSettings) error:',
+                    { message: e.message }
+                );
+            }
+            return { success: false, error: { code: 404, message: 'Users not found' } };
+        } finally {
+            client.release();
+        }
+    }
+    
+    
+    async unsubscribe(email) {
+        const client = await pool.connect();
+        try {
+            const userRes = await client.query(`SELECT subscription_id FROM data.users
+                    LEFT JOIN data.subscriptions ON data.subscriptions.user_id = data.users.id WHERE data.users.email = 'plan@123.com'`);
+            if (userRes.rows.length) {
+                const unsubscribeRes = await stripe.subscriptions.update(userRes.rows[0].subscription_id, {cancel_at_period_end: true});
+                if (unsubscribeRes.id){
+                    await client.query(`UPDATE data.subscriptions SET status='cancel_at_period_end' WHERE subscription_id='${unsubscribeRes.id}'`);
+                }
+                return { success: true, error: null };
+            } else {
+                return { success: false, error: 'No subscription on DB' };
+            }
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model User (Unsubscribe) error:',
                     { message: e.message }
                 );
             }

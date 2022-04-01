@@ -1,4 +1,5 @@
 import sellerModel from '../models/Seller.js';
+import userModel from '../models/User.js';
 
 class SellerController {
     /**
@@ -23,6 +24,15 @@ class SellerController {
             return res.status(401).json('Access deny');
         } else {
             const items = await sellerModel.fetchFilters();
+            return res.status(200).json({ items: items.res });
+        }
+    }
+    
+    async percentHistory(req, res) {
+        if (!req.user) {
+            return res.status(401).json('Access deny');
+        } else {
+            const items = await sellerModel.getSellerPercentHistory(req.query.emailSeller);
             return res.status(200).json({ items: items.res });
         }
     }
@@ -65,6 +75,20 @@ class SellerController {
         //     return res.status(401).json({success: false, error: 'Something wend wrong'});
         // }
         return res.status(200).json({success: true, message: 'creating orders'});
+    }
+    
+    async unsubscribe (req, res) {
+        if (!req.user) {
+            return res.status(401).json('Access deny');
+        } else {
+            const data = await userModel.unsubscribe(req.body.seller);
+            if (data.success) {
+                return res.status(200).json({ success: data.success, error: null });
+            } else {
+                return res.status(403).json({ success: data.success, error: data.error });
+    
+            }
+        }
     }
 }
 

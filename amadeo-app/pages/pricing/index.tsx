@@ -1,4 +1,5 @@
 import { useTranslations } from 'next-intl';
+import Link from 'next/link';
 import Router from 'next/router';
 import Image from 'next/image';
 import React, { Fragment, useEffect, useState } from 'react';
@@ -74,25 +75,19 @@ const Price = ({
                 {buttonText}
             </button>
 
-            <button
-                onClick={() => {
-                    if (user?.email) {
-                        Router.push(`/subscription?planId=${planId}&type=trial`);
-                    } else {
-                        Router.push(`/auth/subscription?planId=${planId}&type=trial`);
-                    }
-                }}
-                className={`${
-                    disabled ? 'disabled-btn' : 'gradient-btn'
-                } w-full mt-7 justify-self-end`}>
-                {t('Select Trial')}
-            </button>
-            {/* <div className="mt-7 mb-auto">{permissions}</div>
-            <button
-                onClick={onClick}
-                className={`${disabled ? 'disabled-btn' : 'gradient-btn'} w-full`}>
-                {buttonText}
-            </button> */}
+            {/*<button*/}
+            {/*    onClick={() => {*/}
+            {/*        if (user?.email) {*/}
+            {/*            Router.push(`/subscription?planId=${planId}&type=trial`);*/}
+            {/*        } else {*/}
+            {/*            Router.push(`/auth/subscription?planId=${planId}&type=trial`);*/}
+            {/*        }*/}
+            {/*    }}*/}
+            {/*    className={`${*/}
+            {/*        disabled ? 'disabled-btn' : 'gradient-btn'*/}
+            {/*    } w-full mt-7 justify-self-end`}>*/}
+            {/*    {t('Select Trial')}*/}
+            {/*</button>*/}
         </div>
     );
 };
@@ -101,11 +96,21 @@ export default function Pricing({ locale }: { locale: any }) {
     const [selected, setSelected] = useState('business');
     const dispatch = useDispatch();
     const plans = useSelector(itemsSelector);
+    const user = useSelector(userSelector);
+    const [showTrial, setShowTrial] = useState(true);
 
     useEffect(() => {
         dispatch(showLoaderAction(true));
         dispatch(fetchFormAction());
     }, []);
+
+    useEffect(() => {
+        if (user.email) {
+            if (user.status) {
+                setShowTrial(false);
+            }
+        }
+    }, [user?.email]);
 
     const t = useTranslations();
 
@@ -182,11 +187,25 @@ export default function Pricing({ locale }: { locale: any }) {
                 </div>
             </div>
 
-            {/*<div className="underline text-center mt-8 lg:mt-10">*/}
-            {/*    <Link href="/dashboard">*/}
-            {/*        <a>{t('Skip for now (Take trial)')}</a>*/}
-            {/*    </Link>*/}
-            {/*</div>*/}
+            <div className="underline text-center mt-8 lg:mt-10">
+                {showTrial && (
+                    <Fragment>
+                        {/*{user?.email && (*/}
+                        {/*    <Link href="/auth/signup">*/}
+                        {/*        <a>{t('Skip for now (Take trial)')}</a>*/}
+                        {/*    </Link>*/}
+                        {/*)}*/}
+                        {/*{!user?.email && (*/}
+                        {/*    <Link href="/auth/signup">*/}
+                        {/*        <a>{t('Skip for now (Take trial)')}</a>*/}
+                        {/*    </Link>*/}
+                        {/*)}*/}
+                        <Link href="/auth/signup">
+                            <a>{t('Skip for now (Take trial)')}</a>
+                        </Link>
+                    </Fragment>
+                )}
+            </div>
 
             <div className="lg:space-x-10 flex justify-end items-stretch text-center lg:text-left mt-8 lg:mt-10">
                 <Price

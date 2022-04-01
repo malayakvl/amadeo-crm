@@ -353,5 +353,20 @@
   "Change": "Change",
   "Transaction Persent": "Transaction Persent",
   "Multisafepay API": "Multisafepay API",
-  "Multisafepay Account": "Multisafepay Account"
+  "Multisafepay Account": "Multisafepay Account",
+  "Are you sure you want unsubscribe seller?": "Are you sure you want unsubscribe seller?",
+  "Subscription End": "Subscription End",
+  "cancel_at_period_end": "cancel at period end",
+  "Seller has been unsubscribed": "Seller has been unsubscribed",
+  "Skip for now (Take trial)": "Skip for now (Take trial)",
+  "Unsubscribe": "Unsubscribe",
+  "active": "active",
+  "trialing": "trial",
+  "Add Card": "Add Card",
+  "Change Plan": "Change Plan",
+  "incomplete": "incomplete",
+  "Support_email": "Support_email",
+  "View history": "View history",
+  "Transaction Persent History": "Transaction Persent History",
+  "No history yet": "No history yet"
 }

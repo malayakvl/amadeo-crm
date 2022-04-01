@@ -13,14 +13,24 @@ import {
     showLoginFormAction,
     setSelectedSellerAction,
     showPersentConfirmFormAction,
-    setSellerPercentAction
+    setSellerPercentAction,
+    showUnsubscribeConfirmFormAction,
+    showSellerPercentHistoryAction
 } from '../../redux/sellers';
 import moment from 'moment';
 import Image from 'next/image';
 import { baseApiUrl } from '../../constants';
 import { setPaginationAction } from '../../redux/layouts';
 import { useTranslations } from 'next-intl';
-import { Filters, FilterValues, SellerLogin, SellerPersent, SellerPersentConfirm } from './index';
+import {
+    Filters,
+    FilterValues,
+    SellerLogin,
+    SellerPersent,
+    SellerPersentConfirm,
+    SellerUnsubscribeConfirm,
+    SellerPersentHistory
+} from './index';
 import { paginationSelectorFactory } from '../../redux/layouts/selectors';
 import { DateRangePicker } from 'react-date-range';
 import 'react-date-range/dist/styles.css'; // main css file
@@ -168,18 +178,18 @@ const ListSellers: React.FC<{ locale: string }> = ({ locale }) => {
                                     }}>
                                     {item.transaction_percent > 0 ? item.transaction_percent : 0}%
                                 </span>
+                                <span
+                                    onClick={() => {
+                                        dispatch(setSelectedSellerAction(item.email));
+                                        dispatch(showSellerPercentHistoryAction(true));
+                                    }}
+                                    className="cursor-pointer block text-xs text-normal"
+                                    role="presentation">
+                                    {t('View history')}
+                                </span>
                             </td>
                             <td>{item.phone}</td>
-                            <td>
-                                {parseTranslation(item.country_json, 'name', locale)}
-                                {/*{item.country_iso && (*/}
-                                {/*    <img*/}
-                                {/*        src={`/images/flags/${item.country_iso.toLowerCase()}.svg`}*/}
-                                {/*        className="fill-current text-black"*/}
-                                {/*        alt={''}*/}
-                                {/*    />*/}
-                                {/*)}*/}
-                            </td>
+                            <td>{parseTranslation(item.country_json, 'name', locale)}</td>
                             <td>{item.full_address?.slice(0, -2)}</td>
                             <td>{item.total_sessions}</td>
                             <td>{item.total_orders}</td>
@@ -187,6 +197,26 @@ const ListSellers: React.FC<{ locale: string }> = ({ locale }) => {
                             <td>{formatCurrency(item.total_amount)}</td>
                             <td className="order-date">
                                 {moment(item.created_at).format('DD/MM/YYYY')}
+                            </td>
+                            <td>
+                                {item.subscriptions_status ? t(item.subscriptions_status) : ''}
+                                <br />
+                                {item.subscriptions_period_end && (
+                                    <>
+                                        {moment(item.subscriptions_period_end).format('DD/MM/YYYY')}
+                                    </>
+                                )}
+                            </td>
+                            <td style={{ fontSize: '12px' }}>
+                                <span
+                                    className="cursor-pointer"
+                                    role="presentation"
+                                    onClick={() => {
+                                        dispatch(setSelectedSellerAction(item.email));
+                                        dispatch(showUnsubscribeConfirmFormAction(true));
+                                    }}>
+                                    {t('Unsubscribe')}
+                                </span>
                             </td>
                             <td>
                                 <span
@@ -204,8 +234,10 @@ const ListSellers: React.FC<{ locale: string }> = ({ locale }) => {
                 ))}
             </DataTable>
             <SellerLogin />
+            <SellerUnsubscribeConfirm />
             <SellerPersentConfirm />
             <SellerPersent />
+            <SellerPersentHistory />
         </div>
     );
 };

@@ -189,10 +189,12 @@ export const unsubscribeAction: any = createAction(
                     }
                 })
                 .then(() => {
+                    dispatch(setSuccessToastAction('Response was sent successfully'));
                     dispatch(showLoaderAction(false));
-                    // return {
-                    //     subscription: res.data.subscription
-                    // };
+                })
+                .catch((e) => {
+                    dispatch(setErrorToastAction(e.response.data.error));
+                    dispatch(showLoaderAction(false));
                 });
         }
 );
@@ -200,3 +202,4 @@ export const unsubscribeAction: any = createAction(
 
 export const setUserAction: any = createAction('user/SET_USER');
 export const hideRegisterFormAction: any = createAction('user/HIDE_REGISTER_FORM');
+export const showChangeSubscriptionFormAction: any = createAction('user/CHANGE_SUBSCRIPTION_FORM');

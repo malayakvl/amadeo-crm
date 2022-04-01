@@ -31,3 +31,7 @@ export const paymentIntentSelector = createSelector(
     rootSelector,
     (user: State.User): any => user.paymentIntent
 );
+export const showChangeSubscriptionSelector = createSelector(
+    rootSelector,
+    (user: State.User): any => user.showChangeSubscription
+);

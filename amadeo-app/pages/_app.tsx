@@ -9,8 +9,8 @@ import { Provider as ReduxProvider } from 'react-redux';
 import store from '../app/store';
 import MainLayout from '../components/layout/MainLayout';
 import SidebarLayout from '../components/layout/SidebarLayout';
-import { Toasts } from '../components/_common';
-import { ConfirmationModal } from '../components/_common';
+import { Toasts, ConfirmationModal } from '../components/_common';
+// import { ConfirmationModal } from '../components/_common';
 import React from 'react';
 
 type NextPageWithLayout = NextPage & {

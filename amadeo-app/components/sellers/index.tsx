@@ -11,3 +11,5 @@ export { default as FilterSeller } from './filters/FilterSeller';
 export { default as SellerLogin } from './SellerLogin';
 export { default as SellerPersent } from './SellerPersent';
 export { default as SellerPersentConfirm } from './SellerPersentConfirm';
+export { default as SellerUnsubscribeConfirm } from './SellerUnsubscribeConfirm';
+export { default as SellerPersentHistory } from './SellerPersentHistory';

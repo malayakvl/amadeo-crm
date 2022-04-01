@@ -12,8 +12,11 @@ declare namespace Sellers {
         showLoginForm: boolean;
         showPersentForm: boolean;
         showPersentConfirmForm: boolean;
+        showUnsubscribeConfirmForm: boolean;
+        showHistoryPersentForm: boolean;
         selectedSeller: string;
         sellerPercent: number | null;
+        itemsHistory: any[];
     }
 
     interface DataItem {

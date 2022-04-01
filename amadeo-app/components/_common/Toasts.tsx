@@ -11,18 +11,6 @@ const ToastClassNamesMap = {
     info: 'alert-info'
 };
 
-// const ToastHeadersMap = {
-//     error: 'Error',
-//     success: 'Success',
-//     info: 'Info'
-// };
-//
-// const ToastIconsMap = {
-//     error: 'fas fa-exclamation-triangle',
-//     success: 'fas fa-check-circle',
-//     info: 'fas fa-info-circle'
-// };
-
 const Toasts: React.FC = () => {
     const toasts = useSelector(toastsSelector);
 

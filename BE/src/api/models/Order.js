@@ -330,7 +330,6 @@ class Order {
                     _filters.status = [OrderStatus.PAYED, OrderStatus.SHIPPED, OrderStatus.CANCELED];
                 }
             }
-            console.log(_filters);
 
             const _total = await client.query(`SELECT count FROM data.get_orders_count('${JSON.stringify(_filters)}');`);
             const size = _total.rows[0].count;

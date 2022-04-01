@@ -44,7 +44,19 @@ export const showPersentConfirmFormSelector = createSelector(
     rootSelector,
     (sellers: State.Sellers): boolean => sellers.showPersentConfirmForm
 );
+export const showUnsubscribeConfirmFormSelector = createSelector(
+    rootSelector,
+    (sellers: State.Sellers): boolean => sellers.showUnsubscribeConfirmForm
+);
 export const sellerPrcentSelector = createSelector(
     rootSelector,
     (sellers: State.Sellers): number | null => sellers.sellerPercent
+);
+export const showPersentHistoryFormSelector = createSelector(
+    rootSelector,
+    (sellers: State.Sellers): boolean => sellers.showHistoryPersentForm
+);
+export const itemsHistorySelector = createSelector(
+    rootSelector,
+    (sellers: State.Sellers): any => sellers.itemsHistory
 );
