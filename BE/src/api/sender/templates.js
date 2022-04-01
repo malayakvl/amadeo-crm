@@ -30,7 +30,7 @@ export const welcomeEmail = async (email = '', link = '', locale = localeDefault
 
   return {
     subject: t['Account Activation Required'],
-    body: emailHtml(t, ` 
+    body: emailHtml(t, `
     <p>${t['Hi']}</p>
     <p>
       ${t['Verify yourself below to sign in to your Liveproshop.com account for']} ${email}
@@ -91,6 +91,18 @@ export const supportFromEmail = async (email = '', message, locale = localeDefau
     subject: t['Support message from'] + ' ' + email,
     body: emailHtml(t, `
     <p>${t['Support message from']} ${email}!</p>
+    <p>
+      ${message}
+    </p>`)
+  };
+};
+export const unsubscriberFromEmail = async (email = '', message, locale = localeDefault) => {
+  const { default: t } = await import(`../sender/${locale}.js`);
+  
+  return {
+    subject: t['Unsubscriber message from'] + ' ' + email,
+    body: emailHtml(t, `
+    <p>${t['Unsubscribe message from']} ${email}!</p>
     <p>
       ${message}
     </p>`)

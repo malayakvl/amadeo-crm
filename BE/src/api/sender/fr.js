@@ -48,4 +48,8 @@ export default {
   "Verify yourself below to sign in to your Liveproshop.com account for": "Vous venez de créer un compte sur  Liveproshop.com avec",
   "Here’s the verification link": "Cliquez ci-dessous pour confirmer votre adresse e-mail",
   "If you didn't request this verification link, you can safely ignore this email": "Si vous n'êtes pas à l'origine de cette demande, vous pouvez ignorer cet e-mail en toute sécurité",
+  
+  //unsubscribe
+  "User want unsubscribe from plan": "User want unsubscribe from plan",
+  "Unsubscribe message from":"Unsubscribe message from"
 };
