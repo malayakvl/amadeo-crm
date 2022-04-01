@@ -144,6 +144,7 @@ function ProductForm({
         setSelectedColors(additionalSelectedProps.colors);
         setSelectedMaterials(additionalSelectedProps.materials);
         setTags(additionalSelectedProps.tags);
+        setEditorContent('');
     }, [additionalSelectedProps]);
 
     const handleChangeEditor = (content: any) => {
