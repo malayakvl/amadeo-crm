@@ -57,7 +57,7 @@ function Restore({ locale }: { locale: string }) {
                     initialValues={{ email: '' }}
                     validationSchema={SubmitSchema}
                     onSubmit={(values) => {
-                        dispatch(restorePasswordAction(values));
+                        dispatch(restorePasswordAction(values, locale));
                     }}>
                     {(props) =>
                         validEmail === 'yes' ? (
@@ -104,7 +104,7 @@ export async function getServerSideProps(context: any) {
     }
     return {
         props: {
-            locale: locale,
+            locale,
             messages: {
                 ...require(`../../messages/${locale}.json`)
             }

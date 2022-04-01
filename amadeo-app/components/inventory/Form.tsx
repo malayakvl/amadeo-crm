@@ -144,6 +144,7 @@ function ProductForm({
         setSelectedColors(additionalSelectedProps.colors);
         setSelectedMaterials(additionalSelectedProps.materials);
         setTags(additionalSelectedProps.tags);
+        setEditorContent('');
     }, [additionalSelectedProps]);
 
     const handleChangeEditor = (content: any) => {
@@ -160,7 +161,7 @@ function ProductForm({
             setSelectedSizes(selectedOption);
         } else {
             const _sizes: any = selectedSizes;
-            setSelectedSizes([]);
+            // setSelectedSizes([]);
             if (!_sizes.find((v: any) => v.value === selectedOption.value)) {
                 setSelectedSizes([...selectedSizes, selectedOption]);
             }
@@ -181,13 +182,13 @@ function ProductForm({
         // description: Yup.string().required(t('Required field')),
         price: Yup.number().when('configured', {
             is: false,
-            then: Yup.number().required(t('Required field')),
-            otherwise: Yup.number().min(0)
+            then: Yup.number().required(t('Required field')).min(0)
+            // otherwise: Yup.number().min(0)
         }),
         quantity: Yup.number().when('configured', {
             is: false,
-            then: Yup.number().required(t('Required field')),
-            otherwise: Yup.number().min(0)
+            then: Yup.number().required(t('Required field')).min(0)
+            // otherwise: Yup.number().min(0)
         }),
         color:
             selectedSizes.length === 0 && selectedColors.length === 0
@@ -262,6 +263,10 @@ function ProductForm({
                                     style={null}
                                     props={props}
                                     tips={t('count_characters', { charNumber: 140 })}
+                                    onChange={(event) => {
+                                        event.target.value = event.target.value.trimStart();
+                                        props.handleChange(event);
+                                    }}
                                 />
 
                                 <div className="mb-4">
@@ -312,6 +317,10 @@ function ProductForm({
                                             style={null}
                                             props={props}
                                             tips={t('count_characters', { charNumber: 5 })}
+                                            onChange={(event) => {
+                                                event.target.value = event.target.value.trimStart();
+                                                props.handleChange(event);
+                                            }}
                                         />
 
                                         <InputText
@@ -332,6 +341,13 @@ function ProductForm({
                                             style={null}
                                             props={props}
                                             tips={t('Select one')}
+                                            onChange={(event) => {
+                                                let num = Math.round(+event.target.value);
+                                                num = Math.abs(num);
+                                                if (!Number.isInteger(num)) num = 0;
+                                                event.target.value = String(num);
+                                                props.handleChange(event);
+                                            }}
                                         />
                                     </>
                                 )}
@@ -392,7 +408,7 @@ function ProductForm({
                                                 sizes={selectedSizes}
                                                 configured={props.values.configured}
                                                 removeSizeHandler={removeSizeHandler}
-                                                showSizeHandler={showSizeHandler}
+                                                // showSizeHandler={showSizeHandler}
                                             />
                                         }
                                         {showSizeTable && (

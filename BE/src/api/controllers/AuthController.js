@@ -4,7 +4,8 @@ import invitationModel from '../models/Invitation.js'
 import countryModel from '../models/Country.js';
 import { getTokensAndSetCookies } from '../lib/token.js';
 import { sendMail } from '../lib/sendMail.js';
-import { welcomeEmailHtml } from '../sender/templates.js'
+import { welcomeEmail, restoreEmail, registerEmail } from '../sender/templates.js';
+
 
 class AuthController {
     /**
@@ -164,11 +165,19 @@ class AuthController {
 
         invitationModel.deactivate(invitation.id)
 
+        const mail = registerEmail(user.email, req.query.locale);
+
         sendMail(
             user.email,
-            'Proshop',
-            `Your email was successfully verified!`
+            mail.subject,
+            mail.body
         );
+
+        // sendMail(
+        //     user.email,
+        //     'Proshop',
+        //     `Your email was successfully verified!`
+        // );
 
         return res.status(200).json({ user })
 
@@ -194,11 +203,15 @@ class AuthController {
         invitation = await invitationModel.create(data);
 
         let link = `${process.env.APPLICATION_BASE_URL}/auth/registration?hash=${invitation.hash}`;
-        const welcomeEmail = welcomeEmailHtml(data.emai, link, '');
+
+        const mail = welcomeEmail(data.email, link, req.query.locale);
+
         sendMail(
             data.email,
-            'Proshop',
-            welcomeEmail);
+            mail.subject,
+            mail.body
+        );
+
         // sendMail(
         //     data.email,
         //     'Proshop',
@@ -219,10 +232,7 @@ class AuthController {
 
         const user = await userModel.findUserByEmail(data.email);
 
-        if (!user) {
-            console.log('restorePassword _user = ', user);
-            return res.status(402).json({ status: false, error: 'wrong email' });
-        }
+        if (!user) return res.status(402).json({ status: false, error: 'wrong email' });
 
         let invitation = await invitationModel.findByEmail(data.email);
 
@@ -234,15 +244,14 @@ class AuthController {
 
         const link = `${process.env.APPLICATION_BASE_URL}/auth/restore/password?hash=${invitation.hash}`;
 
+        const mail = await restoreEmail(data.email, link, req.query.locale);
+
         sendMail(
-            req.body.email,
-            'Amadeo CRM - restore password',
-            `
-                Hi, ${req.body.email}!<br>
-                You can use following <a href='${link}'>link</a> for continue
-                <br><br>
-                Good luck!`
+            data.email,
+            mail.subject,
+            mail.body
         );
+
         res.status(200).json({ status: true });
     }
 

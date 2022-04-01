@@ -9,12 +9,12 @@ const actionName = (name: string) => `SUPPORT/${name}`;
 
 export const sendMessage: any = createAction(
     actionName('SEND_MESSAGE'),
-    (values: { email: string; message: string }) =>
+    (values: { email: string; message: string }, locale: string) =>
         async (dispatch: Type.Dispatch, getState: () => State.Root) => {
             const state = getState();
 
             await axios.post(
-                `${url}/send-message`,
+                `${url}/send-message?locale=${locale}`,
                 { ...values },
                 {
                     headers: {

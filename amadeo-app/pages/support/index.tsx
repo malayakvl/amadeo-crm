@@ -8,7 +8,7 @@ import { sendMessage } from '../../redux/support/actions';
 import { setSuccessToastAction } from '../../redux/layouts';
 import { getSession } from 'next-auth/client';
 
-export default function Support() {
+export default function Support({ locale }: { locale: string }) {
     const t = useTranslations();
     const user = useSelector(userSelector);
     const dispatch = useDispatch();
@@ -39,7 +39,7 @@ export default function Support() {
                 <Formik
                     enableReinitialize
                     onSubmit={(values, actions) =>
-                        dispatch(sendMessage(values))
+                        dispatch(sendMessage(values, locale))
                             .then(
                                 dispatch(
                                     setSuccessToastAction(

@@ -2,7 +2,7 @@ import pool from './connect.js';
 import { logger } from '../../common/logger.js';
 
 class Seller {
-    async fetchItems (page, perPage = 20, user, isRead = false, reqOffset = null, filters, column, sort) {
+    async fetchItems(page, perPage = 20, user, isRead = false, reqOffset = null, filters, column, sort) {
         const client = await pool.connect();
         try {
             const _filters = JSON.parse(filters);
@@ -23,8 +23,7 @@ class Seller {
                 offset = (Number(page) - 1) * Number(perPage);
             }
             
-            const ordersQuery = `SELECT *
-                                 FROM data.get_sellers (${perPage}, ${offset}, '${JSON.stringify(_filters)}', '${column} ${sort}');`;
+            const ordersQuery = `SELECT * FROM data.get_sellers(${perPage}, ${offset}, '${JSON.stringify(_filters)}', '${column} ${sort}');`;
             const res = await client.query(ordersQuery);
             const items = res.rows.length > 0 ? res.rows : [];
             const error = null;
@@ -41,6 +40,7 @@ class Seller {
                     'Model error (Products getAll):',
                     { message: e.message }
                 );
+                console.log('[Seller.fetchItems] e.message = ', e.message);
             }
             const items = null;
             const error = {
