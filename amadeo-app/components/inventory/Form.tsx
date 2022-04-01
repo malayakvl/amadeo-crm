@@ -181,12 +181,12 @@ function ProductForm({
         // description: Yup.string().required(t('Required field')),
         price: Yup.number().when('configured', {
             is: false,
-            then: Yup.number().required(t('Required field')).min(0),
+            then: Yup.number().required(t('Required field')).min(0)
             // otherwise: Yup.number().min(0)
         }),
         quantity: Yup.number().when('configured', {
             is: false,
-            then: Yup.number().required(t('Required field')).min(0),
+            then: Yup.number().required(t('Required field')).min(0)
             // otherwise: Yup.number().min(0)
         }),
         color:

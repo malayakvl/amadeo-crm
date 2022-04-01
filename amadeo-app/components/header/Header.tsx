@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { useSession } from 'next-auth/client';
 import React from 'react';
 import { Menu } from '@headlessui/react';
+import LangSwitcher from '../lang/Switcher';
 
 const userProfileImg =
     'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80';
@@ -90,6 +91,8 @@ const Header: React.FC = () => {
                             </div>
                         </div>
                     )}
+
+                    <LangSwitcher />
                 </div>
             </nav>
         </header>
