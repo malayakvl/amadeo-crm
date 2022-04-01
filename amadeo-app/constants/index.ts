@@ -108,6 +108,8 @@ export const TableHeaders: { [key in PaginationType]: Type.DataTableHeader[] } =
             titleKey: 'Creation Date',
             iconClass: 'icon-tbl-date'
         },
+        { titleKey: 'Subscription End' },
+        { iconClass: 'icon-tbl-keys', titleKey: '' },
         { iconClass: 'icon-tbl-keys', titleKey: 'LogIn' }
     ],
     [PaginationType.WAITING]: [

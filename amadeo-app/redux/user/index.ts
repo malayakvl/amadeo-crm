@@ -6,7 +6,8 @@ import {
     createExistUserSubscriptionAction,
     createUserFromSubscriptionAction,
     checkPaymentStatusAction,
-    fetchUserSubscriptionAction
+    fetchUserSubscriptionAction,
+    showChangeSubscriptionFormAction
 } from './actions';
 
 // const initialState: State.User = {
@@ -20,11 +21,13 @@ const initialState: {
     subscription: null;
     user: User.User;
     paymentIntent: null;
+    showChangeSubscription: boolean;
 } = {
     user: {} as User.User,
     clientSecret: null,
     subscription: null,
-    paymentIntent: null
+    paymentIntent: null,
+    showChangeSubscription: false
 };
 
 const ACTION_HANDLERS: any = {
@@ -93,6 +96,12 @@ const ACTION_HANDLERS: any = {
         throw: (state: State.User): State.User => ({
             ...state
         })
+    },
+    [showChangeSubscriptionFormAction]: {
+        next: (state: State.User, action: Action<boolean>): State.User => ({
+            ...state,
+            showChangeSubscription: action.payload
+        })
     }
 };
 
@@ -103,7 +112,8 @@ export {
     createExistUserSubscriptionAction,
     createUserFromSubscriptionAction,
     checkPaymentStatusAction,
-    fetchUserSubscriptionAction
+    fetchUserSubscriptionAction,
+    showChangeSubscriptionFormAction
 };
 
 // ------------------------------------

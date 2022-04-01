@@ -4,7 +4,6 @@ import axios from 'axios';
 import getConfig from 'next/config';
 const { publicRuntimeConfig } = getConfig();
 const baseUrl = `${publicRuntimeConfig.apiUrl}/api`;
-// import { setSuccessToastAction } from '../layouts';
 import { paginationSelectorFactory } from '../layouts/selectors';
 import { PaginationType } from '../../constants';
 import queryString from 'query-string';
@@ -44,6 +43,32 @@ export const fetchItemsAction: any = createAction(
                     return {
                         count: res.data.count,
                         items: res.data.items
+                    };
+                });
+        }
+);
+export const fetchHistoryAction: any = createAction(
+    'sellers/FETCH_HISTORY_ITEMS',
+    async (emailSeller: string) =>
+        (dispatch: Type.Dispatch, getState: () => State.Root): Promise<{ itemsHistory: any }> => {
+            const state = getState();
+            dispatch(showLoaderAction(true));
+            return axios
+                .get(`${baseUrl}/sellers/history?emailSeller=${emailSeller}`, {
+                    headers: {
+                        ...authHeader(state.user.user.email)
+                    }
+                })
+                .then((res: any) => {
+                    dispatch(showLoaderAction(false));
+                    return {
+                        itemsHistory: res.data.items
+                    };
+                })
+                .catch(() => {
+                    dispatch(showLoaderAction(false));
+                    return {
+                        itemsHistory: []
                     };
                 });
         }
@@ -119,11 +144,43 @@ export const updateSellerPercentAction: any = createAction(
                 });
         }
 );
+export const unsubscribeSellerAction: any = createAction(
+    'seller/UNSUBSCRIBE_SELLER',
+    async () =>
+        (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
+            const state = getState();
+            const selectedSeller = state.sellers.selectedSeller;
+            dispatch(showLoaderAction(true));
+            return axios
+                .post(
+                    `${baseUrl}/sellers/unsubscribe`,
+                    { seller: selectedSeller },
+                    {
+                        headers: {
+                            ...authHeader(state.user.user.email)
+                        }
+                    }
+                )
+                .then(async () => {
+                    dispatch(showLoaderAction(false));
+                    dispatch(fetchItemsAction());
+                    dispatch(showUnsubscribeConfirmFormAction(false));
+                    dispatch(setSuccessToastAction(`Seller has been unsubscribed`));
+                    // toggleModalPopup('.modal-seller-confirm-unsubscribe');
+                })
+                .catch((e: any) => {
+                    dispatch(showLoaderAction(false));
+                    dispatch(setErrorToastAction(e.message));
+                });
+        }
+);
 
 export const showPopupAction: any = createAction('sellers/SHOW_POPUP');
 export const showDateSelectorAction: any = createAction('sellers/SHOW_DATE_POPUP');
 export const showLoginFormAction: any = createAction('sellers/SHOW_LOGIN_FORM');
 export const showPersentFormAction: any = createAction('sellers/SHOW_PERSENT_FORM');
 export const showPersentConfirmFormAction: any = createAction('sellers/SHOW_PERSENT_CONFIRM_MODAL');
+export const showUnsubscribeConfirmFormAction: any = createAction('sellers/SHOW_UNSUBSCRIBE_MODAL');
 export const setSelectedSellerAction: any = createAction('sellers/SET_SELECTED_SELLER');
 export const setSellerPercentAction: any = createAction('sellers/SET_PERCENT');
+export const showSellerPercentHistoryAction: any = createAction('sellers/SELLER_PERSENT_HISTORY');

@@ -3,7 +3,7 @@ import { getSession } from 'next-auth/client';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { userSelector, userSubscriptionSelector } from '../../../redux/user/selectors';
-import { fetchUserSubscriptionAction } from '../../../redux/user';
+import { fetchUserSubscriptionAction, showChangeSubscriptionFormAction } from '../../../redux/user';
 import { unsubscribeAction } from '../../../redux/user/actions';
 import moment from 'moment';
 import getConfig from 'next/config';
@@ -12,11 +12,15 @@ const stripeKey = publicRuntimeConfig.stripeKey;
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe, StripeElementsOptions } from '@stripe/stripe-js';
 import { CardForm } from '../../../components/checkout';
+import { useTranslations } from 'next-intl';
+import ChangeSubscription from './ChangeSubscription';
+
 const stripePromise = loadStripe(stripeKey);
 
 export default function Index({ session }: { session: any }) {
     if (!session) return <></>;
     const dispatch = useDispatch();
+    const t = useTranslations();
 
     const appearance: any = {
         theme: 'stripe'
@@ -83,7 +87,7 @@ export default function Index({ session }: { session: any }) {
                     <div className="clear-both" />
                 </div>
             </div>
-            <div className="mt-10 block-white-8 white-shadow-big">
+            <div className="mt-10 block-white-8 white-shadow-big pb-[50px]">
                 <div className={`w-1/5`}>
                     <Elements options={options} stripe={stripePromise}>
                         <CardForm />
@@ -94,7 +98,7 @@ export default function Index({ session }: { session: any }) {
                         <table className="w-full float-table">
                             <thead>
                                 <tr>
-                                    <th style={{ textAlign: 'left' }}>Id</th>
+                                    <th style={{ textAlign: 'left' }}>{t('Name')}</th>
                                     <th>Status</th>
                                     <th>Created</th>
                                     <th>Period</th>
@@ -104,7 +108,7 @@ export default function Index({ session }: { session: any }) {
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>{subscriptionInfo.id}</td>
+                                    <td>{subscriptionInfo.DBName}</td>
                                     <td style={{ textAlign: 'center' }}>
                                         <span className={`${subscriptionInfo.status}-subscription`}>
                                             {subscriptionInfo.status}
@@ -115,6 +119,16 @@ export default function Index({ session }: { session: any }) {
                                     </td>
                                     <td style={{ textAlign: 'center' }}>{preparePeriod()}</td>
                                     <td style={{ textAlign: 'center' }}>{prepareDayLeft()}</td>
+                                    <td>
+                                        <span
+                                            className="cursor-pointer"
+                                            role="presentation"
+                                            onClick={() =>
+                                                dispatch(showChangeSubscriptionFormAction(true))
+                                            }>
+                                            {t('Change Plan')}
+                                        </span>
+                                    </td>
                                     <td style={{ textAlign: 'center' }}>
                                         <span
                                             role="presentation"
@@ -122,7 +136,7 @@ export default function Index({ session }: { session: any }) {
                                             onClick={() => {
                                                 dispatch(unsubscribeAction());
                                             }}>
-                                            Unsubscribe
+                                            {t('Unsubscribe')}
                                         </span>
                                     </td>
                                 </tr>
@@ -131,6 +145,7 @@ export default function Index({ session }: { session: any }) {
                     </div>
                 )}
             </div>
+            <ChangeSubscription />
         </>
     );
 }

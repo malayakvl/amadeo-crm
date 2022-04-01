@@ -53,11 +53,11 @@ export default function SellerRegistration({
             .strict(true)
             .trim(t('Cannot include leading and trailing spaces'))
             .required(t('Required field')),
-        state: Yup.string()
-            .strict(true)
-            .trim(t('Cannot include leading and trailing spaces'))
-            .required(t('Required field'))
-            .min(3, t('State must be at least 3 characters')),
+        // state: Yup.string()
+        //     .strict(true)
+        //     .trim(t('Cannot include leading and trailing spaces'))
+        //     .required(t('Required field'))
+        //     .min(3, t('State must be at least 3 characters')),
         city: Yup.string()
             .strict(true)
             .trim(t('Cannot include leading and trailing spaces'))
@@ -104,12 +104,11 @@ export default function SellerRegistration({
                 signIn('credentials_login', {
                     email: values.email,
                     password: values.password,
-                    callbackUrl: `${window.location.origin}/pricing`
+                    callbackUrl: `${window.location.origin}/dashboard`
                 });
             });
         });
     };
-
     return (
         <Formik
             enableReinitialize
@@ -118,8 +117,8 @@ export default function SellerRegistration({
             onSubmit={onSubmit}>
             {(props) => (
                 <form onSubmit={props.handleSubmit}>
-                    <div className="px-24 py-14 my-10 rounded-lg border shadow-xl flex justify-center w-[996px] bg-white">
-                        <div className="pt-5 pr-20 border-r">
+                    <div className="w-full px-6 md:px-24 py-14 my-10 rounded-lg border shadow-xl flex flex-col md:flex-row md:flex-rowjustify-center md:w-[996px] bg-white">
+                        <div className="pt-5 md:pr-20 md:border-r">
                             <div className="flex mb-4 items-center">
                                 <div className="mr-2.5 font-bold text-3xl line-height-105percent w-60">
                                     {t('Your email has been verified!')}
@@ -137,11 +136,11 @@ export default function SellerRegistration({
                             <div className="mb-3 mt-9 text-blue-350 text-sm">
                                 {t('Almost there, please')}
                             </div>
-                            <div className="w-60 text-5xl line-height-105percent font-bold">
+                            <div className="w-60 mb-10 md:mb-0 text-5xl line-height-105percent font-bold">
                                 {t('Complete your profile')}
                             </div>
                         </div>
-                        <div className="ml-8 w-full">
+                        <div className="md:ml-8 w-full">
                             <InputText
                                 icon={'f-fname'}
                                 style={null}

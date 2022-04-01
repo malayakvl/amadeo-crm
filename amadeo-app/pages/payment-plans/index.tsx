@@ -46,6 +46,7 @@ export default function Index({ session, locale }: { session: any; locale: any }
             initValues['trial_period'] = settings.trial_period;
             initValues['multisafe_api_key'] = settings.multisafe_api_key;
             initValues['multisafe_account'] = settings.multisafe_account;
+            initValues['support_email'] = settings.support_email;
             setStripeInitData(initValues);
         }
     }, [plans?.header?.length, settings]);
@@ -133,7 +134,8 @@ export default function Index({ session, locale }: { session: any; locale: any }
     const SubmitSchema = Yup.object().shape({
         trial_period: Yup.number(),
         multisafe_api_key: Yup.string().required(t('Required field')),
-        multisafe_account: Yup.string().required(t('Required field'))
+        multisafe_account: Yup.string().required(t('Required field')),
+        support_email: Yup.string().email(t('Must be a valid email')).required(t('Required field'))
     });
 
     return (
@@ -185,6 +187,15 @@ export default function Index({ session, locale }: { session: any; locale: any }
                                         label={t('Multisafepay Account')}
                                         name={'multisafe_account'}
                                         placeholder={'Multisafepay Account'}
+                                        props={props}
+                                        tips={null}
+                                    />
+                                    <InputText
+                                        style={'w-1/2'}
+                                        icon={null}
+                                        label={t('Support_email')}
+                                        name={'support_email'}
+                                        placeholder={'Support_email'}
                                         props={props}
                                         tips={null}
                                     />

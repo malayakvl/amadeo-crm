@@ -97,20 +97,68 @@ class Seller {
         }
     }
     
+    async getSellerPercentHistory(emailSeller) {
+        const client = await pool.connect();
+        try {
+            const resUser = await client.query(`SELECT id FROM data.users WHERE email='${emailSeller.toLowerCase()}'`);
+            if (resUser.rows.length > 0) {
+                const query = `SELECT * FROM data.sellers_persent_history WHERE user_id=${resUser.rows[0].id} ORDER BY created_at DESC`;
+                const items = await client.query(query);
+                return {res: items.rows, error: null };
+            } else {
+                const res = [];
+                const error = {
+                    code: 500,
+                    message: 'Error get list of users'
+                };
+                return {
+                    res,
+                    error
+                };
+            }
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error (Products getAll):',
+                    { message: e.message }
+                );
+            }
+            const res = [];
+            const error = {
+                code: 500,
+                message: 'Error get list of users'
+            };
+            return {
+                res,
+                error
+            };
+        } finally {
+            client.release();
+        }
+    }
+    
     
     async updatePercent(data) {
         const client = await pool.connect();
         try {
-            console.log(data);
             let res = false;
             const resUser = await client.query(`SELECT id FROM data.users WHERE email='${data.email.toLowerCase()}'`);
             if (resUser.rows.length > 0) {
+                const sellerSettingsResPrev = await client.query(`SELECT * FROM data.seller_settings WHERE user_id=${resUser.rows[0].id};`);
                 const query = `INSERT INTO data.seller_settings(user_id, transaction_percent)
                                     VALUES (${resUser.rows[0].id}, '${data.transaction_percent}')
                                     ON CONFLICT ON CONSTRAINT seller_settings__pkey DO UPDATE SET
                                         transaction_percent = EXCLUDED.transaction_percent
                                     ;`;
+                let prevPersent = 0;
+                if (sellerSettingsResPrev.rows.length) {
+                    prevPersent = sellerSettingsResPrev.rows[0].transaction_percent;
+                }
+                const queryHistory = `INSERT INTO data.sellers_persent_history (user_id, percent_prev, percent_next) VALUES
+                    (${resUser.rows[0].id}, ${prevPersent}, ${data.transaction_percent})`;
                 await client.query(query);
+                await client.query(queryHistory);
                 res = true;
             }
             

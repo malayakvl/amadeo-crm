@@ -5,6 +5,7 @@ declare namespace User {
         subscription: any;
         clientSecret: string;
         paymentIntent: any;
+        showChangeSubscription: boolean;
     }
 
     interface User {

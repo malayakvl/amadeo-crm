@@ -138,6 +138,17 @@ class AuthController {
         }
 
         const { user, error } = await userModel.create(createUserData);
+        // create trial subscription
+        const userData = {
+            planId: 1,
+            type: 'trial',
+            user: {
+                email: email,
+                first_name: formData.first_name,
+                last_name: formData.last_name
+            }
+        }
+        await userModel.createExistUserSubscription(userData, user);
 
         if (error) {
             return res.status(error.code).json(error);

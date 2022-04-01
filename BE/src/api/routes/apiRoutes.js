@@ -124,6 +124,8 @@ apiRoutes.route('/buyers/fetch-filters').get(BuyerController.fetchFilters);
 apiRoutes.route('/sellers/fetch-items').get(SellerController.fetchItems);
 apiRoutes.route('/sellers/fetch-filters').get(SellerController.fetchFilters);
 apiRoutes.route('/sellers/update-percent').post(SellerController.updatePercent);
+apiRoutes.route('/sellers/history').get(SellerController.percentHistory);
+apiRoutes.route('/sellers/unsubscribe').post(SellerController.unsubscribe);
 
 apiRoutes.route('/users/find-seller').get(UserController.fetchSellers);
 apiRoutes.route('/users/find-buyer').get(UserController.fetchBuyers);

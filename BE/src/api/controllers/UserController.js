@@ -1,7 +1,10 @@
 import userModel from '../models/User.js';
-import countryModel from '../models/Country.js'
+import countryModel from '../models/Country.js';
+import paymentPlanModel from '../models/PaymentPlan.js';
 import multer from 'multer';
 import fs from 'fs';
+import {welcomeEmailHtml} from "../sender/templates.js";
+import {sendMail} from "../lib/sendMail.js";
 
 class UserController {
     async getProfile(req, res) {
@@ -197,7 +200,18 @@ class UserController {
     }
     
     async unsubscribe (req, res) {
-        return res.status(200).json({success: true});
+        if (req.user) {
+            // send email to support about unsubscribe
+            const settings = paymentPlanModel.fetchSettings();
+            const welcomeEmail = welcomeEmailHtml(req.user.email, '', '');
+            sendMail(
+                settings.support_email,
+                'Proshop',
+                welcomeEmail);
+            return res.status(200).json({success: true});
+        } else {
+            return res.status(403).json({error: 'Something wend wrong'});
+        }
     }
 }
 

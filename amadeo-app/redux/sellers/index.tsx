@@ -9,7 +9,10 @@ import {
     setSelectedSellerAction,
     showPersentFormAction,
     showPersentConfirmFormAction,
-    setSellerPercentAction
+    setSellerPercentAction,
+    showUnsubscribeConfirmFormAction,
+    showSellerPercentHistoryAction,
+    fetchHistoryAction
 } from './actions';
 
 const initialState: {
@@ -25,7 +28,10 @@ const initialState: {
     selectedSeller: string;
     showPersentForm: boolean;
     showPersentConfirmForm: boolean;
+    showUnsubscribeConfirmForm: boolean;
     sellerPercent: number | null;
+    showHistoryPersentForm: boolean;
+    itemsHistory: any;
 } = {
     isFetched: false,
     loading: false,
@@ -45,8 +51,11 @@ const initialState: {
     showLoginForm: false,
     showPersentForm: false,
     showPersentConfirmForm: false,
+    showUnsubscribeConfirmForm: false,
     selectedSeller: '',
-    sellerPercent: null
+    sellerPercent: null,
+    showHistoryPersentForm: false,
+    itemsHistory: []
 };
 
 const ACTION_HANDLERS: any = {
@@ -54,6 +63,22 @@ const ACTION_HANDLERS: any = {
         next: (
             state: State.Sellers,
             action: Type.ReduxAction<Pick<State.Sellers, 'count' | 'items'>>
+        ): State.Sellers => ({
+            ...state,
+            ...action.payload,
+            loading: false,
+            isFetched: true
+        }),
+        throw: (state: State.Sellers): State.Sellers => ({
+            ...state,
+            loading: false,
+            isFetched: false
+        })
+    },
+    [fetchHistoryAction]: {
+        next: (
+            state: State.Sellers,
+            action: Type.ReduxAction<Pick<State.Sellers, 'itemsHistory'>>
         ): State.Sellers => ({
             ...state,
             ...action.payload,
@@ -122,6 +147,12 @@ const ACTION_HANDLERS: any = {
             showPersentConfirmForm: action.payload
         })
     },
+    [showUnsubscribeConfirmFormAction]: {
+        next: (state: State.Sellers, action: Action<boolean>): State.Sellers => ({
+            ...state,
+            showUnsubscribeConfirmForm: action.payload
+        })
+    },
     [showDateSelectorAction]: {
         next: (state: State.Sellers, action: Action<boolean>): State.Sellers => ({
             ...state,
@@ -139,6 +170,12 @@ const ACTION_HANDLERS: any = {
             ...state,
             sellerPercent: action.payload
         })
+    },
+    [showSellerPercentHistoryAction]: {
+        next: (state: State.Sellers, action: Action<boolean>): State.Sellers => ({
+            ...state,
+            showHistoryPersentForm: action.payload
+        })
     }
 };
 
@@ -152,7 +189,9 @@ export {
     setSelectedSellerAction,
     showPersentFormAction,
     showPersentConfirmFormAction,
-    setSellerPercentAction
+    setSellerPercentAction,
+    showUnsubscribeConfirmFormAction,
+    showSellerPercentHistoryAction
 };
 
 // ------------------------------------

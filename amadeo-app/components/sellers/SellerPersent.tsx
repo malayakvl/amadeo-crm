@@ -25,8 +25,6 @@ const SellerPersent: React.FC<any> = () => {
         }
     }, [dispatch, showModal]);
 
-    console.log(selectedSeller);
-
     const validationSchema = Yup.object().shape({
         transaction_percent: Yup.number()
     });
