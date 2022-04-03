@@ -93,7 +93,6 @@ class Shipping {
             const query = `SELECT
                                 id, name, image, status, status__customer_disabled_shipping, countries, created_at
                             FROM data.get_shipping_by_user(${userId});`;
-            console.log(query);
             const res = await client.query(query);
 
             return res.rows
@@ -384,7 +383,6 @@ class Shipping {
             const res = await client.query(
                 'SELECT threshold FROM data.free_order_threshold WHERE user_id = $1', [userId]
             );
-            console.log();
 
             if (res.rows.length) {
                 return res.rows[0];

@@ -192,10 +192,8 @@ class Checkout {
                         headers: { 'Content-Type': 'application/json' }
                     })
                     .then(async (res) => {
-                        console.log(res.data);
                         return {redirectUrl: res.data.data.payment_url, error: null}
                     }).catch(error => {
-                        console.log(error.message)
                         return {redirectUrl: null, error: error.message}
                     });
                 return {redirectUrl: multiSafePayClientRes.redirectUrl, error: multiSafePayClientRes.error}
