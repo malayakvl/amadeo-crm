@@ -303,7 +303,6 @@ class User {
             const subscription = await stripe.subscriptions.retrieve(
                 subscriptionId
             );
-            console.log('SUBSCRIPTION', subscription);
             const paymentMethods = await stripe.customers.listPaymentMethods(
                 customerId,
                 {type: 'card'}
@@ -789,7 +788,6 @@ class User {
             const query = `SELECT *
                             FROM data.seller_settings WHERE user_id=${userId};`;
             const res = await client.query(query);
-            console.log('Hours', res.rows[0].order_timer);
             if (res.rows.length > 0) {
                 if (res.rows[0].order_timer) {
                     res.rows[0].order_timer = res.rows[0].order_timer.hours ? res.rows[0].order_timer.hours: res.rows[0].order_timer.days;

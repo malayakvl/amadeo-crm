@@ -486,7 +486,6 @@ class Order {
                     invoice_nr: res.rows[0].order_number,
                     invoice_date: moment(res.rows[0].created_at).format('DD/MM/YYYY'),
                 };
-                console.log(invoice);
                 createInvoice(invoice, `${dirUpload}/${res.rows[0].order_number}.pdf`);
     
                 await setTimeout(2000);
@@ -496,7 +495,6 @@ class Order {
                 const base64 = await pdf2base64(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${res.rows[0].order_number}.pdf`)
                     .then(
                         (response) => {
-                            console.log(response);
                             return response;
                         }
                     )

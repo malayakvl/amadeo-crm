@@ -35,7 +35,6 @@ class PaymentPlanController {
             products.data.forEach(product => {
                 product.price = prices.data.filter(price => price.product === product.id);
             });
-            console.log(prices);
             return res.status(200).json({ items: products.data });
         } catch (e) {
             return res.status(401).json({ items: null });
