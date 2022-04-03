@@ -198,6 +198,112 @@ export const unsubscribeAction: any = createAction(
                 });
         }
 );
+export const updateSubscriptionAction: any = createAction(
+    'user/UPDATE_SUBSCRIPTION_PLAN',
+    async (planId: string) =>
+        (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
+            const state = getState();
+            dispatch(showLoaderAction(true));
+            return axios
+                .post(
+                    `${baseUrl}/profile/update-subscription-plan`,
+                    { planId: planId },
+                    {
+                        headers: {
+                            ...authHeader(state.user.user.email)
+                        }
+                    }
+                )
+                .then(() => {
+                    dispatch(setSuccessToastAction('Response was sent successfully'));
+                    dispatch(showChangeSubscriptionFormAction(false));
+                    dispatch(fetchUserSubscriptionAction());
+                    dispatch(showLoaderAction(false));
+                })
+                .catch((e) => {
+                    dispatch(setErrorToastAction(e.response.data.error));
+                    dispatch(showLoaderAction(false));
+                });
+        }
+);
+export const addPyamentMethodActions: any = createAction(
+    'user/ADD_PAYMENT_METHOD',
+    async (data: any) =>
+        (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
+            const state = getState();
+            dispatch(showLoaderAction(true));
+            return axios
+                .post(`${baseUrl}/profile/add-payment-method`, data, {
+                    headers: {
+                        ...authHeader(state.user.user.email)
+                    }
+                })
+                .then(() => {
+                    dispatch(setSuccessToastAction('Response was sent successfully'));
+                    dispatch(fetchUserSubscriptionAction());
+                    dispatch(showLoaderAction(false));
+                })
+                .catch((e) => {
+                    dispatch(setErrorToastAction(e.response.data.error));
+                    dispatch(showLoaderAction(false));
+                });
+        }
+);
+export const stripeDefaultPaymentAction: any = createAction(
+    'user/CHANGE_DEFAULT_PAYMENT',
+    async (paymentId: any) =>
+        (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
+            const state = getState();
+            dispatch(showLoaderAction(true));
+            return axios
+                .post(
+                    `${baseUrl}/profile/default-payment-method`,
+                    { paymentId: paymentId },
+                    {
+                        headers: {
+                            ...authHeader(state.user.user.email)
+                        }
+                    }
+                )
+                .then(() => {
+                    dispatch(setSuccessToastAction('Response was sent successfully'));
+                    dispatch(fetchUserSubscriptionAction());
+                    dispatch(showLoaderAction(false));
+                })
+                .catch((e) => {
+                    dispatch(setErrorToastAction(e.response.data.error));
+                    dispatch(showLoaderAction(false));
+                });
+        }
+);
+export const stripeDeletetPaymentAction: any = createAction(
+    'user/DELETE_PAYMENT',
+    async (paymentId: any) =>
+        (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
+            const state = getState();
+            dispatch(showLoaderAction(true));
+            return axios
+                .post(
+                    `${baseUrl}/profile/delete-payment-method`,
+                    { paymentId: paymentId },
+                    {
+                        headers: {
+                            ...authHeader(state.user.user.email)
+                        }
+                    }
+                )
+                .then(() => {
+                    dispatch(setSuccessToastAction('Response was sent successfully'));
+                    dispatch(fetchUserSubscriptionAction());
+                    dispatch(showLoaderAction(false));
+                })
+                .catch((e) => {
+                    dispatch(setErrorToastAction(e.response.data.error));
+                    dispatch(showLoaderAction(false));
+                });
+        }
+);
+
 // http://localhost:3000/complete?payment_intent=pi_3KfQDVDBSh7ykoyW1UZ7i0GM&payment_intent_client_secret=pi_3KfQDVDBSh7ykoyW1UZ7i0GM_secret_O7RljPcB3glQMv9zlLgOV1mui&redirect_status=succeeded
 
 export const setUserAction: any = createAction('user/SET_USER');

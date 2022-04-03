@@ -368,5 +368,9 @@
   "Support_email": "Support_email",
   "View history": "View history",
   "Transaction Persent History": "Transaction Persent History",
-  "No history yet": "No history yet"
+  "No history yet": "No history yet",
+  "Exist Payment Method": "Exist Payment Method",
+  "Add Payment Method": "Add Payment Method",
+  "Add and setup default payment first": "Add and setup default payment first",
+  "No Payment info yet": "No Payment info yet"
 }
