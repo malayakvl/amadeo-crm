@@ -6,3 +6,4 @@ export { default as PaymentMethod } from './PaymentMethod';
 export { default as OrderSummary } from './OrderSummary';
 export { default as Radio } from './Radio';
 export { default as RadioCreditCard } from './RadioCreditCard';
+export { default as PaymentMethodPlan } from './PaymentMethodPlan';

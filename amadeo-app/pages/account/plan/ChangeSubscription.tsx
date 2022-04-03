@@ -1,53 +1,26 @@
-import React, { useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { toggleModalPopup } from '../../../lib/functions';
 import { useTranslations } from 'next-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-    clientSecretSelector,
     showChangeSubscriptionSelector,
     userSubscriptionSelector
 } from '../../../redux/user/selectors';
 import { showChangeSubscriptionFormAction } from '../../../redux/user';
-import { loadStripe, StripeElementsOptions } from '@stripe/stripe-js';
-import getConfig from 'next/config';
-import { Elements } from '@stripe/react-stripe-js';
-import { CheckoutForm } from '../../../components/checkout';
-const { publicRuntimeConfig } = getConfig();
-const stripeKey = publicRuntimeConfig.stripeKey;
-
-const stripePromise = loadStripe(stripeKey);
+import { updateSubscriptionAction } from '../../../redux/user/actions';
 
 const ChangeSubscription: React.FC<any> = () => {
     const t = useTranslations();
     const dispatch = useDispatch();
     const showModal = useSelector(showChangeSubscriptionSelector);
-    const stripeClientSecret = useSelector(clientSecretSelector);
-    const subscription = useSelector(userSubscriptionSelector);
-
-    const [clientSecret, setClientSecret] = useState('');
+    const subscriptionInfo = useSelector(userSubscriptionSelector);
+    const [planId, setPlanId] = useState<any>('');
 
     useEffect(() => {
         if (showModal) {
             toggleModalPopup('.modal-seller-change-subscription');
         }
     }, [dispatch, showModal]);
-
-    useEffect(() => {
-        if (subscription) {
-            setClientSecret(stripeClientSecret);
-        }
-    }, [subscription]);
-
-    const appearance: any = {
-        theme: 'stripe',
-        fontFamily: 'Montserrat',
-        borderRadius: '8px',
-        colorText: '#ccc'
-    };
-    const options: StripeElementsOptions = {
-        clientSecret,
-        appearance
-    };
 
     return (
         <div className="modal modal-seller-change-subscription opacity-0 pointer-events-none fixed w-full h-full top-0 left-0 flex items-center justify-center">
@@ -74,17 +47,48 @@ const ChangeSubscription: React.FC<any> = () => {
                     </div>
 
                     {/*Body*/}
-                    <div>
-                        <div className="flex">
-                            <div className="flex justify-center">
-                                {clientSecret !== '' && (
-                                    <Elements options={options} stripe={stripePromise}>
-                                        <CheckoutForm />
-                                    </Elements>
+                    {subscriptionInfo?.id && (
+                        <div>
+                            <div className="flex flex-col">
+                                {subscriptionInfo.defaultPayment && (
+                                    <>
+                                        <div className="flex justify-center">
+                                            <select
+                                                name="plan_id"
+                                                style={{ width: '250px' }}
+                                                value={planId}
+                                                className="form-control w-full"
+                                                onChange={(e) => {
+                                                    setPlanId(e.target.value);
+                                                }}>
+                                                <option>Select Plan</option>
+                                                {subscriptionInfo.dbPlans.map((plan: any) => (
+                                                    <Fragment key={plan.stripe_id}>
+                                                        {plan.stripe_id !==
+                                                            subscriptionInfo.plan.id && (
+                                                            <option value={plan.stripe_id}>
+                                                                {plan.name}
+                                                            </option>
+                                                        )}
+                                                    </Fragment>
+                                                ))}
+                                            </select>
+                                        </div>
+                                        <button
+                                            className="gradient-btn mt-4"
+                                            onClick={() =>
+                                                dispatch(updateSubscriptionAction(planId))
+                                            }>
+                                            {t('Save')}
+                                        </button>
+                                    </>
+                                )}
+                                {!subscriptionInfo?.defaultPayment && (
+                                    <p>{t('Add and setup default payment first')}</p>
                                 )}
                             </div>
                         </div>
-                    </div>
+                    )}
                 </div>
             </div>
         </div>

@@ -37,13 +37,6 @@ const CardForm = () => {
             console.log(result.error.message);
         }
     };
-    // const style = {
-    //     base: {
-    //         fontSize: '13px',
-    //         color: '#757575'
-    //     }
-    // };
-
     return (
         <form onSubmit={handleSubmitPayment}>
             <CardElement />

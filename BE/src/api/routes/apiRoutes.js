@@ -71,6 +71,10 @@ apiRoutes.use(async (req, res, next) => {
 });
 apiRoutes.post('/changePassword', UserController.changePassword);
 apiRoutes.get('/profile/subscription', UserController.getSubscription);
+apiRoutes.post('/profile/delete-payment-method', UserController.deletePaymentMethod);
+apiRoutes.post('/profile/default-payment-method', UserController.defaultPaymentSetup);
+apiRoutes.post('/profile/add-payment-method', UserController.addPaymentMethod);
+apiRoutes.post('/profile/update-subscription-plan', UserController.updateSubscriptionPlan);
 apiRoutes.get('/profile/unsubscription', UserController.unsubscribe);
 apiRoutes.route('/profile')
     .post(UserController.updateProfile)

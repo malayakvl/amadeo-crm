@@ -155,6 +155,37 @@ class UserController {
         }
     }
     
+    async defaultPaymentSetup(req, res) {
+        if (req.user) {
+            const data = await userModel.setupDefaultPayment(req.user, req.body.paymentId);
+            if (data.subscription) {
+                return res.status(200).json({
+                    subscription: data.subscription,
+                });
+            } else {
+                return res.status(402).json('Something wend wrong');
+            }
+        } else {
+            return res.status(402).json('Something wend wrong');
+        }
+    }
+    
+    async deletePaymentMethod(req, res) {
+        if (req.user) {
+            const data = await userModel.deletePaymentMethod(req.user, req.body.paymentId);
+            if (data.subscription) {
+                return res.status(200).json({
+                    subscription: data.subscription,
+                });
+            } else {
+                return res.status(402).json('Something wend wrong');
+            }
+        } else {
+            return res.status(402).json('Something wend wrong');
+        }
+    }
+    
+    
     async getSubscription(req, res) {
         if (req.user) {
             const data = await userModel.getSubscriptionInfo(req.user.subscription_id, req.user.customer_id);
@@ -164,6 +195,42 @@ class UserController {
                 });
             } else {
                 return res.status(402).json('Something wend wrong');
+            }
+        } else {
+            return res.status(402).json('Something wend wrong');
+        }
+    }
+    
+    async addPaymentMethod(req, res) {
+        if (req.user) {
+            const data = await userModel.addPaymentMethod(req.user, req.body);
+            if (data.success) {
+                return res.status(200).json({
+                    success: data.success
+                });
+            } else {
+                return res.status(402).json({
+                    success: data.success,
+                    error: data.error
+                });
+            }
+        } else {
+            return res.status(402).json('Something wend wrong');
+        }
+    }
+    
+    async updateSubscriptionPlan (req, res) {
+        if (req.user) {
+            const data = await userModel.updateSubscriptionPlan(req.user, req.body.planId);
+            if (data.success) {
+                return res.status(200).json({
+                    success: data.success
+                });
+            } else {
+                return res.status(402).json({
+                    success: data.success,
+                    error: data.error
+                });
             }
         } else {
             return res.status(402).json('Something wend wrong');

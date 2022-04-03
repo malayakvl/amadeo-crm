@@ -254,20 +254,72 @@ class User {
         }
     }
     
+    async deletePaymentMethod(user, paymentId) {
+        try {
+            await stripe.paymentMethods.detach(
+                paymentId
+            );
+            return this.getSubscriptionInfo(user.subscription_id, user.customer_id);
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error:',
+                    { message: e.message }
+                );
+            }
+            return { user: null, error: { code: 404, message: 'User Not found' } };
+        }
+    }
+    
+    
+    async setupDefaultPayment(user, paymentId) {
+        try {
+            const customer = await stripe.customers.update(
+                user.customer_id,
+                {
+                    invoice_settings: {
+                        default_payment_method: paymentId
+                    }
+                }
+            );
+            return this.getSubscriptionInfo(user.subscription_id, user.customer_id);
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error:',
+                    { message: e.message }
+                );
+            }
+            return { user: null, error: { code: 404, message: 'User Not found' } };
+        }
+    }
+    
     async getSubscriptionInfo(subscriptionId, customerId) {
         const client = await pool.connect();
         try {
+            const dbPlansRes = await client.query('SELECT * FROM data.subscription_plans WHERE stripe_id IS NOT NULL');
             const subscription = await stripe.subscriptions.retrieve(
                 subscriptionId
             );
-            // const cards = await stripe.customers.listSources(
-            //     customerId,
-            //     {object: 'card', limit: 10}
-            // );
-            const resSubscription = await client.query(`SELECT name FROM data.subscription_plans
-                    LEFT JOIN data.subscriptions ON data.subscriptions.plan_id=data.subscription_plans.id
-                    WHERE subscription_id='${subscriptionId}'`);
+            console.log('SUBSCRIPTION', subscription);
+            const paymentMethods = await stripe.customers.listPaymentMethods(
+                customerId,
+                {type: 'card'}
+            );
+            const customer = await stripe.customers.retrieve(
+                customerId
+            );
+            // const resSubscription = await client.query(`SELECT name FROM data.subscription_plans
+            //         LEFT JOIN data.subscriptions ON data.subscriptions.plan_id=data.subscription_plans.id
+            //         WHERE subscription_id='${subscriptionId}'`);
+            const resSubscription = await client.query(`SELECT * FROM data.subscription_plans WHERE stripe_id='${subscription.plan.id}'`);
             subscription.DBName = resSubscription.rows[0].name;
+            subscription.paymentMethods = paymentMethods.data;
+            subscription.defaultPayment = customer.invoice_settings.default_payment_method;
+            subscription.defaultPlanId = subscription.items.data[0].plan.id;
+            subscription.dbPlans = dbPlansRes.rows;
             return { subscription: subscription };
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
@@ -774,6 +826,64 @@ class User {
         }
     }
     
+    async addPaymentMethod(user, data) {
+        try {
+            const expPeriod = data.card_expire_date.split('/');
+            await stripe.customers.listPaymentMethods(
+                user.customer_id,
+                {type: 'card'}
+            );
+            const paymentMethod = await stripe.paymentMethods.create({
+                type: 'card',
+                card: {
+                    number: data.card_number,
+                    exp_month: expPeriod[0],
+                    exp_year: expPeriod[1],
+                    cvc: data.card_ccv,
+                },
+            });
+            await stripe.paymentMethods.attach(
+                paymentMethod.id,
+                {customer: user.customer_id}
+            );
+            return { success: true, error: null };
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Stripe Add Payment Method Error:',
+                    {message: e.message}
+                );
+            }
+            return { success: false, error: { code: 404, message: 'Cannot add payment method to customer' } };
+        }
+    
+    }
+    
+    async updateSubscriptionPlan(user, planId) {
+        try {
+            // const paymentMethods = await  stripe.paymentMethods.list({ customer: user.customer_id, type: 'card' });
+            const subscription = await stripe.subscriptions.retrieve(user.subscription_id);
+            await stripe.subscriptions.update(user.subscription_id, {
+                cancel_at_period_end: false,
+                proration_behavior: 'create_prorations',
+                items: [{
+                    id: subscription.items.data[0].id,
+                    price: planId,
+                }]
+            });
+            return { success: true, error: null };
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Stripe Add Payment Method Error:',
+                    {message: e.message}
+                );
+            }
+            return { success: false, error: { code: 404, message: 'Cannot add payment method to customer' } };
+        }
+    }
     
     async unsubscribe(email) {
         const client = await pool.connect();

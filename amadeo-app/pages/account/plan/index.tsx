@@ -4,30 +4,25 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { userSelector, userSubscriptionSelector } from '../../../redux/user/selectors';
 import { fetchUserSubscriptionAction, showChangeSubscriptionFormAction } from '../../../redux/user';
-import { unsubscribeAction } from '../../../redux/user/actions';
+import {
+    unsubscribeAction,
+    addPyamentMethodActions,
+    stripeDeletetPaymentAction
+} from '../../../redux/user/actions';
 import moment from 'moment';
-import getConfig from 'next/config';
-const { publicRuntimeConfig } = getConfig();
-const stripeKey = publicRuntimeConfig.stripeKey;
-import { Elements } from '@stripe/react-stripe-js';
-import { loadStripe, StripeElementsOptions } from '@stripe/stripe-js';
-import { CardForm } from '../../../components/checkout';
 import { useTranslations } from 'next-intl';
 import ChangeSubscription from './ChangeSubscription';
-
-const stripePromise = loadStripe(stripeKey);
+import { PaymentMethodPlan } from '../../../components/checkout';
+import { fetchStripeProductAction } from '../../../redux/paymentPlans';
+import { stripeDefaultPaymentAction } from '../../../redux/user/actions';
+import { Form, Formik } from 'formik';
+import * as Yup from 'yup';
+import CardValidator from 'card-validator';
 
 export default function Index({ session }: { session: any }) {
     if (!session) return <></>;
     const dispatch = useDispatch();
     const t = useTranslations();
-
-    const appearance: any = {
-        theme: 'stripe'
-    };
-    const options: StripeElementsOptions = {
-        appearance
-    };
 
     const user = useSelector(userSelector);
     const subscriptionInfo = useSelector(userSubscriptionSelector);
@@ -37,6 +32,7 @@ export default function Index({ session }: { session: any }) {
         if (user?.email) {
             dispatch(fetchUserSubscriptionAction());
         }
+        dispatch(fetchStripeProductAction());
     }, [user?.email]);
 
     const preparePeriod = () => {
@@ -74,6 +70,46 @@ export default function Index({ session }: { session: any }) {
         }
     };
 
+    const validationSchema = Yup.object({
+        card_number: Yup.string()
+            .strict(true)
+            .when('paymentMethod', {
+                is: (val: string) => val === 'card',
+                then: Yup.string()
+                    .test(
+                        'test-card-number',
+                        t('Credit card number is invalid'),
+                        (value) => CardValidator.number(value).isValid
+                    ) // return true false based on validation
+                    .required(t('Required field'))
+                // otherwise: Yup.required(),
+            }),
+        card_expire_date: Yup.string()
+            .strict(true)
+            .when('paymentMethod', {
+                is: (val: string) => val === 'card',
+                then: Yup.string()
+                    .test(
+                        'test-card-exp',
+                        t('Credit card expiration date is invalid'),
+                        (value) => CardValidator.expirationDate(value).isValid
+                    )
+                    .required(t('Required field'))
+            }),
+        card_ccv: Yup.string()
+            .strict(true)
+            .when('paymentMethod', {
+                is: (val: string) => val === 'card',
+                then: Yup.string()
+                    .test(
+                        'test-card-ccv',
+                        t('Credit card CCV is invalid'),
+                        (value) => CardValidator.cvv(value).isValid
+                    )
+                    .required(t('Required field'))
+            })
+    });
+
     return (
         <>
             <Head>
@@ -87,13 +123,101 @@ export default function Index({ session }: { session: any }) {
                     <div className="clear-both" />
                 </div>
             </div>
-            <div className="mt-10 block-white-8 white-shadow-big pb-[50px]">
-                <div className={`w-1/5`}>
-                    <Elements options={options} stripe={stripePromise}>
-                        <CardForm />
-                    </Elements>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="white-shadow-medium bg-white rounded-lg p-3 lg:p-6 mt-10">
+                    <div className="flex flex-wrap justify-between">
+                        <div className="flex-auto lg:flex-1">
+                            <div className="text-2xl font-bold text-gray-350 mb-6">
+                                {t('Exist Payment Method')}
+                            </div>
+                            {subscriptionInfo && (
+                                <table className="w-full float-table">
+                                    <tbody>
+                                        {subscriptionInfo.paymentMethods.map((method: any) => (
+                                            <tr key={method.id}>
+                                                <td>
+                                                    ************{method.card.last4}{' '}
+                                                    {method.card.brand}
+                                                </td>
+                                                <td>
+                                                    {method.card.exp_month}/{method.card.exp_year}
+                                                </td>
+                                                <td>
+                                                    {method.id !==
+                                                        subscriptionInfo.defaultPayment && (
+                                                        <span
+                                                            className="cursor-pointer"
+                                                            role="presentation"
+                                                            onClick={() =>
+                                                                dispatch(
+                                                                    stripeDefaultPaymentAction(
+                                                                        method.id
+                                                                    )
+                                                                )
+                                                            }>
+                                                            Setup Default
+                                                        </span>
+                                                    )}
+                                                    {method.id ===
+                                                        subscriptionInfo.defaultPayment && (
+                                                        <span>Default</span>
+                                                    )}
+                                                </td>
+                                                <td>
+                                                    {method.id !==
+                                                        subscriptionInfo.defaultPayment && (
+                                                        <span
+                                                            className="cursor-pointer"
+                                                            role="presentation"
+                                                            onClick={() =>
+                                                                dispatch(
+                                                                    stripeDeletetPaymentAction(
+                                                                        method.id
+                                                                    )
+                                                                )
+                                                            }>
+                                                            Delete
+                                                        </span>
+                                                    )}
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            )}
+                        </div>
+                    </div>
                 </div>
-                {subscriptionInfo && (
+                <div className="white-shadow-medium bg-white rounded-lg p-3 lg:p-6 mt-10 ">
+                    <Formik
+                        // enableReinitialize
+                        initialValues={{
+                            card_ccv: '',
+                            card_expire_date: '',
+                            card_number: ''
+                        }}
+                        validationSchema={validationSchema}
+                        onSubmit={(values, actions) => {
+                            // dispatch(submitCheckoutAction(values, orderNumber));
+                            dispatch(addPyamentMethodActions(values));
+                            actions.setSubmitting(false);
+                        }}>
+                        <Form>
+                            <div className="flex flex-wrap justify-between">
+                                <div className="flex-auto lg:flex-1">
+                                    <div className="text-2xl font-bold text-gray-350 mb-6">
+                                        {t('Add Payment Method')}
+                                    </div>
+                                    <PaymentMethodPlan />
+                                </div>
+                            </div>
+                            <button className="gradient-btn mt-4">{t('Add Card')}</button>
+                        </Form>
+                    </Formik>
+                </div>
+            </div>
+            <div className="mt-10 block-white-8 white-shadow-big pb-[50px]">
+                {subscriptionInfo ? (
                     <div className="overflow-x-scroll">
                         <table className="w-full float-table">
                             <thead>
@@ -143,6 +267,8 @@ export default function Index({ session }: { session: any }) {
                             </tbody>
                         </table>
                     </div>
+                ) : (
+                    <p>{t('No Payment info yet')}</p>
                 )}
             </div>
             <ChangeSubscription />
