@@ -5,11 +5,12 @@ import Image from 'next/image';
 import React, { Fragment, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { userSelector } from '../../redux/user/selectors';
-import { session, useSession } from 'next-auth/client';
+import { session } from 'next-auth/client';
 import { showLoaderAction } from '../../redux/layouts/actions';
 import { fetchFormAction } from '../../redux/paymentPlans';
 import { itemsSelector } from '../../redux/paymentPlans/selectors';
 import { formatCurrency, parseTranslation } from '../../lib/functions';
+import FullLayout from '../../components/layout/FullLayout';
 
 type PriceProps = {
     planId: number;
@@ -41,7 +42,7 @@ const Price = ({
     return (
         <div
             className={`lg:w-56 p-2 lg:p-4 flex flex-col border-2 lg:border-b-0 ${
-                selected ? 'rounded-xl lg:rounded-b-none border-orange-450' : 'border-white'
+                selected ? 'rounded-xl lg:rounded-b-none border-orange-450' : 'border-transparent'
             }`}>
             <div className="w-full h-32 lg:h-64 relative mx-auto">
                 <Image src={imageSrc} layout="fill" className="object-contain object-center" />
@@ -125,7 +126,7 @@ export default function Pricing({ locale }: { locale: any }) {
     }) => (
         <div
             className={`min-w-[4rem] lg:min-w-[14rem] lg:w-56 
-            ${selected ? 'lg:border-l-2 lg:border-r-2 border-orange-450' : 'border-white'}
+            ${selected ? 'lg:border-l-2 lg:border-r-2 border-orange-450' : 'border-transparent'}
             ${className || ''}`}>
             {!disabled ? (
                 <div className="w-4 h-4 lg:w-6 lg:h-6 relative mx-auto">
@@ -258,7 +259,7 @@ export default function Pricing({ locale }: { locale: any }) {
                                 className={`min-w-[4rem] sm:min-w-[14rem] sm:w-56 relative p-3 sm:hidden ${
                                     selected === 'basic'
                                         ? 'sm:border-l-2 sm:border-r-2 border-orange-450'
-                                        : 'border-white'
+                                        : 'border-transparent'
                                 }`}>
                                 <Image
                                     src={'/images/box.png'}
@@ -273,7 +274,7 @@ export default function Pricing({ locale }: { locale: any }) {
                                 className={`min-w-[4rem] sm:min-w-[14rem] sm:w-56 p-3 relative sm:hidden ${
                                     selected === 'business'
                                         ? 'sm:border-l-2 sm:border-r-2 border-orange-450'
-                                        : 'border-white'
+                                        : 'border-transparent'
                                 }`}>
                                 <Image
                                     src={'/images/store.png'}
@@ -288,7 +289,7 @@ export default function Pricing({ locale }: { locale: any }) {
                                 className={`min-w-[4rem] sm:min-w-[14rem] sm:w-56 p-3 relative sm:hidden ${
                                     selected === 'platinum'
                                         ? 'sm:border-l-2 sm:border-r-2 border-orange-450'
-                                        : 'border-white'
+                                        : 'border-transparent'
                                 }`}>
                                 <Image
                                     src={'/images/briefcase.png'}
@@ -325,7 +326,7 @@ export default function Pricing({ locale }: { locale: any }) {
                         className={`min-w-[4rem] lg:min-w-[14rem] lg:w-56 w-3 ${
                             selected === 'basic'
                                 ? 'lg:border-2 lg:border-t-0 lg:rounded-b-xl border-orange-450'
-                                : 'border-white'
+                                : 'border-transparent'
                         }`}
                     />
 
@@ -333,7 +334,7 @@ export default function Pricing({ locale }: { locale: any }) {
                         className={`min-w-[4rem] lg:min-w-[14rem] lg:w-56 w-3 ${
                             selected === 'business'
                                 ? 'lg:border-2 lg:border-t-0 lg:rounded-b-xl border-orange-450'
-                                : 'border-white'
+                                : 'border-transparent'
                         }`}
                     />
 
@@ -341,7 +342,7 @@ export default function Pricing({ locale }: { locale: any }) {
                         className={`min-w-[4rem] lg:min-w-[14rem] lg:w-56 w-3 ${
                             selected === 'platinum'
                                 ? 'lg:border-2 lg:border-t-0 lg:rounded-b-xl border-orange-450'
-                                : 'border-white'
+                                : 'border-transparent'
                         }`}
                     />
                 </div>
@@ -496,10 +497,12 @@ export async function getServerSideProps(context: any) {
     };
 }
 
-Pricing.Layout = ({ children }: { children: any }) => {
-    const user = useSelector(userSelector);
-    const [session] = useSession();
-    console.log('USER SESSION', session);
-    console.log('USER ', user);
-    return children;
-};
+Pricing.Layout = FullLayout;
+
+// Pricing.Layout = ({ children }: { children: any }) => {
+//     const user = useSelector(userSelector);
+//     const [session] = useSession();
+//     console.log('USER SESSION', session);
+//     console.log('USER ', user);
+//     return children;
+// };

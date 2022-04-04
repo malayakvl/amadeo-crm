@@ -37,9 +37,7 @@ const Header: React.FC = () => {
                     />
                 </svg>
 
-                <div
-                    className="hidden md:flex font-bold text-sm flex items-center justify-end"
-                    id="menu">
+                <div className="md:flex font-bold text-sm flex items-center justify-end" id="menu">
                     <Link href={'/'}>
                         <a className="hover:text-purple-400">Features</a>
                     </Link>
