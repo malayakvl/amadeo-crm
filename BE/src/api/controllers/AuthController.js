@@ -176,7 +176,7 @@ class AuthController {
 
         invitationModel.deactivate(invitation.id)
 
-        const mail = registerEmail(user.email, req.query.locale);
+        const mail = await registerEmail(user.email, req.query.locale);
 
         sendMail(
             user.email,
@@ -215,7 +215,7 @@ class AuthController {
 
         let link = `${process.env.APPLICATION_BASE_URL}/auth/registration?hash=${invitation.hash}`;
 
-        const mail = welcomeEmail(data.email, link, req.query.locale);
+        const mail = await welcomeEmail(data.email, link, req.query.locale);
 
         sendMail(
             data.email,
