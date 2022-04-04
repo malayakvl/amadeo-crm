@@ -51,7 +51,7 @@
   }
 }
 
-.btn-export {
+.btn-export, .btn-add-product {
   @apply rounded-lg text-white text-base font-bold bg-green-250 p-2.5 mb-4 md:mb-2;
   box-shadow: 0 10px 20px rgba(0, 200, 104, 0.25);
 
@@ -68,6 +68,14 @@
       position: absolute;
       left: 0;
     }
+  }
+}
+
+.btn-add-product span {
+  @apply pl-0;
+
+  &:before  {
+    background: none;
   }
 }
 

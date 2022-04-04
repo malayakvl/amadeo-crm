@@ -128,6 +128,17 @@ const SidebarFull: React.FC = () => {
                     </a>
                 </Link>
             </li>
+            <li
+                role="presentation"
+                className={currRoute === 'support' ? 'active' : ''}
+                onClick={() => closeMenu()}>
+                <Link href={'/guides'}>
+                    <a>
+                        <i className="support" />
+                        <span className="s-caption">{t('Guides')}</span>
+                    </a>
+                </Link>
+            </li>
         </Fragment>
     );
 };
