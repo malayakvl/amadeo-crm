@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AddProduct, ListProducts, EditProduct, SyncProduct } from '../../components/inventory';
 import { fetchAdditionalAction, importProductAction } from '../../redux/products/actions';
 import { activeTabSelectorFactory } from '../../redux/layouts/selectors';
-import { setSwitchHeaderAction } from '../../redux/layouts/actions';
+import { setSwitchHeaderAction, setActivePageAction } from '../../redux/layouts/actions';
 
 export default function Index({ session, locale }: { session: any; locale: string }) {
     if (!session) return <></>;
@@ -14,6 +14,7 @@ export default function Index({ session, locale }: { session: any; locale: strin
     const dispatch = useDispatch();
     const activeTabLayout = useSelector(activeTabSelectorFactory('inventory'));
     const hiddenFileInput = React.useRef(null);
+
     useEffect(() => {
         dispatch(fetchAdditionalAction());
         dispatch(setSwitchHeaderAction(null));
@@ -30,6 +31,15 @@ export default function Index({ session, locale }: { session: any; locale: strin
             formData.append('file', fileUploaded);
         }
         dispatch(importProductAction(formData));
+    };
+
+    const handleAddProduct = () => {
+        dispatch(
+            setActivePageAction({
+                type: 'inventory',
+                modifier: 'add'
+            })
+        );
     };
 
     return (
@@ -55,6 +65,11 @@ export default function Index({ session, locale }: { session: any; locale: strin
                         <span className="block text-gray-350 text-base font-bold pb-2">
                             {t('Read rules and download csv template here')}
                         </span>
+                    </div>
+                    <div className="md:float-right md:text-right">
+                        <button className="mt-4 mb:0 btn-add-product" onClick={handleAddProduct}>
+                            <span>{t('Add Product')}</span>
+                        </button>
                     </div>
                     <div className="clear-both" />
                 </div>
