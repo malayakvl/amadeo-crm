@@ -270,7 +270,7 @@ class UserController {
         if (req.user) {
             // send email to support about unsubscribe
             const settings = paymentPlanModel.fetchSettings();
-            const mail = unsubscriberFromEmail(req.user.email, "User want unsubscribe from plan", 'fr');
+            const mail = await unsubscriberFromEmail(req.user.email, "User want unsubscribe from plan", 'fr');
     
             sendMail(
                 settings.support_email,
