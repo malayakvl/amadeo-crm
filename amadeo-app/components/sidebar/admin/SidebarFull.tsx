@@ -4,15 +4,19 @@ import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/router';
 import { sidebarCloseAction } from '../../../redux/layouts';
 import { useDispatch } from 'react-redux';
+import { useWindowSize } from '../../../hooks';
 
 const SidebarFull: React.FC = () => {
     const t = useTranslations();
     const dispatch = useDispatch();
     const router = useRouter();
     const currRoute = router.route.substring(1);
+    const { isMobile } = useWindowSize();
 
     const closeMenu = () => {
-        dispatch(sidebarCloseAction());
+        if (isMobile) {
+            dispatch(sidebarCloseAction());
+        }
     };
 
     return (

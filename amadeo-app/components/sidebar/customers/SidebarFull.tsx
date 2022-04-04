@@ -5,6 +5,7 @@ import { itemsCountSelector } from '../../../redux/waitingList/selectors';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 import { sidebarCloseAction } from '../../../redux/layouts';
+import { useWindowSize } from '../../../hooks';
 
 const SidebarFull: React.FC = () => {
     const t = useTranslations();
@@ -12,9 +13,12 @@ const SidebarFull: React.FC = () => {
     const countWaiting = useSelector(itemsCountSelector);
     const router = useRouter();
     const currRoute = router.route.substring(1);
+    const { isMobile } = useWindowSize();
 
     const closeMenu = () => {
-        dispatch(sidebarCloseAction());
+        if (isMobile) {
+            dispatch(sidebarCloseAction());
+        }
     };
 
     return (

@@ -186,7 +186,6 @@ class Checkout {
                     }
                 }
                 // redirect url after payment
-                // http://localhost:3000/payment?hash=001449ec4c910310c9367dd69354d24165e1d78436940ce036&type=redirect&transactionid=amadeo-order-id-1182
                 const multiSafePayClientRes = await axios
                     .post(`https://testapi.multisafepay.com/v1/json/orders?api_key=${sellerSettingsRes.rows[0].multisafe_api_key}`, dataOrder, {
                         headers: { 'Content-Type': 'application/json' }

@@ -28,6 +28,7 @@ interface Props {
     sendDeleteRequest?: () => Promise<void>;
     sendCopyRequest?: () => Promise<void>;
     switcherRequest?: () => Promise<void>;
+    sendStatusRequest?: (status: string) => Promise<void>;
     hidePaginationBar?: boolean;
 }
 
@@ -40,6 +41,7 @@ const DataTable: React.FC<Props> = ({
     switcherRequest,
     sendDeleteRequest,
     sendCopyRequest,
+    sendStatusRequest,
     switcherOnClick,
     hideBulk
 }) => {
@@ -57,9 +59,13 @@ const DataTable: React.FC<Props> = ({
     // const hideSearch: boolean = [INVESTMENT].includes(paginationType);
     // const hideSearch = false;
     const headers = TableHeaders[paginationType];
+    let dropdownOptions = ['copy', 'delete'];
 
     if (paginationType === PaginationType.SHIPPING && user.role_id === 3) {
         delete headers[5];
+    }
+    if (paginationType === PaginationType.ORDERS) {
+        dropdownOptions = ['shipped', 'cancel'];
     }
 
     const dispatch = useDispatch();
@@ -114,8 +120,12 @@ const DataTable: React.FC<Props> = ({
         (action: any): void => {
             if (action === 'delete' && sendDeleteRequest) {
                 sendDeleteRequest();
-            } else if (action === 'copy' && sendCopyRequest) {
+            }
+            if (action === 'copy' && sendCopyRequest) {
                 sendCopyRequest();
+            }
+            if ((action === 'shipped' || action === 'cancel') && sendStatusRequest) {
+                sendStatusRequest(action);
             }
             // setSelectBulkAction(null);
         },
@@ -217,7 +227,7 @@ const DataTable: React.FC<Props> = ({
                                         dispatch(setErrorToastAction('Select at least one item'));
                                     }
                                 }}
-                                options={['copy', 'delete']}
+                                options={dropdownOptions}
                             />
                         </th>
                     )}

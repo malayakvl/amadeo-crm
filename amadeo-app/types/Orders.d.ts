@@ -12,6 +12,7 @@ declare namespace Orders {
         fileName: string;
         base64Data: string;
         tagSellersSuggestions: any[];
+        showCancelPopup: boolean;
     }
 
     interface DataItem {

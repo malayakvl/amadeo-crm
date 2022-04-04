@@ -1,4 +1,4 @@
-import React, { Fragment, useCallback, useState } from 'react';
+import React, { Fragment, useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -8,19 +8,24 @@ import {
 } from '../../redux/orders/selectors';
 import { PaginationType } from '../../constants';
 import { DataTable } from '../_common';
-import { fetchItemsAction, showDateSelectorAction } from '../../redux/orders';
+import {
+    fetchItemsAction,
+    showCancelConfirmationModalAction,
+    showDateSelectorAction
+} from '../../redux/orders';
 import moment from 'moment';
 import Image from 'next/image';
 import { baseApiUrl } from '../../constants';
-import { checkIdsAction, setPaginationAction } from '../../redux/layouts';
+import { checkIdsAction, initIdsAction, setPaginationAction } from '../../redux/layouts';
 import { useTranslations } from 'next-intl';
-import { Filters, FilterValues, ListItems } from './index';
+import { Filters, FilterValues, ListItems, CancelConfirmation } from './index';
 import { checkedIdsSelector, paginationSelectorFactory } from '../../redux/layouts/selectors';
 import { DateRangePicker } from 'react-date-range';
 import 'react-date-range/dist/styles.css'; // main css file
 import 'react-date-range/dist/theme/default.css';
 import { formatCurrency, parseTranslation } from '../../lib/functions';
 import { userSelector } from '../../redux/user/selectors';
+import { bulkShippingAction } from '../../redux/orders/actions';
 
 const userProfileImg =
     'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80';
@@ -54,6 +59,26 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
     const sendRequest = useCallback(() => {
         return dispatch(fetchItemsAction());
     }, [dispatch]);
+
+    useEffect(() => {
+        const setupChecked: any = [];
+        items.forEach((item: any) => {
+            setupChecked.push({ id: item.id, checked: false });
+        });
+        dispatch(initIdsAction(setupChecked));
+    }, [items]);
+
+    const sendStatusRequest = useCallback(
+        (status: string) => {
+            if (status === 'shipped') {
+                return dispatch(bulkShippingAction());
+            } else {
+                return dispatch(showCancelConfirmationModalAction(true));
+                // return dispatch(bulkCancelAction())
+            }
+        },
+        [dispatch]
+    );
 
     const handleShowMore = (orderId: number) => {
         const nextCheckedItems = { ...showMoreConfigs };
@@ -133,6 +158,7 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
             </div>
             <DataTable
                 paginationType={PaginationType.ORDERS}
+                sendStatusRequest={sendStatusRequest}
                 totalAmount={count}
                 sendRequest={sendRequest}>
                 {items?.map((item: any) => (
@@ -237,6 +263,7 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                     </Fragment>
                 ))}
             </DataTable>
+            <CancelConfirmation />
         </div>
     );
 };

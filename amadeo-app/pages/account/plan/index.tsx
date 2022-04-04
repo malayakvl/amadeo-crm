@@ -223,10 +223,10 @@ export default function Index({ session }: { session: any }) {
                             <thead>
                                 <tr>
                                     <th style={{ textAlign: 'left' }}>{t('Name')}</th>
-                                    <th>Status</th>
-                                    <th>Created</th>
-                                    <th>Period</th>
-                                    <th>Days left</th>
+                                    <th>{t('Status')}</th>
+                                    <th>{t('Created')}</th>
+                                    <th>{t('Period')}</th>
+                                    <th>{t('Days left')}</th>
                                     <th>&nbsp;</th>
                                 </tr>
                             </thead>
@@ -245,7 +245,7 @@ export default function Index({ session }: { session: any }) {
                                     <td style={{ textAlign: 'center' }}>{prepareDayLeft()}</td>
                                     <td>
                                         <span
-                                            className="cursor-pointer"
+                                            className="cursor-pointer gradient-btn-small"
                                             role="presentation"
                                             onClick={() =>
                                                 dispatch(showChangeSubscriptionFormAction(true))

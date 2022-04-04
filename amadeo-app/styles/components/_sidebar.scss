@@ -95,7 +95,9 @@
       .support {
         background-image: url("../../public/images/icon-help.svg");
       }
-
+      .payment-plans {
+        background-image: url("../../public/images/icon-plan-sidebar.svg");
+      }
       .separator {
         height: 1px;
         background: #99ABCE;
@@ -153,6 +155,38 @@
     font-size: 9px;
     @apply block uppercase font-bold;
   }
+}
+
+.sidebar-close-desctop {
+  background-image: url("../../public/images/close.svg");
+  width: 24px;
+  height: 24px;
+  right: 10px;
+  top:10px;
+  @apply hidden md:absolute md:block cursor-pointer;
+}
+
+.sb-minimize {
+  @apply max-w-[40px] min-w-[60px];
+
+  .brand {
+    @apply hidden;
+  }
+
+  ul {
+    li {
+      @apply pl-2.5 pr-2.5;
+
+      .s-caption {
+        @apply hidden;
+      }
+    }
+  }
+
+  .copyright {
+    @apply hidden;
+  }
+
 }
 
 .mobile-open {

@@ -57,6 +57,29 @@ class OrderController {
         // }
         return res.status(200).json({success: true, message: 'creating orders'});
     }
+    
+    async setupShipped (req, res) {
+        if (!req.user) {
+            return res.status(401).json('Access deny');
+        } else {
+            const ids = [];
+            JSON.parse(req.body.data).filter(id => id.checked).forEach(data => ids.push(data.id));
+            const data = await orderModel.setupShippingStatus(ids, req.user);
+            return res.status(200).json({ data: data.success });
+        }
+    }
+    
+    async bulkCancel (req, res) {
+        if (!req.user) {
+            return res.status(401).json('Access deny');
+        } else {
+            const ids = [];
+            JSON.parse(req.body.data).filter(id => id.checked).forEach(data => ids.push(data.id));
+            const data = await orderModel.bulkCancel(ids, req.user);
+            return res.status(200).json({ data: data.success });
+        }
+    }
+    
 }
 
 export default new OrderController();

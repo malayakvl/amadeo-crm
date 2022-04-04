@@ -2,6 +2,11 @@
   box-shadow: 0 10px 20px rgba(247, 109, 109, 0.2), inset 0px -4px 0px rgba(0, 0, 0, 0.1);
   @apply basic-btn red-yellow-gradient font-bold text-sm text-white rounded-lg px-4 py-2.5
 }
+.gradient-btn-small {
+  box-shadow: 0 10px 20px rgba(247, 109, 109, 0.2), inset 0px -4px 0px rgba(0, 0, 0, 0.1);
+  @apply basic-btn red-yellow-gradient font-bold text-sm text-white rounded-lg px-2 py-1.5
+}
+
 
 .disabled-btn {
   @apply basic-btn border border-gray-300 text-gray-300 py-2
