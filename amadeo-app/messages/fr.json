@@ -312,7 +312,7 @@
   "support_descr": "Support section allows merchants contact to Proshop admin in case of issue or questions",
   "settings_descr": "Settings section allows merchants contact to Proshop admin in case of issue or questions",
   "Payment Plans": "Payment Plans",
-  "payed": "payed",
+  "payed": "paid",
   "shipped": "shipped",
   "Check confirmation link in your mailbox": "Check confirmation link in your mailbox",
   "Pricing_And_Plans": "Pricing & Plans",
@@ -374,5 +374,11 @@
   "Exist Payment Method": "Exist Payment Method",
   "Add Payment Method": "Add Payment Method",
   "Add and setup default payment first": "Add and setup default payment first",
-  "No Payment info yet": "No Payment info yet"
+  "No Payment info yet": "No Payment info yet",
+  "cancel": "cancel",
+  "Are you sure you want to cancel transaction?": "Are you sure you want to cancel transaction?",
+  "Orders has been refund": "Orders has been refund",
+  "Days left": "Days left",
+  "Confirm": "Confirm"
+
 }

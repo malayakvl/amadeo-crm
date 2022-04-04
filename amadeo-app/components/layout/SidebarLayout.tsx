@@ -3,7 +3,7 @@ import SidebarHeader from '../header/SidebarHeader';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { userSelector } from '../../redux/user/selectors';
-import { isDataLoadingSelector } from '../../redux/layouts/selectors';
+import { isDataLoadingSelector, isSidebarOpenSelector } from '../../redux/layouts/selectors';
 import { toggleSidebarAction } from '../../redux/layouts';
 import Router from 'next/router';
 
@@ -11,6 +11,8 @@ export default function SidebarLayout({ children }: { children: any }) {
     const user = useSelector(userSelector);
     const showLoader = useSelector(isDataLoadingSelector);
     const dispatch = useDispatch();
+    const isSidebarOpen = useSelector(isSidebarOpenSelector);
+    // const { isMobile } = useWindowSize();
 
     useEffect(() => {
         if (user.subscription_expired) {
@@ -19,8 +21,6 @@ export default function SidebarLayout({ children }: { children: any }) {
             } else {
                 Router.push(`/pricing`);
             }
-            console.log('USER', user);
-            // Router.push(`/pricing`);
         }
     }, [user?.email]);
 
@@ -40,7 +40,10 @@ export default function SidebarLayout({ children }: { children: any }) {
             {user.role_id === 1 && <SidebarBuyer />}
             {user.role_id === 2 && <SidebarCustomer />}
             {user.role_id === 3 && <SidebarAdmin />}
-            <div className="relative h-full mt-4 md:mt-8 md:mb-10 md:ml-64 md:pl-4 md:mr-8">
+            <div
+                className={`relative h-full mt-4 md:mt-8 md:mb-10 ${
+                    !isSidebarOpen ? 'md:ml-24' : 'md:ml-64'
+                } md:pl-4 md:mr-8`}>
                 <div className="absolute top-3 left-4 md:hidden flex items-center">
                     <button
                         className="outline-none mobile-menu-button"

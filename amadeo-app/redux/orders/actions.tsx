@@ -4,7 +4,7 @@ import axios from 'axios';
 import getConfig from 'next/config';
 const { publicRuntimeConfig } = getConfig();
 const baseUrl = `${publicRuntimeConfig.apiUrl}/api`;
-import { setSuccessToastAction } from '../layouts';
+import { setSuccessToastAction, setErrorToastAction } from '../layouts';
 import { paginationSelectorFactory } from '../layouts/selectors';
 import { PaginationType } from '../../constants';
 import queryString from 'query-string';
@@ -95,6 +95,62 @@ export const fetchFilerItems: any = createAction(
             };
         }
 );
+export const bulkShippingAction: any = createAction(
+    'products/BULK_SHIPPING',
+    async () =>
+        async (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
+            const state = getState();
+            dispatch(showLoaderAction(true));
+            return axios
+                .post(
+                    `${baseUrl}/orders/bulk-shipping`,
+                    { data: JSON.stringify(state.layouts.checkedIds) },
+                    {
+                        headers: {
+                            ...authHeader(state.user.user.email)
+                        }
+                    }
+                )
+                .then(async () => {
+                    dispatch(showLoaderAction(false));
+                    dispatch(setSuccessToastAction('Products has been deleted'));
+                    dispatch(fetchItemsAction());
+                })
+                .catch((e) => {
+                    dispatch(setErrorToastAction(e.message));
+                    dispatch(showLoaderAction(false));
+                });
+        }
+);
+export const bulkCancelAction: any = createAction(
+    'products/BULK_CANCEL',
+    async () =>
+        async (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
+            const state = getState();
+            dispatch(showLoaderAction(true));
+            return axios
+                .post(
+                    `${baseUrl}/orders/bulk-cancel`,
+                    { data: JSON.stringify(state.layouts.checkedIds) },
+                    {
+                        headers: {
+                            ...authHeader(state.user.user.email)
+                        }
+                    }
+                )
+                .then(async () => {
+                    dispatch(showLoaderAction(false));
+                    dispatch(showCancelConfirmationModalAction(false));
+                    dispatch(setSuccessToastAction('Orders has been refund'));
+                    dispatch(fetchItemsAction());
+                    toggleModalPopup('.modal-cancel-confirmation');
+                })
+                .catch((e) => {
+                    dispatch(setErrorToastAction(e.message));
+                    dispatch(showLoaderAction(false));
+                });
+        }
+);
 
 export const fetchItemAction: any = createAction(
     'orders/FETCH_ITEM',
@@ -163,4 +219,6 @@ export const findSellersAction: any = createAction(
 export const showPopupAction: any = createAction('orders/SHOW_POPUP');
 export const showDateSelectorAction: any = createAction('orders/SHOW_DATE_POPUP');
 export const setEmptyFormAction: any = createAction('orders/EMPTY_FORM');
-// export const showItemAction: any = createAction('orders/CHATBOT_SHOWITEM');
+export const showCancelConfirmationModalAction: any = createAction(
+    'orders/CANCEL_CONFIRMATION_ORDER'
+);

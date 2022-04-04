@@ -48,3 +48,7 @@ export const tagSellersSuggestionsSelector = createSelector(
     rootSelector,
     (orders: State.Orders): any => orders.tagSellersSuggestions
 );
+export const cancelConfirmationModalSelector = createSelector(
+    rootSelector,
+    (orders: State.Orders): any => orders.showCancelPopup
+);

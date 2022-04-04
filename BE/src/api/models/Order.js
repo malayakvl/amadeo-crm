@@ -8,6 +8,7 @@ import pdf2base64 from 'pdf-to-base64';
 import {
     setTimeout,
 } from 'timers/promises';
+import axios from "axios";
 
 function createInvoice (invoice, path) {
     try {
@@ -525,6 +526,98 @@ class Order {
                 fileName: '',
                 error
             }
+        } finally {
+            client.release();
+        }
+    }
+    
+    
+    async setupShippingStatus (orderIds) {
+        const client = await pool.connect();
+        try {
+            const SQL = `UPDATE data.orders SET status='shipped' WHERE id IN (${orderIds.join(',')})`;
+            await client.query(SQL);
+            return {success: true, error: null};
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error:',
+                    { message: e.message }
+                );
+            }
+            return {success: false, error: e.message };
+        } finally {
+            client.release();
+        }
+    }
+    
+    
+    async bulkCancel (orderIds) {
+        const client = await pool.connect();
+        try {
+            const SQL = `SELECT * FROM data.orders  WHERE id IN (${orderIds.join(',')})`;
+            const res = await client.query(SQL);
+            if (res.rows.length > 0) {
+                const promisesQueries = [];
+                res.rows.forEach(order => {
+                    promisesQueries.push(this.cancelOrder(order));
+                });
+                if (promisesQueries.length) {
+                    await Promise.all(promisesQueries);
+                }
+                return {success: true, error: null};
+            } else {
+                return {success: false, error: 'No record find'};
+            }
+            
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error:',
+                    { message: e.message }
+                );
+            }
+            return {success: false, error: e.message };
+        } finally {
+            client.release();
+        }
+    }
+    
+    async cancelOrder(order) {
+        const client = await pool.connect();
+        try {
+            const sellerSettingsRes = await client.query(`SELECT * FROM data.get_seller_settings(${order.id});`);
+            if (sellerSettingsRes.rows.length === 0) {
+                return {success: false, error: 'No key for payment'}
+            }
+            const orderData = {
+                "currency": "EUR",
+                "amount": order.total_amount*100,
+                "description": "Refund by seller"
+            }
+            const multiSafePayClientRes = await axios
+                .post(`https://testapi.multisafepay.com/v1/json/orders/amadeo-order-id-${order.id}/refunds?api_key=${sellerSettingsRes.rows[0].multisafe_api_key}`, orderData,{
+                    headers: { 'Content-Type': 'application/json' }
+                })
+                .then(async () => {
+                    await client.query(`UPDATE data.orders SET status='cancel' WHERE id=(${order.id});`);
+                    return {success: true, error: null}
+                }).catch(error => {
+                    return {success: false, error: error.message}
+                });
+    
+            return {success: multiSafePayClientRes.success, error: null};
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error:',
+                    { message: e.message }
+                );
+            }
+            return {success: false, error: e.message };
         } finally {
             client.release();
         }

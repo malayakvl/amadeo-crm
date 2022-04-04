@@ -113,6 +113,8 @@ apiRoutes.route('/orders/fetch-items').get(OrderController.fetchItems);
 apiRoutes.route('/orders/fetch-waiting-items').get(OrderController.fetchWaitingList);
 apiRoutes.route('/orders/fetch-filters').get(OrderController.fetchFilters);
 apiRoutes.route('/create-order/:id').get(OrderController.generateInvoice);
+apiRoutes.route('/orders/bulk-shipping').post(OrderController.setupShipped);
+apiRoutes.route('/orders/bulk-cancel').post(OrderController.bulkCancel);
 
 apiRoutes.route('/payments/fetch-items').get(PaymentController.fetchItems);
 apiRoutes.route('/payments/fetch-item').get(PaymentController.fetchItem);

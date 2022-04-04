@@ -209,7 +209,7 @@ const ListSellers: React.FC<{ locale: string }> = ({ locale }) => {
                             </td>
                             <td style={{ fontSize: '12px' }}>
                                 <span
-                                    className="cursor-pointer"
+                                    className="cursor-pointer gradient-btn-small"
                                     role="presentation"
                                     onClick={() => {
                                         dispatch(setSelectedSellerAction(item.email));

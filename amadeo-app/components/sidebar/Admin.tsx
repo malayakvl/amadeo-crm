@@ -4,7 +4,7 @@ import Brand from './Brand';
 import Pages from './Pages';
 import { SidebarFull, SidebarShipping } from './admin/index';
 import { useWindowSize } from '../../hooks';
-import { sidebarCloseAction } from '../../redux/layouts';
+import { sidebarCloseAction, toggleSidebarAction } from '../../redux/layouts';
 import { useDispatch, useSelector } from 'react-redux';
 import { isSidebarOpenSelector } from '../../redux/layouts/selectors';
 
@@ -38,7 +38,11 @@ const SidebarCustomers: React.FC = () => {
 
     return (
         <>
-            <div className={`sidebar ${isSidebarOpen && isMobile ? 'mobile-open' : ''}`} ref={node}>
+            <div
+                className={`sidebar ${!isSidebarOpen && !isMobile ? 'sb-minimize' : ''} ${
+                    isSidebarOpen && isMobile ? 'mobile-open' : ''
+                }`}
+                ref={node}>
                 <div className="overflow-y-auto overflow-x-hidden flex flex-col justify-between flex-grow">
                     <ul>
                         <Brand />
@@ -46,6 +50,13 @@ const SidebarCustomers: React.FC = () => {
                     </ul>
                     <Pages />
                 </div>
+                <div
+                    className="sidebar-close-desctop"
+                    role="presentation"
+                    onClick={() => {
+                        dispatch(toggleSidebarAction());
+                    }}
+                />
             </div>
         </>
     );
