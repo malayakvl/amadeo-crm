@@ -109,17 +109,21 @@ const SidebarHeader: React.FC = () => {
                                         </a>
                                     </Link>
                                 </li>
-                                <li>
-                                    <Link href={`/account/plan`}>
-                                        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                                        <a
-                                            role="presentation"
-                                            onClick={() => setShowProfileMenu(!showProfileMenu)}>
-                                            <i className="plan" />
-                                            <span className="s-caption">{t('My Plan')}</span>
-                                        </a>
-                                    </Link>
-                                </li>
+                                {user.role_id === 2 && (
+                                    <li>
+                                        <Link href={`/account/plan`}>
+                                            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                                            <a
+                                                role="presentation"
+                                                onClick={() =>
+                                                    setShowProfileMenu(!showProfileMenu)
+                                                }>
+                                                <i className="plan" />
+                                                <span className="s-caption">{t('My Plan')}</span>
+                                            </a>
+                                        </Link>
+                                    </li>
+                                )}
                                 <li>
                                     <Link href={`/settings/payment`}>
                                         {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
