@@ -49,7 +49,7 @@ export default function Signup() {
         <div className="flex justify-center md:h-[580px]">
             <Formik
                 enableReinitialize
-                initialValues={{ email: '', acceptTerms: false, role_id: '1' }}
+                initialValues={{ email: '', acceptTerms: false, role_id: '2' }}
                 validationSchema={validationSchema}
                 onSubmit={onSubmit}>
                 {(props) => (
