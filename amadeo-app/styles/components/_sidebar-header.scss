@@ -76,6 +76,10 @@
     .exit {
       background-image: url("../../public/images/icon-logout.svg");
     }
+    .settings-pay {
+      width: 32px;
+      background-image: url("../../public/images/settings-pay.svg");
+    }
     &:hover {
       .s-caption {
         @apply red-yellow-gradient-text;

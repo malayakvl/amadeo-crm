@@ -121,6 +121,21 @@ const SidebarHeader: React.FC = () => {
                                     </Link>
                                 </li>
                                 <li>
+                                    <Link href={`/settings/payment`}>
+                                        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                                        <a
+                                            role="presentation"
+                                            onClick={() => setShowProfileMenu(!showProfileMenu)}>
+                                            <i className="settings-pay" />
+                                            <span
+                                                className="s-caption"
+                                                style={{ whiteSpace: 'normal' }}>
+                                                {t('My payment settings')}
+                                            </span>
+                                        </a>
+                                    </Link>
+                                </li>
+                                <li>
                                     <Link href={`/notifications`}>
                                         {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                                         <a
