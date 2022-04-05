@@ -37,7 +37,9 @@ const SidebarCustomers: React.FC = () => {
         if (node?.current?.contains(e.target) || node?.current === null) {
             return;
         }
-        dispatch(sidebarCloseAction());
+        if (isMobile) {
+            dispatch(sidebarCloseAction());
+        }
     };
 
     return (

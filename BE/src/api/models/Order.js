@@ -432,7 +432,7 @@ class Order {
     
         try {
             const _filters = {
-                status: [OrderStatus.PAYED],
+                // status: [OrderStatus.PAYED],
                 order_number: orderNumber
             };
 
@@ -448,6 +448,7 @@ class Order {
             const filter = JSON.stringify(_filters);
             const ordersQuery = `SELECT *
                                 FROM data.get_orders(1, 0, '${filter}');`;
+            console.log(ordersQuery);
             const res = await client.query(ordersQuery);
             const dirUpload = `${process.env.DOWNLOAD_FOLDER}/orders/${userId}`;
             

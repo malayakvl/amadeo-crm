@@ -379,6 +379,8 @@
   "Are you sure you want to cancel transaction?": "Are you sure you want to cancel transaction?",
   "Orders has been refund": "Orders has been refund",
   "Days left": "Days left",
-  "Confirm": "Confirm"
+  "Confirm": "Confirm",
+  "Created": "Created",
+  "Setup Default": "Setup Default"
 
 }

@@ -146,7 +146,7 @@ export default function Index({ session }: { session: any }) {
                                                     {method.id !==
                                                         subscriptionInfo.defaultPayment && (
                                                         <span
-                                                            className="cursor-pointer"
+                                                            className="cursor-pointer gradient-btn-small"
                                                             role="presentation"
                                                             onClick={() =>
                                                                 dispatch(
@@ -155,7 +155,7 @@ export default function Index({ session }: { session: any }) {
                                                                     )
                                                                 )
                                                             }>
-                                                            Setup Default
+                                                            {t('Setup Default')}
                                                         </span>
                                                     )}
                                                     {method.id ===
@@ -167,7 +167,7 @@ export default function Index({ session }: { session: any }) {
                                                     {method.id !==
                                                         subscriptionInfo.defaultPayment && (
                                                         <span
-                                                            className="cursor-pointer"
+                                                            className="cursor-pointer disabled-btn-small"
                                                             role="presentation"
                                                             onClick={() =>
                                                                 dispatch(
@@ -232,7 +232,11 @@ export default function Index({ session }: { session: any }) {
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>{subscriptionInfo.DBName}</td>
+                                    <td>
+                                        {subscriptionInfo.DBName}
+                                        <br />
+                                        <span className="hidden">Download Invoice</span>
+                                    </td>
                                     <td style={{ textAlign: 'center' }}>
                                         <span className={`${subscriptionInfo.status}-subscription`}>
                                             {subscriptionInfo.status}
