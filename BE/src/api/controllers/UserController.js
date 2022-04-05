@@ -7,6 +7,17 @@ import { unsubscriberFromEmail } from "../sender/templates.js";
 import { sendMail } from "../lib/sendMail.js";
 
 class UserController {
+    
+    async generateInvoice (req, res) {
+        if (!req.user) {
+            return res.status(401).json('Access deny');
+        }
+        const invoice = await userModel.generatePdf(req.user);
+        if (invoice.success) {
+            return res.status(200).json(invoice);
+        }
+    }
+    
     async getProfile(req, res) {
         const user = req.user;
 

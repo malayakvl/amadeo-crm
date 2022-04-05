@@ -1,7 +1,7 @@
 import { createAction } from 'redux-actions';
 import axios from 'axios';
 import getConfig from 'next/config';
-import { authHeader } from '../../lib/functions';
+import { authHeader, toggleModalPopup } from '../../lib/functions';
 import { setErrorToastAction, setSuccessToastAction, showLoaderAction } from '../layouts/actions';
 
 const { publicRuntimeConfig } = getConfig();
@@ -219,6 +219,7 @@ export const updateSubscriptionAction: any = createAction(
                     dispatch(showChangeSubscriptionFormAction(false));
                     dispatch(fetchUserSubscriptionAction());
                     dispatch(showLoaderAction(false));
+                    toggleModalPopup('.modal-seller-change-subscription');
                 })
                 .catch((e) => {
                     dispatch(setErrorToastAction(e.response.data.error));
@@ -295,6 +296,29 @@ export const stripeDeletetPaymentAction: any = createAction(
                 .then(() => {
                     dispatch(setSuccessToastAction('Response was sent successfully'));
                     dispatch(fetchUserSubscriptionAction());
+                    dispatch(showLoaderAction(false));
+                })
+                .catch((e) => {
+                    dispatch(setErrorToastAction(e.response.data.error));
+                    dispatch(showLoaderAction(false));
+                });
+        }
+);
+export const generateInvoiceStripeAction: any = createAction(
+    'user/GENERATE_STRIPE_INVOICE',
+    async () =>
+        (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
+            const state = getState();
+            dispatch(showLoaderAction(true));
+            return axios
+                .get(`${baseUrl}/profile/generate-stripe-invoice`, {
+                    headers: {
+                        ...authHeader(state.user.user.email)
+                    }
+                })
+                .then(() => {
+                    dispatch(setSuccessToastAction('Response was sent successfully'));
+                    // dispatch(fetchUserSubscriptionAction());
                     dispatch(showLoaderAction(false));
                 })
                 .catch((e) => {
