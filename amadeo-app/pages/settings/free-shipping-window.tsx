@@ -1,15 +1,15 @@
 import { getSession } from 'next-auth/client';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
-import { InputSelect, InputText } from '../../components/_form';
+import { InputSwitcher, InputText } from '../../components/_form';
 import { itemSelector } from '../../redux/settings/selectors';
 import { fetchFormAction } from '../../redux/settings';
 import { showLoaderAction } from '../../redux/layouts/actions';
 import { submitFormAction } from '../../redux/settings/actions';
-// import ConfirmDialog from '../../components/_common/ConfirmDialog';
+import ConfirmDialog from '../../components/_common/ConfirmDialog';
 
 export default function Index() {
     const t = useTranslations();
@@ -17,11 +17,11 @@ export default function Index() {
     const dispatch = useDispatch();
 
     const [showForm, setShowForm] = useState(false);
-    // const [selectedItem, setSelectedItem] = useState<any | null>();
+    const [selectedItem, setSelectedItem] = useState<any | null>();
 
     const validationSchema = Yup.object({
-        order_timer: Yup.number().required(t('Required field')),
-        type: Yup.string().required(t('Required field'))
+        // order_timer: Yup.number().required(t('Required field')),
+        // type: Yup.string().required(t('Required field')),
         // multisafe_api_key: Yup.string().required(t('Required field'))
     });
 
@@ -37,11 +37,11 @@ export default function Index() {
         }
     }, [initialValues]);
 
-    // const handlerConfirm = useCallback(() => {
-    //     if (!selectedItem) return;
-    //     initialValues.free_shipping_status = !initialValues.free_shipping_status;
-    //     setSelectedItem(null);
-    // }, [selectedItem]);
+    const handlerConfirm = useCallback(() => {
+        if (!selectedItem) return;
+        initialValues.free_shipping_status = !initialValues.free_shipping_status;
+        setSelectedItem(null);
+    }, [selectedItem]);
 
     return (
         <>
@@ -61,19 +61,19 @@ export default function Index() {
                             dispatch(submitFormAction(values));
                         }}>
                         {(props) => {
-                            // const onChangeConfigured = () => {
-                            //     if (!selectedItem) {
-                            //         setSelectedItem({
-                            //             status: props.values.free_shipping_status,
-                            //             name: t('Free Shipping Settings')
-                            //         });
-                            //         return false;
-                            //     }
-                            // };
+                            const onChangeConfigured = () => {
+                                if (!selectedItem) {
+                                    setSelectedItem({
+                                        status: props.values.free_shipping_status,
+                                        name: t('Free Shipping Window')
+                                    });
+                                    return false;
+                                }
+                            };
                             return (
                                 <form className="w-full md:w-1/2" onSubmit={props.handleSubmit}>
-                                    <div className="font-bold text-gray-350 text-lg mb-8 border-gray-200">
-                                        {t('Cart duration')}
+                                    {/* <div className="font-bold text-gray-350 text-lg mb-8 border-gray-200">
+                                        {t('Live session Settings')}
                                     </div>
                                     <div className="flex">
                                         <div className="max-w-[100px]">
@@ -99,9 +99,9 @@ export default function Index() {
                                                 props={props}
                                             />
                                         </div>
-                                    </div>
-                                    {/* <div className="mt-8 font-bold text-gray-350 text-lg mb-8 border-gray-200">
-                                        {t('Free Shipping Settings')}
+                                    </div> */}
+                                    <div className="mt-8 font-bold text-gray-350 text-lg mb-8 border-gray-200">
+                                        {t('Free Shipping Window')}
                                     </div>
                                     <InputSwitcher
                                         label={'Free Shipping'}
@@ -121,7 +121,7 @@ export default function Index() {
                                             tips={null}
                                         />
                                     </div>
-                                    <InputText
+                                    {/* <InputText
                                         style={'w-1/2'}
                                         icon={null}
                                         label={t('Multisafepay API')}
@@ -139,7 +139,7 @@ export default function Index() {
                     </Formik>
                 </div>
             )}
-            {/* <ConfirmDialog
+            <ConfirmDialog
                 show={!!selectedItem}
                 text={t('Are you sure you want to {status} {name} method?', {
                     status: selectedItem?.status ? t('disable') : t('enable'),
@@ -149,7 +149,7 @@ export default function Index() {
                 titleCancel={t('Cancel')}
                 onConfirm={handlerConfirm}
                 onClose={() => setSelectedItem(null)}
-            /> */}
+            />
         </>
     );
 }
