@@ -5,8 +5,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
     changeShippingStatus,
     changeShippingStatuses,
-    fetchShippingsAction,
-    setThresholdAction
+    fetchShippingsAction
+    // setThresholdAction
 } from '../../redux/shipping/actions';
 import { shippingsSelector } from '../../redux/shipping/selectors';
 import { useTranslations } from 'next-intl';
@@ -21,18 +21,18 @@ import {
     uncheckAllIdsAction
 } from '../../redux/layouts';
 import { checkedIdsSelector } from '../../redux/layouts/selectors';
-import { ErrorMessage, Field, Formik } from 'formik';
-import { Form } from 'react-bootstrap';
+// import { ErrorMessage, Field, Formik } from 'formik';
+// import { Form } from 'react-bootstrap';
 import { userSelector } from '../../redux/user/selectors';
-import axios from 'axios';
-import { authHeader, formatCurrency, parseTranslation } from '../../lib/functions';
-import getConfig from 'next/config';
-import * as Yup from 'yup';
+// import axios from 'axios';
+import { formatCurrency, parseTranslation } from '../../lib/functions';
+// import getConfig from 'next/config';
+// import * as Yup from 'yup';
 import { getSession } from 'next-auth/client';
 import ConfirmDialog from '../../components/_common/ConfirmDialog';
 
-const { publicRuntimeConfig } = getConfig();
-const url = `${publicRuntimeConfig.apiUrl}/api/shipping`;
+// const { publicRuntimeConfig } = getConfig();
+// const url = `${publicRuntimeConfig.apiUrl}/api/shipping`;
 
 export default function List({ locale }: { locale: string }) {
     const dispatch = useDispatch();
@@ -41,7 +41,7 @@ export default function List({ locale }: { locale: string }) {
     const checkedIds = useSelector(checkedIdsSelector);
     const t = useTranslations();
     const user = useSelector(userSelector);
-    const [threshold, setThreshold] = useState();
+    // const [threshold, setThreshold] = useState();
     const [dropDowns, setDropDowns] = useState<Array<boolean>>([]);
 
     const [selectedItem, setSelectedItem] = useState<Shipping | null>();
@@ -83,19 +83,19 @@ export default function List({ locale }: { locale: string }) {
         setDropDowns(items.map(() => false));
     }, [items]);
 
-    useEffect(() => {
-        if (!user.email) return;
+    // useEffect(() => {
+    //     if (!user.email) return;
 
-        axios
-            .get(`${url}/threshold`, {
-                headers: {
-                    ...authHeader(user.email)
-                }
-            })
-            .then((result) => {
-                setThreshold(result.data.threshold);
-            });
-    }, [user.email]);
+    //     axios
+    //         .get(`${url}/threshold`, {
+    //             headers: {
+    //                 ...authHeader(user.email)
+    //             }
+    //         })
+    //         .then((result) => {
+    //             setThreshold(result.data.threshold);
+    //         });
+    // }, [user.email]);
 
     if (!user.email) return null;
 
@@ -112,8 +112,8 @@ export default function List({ locale }: { locale: string }) {
                 </div>
             </div>
 
-            <div className="md:flex mt-10 block-white-8">
-                {user.role_id !== 3 && (
+            <div className="md:flex mt-10 block-white-8 white-shadow-big">
+                {/* {user.role_id !== 3 && (
                     <div className="w-full md:w-64 p-4 bg-gray-100 rounded-lg shadow-inner">
                         <div className="font-bold text-gray-350 text-lg pb-4 border-b border-gray-200">
                             {t('Free shipping')}
@@ -148,9 +148,9 @@ export default function List({ locale }: { locale: string }) {
                             )}
                         />
                     </div>
-                )}
+                )} */}
 
-                <div className="md:ml-8 md:flex-1">
+                <div className="md:flex-1">
                     <div className="mb-8 font-bold text-gray-350 text-lg py-4 border-b border-gray-200">
                         {t('Shipping methods')}
                     </div>
