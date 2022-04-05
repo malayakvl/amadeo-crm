@@ -190,14 +190,20 @@ function ProductForm({
             then: Yup.number().required(t('Required field')).min(0)
             // otherwise: Yup.number().min(0)
         }),
-        color:
-            selectedSizes.length === 0 && selectedColors.length === 0
-                ? Yup.string().required(t('Select color or size'))
-                : Yup.string(),
-        size:
-            selectedSizes.length === 0 && selectedColors.length === 0
-                ? Yup.string().required(t('Select color or size'))
-                : Yup.string()
+        color: Yup.string().when('configured', {
+            is: true,
+            then:
+                selectedSizes.length === 0 && selectedColors.length === 0
+                    ? Yup.string().required(t('Select color or size'))
+                    : Yup.string()
+        }),
+        size: Yup.string().when('configured', {
+            is: true,
+            then:
+                selectedSizes.length === 0 && selectedColors.length === 0
+                    ? Yup.string().required(t('Select color or size'))
+                    : Yup.string()
+        })
     });
     return (
         <Formik
