@@ -38,7 +38,7 @@ export default function Buyers({ session }: { session: any }) {
             <div className="block-white-8 white-shadow-medium mt-8 flex">
                 <div className="flex flex-col w-full">
                     <div className="flex justify-between mb-8 font-bold text-gray-350 text-lg py-4 border-b border-gray-200">
-                        {t('Buyer details')}
+                        {t('Shopper details')}
 
                         {/* <a
                             href={`/api/download-invoice/${buyerId}`}

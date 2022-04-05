@@ -201,7 +201,7 @@ const ListMessages: React.FC = () => {
                             </td>
                             <td style={{ minWidth: '150px' }}>
                                 {item.item_buyers.length}x{' '}
-                                <span className="red-yellow-gradient-text">buyer (s)</span>
+                                <span className="red-yellow-gradient-text">{t('shopper (s)')}</span>
                             </td>
                             {/*<td></td>*/}
                         </tr>
