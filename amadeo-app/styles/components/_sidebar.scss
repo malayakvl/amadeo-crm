@@ -180,6 +180,37 @@
       .s-caption {
         @apply hidden;
       }
+
+      span {
+        color: transparent;
+
+        &:before {
+          left: 12px !important;
+        }
+      }
+
+
+
+      .inventory-sub {
+        background-repeat: no-repeat;
+        background-position: center;
+        width: 20px;
+        height: 20px;
+        @apply inline-flex justify-center items-center cursor-pointer pl-0 text-center;
+        background-image: url("../../public/images/icon-inventory.svg");
+      }
+
+      .inventory-add {
+        background-repeat: no-repeat;
+        background-position: center;
+        width: 20px;
+        height: 20px;
+        @apply inline-flex justify-center items-center cursor-pointer pl-0 text-center;
+        background-image: url("../../public/images/icon-plus.svg");
+      }
+    }
+    .submenu {
+      @apply text-center;
     }
   }
 
