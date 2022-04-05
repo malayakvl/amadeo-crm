@@ -9,6 +9,7 @@ import {
 import { PaginationType } from '../../constants';
 import { DataTable } from '../_common';
 import {
+    clearBase64Action,
     fetchItemsAction,
     showCancelConfirmationModalAction,
     showDateSelectorAction
@@ -66,6 +67,7 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
             setupChecked.push({ id: item.id, checked: false });
         });
         dispatch(initIdsAction(setupChecked));
+        dispatch(clearBase64Action(''));
     }, [items]);
 
     const sendStatusRequest = useCallback(

@@ -31,7 +31,7 @@ const SidebarInventory: React.FC = () => {
             </li>
             <li className="submenu">
                 <span
-                    className="text-blue-350 text-base font-bold tracking-wide truncate cursor-pointer"
+                    className="inventory-sub text-blue-350 text-base font-bold tracking-wide truncate cursor-pointer"
                     role="presentation"
                     onClick={() => {
                         dispatch(
@@ -46,7 +46,7 @@ const SidebarInventory: React.FC = () => {
             </li>
             <li className="submenu">
                 <span
-                    className="text-blue-350 text-base font-bold tracking-wide truncate cursor-pointer"
+                    className="inventory-add text-blue-350 text-base font-bold tracking-wide truncate cursor-pointer"
                     role="presentation"
                     onClick={() => {
                         dispatch(
