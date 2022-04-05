@@ -92,10 +92,10 @@
   "Profile has been updated": "Profile has been updated",
   "Password has been updated": "Password has been updated",
   "List": "List",
-  "Shipping section allows merchant to manage shipping methods and prices for his buyers": "Shipping section allows merchant to manage shipping methods and prices for his buyers",
+  "Shipping section allows merchant to manage shipping methods and prices for his shoppers": "Shipping section allows merchant to manage shipping methods and prices for his shoppers",
   "Free shipping": "Free shipping",
   "Shipping methods": "Shipping methods",
   "Save changes": "Save changes",
   "Empty": "Empty",
-  "Set a shipping threshold. In case order has reacted this amount, the shipping is free for this buyer": "Set a shipping threshold. In case order has reacted this amount, the shipping is free for this buyer"
+  "Set a shipping threshold. In case order has reacted this amount, the shipping is free for this shopper": "Set a shipping threshold. In case order has reacted this amount, the shipping is free for this shopper"
 }

@@ -133,7 +133,7 @@ const FilterValues: React.FC<any> = () => {
                     )}
                     {filters.total_buyers[1] && (
                         <div className="filter-value">
-                            {t('Buyers')}: {filters.total_buyers[0]} - {filters.total_buyers[1]}
+                            {t('Shoppers')}: {filters.total_buyers[0]} - {filters.total_buyers[1]}
                             <em role="presentation" onClick={() => handleBuyersDelete()} />
                         </div>
                     )}

@@ -55,7 +55,7 @@ const ListOrders: React.FC<{ orders: Orders.DataItem[]; locale: string }> = ({
                                                 width={24}
                                                 height={24}
                                                 className="rounded-full cursor-pointer"
-                                                alt="buyer"
+                                                alt="shopper"
                                             />
                                         </div>
                                         <span className="pl-3">{item.buyer_first_name}</span>

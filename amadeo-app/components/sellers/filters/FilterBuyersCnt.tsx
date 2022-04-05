@@ -84,7 +84,7 @@ const FilterBuyersCnt: React.FC<any> = () => {
                 <div className="flex items-center">
                     <Image width="10" height="10" src={'/images/lang-arrow.svg'} />
                     <span className="ml-2 text-xs font-bold text-blue-350">
-                        {t('Buyers Count')}
+                        {t('Shoppers Count')}
                     </span>
                 </div>
                 <div className="text-sm font-thin text-gray-450">
