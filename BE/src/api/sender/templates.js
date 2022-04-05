@@ -36,7 +36,7 @@ export const welcomeEmail = async (email = '', link = '', locale = localeDefault
       ${t['Verify yourself below to sign in to your Liveproshop.com account for']} ${email}
     </p>
     <p>
-      ${t['Here’s the verification link']}: <a href='${link}'>${link}</a>
+      ${t['Here’s the verification link']}: <a href='${link}'>${t['Click here']}</a>
     </p>
     <p>
       ${t["If you didn't request this verification link, you can safely ignore this email"]}.
@@ -58,7 +58,7 @@ export const registerEmail = async (email = '', locale = localeDefault) => {
       ${t['Thank you for joining Live Pro Shop']}. ${t['Your account has been created']}.
     </p>
     <p>
-      ${t['To access your account and complete your profile, click on the link below']}: <a href='${frontUrl}'>${frontUrl}</a>
+      ${t['To access your account and complete your profile, click on the link below']}: <a href='${frontUrl}'>${t['Click for confirmation']}</a>
     </p>
     <p>
       ${t['If you are having trouble logging into your account, contact us at']} info@liveproshop.com
