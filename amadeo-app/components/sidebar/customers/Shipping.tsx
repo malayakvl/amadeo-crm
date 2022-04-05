@@ -33,14 +33,44 @@ const SidebarShipping = function () {
                     </a>
                 </Link>
             </li>
+
             <li className={`submenu ${currRoute === 'settings' ? 'active' : ''}`}>
                 <Link href={'/settings'}>
                     <a>
                         <i className="text-blue-350 text-base font-bold tracking-wide truncate cursor-pointer" />
-                        <span className="s-caption">{t('Settings')}</span>
+                        <span className="s-caption">{t('Cart duration')}</span>
                     </a>
                 </Link>
             </li>
+
+            <li
+                className={`submenu ${
+                    currRoute === 'settings/free-shipping-threshold' ? 'active' : ''
+                }`}>
+                <Link href={'/settings/free-shipping-threshold'}>
+                    <a>
+                        <i className="text-blue-350 text-base font-bold tracking-wide truncate cursor-pointer" />
+                        <span className="s-caption" style={{ whiteSpace: 'normal' }}>
+                            {t('Free shipping threshold')}
+                        </span>
+                    </a>
+                </Link>
+            </li>
+
+            <li
+                className={`submenu ${
+                    currRoute === 'settings/free-shipping-window' ? 'active' : ''
+                }`}>
+                <Link href={'/settings/free-shipping-window'}>
+                    <a>
+                        <i className="text-blue-350 text-base font-bold tracking-wide truncate cursor-pointer" />
+                        <span className="s-caption" style={{ whiteSpace: 'normal' }}>
+                            {t('Free shipping window')}
+                        </span>
+                    </a>
+                </Link>
+            </li>
+
             <li className={`submenu ${currRoute === 'shipping/list' ? 'active' : ''}`}>
                 <Link href={'/shipping/list'}>
                     <a>
