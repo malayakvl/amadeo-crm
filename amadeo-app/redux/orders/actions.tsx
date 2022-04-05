@@ -216,6 +216,7 @@ export const findSellersAction: any = createAction(
         }
 );
 
+export const clearBase64Action: any = createAction('orders/CLEAR_BASE_64');
 export const showPopupAction: any = createAction('orders/SHOW_POPUP');
 export const showDateSelectorAction: any = createAction('orders/SHOW_DATE_POPUP');
 export const setEmptyFormAction: any = createAction('orders/EMPTY_FORM');

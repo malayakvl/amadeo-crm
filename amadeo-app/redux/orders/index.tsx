@@ -8,7 +8,8 @@ import {
     fetchOrderPdfAction,
     showDateSelectorAction,
     findSellersAction,
-    showCancelConfirmationModalAction
+    showCancelConfirmationModalAction,
+    clearBase64Action
 } from './actions';
 
 const initialState: {
@@ -152,6 +153,12 @@ const ACTION_HANDLERS: any = {
             loading: false,
             isFetched: true
         })
+    },
+    [clearBase64Action]: {
+        next: (state: State.Orders, action: Action<string>): State.Orders => ({
+            ...state,
+            base64Data: action.payload
+        })
     }
 };
 
@@ -164,7 +171,8 @@ export {
     showDateSelectorAction,
     fetchOrderPdfAction,
     findSellersAction,
-    showCancelConfirmationModalAction
+    showCancelConfirmationModalAction,
+    clearBase64Action
 };
 
 // ------------------------------------
