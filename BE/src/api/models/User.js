@@ -314,11 +314,33 @@ class User {
             //         LEFT JOIN data.subscriptions ON data.subscriptions.plan_id=data.subscription_plans.id
             //         WHERE subscription_id='${subscriptionId}'`);
             const resSubscription = await client.query(`SELECT * FROM data.subscription_plans WHERE stripe_id='${subscription.plan.id}'`);
-            subscription.DBName = resSubscription.rows[0].name;
+            subscription.DBName = resSubscription.rows.length ? resSubscription.rows[0].name : '';
             subscription.paymentMethods = paymentMethods.data;
             subscription.defaultPayment = customer.invoice_settings.default_payment_method;
             subscription.defaultPlanId = subscription.items.data[0].plan.id;
             subscription.dbPlans = dbPlansRes.rows;
+    
+            let invoices = await stripe.invoices.list({
+                limit: 3,
+                customer: customerId
+            });
+            if (!invoices.data.length ) {
+                await stripe.invoices.create({
+                    customer: user.customer_id,
+                });
+                invoices = await stripe.invoices.list({
+                    limit: 1,
+                    customer: user.curstomer_id
+                });
+            }
+            let invoicePdf = '';
+            invoices.data.forEach(_invoice => {
+                if (_invoice.invoice_pdf) {
+                    invoicePdf = _invoice.invoice_pdf;
+                    return;
+                }
+            });
+            subscription.invoicePdf = invoicePdf;
             return { subscription: subscription };
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
@@ -947,7 +969,44 @@ class User {
         } finally {
             client.release();
         }
-        
+    }
+    
+    async generatePdf(user) {
+        try {
+            let invoices = await stripe.invoices.list({
+                limit: 3,
+                customer: user.curstomer_id
+            });
+            if (!invoices.data.length ) {
+                await stripe.invoices.create({
+                    customer: user.customer_id,
+                });
+                invoices = await stripe.invoices.list({
+                    limit: 1,
+                    customer: user.curstomer_id
+                });
+            }
+            let invoicePdf = '';
+            invoices.data.forEach(_invoice => {
+                if (_invoice.invoice_pdf) {
+                    invoicePdf = _invoice.invoice_pdf;
+                    return;
+                }
+            })
+            console.log('INVOICE PDF', invoicePdf);
+            
+            return { success: true, invoiceUrl: invoicePdf };
+            
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model User (updateUserSettings) error:',
+                    { message: e.message }
+                );
+            }
+            return { success: false, error: { code: 404, message: 'Users not found' } };
+        }
     }
 
     /**
