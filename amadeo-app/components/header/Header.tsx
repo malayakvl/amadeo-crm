@@ -17,7 +17,7 @@ const Header: React.FC = () => {
                 <div className="relative md:-top-2 cursor-pointer">
                     <Link href={'/'}>
                         <a>
-                            <Image src="/images/logo.svg" width={175} height={52} alt="" />
+                            <Image src="/images/logo.svg" width="252" height="24" alt="" />
                         </a>
                     </Link>
                 </div>
