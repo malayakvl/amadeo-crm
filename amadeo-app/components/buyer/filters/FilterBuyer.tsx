@@ -77,7 +77,7 @@ const FilterNumber: React.FC<any> = () => {
                 onClick={() => setShowBlock(!showBlock)}>
                 <div className="flex items-center">
                     <Image width="10" height="10" src={'/images/lang-arrow.svg'} />
-                    <span className="ml-2 text-xs font-bold text-blue-350">{t('Buyer')}</span>
+                    <span className="ml-2 text-xs font-bold text-blue-350">{t('Shopper')}</span>
                 </div>
             </div>
             <div className="mt-3 mb-4 pt-1 max-h-36 relative max-w-sm mx-auto">

@@ -83,7 +83,7 @@ const ListBuyers: React.FC<Props> = ({ locale }) => {
                                                     width={42}
                                                     height={42}
                                                     className="rounded-full cursor-pointer"
-                                                    alt="buyer photo"
+                                                    alt="shopper photo"
                                                 />
                                             </div>
                                             <div className="ml-2">

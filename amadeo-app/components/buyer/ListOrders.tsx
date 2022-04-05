@@ -101,7 +101,7 @@ const ListOrders: React.FC<{ orders: Buyers.OrderDataItem[]; className?: string 
                                         width={24}
                                         height={24}
                                         className="rounded-full cursor-pointer"
-                                        alt="buyer photo"
+                                        alt="shopper photo"
                                     />
                                     <span className="pl-3">{item.buyer_first_name}</span>
                                 </div>

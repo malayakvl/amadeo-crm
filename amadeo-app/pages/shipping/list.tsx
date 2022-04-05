@@ -107,7 +107,7 @@ export default function List({ locale }: { locale: string }) {
                 </div>
                 <div className="text-gray-400">
                     {t(
-                        'Shipping section allows merchant to manage shipping methods and prices for his buyers'
+                        'Shipping section allows merchant to manage shipping methods and prices for his shoppers'
                     )}
                 </div>
             </div>

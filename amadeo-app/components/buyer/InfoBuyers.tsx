@@ -9,7 +9,7 @@ const InfoBuyers: React.FC = () => {
                 <h1>{t('Shoppers')}</h1>
             </div>
             <div className="text-gray-400">
-                {t('Buyers section provides merchant information about his buyers')}
+                {t('Shoppers section provides merchant information about his shoppers')}
             </div>
         </>
     );

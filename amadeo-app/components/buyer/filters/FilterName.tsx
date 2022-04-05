@@ -43,7 +43,9 @@ const FilterName: React.FC<any> = () => {
                 onClick={() => setShowBlock(!showBlock)}>
                 <div className="flex items-center">
                     <Image width="10" height="10" src={'/images/lang-arrow.svg'} />
-                    <span className="ml-2 text-xs font-bold text-blue-350">{t('Buyer name')}</span>
+                    <span className="ml-2 text-xs font-bold text-blue-350">
+                        {t('Shopper name')}
+                    </span>
                 </div>
             </div>
             <div className="mt-3 mb-4 pt-1 overflow-auto max-h-36 relative max-w-sm mx-auto">
@@ -52,7 +54,7 @@ const FilterName: React.FC<any> = () => {
                         <input
                             className="w-full form-control"
                             type="text"
-                            placeholder={t('Buyer name')}
+                            placeholder={t('Shopper name')}
                             onChange={(e) => {
                                 setNameSelected(e.target.value);
                             }}
