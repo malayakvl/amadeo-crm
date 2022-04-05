@@ -235,7 +235,13 @@ export default function Index({ session }: { session: any }) {
                                     <td>
                                         {subscriptionInfo.DBName}
                                         <br />
-                                        <span className="hidden">Download Invoice</span>
+                                        <a
+                                            className="cursor-pointer text-xs"
+                                            href={subscriptionInfo.invoicePdf}
+                                            target="_blank"
+                                            rel="noreferrer">
+                                            {t('Download Invoice')}
+                                        </a>
                                     </td>
                                     <td style={{ textAlign: 'center' }}>
                                         <span className={`${subscriptionInfo.status}-subscription`}>

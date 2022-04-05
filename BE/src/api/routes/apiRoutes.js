@@ -76,6 +76,7 @@ apiRoutes.post('/profile/default-payment-method', UserController.defaultPaymentS
 apiRoutes.post('/profile/add-payment-method', UserController.addPaymentMethod);
 apiRoutes.post('/profile/update-subscription-plan', UserController.updateSubscriptionPlan);
 apiRoutes.get('/profile/unsubscription', UserController.unsubscribe);
+apiRoutes.get('/profile/generate-stripe-invoice', UserController.generateInvoice);
 apiRoutes.route('/profile')
     .post(UserController.updateProfile)
     .get(UserController.getProfile);
