@@ -197,6 +197,11 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                                         <a>{item.order_number}</a>
                                     </Link>
                                 )}
+                                {user.role_id === 1 && item.status !== 'new' && (
+                                    <Link href={`/orders/${item.order_number}`}>
+                                        <a>{item.order_number}</a>
+                                    </Link>
+                                )}
                             </td>
                             <td className="order-status">
                                 <span className={item.status}>{item.status}</span>
