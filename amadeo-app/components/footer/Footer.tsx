@@ -5,15 +5,15 @@ import moment from 'moment';
 export default function Footer() {
     return (
         <footer className="w-full md:h-370">
-            <div className="px-4 px-4 pb-4 tracking-wide text-sm text-blue-350 bg-blue-550 flex h-full justify-between flex-col md:py-16 md:px-32">
+            <div className="px-4 pb-4 tracking-wide text-sm text-blue-350 bg-blue-550 flex h-full justify-between flex-col md:py-16 md:px-32">
                 <div className="flex flex-col md:flex-row justify-between">
                     <div className="cursor-pointer mt-3 md:mt-0">
                         <Link href={'/'}>
                             <a>
                                 <Image
-                                    src="/images/logo-white.svg"
-                                    width={175}
-                                    height={52}
+                                    src="/images/logo.svg"
+                                    width="252"
+                                    height="24"
                                     layout="fixed"
                                 />
                             </a>
