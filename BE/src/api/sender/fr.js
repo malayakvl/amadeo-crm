@@ -53,5 +53,8 @@ export default {
   "User want unsubscribe from plan": "User want unsubscribe from plan",
   "Unsubscribe message from":"Unsubscribe message from",
   
-  "Click here": "Click here"
+  "Click here": "Click here",
+
+  //contactUsFromEmail
+  "Contact Us message from": "Contact Us message from",
 };

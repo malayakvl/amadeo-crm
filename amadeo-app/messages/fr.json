@@ -257,6 +257,7 @@
   "Shipping Method": "Shipping Method",
   "shipping_threshold": "Set a shipping threshold. In case order has reacted this amount, the shipping is free for this shopper",
   "Message": "Message",
+  "Message sended": "Message sended",
   "Send": "Send",
   "enable": "enable",
   "disable": "disable",
@@ -384,6 +385,6 @@
   "Days left": "Days left",
   "Confirm": "Confirm",
   "Created": "Created",
-  "Setup Default": "Setup Default"
-
+  "Setup Default": "Setup Default",
+  "Contact Us": "Contact Us"
 }

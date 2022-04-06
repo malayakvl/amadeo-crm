@@ -37,7 +37,9 @@ const Header: React.FC = () => {
                     />
                 </svg>
 
-                <div className="md:flex font-bold text-sm flex items-center justify-end" id="menu">
+                <div
+                    className="font-bold text-sm flex flex-wrap items-center justify-end"
+                    id="menu">
                     <Link href={'/'}>
                         <a className="hover:text-purple-400">Features</a>
                     </Link>
@@ -50,6 +52,10 @@ const Header: React.FC = () => {
 
                     <Link href={'/'}>
                         <a className="ml-14 uppercase hover:text-purple-400">Faq</a>
+                    </Link>
+
+                    <Link href={'/contact-us'}>
+                        <a className="ml-14 hover:text-purple-400">Contact Us</a>
                     </Link>
 
                     {!session?.user ? (

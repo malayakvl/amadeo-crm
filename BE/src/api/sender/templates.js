@@ -96,6 +96,20 @@ export const supportFromEmail = async (email = '', message, locale = localeDefau
     </p>`)
   };
 };
+
+export const contactUsFromEmail = async (name = '', email = '', message, locale = localeDefault) => {
+  const { default: t } = await import(`../sender/${locale}.js`);
+
+  return {
+    subject: `${t['Contact Us message from']} ${email}`,
+    body: emailHtml(t, `
+    <p>${t['Contact Us message from']} ${name} (${email})!</p>
+    <p>
+      ${message}
+    </p>`)
+  };
+};
+
 export const unsubscriberFromEmail = async (email = '', message, locale = localeDefault) => {
   const { default: t } = await import(`../sender/${locale}.js`);
   
