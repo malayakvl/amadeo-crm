@@ -17,7 +17,7 @@ const Header: React.FC = () => {
                 <div className="cursor-pointer">
                     <Link href={'/'}>
                         <a>
-                            <Image src="/images/logo.svg" width="252" height="24" alt="" />
+                            <Image src="/images/logo.svg" width="176" height="31" alt="" />
                         </a>
                     </Link>
                 </div>
