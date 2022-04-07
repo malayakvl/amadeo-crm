@@ -1,6 +1,7 @@
 import Head from 'next/head';
+import Link from 'next/link';
 import { getSession } from 'next-auth/client';
-import React, { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useTranslations } from 'next-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { AddProduct, ListProducts, EditProduct, SyncProduct } from '../../components/inventory';
@@ -13,7 +14,7 @@ export default function Index({ session, locale }: { session: any; locale: strin
     const t = useTranslations();
     const dispatch = useDispatch();
     const activeTabLayout = useSelector(activeTabSelectorFactory('inventory'));
-    const hiddenFileInput = React.useRef(null);
+    const hiddenFileInput = useRef(null);
 
     useEffect(() => {
         dispatch(fetchAdditionalAction());
@@ -62,12 +63,16 @@ export default function Index({ session, locale }: { session: any; locale: strin
                             ref={hiddenFileInput}
                             style={{ display: 'none' }}
                         />
-                        <span className="block text-gray-350 text-base font-bold pb-2">
-                            {t('Read rules and download csv template here')}
+                        <span className="block text-gray-350 text-sm font-bold pb-2">
+                            <Link href={'/guides/inventory'}>
+                                {t('Read rules and download csv template here')}
+                            </Link>
                         </span>
                     </div>
                     <div className="md:float-right md:text-right">
-                        <button className="mt-4 mb:0 btn-add-product" onClick={handleAddProduct}>
+                        <button
+                            className="mt-4 mb:0 mr-12 btn-add-product"
+                            onClick={handleAddProduct}>
                             <span>{t('Add Product')}</span>
                         </button>
                     </div>
