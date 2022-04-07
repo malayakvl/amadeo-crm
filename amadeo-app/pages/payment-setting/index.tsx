@@ -11,7 +11,7 @@ import { showLoaderAction } from '../../redux/layouts/actions';
 import { submitFormAction } from '../../redux/settings/actions';
 // import ConfirmDialog from '../../components/_common/ConfirmDialog';
 
-export default function Payment() {
+export default function PaymentSetting() {
     const t = useTranslations();
     const initialValues = useSelector(itemSelector);
     const dispatch = useDispatch();
