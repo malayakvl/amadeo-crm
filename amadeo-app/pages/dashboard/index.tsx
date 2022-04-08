@@ -22,7 +22,6 @@ import 'react-date-range/dist/theme/default.css'; // theme css file
 export default function Index({ session, locale }: { session: any; locale: string }) {
     if (!session) return <></>;
     const t = useTranslations();
-
     const dispatch = useDispatch();
     const [state, setState] = useState<any>([
         {

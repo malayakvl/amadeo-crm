@@ -110,7 +110,7 @@ const initialState: State.Layouts = {
             }
         }
     },
-    isSidebarOpen: false,
+    isSidebarOpen: true,
     isDataLoading: false,
     toasts: [],
     checkedIds: [],

@@ -10,7 +10,7 @@ declare namespace Orders {
         showDateSelector: boolean;
         orderFetched: boolean;
         fileName: string;
-        base64Data: string;
+        base64Data: string | null;
         tagSellersSuggestions: any[];
         showCancelPopup: boolean;
     }

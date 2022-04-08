@@ -123,7 +123,7 @@ export const bulkShippingAction: any = createAction(
         }
 );
 export const bulkCancelAction: any = createAction(
-    'products/BULK_CANCEL',
+    'orders/BULK_CANCEL',
     async () =>
         async (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
             const state = getState();

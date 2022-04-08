@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import ReactTags from 'react-tag-autocomplete';
 import Select, { StylesConfig } from 'react-select';
 import chroma from 'chroma-js';
-import dynamic from 'next/dynamic';
+// import dynamic from 'next/dynamic';
 import { prepareAdditionalDropdown } from '../../lib/functions';
 import { prepareConfigValues, prepareAdditionalColorDropdown } from '../../lib/inventoryServices';
 import {
@@ -22,9 +22,9 @@ import { findTagAction, setIdentAction, updateProductAction } from '../../redux/
 import 'suneditor/dist/css/suneditor.min.css';
 import { InventoryPhotos, RenderSizes, RenderVariant } from './index';
 
-const SunEditor = dynamic(() => import('suneditor-react'), {
-    ssr: false
-});
+// const SunEditor = dynamic(() => import('suneditor-react'), {
+//     ssr: false
+// });
 
 export interface ColourOption {
     readonly value: string;
@@ -105,7 +105,7 @@ function ProductForm({
     const uploadedFiles = useSelector(uploadedFilesSelector);
     const isIdent = useSelector(getIdentSelector);
 
-    const [editorContent, setEditorContent] = useState('');
+    // const [editorContent, setEditorContent] = useState('');
     const [selectedColors, setSelectedColors] = useState([]);
     const [selectedSizes, setSelectedSizes] = useState<any[]>([]);
     const [selectedMaterials, setSelectedMaterials] = useState<any>(null);
@@ -144,12 +144,12 @@ function ProductForm({
         setSelectedColors(additionalSelectedProps.colors);
         setSelectedMaterials(additionalSelectedProps.materials);
         setTags(additionalSelectedProps.tags);
-        setEditorContent('');
+        // setEditorContent('');
     }, [additionalSelectedProps]);
 
-    const handleChangeEditor = (content: any) => {
-        setEditorContent(content);
-    };
+    // const handleChangeEditor = (content: any) => {
+    //     setEditorContent(content);
+    // };
     const handleChangeMaterials = (selectedOption: any) => {
         setSelectedMaterials(selectedOption);
     };
@@ -213,7 +213,8 @@ function ProductForm({
                             formData.append(key, (values as any)[key]);
                         }
                     });
-                    formData.append('description', editorContent);
+                    // formData.append('description', editorContent);
+                    formData.append('description', '');
                     formData.append('tags', JSON.stringify(tags));
                     formData.append(
                         'configurations',
@@ -268,21 +269,20 @@ function ProductForm({
                                         props.handleChange(event);
                                     }}
                                 />
-
-                                <div className="mb-4">
-                                    <label className="control-label" htmlFor={'description'}>
-                                        {t('Product Description')}
-                                    </label>
-                                    <SunEditor
-                                        name={'description'}
-                                        setDefaultStyle="font-family: Montserrat; font-size: 14px;"
-                                        placeholder={t('Product Description')}
-                                        defaultValue={props.values.description || editorContent}
-                                        setContents={props.values.description}
-                                        setOptions={{ height: '250' }}
-                                        onChange={handleChangeEditor}
-                                    />
-                                </div>
+                                {/*<div className="mb-4">*/}
+                                {/*    <label className="control-label" htmlFor={'description'}>*/}
+                                {/*        {t('Product Description')}*/}
+                                {/*    </label>*/}
+                                {/*    <SunEditor*/}
+                                {/*        name={'description'}*/}
+                                {/*        setDefaultStyle="font-family: Montserrat; font-size: 14px;"*/}
+                                {/*        placeholder={t('Product Description')}*/}
+                                {/*        defaultValue={props.values.description || editorContent}*/}
+                                {/*        setContents={props.values.description}*/}
+                                {/*        setOptions={{ height: '250' }}*/}
+                                {/*        onChange={handleChangeEditor}*/}
+                                {/*    />*/}
+                                {/*</div>*/}
 
                                 <InputSwitcher
                                     label={'Configured'}

@@ -23,7 +23,7 @@ const initialState: {
     showDateSelector: boolean;
     orderFetched: boolean;
     fileName: string;
-    base64Data: string;
+    base64Data: string | null;
     tagSellersSuggestions: any[];
     showCancelPopup: boolean;
 } = {
@@ -42,7 +42,7 @@ const initialState: {
     showDateSelector: false,
     orderFetched: false,
     fileName: '',
-    base64Data: '',
+    base64Data: null,
     tagSellersSuggestions: [],
     showCancelPopup: false
 };

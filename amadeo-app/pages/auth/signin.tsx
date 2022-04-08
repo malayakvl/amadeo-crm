@@ -19,7 +19,6 @@ function Signin({ locale }: { locale: string }) {
         email: Yup.string().email(t('Must be a valid email')).required(t('Required field')),
         password: Yup.string().required(t('Required field'))
     });
-
     return (
         <div className="flex justify-center">
             <div className="mt-10 rounded-lg bg-white w-96 p-10 pb-24">

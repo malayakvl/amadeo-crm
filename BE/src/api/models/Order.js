@@ -10,14 +10,13 @@ import {
 } from 'timers/promises';
 import axios from "axios";
 
-function createInvoice (invoice, path) {
+async function createInvoice (invoice, path) {
     try {
         let doc = new PDFDocument({ size: "A4", margin: 50 });
-        
-        generateHeader(doc);
-        generateCustomerInformation(doc, invoice);
-        generateInvoiceTable(doc, invoice);
-        generateFooter(doc);
+        await generateHeader(doc, invoice.seller.data);
+        await generateCustomerInformation(doc, invoice);
+        await generateInvoiceTable(doc, invoice);
+        await generateFooter(doc);
         
         doc.end();
         doc.pipe(fs.createWriteStream(path));
@@ -29,19 +28,21 @@ function createInvoice (invoice, path) {
 }
 
 
-function generateHeader(doc) {
+async function generateHeader(doc, seller) {
+    console.log(seller);
     doc
-        // .image("./public/images/logoBig.png", 90, 45, { width: 90 })
+        .image("./public/images/logo.png", 90, 45, { width: 90 })
         .fillColor("#444444")
         .fontSize(20)
-        .text("", 170, 57)
+        .text("", 170, 0)
         .fontSize(10)
-        .text("LiveProshop Inc.", 200, 50, { align: "right" })
-        .text("123 Main Street", 200, 65, { align: "right" })
-        .text("New York, NY, 10025", 200, 80, { align: "right" })
+        .text(seller.company_name, 300, 50, { align: "right" })
+        .text(seller.address_line_1, 300, 65, { align: "right" })
+        .text(`${seller.post_code}, ${seller.city}`, 300, 80, { align: "right" })
+        .text(seller.phone, 300, 95, { align: "right" })
         .moveDown();
 }
-function generateCustomerInformation(doc, invoice) {
+async function generateCustomerInformation(doc, invoice) {
     doc
         .fillColor("#444444")
         .fontSize(20)
@@ -100,57 +101,70 @@ function generateInvoiceTable(doc, invoice) {
     );
     generateHr(doc, invoiceTableTop + 20);
     doc.font("Helvetica");
+    if (invoice.items) {
+        for (i = 0; i < invoice.items.length; i++) {
+            const item = invoice.items[i];
+            const position = invoiceTableTop + (i + 1) * 30;
+            generateTableRow(
+                doc,
+                position,
+                item.name,
+                item.description,
+                formatCurrency(item.price),
+                item.quantity,
+                formatCurrency(item.price * item.quantity)
+            );
+        
+            generateHr(doc, position + 20);
+        }
     
-    for (i = 0; i < invoice.items.length; i++) {
-        const item = invoice.items[i];
-        const position = invoiceTableTop + (i + 1) * 30;
+        const subtotalPosition = invoiceTableTop + (i + 1) * 30;
         generateTableRow(
             doc,
-            position,
-            item.name,
-            item.description,
-            formatCurrency(item.price),
-            item.quantity,
-            formatCurrency(item.price * item.quantity)
+            subtotalPosition,
+            "",
+            "",
+            "Subtotal",
+            "",
+            formatCurrency(invoice.subtotal)
         );
-        
-        generateHr(doc, position + 20);
+    
+        const paidToDatePosition = subtotalPosition + 20;
+        generateTableRow(
+            doc,
+            paidToDatePosition,
+            "",
+            "",
+            "Shipping Amount",
+            "",
+            formatCurrency(invoice.shipping_amount)
+        );
+    
+        const vatToDatePosition = paidToDatePosition + 20;
+        generateTableRow(
+            doc,
+            vatToDatePosition,
+            "",
+            "",
+            "VAT",
+            "",
+            formatCurrency((invoice.subtotal*15/100))
+        );
+    
+    
+        const duePosition = vatToDatePosition + 25;
+        doc.font("Helvetica-Bold");
+        generateTableRow(
+            doc,
+            duePosition,
+            "",
+            "",
+            "Total Payment",
+            "",
+            formatCurrency(invoice.paid)
+        );
+        doc.font("Helvetica");
     }
-    
-    const subtotalPosition = invoiceTableTop + (i + 1) * 30;
-    generateTableRow(
-        doc,
-        subtotalPosition,
-        "",
-        "",
-        "Subtotal",
-        "",
-        formatCurrency(invoice.subtotal)
-    );
-    
-    const paidToDatePosition = subtotalPosition + 20;
-    generateTableRow(
-        doc,
-        paidToDatePosition,
-        "",
-        "",
-        "Shipping Amount",
-        "",
-        formatCurrency(invoice.shipping_amount)
-    );
-    
-    const duePosition = paidToDatePosition + 25;
-    doc.font("Helvetica-Bold");
-    generateTableRow(
-        doc,
-        duePosition,
-        "",
-        "",
-        "Total Payment",
-        "",
-        formatCurrency(invoice.paid)
-    );
-    doc.font("Helvetica");
 }
 
 function generateFooter(doc) {
@@ -176,7 +190,7 @@ function generateTableRow(
     doc
         .fontSize(10)
         .text(item, 50, y)
-        .text(description.replace(/<[^>]*>?/gm, ''), 150, y)
+        // .text(description.replace(/<[^>]*>?/gm, ''), 150, y)
         .text(unitCost, 280, y, { width: 90, align: "right" })
         .text(quantity, 370, y, { width: 90, align: "right" })
         .text(lineTotal, 0, y, { align: "right" });
@@ -475,24 +489,37 @@ class Order {
                 }
             }
             if (res.rows.length > 0) {
+                // get seller information
+                const addressRes = await client.query(`SELECT data.addresses.*, data.users.company_name, data.users.phone
+                                                       FROM data.addresses LEFT JOIN data.users ON data.users.id=data.addresses.user_id
+                                                       WHERE user_id=${res.rows[0].seller_id}`);
                 const invoice = {
                     shipping: {
                         name: res.rows[0].buyer_first_name,
                         address: res.rows[0].shipping_address,
-                        
+                        state: res.rows[0].state,
+                        city: res.rows[0].city,
+                        post_code: res.rows[0].post_code,
+                        phone: res.rows[0].phone
+                    },
+                    seller: {
+                      data: addressRes.rows[0]
                     },
                     items: res.rows[0].order_items,
                     subtotal: res.rows[0].order_amount,
-                    shipping_amount: res.rows[0].total_amount - res.rows[0].order_amount,
+                    shipping_amount: res.rows[0].shipping_amount,
                     paid: res.rows[0].total_amount,
                     invoice_nr: res.rows[0].order_number,
                     invoice_date: moment(res.rows[0].created_at).format('DD/MM/YYYY'),
                 };
-                createInvoice(invoice, `${dirUpload}/${res.rows[0].order_number}.pdf`);
+                
+                
+                
+                await createInvoice(invoice, `${dirUpload}/${res.rows[0].order_number}.pdf`);
     
-                await setTimeout(2000);
+                await setTimeout(4000);
                 if (!fs.existsSync(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${res.rows[0].order_number}.pdf`)) {
-                    await setTimeout(2000);
+                    await setTimeout(4000);
                 }
                 const base64 = await pdf2base64(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${res.rows[0].order_number}.pdf`)
                     .then(
@@ -508,6 +535,7 @@ class Order {
                 return {
                     filename: `${process.env.DB_DOWNLOAD_FOLDER}/orders/${userId}/${res.rows[0].order_number}.pdf`,
                     fileEncoded: base64,
+                    isCreated: true,
                     error: null
                 }
             }
@@ -603,7 +631,7 @@ class Order {
                     headers: { 'Content-Type': 'application/json' }
                 })
                 .then(async () => {
-                    await client.query(`UPDATE data.orders SET status='cancel' WHERE id=(${order.id});`);
+                    await client.query(`UPDATE data.orders SET status='canceled' WHERE id=${order.id};`);
                     return {success: true, error: null}
                 }).catch(error => {
                     return {success: false, error: error.message}
