@@ -29,7 +29,7 @@ export default function Index() {
     const dispatch = useDispatch();
     const orderFetched: boolean = useSelector(orderFetchedSelector);
     // const fileName: string = useSelector(orderFileNameFetchedSelector);
-    const base64Data: string = useSelector(orderBase64DataSelector);
+    const base64Data: string | null = useSelector(orderBase64DataSelector);
 
     const [url, setUrl] = useState('');
     const [blobData, setBlobData] = useState<any>(null);
