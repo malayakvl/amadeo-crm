@@ -10,7 +10,7 @@ import {
     // orderFileNameFetchedSelector,
     orderBase64DataSelector
 } from '../../../redux/orders/selectors';
-import { fetchOrderPdfAction } from '../../../redux/orders';
+import { clearBase64Action, fetchOrderPdfAction } from '../../../redux/orders';
 import { showLoaderAction } from '../../../redux/layouts/actions';
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import '@react-pdf-viewer/default-layout/lib/styles/index.css';
@@ -35,9 +35,10 @@ export default function Index() {
     const dispatch = useDispatch();
     const orderFetched: boolean = useSelector(orderFetchedSelector);
     // const fileName: string = useSelector(orderFileNameFetchedSelector);
-    const base64Data: string = useSelector(orderBase64DataSelector);
+    const base64Data: string | null = useSelector(orderBase64DataSelector);
 
     const [url, setUrl] = useState('');
+    const [blobData, setBlobData] = useState<any>(null);
 
     const {
         query: { orderNumber }
@@ -48,13 +49,30 @@ export default function Index() {
         dispatch(fetchOrderPdfAction(orderNumber));
     }, []);
 
+    // useEffect(() => {
+    //     if (orderFetched) {
+    //         const blob = base64toBlob(`data:application/pdf;base64,${base64Data}`);
+    //         setUrl(URL.createObjectURL(blob));
+    //         dispatch(showLoaderAction(false));
+    //     }
+    // }, [orderFetched]);
     useEffect(() => {
-        if (orderFetched) {
-            const blob = base64toBlob(`data:application/pdf;base64,${base64Data}`);
-            setUrl(URL.createObjectURL(blob));
+        if (orderFetched && base64Data) {
+            setBlobData(base64toBlob(`data:application/pdf;base64,${base64Data}`));
+        }
+        if (blobData) {
+            setUrl(URL.createObjectURL(blobData));
+            dispatch(showLoaderAction(false));
+            dispatch(clearBase64Action(null));
+        }
+    }, [orderFetched, base64Data]);
+
+    useEffect(() => {
+        if (blobData) {
+            setUrl(URL.createObjectURL(blobData));
             dispatch(showLoaderAction(false));
         }
-    }, [orderFetched]);
+    }, [blobData]);
 
     return (
         <>

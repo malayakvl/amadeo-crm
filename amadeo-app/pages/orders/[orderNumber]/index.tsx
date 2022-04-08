@@ -45,11 +45,9 @@ export default function Index() {
 
     useEffect(() => {
         if (orderFetched && base64Data) {
-            console.log('BASE 64', base64Data);
             setBlobData(base64toBlob(`data:application/pdf;base64,${base64Data}`));
         }
         if (blobData) {
-            console.log('hahaha');
             setUrl(URL.createObjectURL(blobData));
             dispatch(showLoaderAction(false));
             dispatch(clearBase64Action(null));

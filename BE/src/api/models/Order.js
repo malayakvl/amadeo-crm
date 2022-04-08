@@ -361,6 +361,7 @@ class Order {
             }
             const ordersQuery = `SELECT *
                                 FROM data.get_orders (${perPage}, ${offset}, '${JSON.stringify(_filters)}', '${column} ${sort}');`;
+            console.log(ordersQuery);
             const res = await client.query(ordersQuery);
             const items = res.rows.length > 0 ? res.rows : [];
             const error = null;
@@ -394,17 +395,24 @@ class Order {
         }
     }
     
-    async fetchFilters () {
+    async fetchFilters (user) {
         const client = await pool.connect();
         try {
+            const _filters = {};
+            if (user.role_id === UserRole.BUYER) {
+                _filters.status = [OrderStatus.PAYED, OrderStatus.SHIPPED, OrderStatus.CANCELED, OrderStatus.NEW];
+            } else {
+                _filters.status = [OrderStatus.PAYED, OrderStatus.SHIPPED, OrderStatus.CANCELED];
+            }
+            _filters.seller_id = [user.id];
             const res = {};
-            const shipping = await client.query('SELECT * FROM data.get_orders_shipping();');
+            const shipping = await client.query(`SELECT * FROM data.get_orders_shipping('${JSON.stringify(_filters)}');`);
             res.shippings = shipping.rows[0].shipping ? shipping.rows[0].shipping : [];
-            const payments = await client.query('SELECT * FROM data.get_orders_payments();');
+            const payments = await client.query(`SELECT * FROM data.get_orders_payments('${JSON.stringify(_filters)}');`);
             res.payments = payments.rows[0].payments ? payments.rows[0].payments : [];
-            const countries = await client.query('SELECT * FROM data.get_orders_countries();');
+            const countries = await client.query(`SELECT * FROM data.get_orders_countries('${JSON.stringify(_filters)}');`);
             res.countries = countries.rows[0].countries ? countries.rows[0].countries : [];
-            const amounts = await client.query('SELECT * FROM data.get_orders_total_amount_range();');
+            const amounts = await client.query(`SELECT * FROM data.get_orders_total_amount_range('${JSON.stringify(_filters)}');`);
             res.amounts = amounts.rows[0].total_amount_range.max ? [amounts.rows[0].total_amount_range.min, amounts.rows[0].total_amount_range.max] : [];
             const error = null;
 
