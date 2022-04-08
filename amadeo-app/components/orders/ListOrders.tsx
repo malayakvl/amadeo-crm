@@ -67,7 +67,7 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
             setupChecked.push({ id: item.id, checked: false });
         });
         dispatch(initIdsAction(setupChecked));
-        dispatch(clearBase64Action(''));
+        dispatch(clearBase64Action(null));
     }, [items]);
 
     const sendStatusRequest = useCallback(
@@ -227,16 +227,7 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                                     <span className="pl-3">{item.buyer_first_name}</span>
                                 </div>
                             </td>
-                            <td>
-                                {parseTranslation(item.country_json, 'name', locale)}
-                                {/*{item.flag_name && (*/}
-                                {/*    <img*/}
-                                {/*        src={`/images/flags/${item.flag_name.toLowerCase()}.svg`}*/}
-                                {/*        className="fill-current text-black"*/}
-                                {/*        alt={''}*/}
-                                {/*    />*/}
-                                {/*)}*/}
-                            </td>
+                            <td>{parseTranslation(item.country_json, 'name', locale)}</td>
                             <td>
                                 {item.shipping_image && (
                                     <Image

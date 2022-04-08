@@ -27,7 +27,6 @@ export default function SellerRegistration({
 }) {
     const t = useTranslations();
     const dispatch = useDispatch();
-
     const countries = useSelector(countriesSelector);
 
     const preparedCountriesDropdown = useMemo(

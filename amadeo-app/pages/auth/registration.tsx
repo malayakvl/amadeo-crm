@@ -7,15 +7,14 @@ import SellerRegistration from '../../components/form/SellerRegistration';
 const { publicRuntimeConfig } = getConfig();
 const baseUrl = `${publicRuntimeConfig.apiUrl}/auth`;
 
-function Registration(invitation: any, locale: string) {
+function Registration({ locale, invitation }: { locale: string; invitation: any }) {
     let Form = <></>;
-
     if (invitation.role_id === 1) {
         Form = <BuyerRegistration email={invitation.email} locale={locale} />;
     }
 
     if (invitation.role_id === 2) {
-        Form = <SellerRegistration email={invitation.email} />;
+        Form = <SellerRegistration email={invitation.email} locale={locale} />;
     }
 
     return <div className="flex justify-center">{Form}</div>;
@@ -30,7 +29,6 @@ export async function getServerSideProps(context: any) {
         locale
     } = context;
     const res = await fetch(`${baseUrl}/invitation/${hash}`);
-
     if (res.status !== 200) {
         return {
             redirect: { destination: '/' }
@@ -38,7 +36,6 @@ export async function getServerSideProps(context: any) {
     }
 
     const json = await res.json();
-
     if (!json.active) {
         return {
             locale,
@@ -46,8 +43,18 @@ export async function getServerSideProps(context: any) {
             redirect: { destination: '/' }
         };
     }
-
     return {
-        props: json
+        props: {
+            locale,
+            invitation: json,
+            messages: {
+                ...require(`../../messages/${locale}.json`)
+            }
+        }
     };
+    // console.log(locale, json);
+
+    // return {
+    //     props: { invitation: json, locale: locale }
+    // };
 }

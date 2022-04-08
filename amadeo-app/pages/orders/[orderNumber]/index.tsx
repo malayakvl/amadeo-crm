@@ -3,14 +3,8 @@ import { getSession } from 'next-auth/client';
 import { useDispatch, useSelector } from 'react-redux';
 import { Viewer, Worker } from '@react-pdf-viewer/core';
 import { useRouter } from 'next/router';
-// import { defaultLayoutPlugin } from '@react-pdf-viewer/default-layout';
-// import { baseApiUrl } from '../../../constants';
-import {
-    orderFetchedSelector,
-    // orderFileNameFetchedSelector,
-    orderBase64DataSelector
-} from '../../../redux/orders/selectors';
-import { fetchOrderPdfAction } from '../../../redux/orders';
+import { orderFetchedSelector, orderBase64DataSelector } from '../../../redux/orders/selectors';
+import { clearBase64Action, fetchOrderPdfAction } from '../../../redux/orders';
 import { showLoaderAction } from '../../../redux/layouts/actions';
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import '@react-pdf-viewer/default-layout/lib/styles/index.css';
@@ -38,6 +32,7 @@ export default function Index() {
     const base64Data: string = useSelector(orderBase64DataSelector);
 
     const [url, setUrl] = useState('');
+    const [blobData, setBlobData] = useState<any>(null);
 
     const {
         query: { orderNumber }
@@ -49,16 +44,28 @@ export default function Index() {
     }, []);
 
     useEffect(() => {
-        if (orderFetched) {
-            const blob = base64toBlob(`data:application/pdf;base64,${base64Data}`);
-            setUrl(URL.createObjectURL(blob));
+        if (orderFetched && base64Data) {
+            console.log('BASE 64', base64Data);
+            setBlobData(base64toBlob(`data:application/pdf;base64,${base64Data}`));
+        }
+        if (blobData) {
+            console.log('hahaha');
+            setUrl(URL.createObjectURL(blobData));
+            dispatch(showLoaderAction(false));
+            dispatch(clearBase64Action(null));
+        }
+    }, [orderFetched, base64Data]);
+
+    useEffect(() => {
+        if (blobData) {
+            setUrl(URL.createObjectURL(blobData));
             dispatch(showLoaderAction(false));
         }
-    }, [orderFetched]);
+    }, [blobData]);
 
     return (
         <>
-            {orderFetched && (
+            {base64Data && (
                 <Worker workerUrl="https://unpkg.com/pdfjs-dist@2.12.313/build/pdf.worker.js">
                     <div style={{ height: '750px' }}>
                         <Viewer

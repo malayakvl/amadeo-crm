@@ -6,12 +6,15 @@ import { TogglePassword } from '../_form';
 import InputTextDisabled from '../_form/InputTextDisabled';
 import getConfig from 'next/config';
 import { signIn } from 'next-auth/client';
+import { showLoaderAction } from '../../redux/layouts/actions';
+import { useDispatch } from 'react-redux';
 
 const { publicRuntimeConfig } = getConfig();
 const baseUrl = `${publicRuntimeConfig.apiUrl}/auth`;
 
 export default function BuyerRegistration({ email, locale }: { email: string; locale: string }) {
     const t = useTranslations();
+    const dispatch = useDispatch();
 
     const validationSchema = Yup.object().shape({
         password: Yup.string()
@@ -26,6 +29,7 @@ export default function BuyerRegistration({ email, locale }: { email: string; lo
     });
 
     const onSubmit = (values: any) => {
+        dispatch(showLoaderAction(true));
         fetch(`${baseUrl}/register?locale=${locale}`, {
             method: 'POST',
             body: JSON.stringify(values),
