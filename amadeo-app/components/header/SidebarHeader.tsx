@@ -99,7 +99,7 @@ const SidebarHeader: React.FC = () => {
                             <div className="corner" />
                             <ul>
                                 <li>
-                                    <Link href={`/account`}>
+                                    <Link href="/account">
                                         {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                                         <a
                                             role="presentation"
@@ -111,7 +111,7 @@ const SidebarHeader: React.FC = () => {
                                 </li>
                                 {user.role_id === 2 && (
                                     <li>
-                                        <Link href={`/account/plan`}>
+                                        <Link href="/account/plan">
                                             {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                                             <a
                                                 role="presentation"
@@ -125,7 +125,7 @@ const SidebarHeader: React.FC = () => {
                                     </li>
                                 )}
                                 <li>
-                                    <Link href={`/settings/payment`}>
+                                    <Link href="/payment-setting">
                                         {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                                         <a
                                             role="presentation"
@@ -140,7 +140,7 @@ const SidebarHeader: React.FC = () => {
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link href={`/notifications`}>
+                                    <Link href="/notifications">
                                         {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                                         <a
                                             role="presentation"
@@ -161,7 +161,7 @@ const SidebarHeader: React.FC = () => {
                                 </li>
                                 <li>
                                     <a
-                                        href={`/api/auth/signout`}
+                                        href="/api/auth/signout"
                                         onClick={(e) => {
                                             e.preventDefault();
                                             window.localStorage.removeItem('user');
@@ -179,7 +179,7 @@ const SidebarHeader: React.FC = () => {
                 {/*<span className="divider" />*/}
                 <span className="mt-1 ml-3 min-w-max">
                     <a
-                        href={`/api/auth/signout`}
+                        href="/api/auth/signout"
                         title={t('Logout')}
                         onClick={(e) => {
                             e.preventDefault();

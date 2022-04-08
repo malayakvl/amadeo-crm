@@ -12,8 +12,8 @@ export default function Footer() {
                             <a>
                                 <Image
                                     src="/images/logo.svg"
-                                    width="252"
-                                    height="24"
+                                    width="176"
+                                    height="31"
                                     layout="fixed"
                                 />
                             </a>
