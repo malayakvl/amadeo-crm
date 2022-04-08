@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 import Brand from './Brand';
 import Pages from './Pages';
-import { SidebarInventory, SidebarFull, SidebarShipping } from './customers/index';
+import { SidebarInventory, SidebarFull, SidebarShipping, SidebarGuides } from './customers/index';
 import { isSidebarOpenSelector } from '../../redux/layouts/selectors';
 import { useWindowSize } from './../../hooks';
 import { sidebarCloseAction, toggleSidebarAction } from '../../redux/layouts';
@@ -23,6 +23,10 @@ const SidebarCustomers: React.FC = () => {
 
     if (router.route.startsWith('/inventory')) {
         CurrentSidebar = SidebarInventory;
+    }
+
+    if (router.route.startsWith('/guides')) {
+        CurrentSidebar = SidebarGuides;
     }
 
     useEffect(() => {

@@ -16,7 +16,7 @@
 }
 
 .btn-big {
-  @apply red-yellow-gradient text-white text-2xl font-bold px-7 py-3 rounded-lg whitespace-nowrap;
+  @apply red-yellow-gradient text-white text-2xl font-bold px-3 md:px-7 py-3 rounded-lg whitespace-nowrap;
 }
 .view-all {
   @apply red-yellow-gradient-text text-xs font-bold relative;
@@ -90,7 +90,7 @@
 .btn-sync-fb {
   border: solid 1px #3680FB;
   color: #3680FB;
-  @apply rounded-lg text-[9px] font-bold p-1.5 mt-3 ml-4;
+  @apply rounded-lg text-[9px] font-bold p-1.5 mt-3 ml-2 md:ml-4;
   //box-shadow: 0 10px 20px rgba(153, 171, 206, 0.35), inset 0px -4px 0px rgba(0, 0, 0, 0.1);
 
   span {

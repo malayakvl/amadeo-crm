@@ -302,7 +302,7 @@
   "payment_descr": "Payment section should allow merchant to view all payment<br/> transactions he had in our system.{pmk}Merchant should be able to:{endpmk}{listmk}{limk}choose a period using calendar and see transactions within this period{endlimk}{limk}download invoices of each transaction one by one or with bulk selection{endlimk}{limk}manage and adjust payment methods that will be seen and available for his shoppers{endlimk}{endlistmk}",
   "scheduled": "scheduled",
   "live": "live",
-  "liveselling_descr": "A live selling session is a streaming session that merchant conducts via Facebook account. The purpose of these sessions is to sell products(cloths, goods, etc.). While this session  viewers (potential shoppers) will write comments based on what the merchant says.",
+  "liveselling_descr": "In order to learn more go to the \"live selling rules\" page",
   "Read rules and download csv template here": "Read rules and download csv template here",
   "Settings": "Settings",
   "Cart duration": "Cart duration",
