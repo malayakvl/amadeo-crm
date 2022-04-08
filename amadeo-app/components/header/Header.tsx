@@ -13,11 +13,11 @@ const Header: React.FC = () => {
 
     return (
         <header>
-            <nav className="px-4 bg-white flex items-center justify-between md:px-32 md:h-144 md:flex">
-                <div className="relative md:-top-2 cursor-pointer">
+            <nav className="px-4 bg-white flex flex-wrap items-center justify-between md:px-32 py-10">
+                <div className="cursor-pointer">
                     <Link href={'/'}>
                         <a>
-                            <Image src="/images/logo.svg" width={175} height={52} alt="" />
+                            <Image src="/images/logo.svg" width="176" height="31" alt="" />
                         </a>
                     </Link>
                 </div>
@@ -37,30 +37,39 @@ const Header: React.FC = () => {
                     />
                 </svg>
 
-                <div className="md:flex font-bold text-sm flex items-center justify-end" id="menu">
+                <div
+                    className="flex flex-wrap justify-center justify-items-end flex-auto mx-2 xl:mx-4 2xl:mx-7 my-4 lg:my-0 font-bold text-sm"
+                    id="menu">
                     <Link href={'/'}>
-                        <a className="hover:text-purple-400">Features</a>
+                        <a className="m-2 xl:mx-4 2xl:mx-7 hover:text-purple-400">Features</a>
                     </Link>
+
                     <Link href={'/pricing'}>
-                        <a className="ml-14 hover:text-purple-400">Pricing</a>
-                    </Link>
-                    <Link href={'/'}>
-                        <a className="ml-14 hover:text-purple-400">Case Studies</a>
+                        <a className="m-2 xl:mx-4 2xl:mx-7 hover:text-purple-400">Pricing</a>
                     </Link>
 
                     <Link href={'/'}>
-                        <a className="ml-14 uppercase hover:text-purple-400">Faq</a>
+                        <a className="m-2 xl:mx-4 2xl:mx-7 hover:text-purple-400">Case Studies</a>
                     </Link>
 
+                    <Link href={'/'}>
+                        <a className="m-2 xl:mx-4 2xl:mx-7 hover:text-purple-400 uppercase">Faq</a>
+                    </Link>
+
+                    <Link href={'/contact-us'}>
+                        <a className="m-2 xl:mx-4 2xl:mx-7 hover:text-purple-400">Contact Us</a>
+                    </Link>
+                </div>
+                <div className="font-bold text-sm flex flex-wrap flex-none space-x-4 justify-end">
                     {!session?.user ? (
                         <>
                             <Link href={'/auth/signup'}>
-                                <button className="ml-14 gradient-btn">
+                                <button className="gradient-btn">
                                     <a>Try for free</a>
                                 </button>
                             </Link>
                             <Link href={'/auth/signin'}>
-                                <button className="ml-14 disabled-btn">
+                                <button className="disabled-btn">
                                     <a className="">Login</a>
                                 </button>
                             </Link>

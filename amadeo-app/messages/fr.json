@@ -257,6 +257,7 @@
   "Shipping Method": "Shipping Method",
   "shipping_threshold": "Set a shipping threshold. In case order has reacted this amount, the shipping is free for this shopper",
   "Message": "Message",
+  "Message sended": "Message sended",
   "Send": "Send",
   "enable": "enable",
   "disable": "disable",
@@ -390,6 +391,6 @@
   "Complete your profile": "Complete your profile",
   "Confirm password": "Confirm password",
   "Continue": "Continue",
-  "Please create a Password": "Please create a Password"
-
+  "Please create a Password": "Please create a Password",
+  "Contact Us": "Contact Us"
 }

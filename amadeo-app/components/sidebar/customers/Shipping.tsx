@@ -75,7 +75,9 @@ const SidebarShipping = function () {
                 <Link href={'/shipping/list'}>
                     <a>
                         <i className="text-blue-350 text-base font-bold tracking-wide truncate cursor-pointer" />
-                        <span className="s-caption">{t('Shipping')}</span>
+                        <span className="s-caption" style={{ whiteSpace: 'normal' }}>
+                            {t('Shipping methods')}
+                        </span>
                     </a>
                 </Link>
             </li>

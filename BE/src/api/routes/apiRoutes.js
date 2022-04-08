@@ -19,6 +19,7 @@ import SellerController from "../controllers/SellerController.js";
 import DashboardController from "../controllers/DashboardController.js";
 import PaymentPlanController from "../controllers/PaymentPlanController.js";
 import CheckoutController from "../controllers/CheckoutController.js";
+import ContactUsController from "../controllers/ContactUsController.js";
 
 
 const apiRoutes = express.Router();
@@ -53,6 +54,8 @@ apiRoutes.route('/subscription').post(UserController.createUserFromSubscription)
 apiRoutes.route('/payment-plans').get(PaymentPlanController.fetchItems);
 apiRoutes.route('/get-plan-info').get(PaymentPlanController.fetchPlanInfo);
 apiRoutes.route('/create-payment-intent').post(PaymentPlanController.stripeClientSecret);
+apiRoutes.route('/contact-us').post(ContactUsController.sendMessage);
+
 /** ===================================================================== */
 /** ================== AUTHENTIFICATED ROUTES =========================== */
 /** ===================================================================== */
