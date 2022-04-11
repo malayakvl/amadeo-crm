@@ -29,7 +29,7 @@ export default function Index() {
     const dispatch = useDispatch();
     const orderFetched: boolean = useSelector(orderFetchedSelector);
     // const fileName: string = useSelector(orderFileNameFetchedSelector);
-    const base64Data: string = useSelector(orderBase64DataSelector);
+    const base64Data: string | null = useSelector(orderBase64DataSelector);
 
     const [url, setUrl] = useState('');
     const [blobData, setBlobData] = useState<any>(null);
@@ -45,11 +45,9 @@ export default function Index() {
 
     useEffect(() => {
         if (orderFetched && base64Data) {
-            console.log('BASE 64', base64Data);
             setBlobData(base64toBlob(`data:application/pdf;base64,${base64Data}`));
         }
         if (blobData) {
-            console.log('hahaha');
             setUrl(URL.createObjectURL(blobData));
             dispatch(showLoaderAction(false));
             dispatch(clearBase64Action(null));

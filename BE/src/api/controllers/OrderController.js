@@ -22,7 +22,7 @@ class OrderController {
         if (!req.user) {
             return res.status(401).json('Access deny');
         } else {
-            const items = await orderModel.fetchFilters();
+            const items = await orderModel.fetchFilters(req.user);
             return res.status(200).json({ items: items.res });
         }
     }

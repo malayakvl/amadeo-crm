@@ -42,7 +42,7 @@ export const orderFileNameFetchedSelector = createSelector(
 );
 export const orderBase64DataSelector = createSelector(
     rootSelector,
-    (orders: State.Orders): string => orders.base64Data
+    (orders: State.Orders): string | null => orders.base64Data
 );
 export const tagSellersSuggestionsSelector = createSelector(
     rootSelector,
