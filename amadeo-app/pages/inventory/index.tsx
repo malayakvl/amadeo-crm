@@ -64,7 +64,7 @@ export default function Index({ session, locale }: { session: any; locale: strin
                             style={{ display: 'none' }}
                         />
                         <span className="block text-gray-350 text-sm font-bold pb-2">
-                            <Link href={'/guides/inventory'}>
+                            <Link href={'/guides/rules-csv'}>
                                 {t('Read rules and download csv template here')}
                             </Link>
                         </span>

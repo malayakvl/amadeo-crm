@@ -39,6 +39,17 @@ const SidebarGuides = function () {
                     </a>
                 </Link>
             </li>
+
+            <li className={`submenu ${currRoute === 'guides/rules-csv' ? 'active' : ''}`}>
+                <Link href={'./rules-csv'}>
+                    <a>
+                        <i className="text-blue-350 text-base font-bold tracking-wide truncate cursor-pointer" />
+                        <span className="s-caption" style={{ whiteSpace: 'normal' }}>
+                            {t('rules_csv')}
+                        </span>
+                    </a>
+                </Link>
+            </li>
         </>
     );
 };
