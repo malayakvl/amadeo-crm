@@ -42,7 +42,7 @@ export default function Index({ session }: { session: any }) {
                 <div className="block">
                     <div className="w-full bg-white">
                         <div className="md:flex justify-between">
-                            <span className="text-blue-350 text-base max-w-[800px]">
+                            <span className="text-blue-400 underline text-base max-w-[800px]">
                                 <Link href={'/guides/liveselling'}>{t('liveselling_descr')}</Link>
                             </span>
                             <button

@@ -63,7 +63,7 @@ export default function Index({ session, locale }: { session: any; locale: strin
                             ref={hiddenFileInput}
                             style={{ display: 'none' }}
                         />
-                        <span className="block text-gray-350 text-sm font-bold pb-2">
+                        <span className="block text-sm font-bold pb-2 text-blue-400 underline">
                             <Link href={'/guides/rules-csv'}>
                                 {t('Read rules and download csv template here')}
                             </Link>
