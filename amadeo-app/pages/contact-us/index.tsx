@@ -24,7 +24,7 @@ function ContactUs({ locale }: { locale: string }) {
         dispatch(
             submitFormAction({
                 form: values,
-                successMessage: t('Message sended'),
+                successMessage: t('Your request has been sent'),
                 locale,
                 callback: setSuccess
             })
@@ -39,7 +39,7 @@ function ContactUs({ locale }: { locale: string }) {
                 </div>
                 {success ? (
                     <div className="mb-4 font-bold text-2xl line-height-105percent w-72 text-green-500">
-                        {t('Message sended')}
+                        {t('Your request has been sent')}
                     </div>
                 ) : (
                     <Formik
