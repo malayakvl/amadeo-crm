@@ -1,5 +1,5 @@
 import { sendMail } from '../lib/sendMail.js';
-import { supportEmail } from '../sender/templates.js';
+import { supportEmail, supportFromEmail } from '../sender/templates.js';
 
 class SupportController {
     async sendMessage(req, res) {
