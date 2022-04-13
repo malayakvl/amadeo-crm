@@ -252,7 +252,7 @@ function ProductForm({
                 };
                 return (
                     <form onSubmit={props.handleSubmit} className="mt-5">
-                        <div className="md:grid md:grid-cols-4 md:w-full">
+                        <div className="max-w-screen-md xl:max-w-screen-2xl xl:grid xl:grid-cols-2">
                             <div className="flex-col mb-4">
                                 <InventoryPhotos
                                     uploadedFiles={uploadedFiles}
@@ -260,7 +260,7 @@ function ProductForm({
                                     productData={productData}
                                 />
                             </div>
-                            <div className="ml-4">
+                            <div className="xl:ml-4">
                                 <h2 className="form-subtitle">{t('Product details')}</h2>
                                 <InputText
                                     icon={null}
