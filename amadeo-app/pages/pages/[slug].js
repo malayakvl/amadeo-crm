@@ -36,13 +36,16 @@ export async function getStaticPaths() {
     };
 }
 
-export async function getStaticProps({ params }) {
+export async function getStaticProps({ params, locale }) {
     const pageData = await getPageData(params.slug);
     const fullPath = path.join(postsDirectory, `${params.slug}.html`);
     pageData[0].content = fs.readFileSync(fullPath, 'utf8');
     return {
         props: {
-            pageData
+            pageData,
+            messages: {
+                ...require(`../../messages/${locale}.json`)
+            }
         }
     };
 }
