@@ -201,3 +201,13 @@ const SidebarHeader: React.FC = () => {
 };
 
 export default SidebarHeader;
+
+export async function getStaticProps({ locale }: any) {
+    return {
+        props: {
+            messages: {
+                ...require(`../../messages/${locale}.json`)
+            }
+        }
+    };
+}
