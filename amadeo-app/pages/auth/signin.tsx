@@ -26,6 +26,12 @@ function Signin({ locale }: { locale: string }) {
                 <div className="mb-8 font-bold text-3xl line-height-105percent">
                     {t('Please sign into your account')}
                 </div>
+
+                {query.message && (
+                    <div className="error-el mb-4">
+                        <span className="text-sm">{query.message}</span>
+                    </div>
+                )}
                 <Formik
                     enableReinitialize
                     initialValues={{}}
@@ -108,7 +114,6 @@ function Signin({ locale }: { locale: string }) {
                     />
                     <div className="text-sm ml-2.5">{t('Continue with Facebook')}</div>
                 </button>
-                <div className="error-el">{query.message}</div>
 
                 <div className="mt-3 border-t text-center text-sm">
                     <div className="mb-2 pt-1">

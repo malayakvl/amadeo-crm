@@ -136,7 +136,7 @@ const SidebarFull: React.FC = () => {
                 role="presentation"
                 className={currRoute === 'guides' ? 'active' : ''}
                 onClick={() => closeMenu()}>
-                <Link href={'/guides'}>
+                <Link href={'/guides/liveselling'}>
                     <a>
                         <i className="support" />
                         <span className="s-caption">{t('Guides')}</span>

@@ -29,8 +29,11 @@
 
   .brand {
     background-image: url("../../public/images/logo.svg");
-    width: 176px;
-    height: 31px;
+    background-size: 200px auto;
+    width: 200px;
+    height: 32px;
+    left: -15px;
+    top: 5px;
     text-indent: -99999px;
     white-space: nowrap;
     @apply block;

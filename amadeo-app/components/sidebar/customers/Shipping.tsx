@@ -22,8 +22,8 @@ const SidebarShipping = function () {
                 onClick={() => {
                     dispatch(
                         setActivePageAction({
-                            type: 'inventory',
-                            modifier: 'products'
+                            type: 'settings',
+                            modifier: ''
                         })
                     );
                 }}>

@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Formik } from 'formik';
 import { useTranslations } from 'next-intl';
 import { useDispatch, useSelector } from 'react-redux';
@@ -12,6 +13,9 @@ export default function Support({ locale }: { locale: string }) {
     const t = useTranslations();
     const user = useSelector(userSelector);
     const dispatch = useDispatch();
+
+    const [success, setSuccess] = useState(false);
+
     const initialValues = {
         email: user.email,
         message: ''
@@ -36,47 +40,53 @@ export default function Support({ locale }: { locale: string }) {
                 <div className="font-bold text-gray-350 text-lg mb-8 border-gray-200">
                     {t('How can I help you ?')}
                 </div>
-                <Formik
-                    enableReinitialize
-                    onSubmit={(values, actions) =>
-                        dispatch(sendMessage(values, locale))
-                            .then(
-                                dispatch(
-                                    setSuccessToastAction(
-                                        t('Your message has been sent to support!')
+                {success ? (
+                    <div className="mb-4 font-bold text-2xl line-height-105percent w-72 text-green-500">
+                        {t('Your message has been sent to support!')}
+                    </div>
+                ) : (
+                    <Formik
+                        enableReinitialize
+                        onSubmit={(values) =>
+                            dispatch(sendMessage(values, locale))
+                                .then(
+                                    dispatch(
+                                        setSuccessToastAction(
+                                            t('Your message has been sent to support!')
+                                        )
                                     )
                                 )
-                            )
-                            .then(() => actions.resetForm())
-                    }
-                    initialValues={initialValues}
-                    validationSchema={validationSchema}
-                    render={(props) => (
-                        <form className="w-full md:w-1/2" onSubmit={props.handleSubmit}>
-                            <InputText
-                                icon={null}
-                                placeholder="user@domain.com"
-                                props={props}
-                                label={t('Email to respond')}
-                                tips={null}
-                                name={'email'}
-                                style=""
-                            />
+                                .then(() => setSuccess(true))
+                        }
+                        initialValues={initialValues}
+                        validationSchema={validationSchema}
+                        render={(props) => (
+                            <form className="w-full md:w-1/2" onSubmit={props.handleSubmit}>
+                                <InputText
+                                    icon={null}
+                                    placeholder="user@domain.com"
+                                    props={props}
+                                    label={t('Email to respond')}
+                                    tips={null}
+                                    name={'email'}
+                                    style=""
+                                />
 
-                            <InputTextarea
-                                props={props}
-                                label={t('Describe the issue')}
-                                icon={null}
-                                placeholder={'Something happend...'}
-                                name="message"
-                                style=""
-                            />
-                            <button type="submit" className="w-32 mt-8 gradient-btn">
-                                {t('Send')}
-                            </button>
-                        </form>
-                    )}
-                />
+                                <InputTextarea
+                                    props={props}
+                                    label={t('Describe the issue')}
+                                    icon={null}
+                                    placeholder={'Something happend...'}
+                                    name="message"
+                                    style=""
+                                />
+                                <button type="submit" className="w-32 mt-8 gradient-btn">
+                                    {t('Send')}
+                                </button>
+                            </form>
+                        )}
+                    />
+                )}
             </div>
         </>
     );
