@@ -41,12 +41,12 @@ export default function Index({ session }: { session: any }) {
                 </div>
                 <div className="block">
                     <div className="w-full bg-white">
-                        <div className="md:flex justify-between">
-                            <span className="text-blue-400 underline text-base max-w-[800px]">
+                        <div className="flex flex-wrap justify-between">
+                            <p className="text-blue-400 underline text-base mb-4">
                                 <Link href={'/guides/liveselling'}>{t('liveselling_descr')}</Link>
-                            </span>
+                            </p>
                             <button
-                                className="btn-big md:ml-4 mt-4 md:mt-0"
+                                className="btn-big xl:ml-4 mt-4 md:mt-0"
                                 onClick={() => dispatch(showPopupAction(true))}>
                                 {t('Schedule new session')}
                             </button>
