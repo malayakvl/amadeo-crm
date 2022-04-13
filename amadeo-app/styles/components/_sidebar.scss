@@ -160,23 +160,44 @@
   }
 }
 
-.sidebar-close-desctop {
-  background-image: url("../../public/images/close.svg");
+.sidebar-close-desktop {
+  position: absolute;
+  top: 59px;
+  right: -25px;
   width: 24px;
   height: 24px;
-  right: 10px;
-  top:10px;
-  @apply hidden md:absolute md:block cursor-pointer;
+  outline: 0px;
+  padding: 0px;
+  border: 0px;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: rgba(9, 30, 66, 0.08) 0px 0px 0px 1px, rgba(9, 30, 66, 0.08) 0px 2px 4px 1px;
+  color: #141A3C; //rgb(107, 119, 140);
+  background-color: rgb(255, 255, 255);
+  transform: translateX(-50%);
+  transition: background-color 100ms linear 0s, color 100ms linear 0s, opacity 350ms cubic-bezier(0.2, 0, 0, 1) 0s;
+  text-decoration-skip-ink: auto;
+  font-family: inherit;
+  opacity: 1;
 }
 
+.sidebar-close-desktop:hover {
+  @apply bg-blue-350;
+  color: rgb(255, 255, 255);
+  opacity: 1;
+}
+
+
 .sb-minimize {
-  @apply max-w-[40px] min-w-[60px];
+  @apply max-w-[20px] min-w-[20px];
 
   .brand {
     @apply hidden;
   }
 
   ul {
+    @apply hidden;
+    
     li {
       @apply pl-2.5 pr-2.5;
 
