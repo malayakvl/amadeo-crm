@@ -38,7 +38,7 @@ const SellerPersent: React.FC<any> = () => {
                     style={{ maxHeight: '90vh' }}>
                     <div className="flex justify-between items-center pb-3">
                         <p className="text-2xl font-bold">
-                            {t('Transaction Persent')}: {selectedSeller}
+                            {t('Transaction Percent')}: {selectedSeller}
                         </p>
                         <div
                             className="modal-close cursor-pointer z-50"
@@ -77,7 +77,7 @@ const SellerPersent: React.FC<any> = () => {
                                                 icon={null}
                                                 label={null}
                                                 name={'transaction_percent'}
-                                                placeholder={'Transaction Persent'}
+                                                placeholder={t('Transaction Percent')}
                                                 props={props}
                                                 tips={null}
                                             />

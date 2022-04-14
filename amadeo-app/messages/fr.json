@@ -359,7 +359,7 @@
   "Percent Sales": "Percent Sales",
   "Are you sure you want change persent for this seller?": "Are you sure you want change persent for this seller?",
   "Change": "Change",
-  "Transaction Persent": "Transaction Persent",
+  "Transaction Percent": "Transaction Percent",
   "Multisafepay API": "Multisafepay API",
   "Multisafepay Account": "Multisafepay Account",
   "Are you sure you want unsubscribe seller?": "Are you sure you want unsubscribe seller?",
@@ -420,5 +420,7 @@
   "For example, you have women skirt in different variations:": "For example, you have women skirt in different variations:",
   "S/green that costs $50 and 2 items are available in stock": "S/green that costs $50 and 2 items are available in stock",
   "M/green that costs $60 and 3 items are available in stock": "M/green that costs $60 and 3 items are available in stock",
-  "L/green that costs $70 and 4 items are available in stock": "L/green that costs $70 and 4 items are available in stock"
+  "L/green that costs $70 and 4 items are available in stock": "L/green that costs $70 and 4 items are available in stock",
+  "View details": "View details",
+  "Hide details": "Hide details"
 }
