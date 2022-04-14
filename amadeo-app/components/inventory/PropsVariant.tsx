@@ -70,7 +70,7 @@ const RenderVariant: React.FC<any> = ({ colors, sizes, props, additional }) => {
                     <tbody>
                         {attrs.map((attr: any, index) => (
                             <tr key={index}>
-                                <td style={{ verticalAlign: 'middle' }}>
+                                <td style={{ paddingTop: 0 }}>
                                     <input
                                         type="checkbox"
                                         onChange={() =>
@@ -78,9 +78,7 @@ const RenderVariant: React.FC<any> = ({ colors, sizes, props, additional }) => {
                                         }
                                     />
                                 </td>
-                                <td
-                                    className="whitespace-nowrap"
-                                    style={{ verticalAlign: 'middle' }}>
+                                <td className="sm:whitespace-nowrap" style={{ paddingTop: 2 }}>
                                     {attr.size !== 'none' ? attr.size : ''}
                                     {attr.color !== 'none' && attr.size !== 'none' ? ' / ' : ''}
                                     <span
@@ -92,9 +90,9 @@ const RenderVariant: React.FC<any> = ({ colors, sizes, props, additional }) => {
                                                 : ''
                                         }}>
                                         {attr.color !== 'none' ? attr.color : ''}
-                                    </span>{' '}
+                                    </span>
                                 </td>
-                                <td>
+                                <td className="flex flex-wrap justify-between">
                                     <InputText
                                         icon={null}
                                         label={t('Price')}
@@ -104,8 +102,8 @@ const RenderVariant: React.FC<any> = ({ colors, sizes, props, additional }) => {
                                         props={props}
                                         tips={null}
                                     />
-                                </td>
-                                <td>
+                                    {/* </td>
+                                <td> */}
                                     <InputText
                                         icon={null}
                                         label={t('Quantity')}
@@ -115,14 +113,14 @@ const RenderVariant: React.FC<any> = ({ colors, sizes, props, additional }) => {
                                         props={props}
                                         tips={null}
                                     />
-                                </td>
-                                <td>
+                                    {/* </td>
+                                <td> */}
                                     <InputText
                                         icon={null}
                                         label={t('SKU')}
                                         name={`configureSKU_${attr.color}_${attr.size}`}
                                         placeholder={'SKU'}
-                                        style={'w-[170px]'}
+                                        style={'w-full max-w-[170px]'}
                                         props={props}
                                         tips={null}
                                     />

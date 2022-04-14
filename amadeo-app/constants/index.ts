@@ -90,10 +90,10 @@ export const TableHeaders: { [key in PaginationType]: Type.DataTableHeader[] } =
     [PaginationType.SELLERS]: [
         // { className: 'flex justify-center', iconClass: 'icon-tbl-index' },
         { iconClass: 'icon-tbl-users', titleKey: 'Seller' },
-        { titleKey: 'Transaction Persent' },
-        { sortKey: 'users__seller.phone', className: '', iconClass: 'icon-tbl-phone' },
-        { sortKey: 'countries.name', iconClass: 'icon-tbl-country', titleKey: 'Country' },
-        { sortKey: 'full_address', iconClass: 'icon-tbl-address', titleKey: 'Address' },
+        { titleKey: 'Transaction Percent' },
+        // { sortKey: 'users__seller.phone', className: '', iconClass: 'icon-tbl-phone' },
+        // { sortKey: 'countries.name', iconClass: 'icon-tbl-country', titleKey: 'Country' },
+        // { sortKey: 'full_address', iconClass: 'icon-tbl-address', titleKey: 'Address' },
         {
             className: 'justify-center',
             iconClass: 'scenario',

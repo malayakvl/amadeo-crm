@@ -81,6 +81,17 @@
   display: none !important;
 }
 
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(153, 171, 206, 1) transparent;
+}
+::-webkit-scrollbar {
+  @apply w-2 h-2;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-blue-350 rounded;
+}
+
 @import "components/buttons";
 @import "components/alerts";
 @import "components/sidebar";
