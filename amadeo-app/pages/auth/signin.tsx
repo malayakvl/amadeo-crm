@@ -55,6 +55,10 @@ function Signin({ locale }: { locale: string }) {
                                 placeholder={'Email'}
                                 props={props}
                                 tips={null}
+                                onChange={(event) => {
+                                    event.target.value = event.target.value.trim();
+                                    props.handleChange(event);
+                                }}
                             />
 
                             <InputPassword

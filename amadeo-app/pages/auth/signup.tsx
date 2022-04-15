@@ -145,7 +145,11 @@ export default function Signup() {
                                                     placeholder={t('Email')}
                                                     type="text"
                                                     onClick={() => setIsFbClicked(false)}
-                                                    onChange={props.handleChange}
+                                                    onChange={(event) => {
+                                                        event.target.value =
+                                                            event.target.value.trim();
+                                                        props.handleChange(event);
+                                                    }}
                                                     // value={inputValue || ''}
                                                     value={props.values['email']}
                                                     name="email"
