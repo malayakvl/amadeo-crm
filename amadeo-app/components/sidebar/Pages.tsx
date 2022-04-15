@@ -4,7 +4,7 @@ import moment from 'moment';
 
 export default function Pages() {
     return (
-        <div className="mb-5 px-5 py-3 hidden md:block text-center text-xs">
+        <div className="mb-5 px-5 py-3 text-center text-xs">
             <ul className="nav-footer">
                 <li>
                     <Link href={'/pages/price'}>
