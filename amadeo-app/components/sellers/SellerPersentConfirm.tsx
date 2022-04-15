@@ -42,7 +42,7 @@ const showPersentConfirmForm: React.FC<any> = () => {
                     {/*Body*/}
                     <div>
                         <p className="text-xl font-bold px-5 pb-5">
-                            {t('Are you sure you want change persent for this seller?')}
+                            {t('Are you sure you want change percent for this seller?')}
                         </p>
                         <div className="flex">
                             <div className="flex justify-center">
