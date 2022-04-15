@@ -90,6 +90,8 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
 
     const handleHideFilter = useCallback(() => {
         setFilterOpen(false);
+        dispatch(showDateSelectorAction(false));
+        // set
     }, []);
 
     return (
@@ -100,40 +102,40 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                     <span className="text-gray-180 font-normal text-sm"> {count} items</span>
                 </h2>
                 {filterOpen && <Filters handleHideFilter={handleHideFilter} locale={locale} />}
-                {showDatePopup && (
-                    <div className="filters-calendar">
-                        <DateRangePicker
-                            onChange={(item) => {
-                                setState([item.selection]);
-                                dispatch(
-                                    setPaginationAction({
-                                        type: PaginationType.ORDERS,
-                                        modifier: {
-                                            filters: {
-                                                ...filters,
-                                                created_at: [
-                                                    moment(item.selection.startDate).format(
-                                                        'YYYY-MM-DD'
-                                                    ),
-                                                    moment(item.selection.endDate).format(
-                                                        'YYYY-MM-DD'
-                                                    )
-                                                ]
-                                            },
-                                            offset: 0
-                                        }
-                                    })
-                                );
-                                dispatch(showDateSelectorAction(false));
-                            }}
-                            // showSelectionPreview={true}
-                            moveRangeOnFirstSelection={false}
-                            months={1}
-                            ranges={state}
-                            direction="horizontal"
-                        />
-                    </div>
-                )}
+                {/*{showDatePopup && (*/}
+                {/*    <div className="filters-calendar">*/}
+                {/*        <DateRangePicker*/}
+                {/*            onChange={(item) => {*/}
+                {/*                setState([item.selection]);*/}
+                {/*                dispatch(*/}
+                {/*                    setPaginationAction({*/}
+                {/*                        type: PaginationType.ORDERS,*/}
+                {/*                        modifier: {*/}
+                {/*                            filters: {*/}
+                {/*                                ...filters,*/}
+                {/*                                created_at: [*/}
+                {/*                                    moment(item.selection.startDate).format(*/}
+                {/*                                        'YYYY-MM-DD'*/}
+                {/*                                    ),*/}
+                {/*                                    moment(item.selection.endDate).format(*/}
+                {/*                                        'YYYY-MM-DD'*/}
+                {/*                                    )*/}
+                {/*                                ]*/}
+                {/*                            },*/}
+                {/*                            offset: 0*/}
+                {/*                        }*/}
+                {/*                    })*/}
+                {/*                );*/}
+                {/*                dispatch(showDateSelectorAction(false));*/}
+                {/*            }}*/}
+                {/*            // showSelectionPreview={true}*/}
+                {/*            moveRangeOnFirstSelection={false}*/}
+                {/*            months={1}*/}
+                {/*            ranges={state}*/}
+                {/*            direction="horizontal"*/}
+                {/*        />*/}
+                {/*    </div>*/}
+                {/*)}*/}
                 <button
                     onClick={() => {
                         if (filterOpen) {

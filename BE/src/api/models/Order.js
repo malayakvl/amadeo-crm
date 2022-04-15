@@ -404,7 +404,15 @@ class Order {
             } else {
                 _filters.status = [OrderStatus.PAYED, OrderStatus.SHIPPED, OrderStatus.CANCELED];
             }
-            _filters.seller_id = [user.id];
+            switch (user.role_id) {
+                case UserRole.ADMIN:
+                    break;
+                case UserRole.CUSTOMER:
+                    _filters.seller_id = [user.id];
+                    break;
+                case UserRole.BUYER:
+                    _filters.buyer_id = [user.id];
+            }
             const res = {};
             const shipping = await client.query(`SELECT * FROM data.get_orders_shipping('${JSON.stringify(_filters)}');`);
             res.shippings = shipping.rows[0].shipping ? shipping.rows[0].shipping : [];

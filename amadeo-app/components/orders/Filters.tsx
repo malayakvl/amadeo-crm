@@ -9,7 +9,8 @@ import {
     FilterDelivery,
     FilterNumber,
     FilterDate,
-    FilterSeller
+    FilterSeller,
+    FilterDateRange
 } from './index';
 import { fetchFilerItems } from '../../redux/orders';
 import { userSelector } from '../../redux/user/selectors';
@@ -66,7 +67,7 @@ const Filters: React.FC<Props> = ({ handleHideFilter, locale }) => {
 
     return (
         <div
-            className="right-8 -top-14 bg-white absolute md:right-36 w-80 p-6 shadow-xl rounded-3xl filters"
+            className="right-8 -top-14 bg-white absolute md:right-36 w-80 p-6 shadow-xl rounded-3xl filters border"
             ref={node}>
             <div className="pb-3 border-b flex justify-between mb-4">
                 <div className="text-gray-350 font-bold text-xl">{t('Filters')}</div>
@@ -81,6 +82,8 @@ const Filters: React.FC<Props> = ({ handleHideFilter, locale }) => {
                 <FilterNumber />
 
                 <FilterDate />
+
+                <FilterDateRange />
 
                 {user.role_id === 3 && <FilterSeller />}
 
