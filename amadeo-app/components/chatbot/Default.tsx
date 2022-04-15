@@ -27,7 +27,7 @@ const DefaultMessages: React.FC<any> = ({ user }) => {
             <div className="flex border border-l-0 border-r-0 border-t-0 pb-5 mb-10">
                 <h2 className="dark-blue-header">
                     {t('System Replies')}
-                    <span className="text-gray-180 font-normal text-sm"> {t('Mandatory')}</span>
+                    <span className="text-gray-180 font-normal text-sm"> ({t('Mandatory')})</span>
                 </h2>
             </div>
             <div className="system-message overflow-x-scroll">

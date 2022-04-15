@@ -1,4 +1,5 @@
 import Head from 'next/head';
+import Link from 'next/link';
 import { getSession } from 'next-auth/client';
 import React, { useEffect } from 'react';
 import { useTranslations } from 'next-intl';
@@ -40,19 +41,15 @@ export default function Index({ session }: { session: any }) {
                 </div>
                 <div className="block">
                     <div className="w-full bg-white">
-                        <div className="md:flex">
-                            <div className="md:shrink-0">
-                                <span className="text-blue-350 text-base max-w-[800px]">
-                                    {t('liveselling_descr')}
-                                </span>
-                            </div>
-                            <div className="md:justify-end">
-                                <button
-                                    className="mt-4 md:mt-0 btn-big"
-                                    onClick={() => dispatch(showPopupAction(true))}>
-                                    {t('Schedule new session')}
-                                </button>
-                            </div>
+                        <div className="flex flex-wrap justify-between">
+                            <p className="text-blue-400 underline text-base mb-4">
+                                <Link href={'/guides/liveselling'}>{t('liveselling_descr')}</Link>
+                            </p>
+                            <button
+                                className="btn-big xl:ml-4 mt-4 md:mt-0"
+                                onClick={() => dispatch(showPopupAction(true))}>
+                                {t('Schedule new session')}
+                            </button>
                         </div>
                     </div>
                     <div className="clear-both" />

@@ -36,6 +36,8 @@ import { DateRangePicker } from 'react-date-range';
 import 'react-date-range/dist/styles.css'; // main css file
 import 'react-date-range/dist/theme/default.css'; // theme css file
 import { formatCurrency, parseTranslation } from '../../lib/functions';
+import { Disclosure } from '@headlessui/react';
+import { ChevronUpIcon } from '@heroicons/react/solid';
 
 const userProfileImg =
     'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80';
@@ -140,8 +142,56 @@ const ListSellers: React.FC<{ locale: string }> = ({ locale }) => {
                 {items?.map((item: any) => (
                     <Fragment key={item.id}>
                         <tr>
-                            <td className="order-number">
-                                <div className="flex">
+                            <td>
+                                <Disclosure as="div">
+                                    {({ open }) => (
+                                        <>
+                                            <Disclosure.Button className="flex">
+                                                <div>
+                                                    <Image
+                                                        src={
+                                                            item.photo
+                                                                ? baseApiUrl + item.photo
+                                                                : userProfileImg
+                                                        }
+                                                        width={24}
+                                                        height={24}
+                                                        className="rounded-full  "
+                                                        alt=""
+                                                    />
+                                                </div>
+                                                <span className="pl-3 font-bold text-left">
+                                                    {item.first_name} {item.last_name}
+                                                    <p
+                                                        className="cursor-pointer text-xs font-normal text-center flex items-center"
+                                                        role="presentation">
+                                                        {open
+                                                            ? t('Hide details')
+                                                            : t('View details')}{' '}
+                                                        <ChevronUpIcon
+                                                            className={`${
+                                                                open ? '' : 'transform rotate-180'
+                                                            } w-4 h-4`}
+                                                        />
+                                                    </p>
+                                                </span>
+                                            </Disclosure.Button>
+                                            <Disclosure.Panel className="p-1 pb-2 text-xs font-normal text-blue-350">
+                                                {item.email}
+                                                <p>{item.phone}</p>
+                                                <p>
+                                                    {parseTranslation(
+                                                        item.country_json,
+                                                        'name',
+                                                        locale
+                                                    )}
+                                                </p>
+                                                <p>{item.full_address?.slice(0, -2)}</p>
+                                            </Disclosure.Panel>
+                                        </>
+                                    )}
+                                </Disclosure>
+                                {/* <div className="flex">
                                     <div>
                                         <Image
                                             src={
@@ -159,7 +209,7 @@ const ListSellers: React.FC<{ locale: string }> = ({ locale }) => {
                                         {item.first_name} {item.last_name}
                                         <span className="block text-blue-350">{item.email}</span>
                                     </span>
-                                </div>
+                                </div> */}
                             </td>
                             <td>
                                 <span
@@ -183,14 +233,14 @@ const ListSellers: React.FC<{ locale: string }> = ({ locale }) => {
                                         dispatch(setSelectedSellerAction(item.email));
                                         dispatch(showSellerPercentHistoryAction(true));
                                     }}
-                                    className="cursor-pointer block text-xs text-normal"
+                                    className="cursor-pointer block text-xs font-normal"
                                     role="presentation">
                                     {t('View history')}
                                 </span>
                             </td>
-                            <td>{item.phone}</td>
+                            {/* <td>{item.phone}</td>
                             <td>{parseTranslation(item.country_json, 'name', locale)}</td>
-                            <td>{item.full_address?.slice(0, -2)}</td>
+                            <td>{item.full_address?.slice(0, -2)}</td> */}
                             <td>{item.total_sessions}</td>
                             <td>{item.total_orders}</td>
                             <td>{item.total_buyers}</td>

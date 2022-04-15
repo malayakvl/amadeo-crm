@@ -165,6 +165,7 @@ td.translations {
   @apply border-l pl-4 border-red-500 pt-4 pb-4;
 }
 .table-dropdown {
+  min-width: 14px;
   width: 50px;
   background-repeat: no-repeat;
   background-position: left center;

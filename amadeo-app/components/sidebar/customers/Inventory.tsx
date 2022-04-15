@@ -44,7 +44,7 @@ const SidebarInventory: React.FC = () => {
                     {t('Inventory')}
                 </span>
             </li>
-            <li className="submenu">
+            {/* <li className="submenu">
                 <span
                     className="inventory-add text-blue-350 text-base font-bold tracking-wide truncate cursor-pointer"
                     role="presentation"
@@ -58,7 +58,7 @@ const SidebarInventory: React.FC = () => {
                     }}>
                     {t('Add Product')}
                 </span>
-            </li>
+            </li> */}
         </Fragment>
     );
 };

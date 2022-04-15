@@ -96,3 +96,13 @@ const ChangeSubscription: React.FC<any> = () => {
 };
 
 export default ChangeSubscription;
+
+export async function getStaticProps({ locale }: any) {
+    return {
+        props: {
+            messages: {
+                ...require(`../../../messages/${locale}.json`)
+            }
+        }
+    };
+}

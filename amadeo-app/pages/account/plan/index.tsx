@@ -236,7 +236,7 @@ export default function Index({ session }: { session: any }) {
                                         {subscriptionInfo.DBName}
                                         <br />
                                         <a
-                                            className="cursor-pointer text-xs"
+                                            className="cursor-pointer text-xs gradient-btn-small"
                                             href={subscriptionInfo.invoicePdf}
                                             target="_blank"
                                             rel="noreferrer">

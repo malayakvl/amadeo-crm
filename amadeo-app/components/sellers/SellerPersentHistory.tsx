@@ -39,7 +39,7 @@ const SellerPersent: React.FC<any> = () => {
                     style={{ maxHeight: '90vh' }}>
                     <div className="flex justify-between items-center pb-3">
                         <p className="text-2xl font-bold">
-                            {t('Transaction Persent History')}: {selectedSeller}
+                            {t('Transaction history')}: {selectedSeller}
                         </p>
                         <div
                             className="modal-close cursor-pointer z-50"
