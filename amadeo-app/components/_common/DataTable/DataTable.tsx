@@ -280,7 +280,11 @@ const DataTable: React.FC<Props> = ({
                     </div>
                     {Math.ceil(totalAmount / limit) > 1 && (
                         <RawPagination
-                            forcePage={offset && offset / limit}
+                            forcePage={
+                                offset > totalAmount
+                                    ? Math.ceil(totalAmount / limit)
+                                    : offset / limit
+                            }
                             pageCount={Math.ceil(totalAmount / limit)}
                             onPageChange={setPage}
                         />

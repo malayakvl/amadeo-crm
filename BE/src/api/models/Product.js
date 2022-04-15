@@ -489,7 +489,7 @@ class Product {
             const size = _total.rows[0].count;
             let offset;
             if (reqOffset) {
-                offset = reqOffset;
+                offset = reqOffset < size ? reqOffset : (Math.ceil(size / perPage) - 1) * perPage;
             } else {
                 offset = (Number(page) - 1) * Number(perPage);
             }
