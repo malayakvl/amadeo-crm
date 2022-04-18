@@ -19,8 +19,12 @@ export const submitFormAction: any = createAction(
                         ...authHeader(state.user.user.email)
                     }
                 })
-                .then(async () => {
-                    dispatch(setSuccessToastAction('Record has been updated'));
+                .then(async (response) => {
+                    if (response.data.success) {
+                        dispatch(fetchFormAction());
+                        dispatch(setSuccessToastAction('Record has been updated'));
+                    } else dispatch(setErrorToastAction('Something went wrong'));
+
                     dispatch(showLoaderAction(false));
                 })
                 .catch((e) => {

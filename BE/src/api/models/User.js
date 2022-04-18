@@ -964,6 +964,7 @@ class User {
                     'Model User (updateUserSettings) error:',
                     { message: e.message }
                 );
+                console.log('[updateSellerSettings] sql e.message = ', e.message);
             }
             return { success: false, error: { code: 404, message: 'Users not found' } };
         } finally {
