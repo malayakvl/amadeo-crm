@@ -17,10 +17,10 @@ async function createInvoice (invoice, path) {
         await generateCustomerInformation(doc, invoice);
         await generateInvoiceTable(doc, invoice);
         await generateFooter(doc);
-        
+
         doc.end();
         doc.pipe(fs.createWriteStream(path));
-        
+
         return {success: true}
     } catch (e) {
         return {success: false}
@@ -47,11 +47,11 @@ async function generateCustomerInformation(doc, invoice) {
         .fillColor("#444444")
         .fontSize(20)
         .text("Invoice", 50, 160);
-    
+
     generateHr(doc, 185);
-    
+
     const customerInformationTop = 200;
-    
+
     doc
         .fontSize(10)
         .text("Numéro de facture:", 50, customerInformationTop)
@@ -66,7 +66,7 @@ async function generateCustomerInformation(doc, invoice) {
             150,
             customerInformationTop + 30
         )
-        
+
         .font("Helvetica-Bold")
         .text(invoice.shipping.name, 300, customerInformationTop)
         .font("Helvetica")
@@ -81,14 +81,14 @@ async function generateCustomerInformation(doc, invoice) {
         //     customerInformationTop + 30
         // )
         .moveDown();
-    
+
     generateHr(doc, 252);
 }
 
 function generateInvoiceTable(doc, invoice) {
     let i;
     const invoiceTableTop = 330;
-    
+
     doc.font("Helvetica-Bold");
     generateTableRow(
         doc,
@@ -114,10 +114,10 @@ function generateInvoiceTable(doc, invoice) {
                 item.quantity,
                 formatCurrency(item.price * item.quantity)
             );
-        
+
             generateHr(doc, position + 20);
         }
-    
+
         const subtotalPosition = invoiceTableTop + (i + 1) * 30;
         generateTableRow(
             doc,
@@ -128,7 +128,7 @@ function generateInvoiceTable(doc, invoice) {
             "",
             formatCurrency(invoice.subtotal)
         );
-    
+
         const paidToDatePosition = subtotalPosition + 20;
         generateTableRow(
             doc,
@@ -139,7 +139,7 @@ function generateInvoiceTable(doc, invoice) {
             "",
             formatCurrency(invoice.shipping_amount)
         );
-    
+
         const vatToDatePosition = paidToDatePosition + 20;
         generateTableRow(
             doc,
@@ -150,8 +150,8 @@ function generateInvoiceTable(doc, invoice) {
             "",
             formatCurrency((invoice.subtotal*15/100))
         );
-    
-    
+
+
         const duePosition = vatToDatePosition + 25;
         doc.font("Helvetica-Bold");
         generateTableRow(
@@ -227,7 +227,7 @@ class Order {
             await client.query(productQuery);
             const items = [];
             const error = null;
-    
+
             return {
                 items,
                 error
@@ -255,7 +255,7 @@ class Order {
             client.release();
         }
     }
-    
+
     async fetchWaitingItems (page, perPage = 20, user, isRead = false, reqOffset = null, filters, column, sort) {
         const client = await pool.connect();
         try {
@@ -289,7 +289,7 @@ class Order {
             const res = await client.query(ordersQuery);
             const items = res.rows.length > 0 ? res.rows : [];
             const error = null;
-            
+
             return {
                 items,
                 size,
@@ -317,8 +317,8 @@ class Order {
             client.release();
         }
     }
-    
-    
+
+
     async fetchItems (page, perPage = 20, user, isRead = false, reqOffset = null, filters, column, sort) {
         const client = await pool.connect();
         try {
@@ -355,9 +355,9 @@ class Order {
                 offset = (Number(page) - 1) * Number(perPage);
             }
             if (!column && !sort) {
-            
+
             } else {
-            
+
             }
             const ordersQuery = `SELECT *
                                 FROM data.get_orders (${perPage}, ${offset}, '${JSON.stringify(_filters)}', '${column} ${sort}');`;
@@ -365,7 +365,7 @@ class Order {
             const res = await client.query(ordersQuery);
             const items = res.rows.length > 0 ? res.rows : [];
             const error = null;
-            
+
             return {
                 items,
                 size,
@@ -394,7 +394,7 @@ class Order {
             client.release();
         }
     }
-    
+
     async fetchFilters (user) {
         const client = await pool.connect();
         try {
@@ -404,7 +404,15 @@ class Order {
             } else {
                 _filters.status = [OrderStatus.PAYED, OrderStatus.SHIPPED, OrderStatus.CANCELED];
             }
-            _filters.seller_id = [user.id];
+            switch (user.role_id) {
+                case UserRole.ADMIN:
+                    break;
+                case UserRole.CUSTOMER:
+                    _filters.seller_id = [user.id];
+                    break;
+                case UserRole.BUYER:
+                    _filters.buyer_id = [user.id];
+            }
             const res = {};
             const shipping = await client.query(`SELECT * FROM data.get_orders_shipping('${JSON.stringify(_filters)}');`);
             res.shippings = shipping.rows[0].shipping ? shipping.rows[0].shipping : [];
@@ -443,15 +451,15 @@ class Order {
             client.release();
         }
     }
-    
-    
-    
-    
+
+
+
+
     async generatePdf (orderNumber, userId, user) {
         const client = await pool.connect();
-    
+
         let error = null;
-    
+
         try {
             const _filters = {
                 // status: [OrderStatus.PAYED],
@@ -473,7 +481,7 @@ class Order {
             console.log(ordersQuery);
             const res = await client.query(ordersQuery);
             const dirUpload = `${process.env.DOWNLOAD_FOLDER}/orders/${userId}`;
-            
+
             if (fs.existsSync(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${res.rows[0].order_number}.pdf`)) {
                 const base64 = await pdf2base64(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${res.rows[0].order_number}.pdf`)
                     .then(
@@ -520,11 +528,11 @@ class Order {
                     invoice_nr: res.rows[0].order_number,
                     invoice_date: moment(res.rows[0].created_at).format('DD/MM/YYYY'),
                 };
-                
-                
-                
+
+
+
                 await createInvoice(invoice, `${dirUpload}/${res.rows[0].order_number}.pdf`);
-    
+
                 await setTimeout(4000);
                 if (!fs.existsSync(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${res.rows[0].order_number}.pdf`)) {
                     await setTimeout(4000);
@@ -567,8 +575,8 @@ class Order {
             client.release();
         }
     }
-    
-    
+
+
     async setupShippingStatus (orderIds) {
         const client = await pool.connect();
         try {
@@ -588,8 +596,8 @@ class Order {
             client.release();
         }
     }
-    
-    
+
+
     async bulkCancel (orderIds) {
         const client = await pool.connect();
         try {
@@ -607,7 +615,7 @@ class Order {
             } else {
                 return {success: false, error: 'No record find'};
             }
-            
+
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
                 logger.log(
@@ -621,7 +629,7 @@ class Order {
             client.release();
         }
     }
-    
+
     async cancelOrder(order) {
         const client = await pool.connect();
         try {
@@ -642,9 +650,10 @@ class Order {
                     await client.query(`UPDATE data.orders SET status='canceled' WHERE id=${order.id};`);
                     return {success: true, error: null}
                 }).catch(error => {
+                    console.log(error.message);
                     return {success: false, error: error.message}
                 });
-    
+
             return {success: multiSafePayClientRes.success, error: null};
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {

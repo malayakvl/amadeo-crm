@@ -1,11 +1,7 @@
 import React, { Fragment, useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-    itemsCountSelector,
-    paginatedItemsSelector,
-    showDatePopupSelector
-} from '../../redux/orders/selectors';
+import { itemsCountSelector, paginatedItemsSelector } from '../../redux/orders/selectors';
 import { PaginationType } from '../../constants';
 import { DataTable } from '../_common';
 import {
@@ -17,13 +13,13 @@ import {
 import moment from 'moment';
 import Image from 'next/image';
 import { baseApiUrl } from '../../constants';
-import { checkIdsAction, initIdsAction, setPaginationAction } from '../../redux/layouts';
+import { checkIdsAction, initIdsAction } from '../../redux/layouts';
 import { useTranslations } from 'next-intl';
 import { Filters, FilterValues, ListItems, CancelConfirmation } from './index';
 import { checkedIdsSelector, paginationSelectorFactory } from '../../redux/layouts/selectors';
-import { DateRangePicker } from 'react-date-range';
-import 'react-date-range/dist/styles.css'; // main css file
-import 'react-date-range/dist/theme/default.css';
+// import { DateRangePicker } from 'react-date-range';
+// import 'react-date-range/dist/styles.css'; // main css file
+// import 'react-date-range/dist/theme/default.css';
 import { formatCurrency, parseTranslation } from '../../lib/functions';
 import { userSelector } from '../../redux/user/selectors';
 import { bulkShippingAction } from '../../redux/orders/actions';
@@ -45,14 +41,14 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
         paginationSelectorFactory(PaginationType.ORDERS)
     );
     const user = useSelector(userSelector);
-    const [state, setState] = useState<any>([
-        {
-            startDate: new Date(),
-            endDate: null,
-            key: 'selection'
-        }
-    ]);
-    const showDatePopup = useSelector(showDatePopupSelector);
+    // const [state, setState] = useState<any>([
+    //     {
+    //         startDate: new Date(),
+    //         endDate: null,
+    //         key: 'selection'
+    //     }
+    // ]);
+    // const showDatePopup = useSelector(showDatePopupSelector);
 
     const [showMoreConfigs, setShowMoreConfigs] = useState<any>({});
     const [filterOpen, setFilterOpen] = useState(false);
@@ -90,6 +86,7 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
 
     const handleHideFilter = useCallback(() => {
         setFilterOpen(false);
+        // dispatch(showDateSelectorAction(false));
     }, []);
 
     return (
@@ -99,41 +96,46 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                     {t('Orders')}
                     <span className="text-gray-180 font-normal text-sm"> {count} items</span>
                 </h2>
-                {filterOpen && <Filters handleHideFilter={handleHideFilter} locale={locale} />}
-                {showDatePopup && (
-                    <div className="filters-calendar">
-                        <DateRangePicker
-                            onChange={(item) => {
-                                setState([item.selection]);
-                                dispatch(
-                                    setPaginationAction({
-                                        type: PaginationType.ORDERS,
-                                        modifier: {
-                                            filters: {
-                                                ...filters,
-                                                created_at: [
-                                                    moment(item.selection.startDate).format(
-                                                        'YYYY-MM-DD'
-                                                    ),
-                                                    moment(item.selection.endDate).format(
-                                                        'YYYY-MM-DD'
-                                                    )
-                                                ]
-                                            },
-                                            offset: 0
-                                        }
-                                    })
-                                );
-                                dispatch(showDateSelectorAction(false));
-                            }}
-                            // showSelectionPreview={true}
-                            moveRangeOnFirstSelection={false}
-                            months={1}
-                            ranges={state}
-                            direction="horizontal"
-                        />
-                    </div>
-                )}
+                <Filters
+                    handleHideFilter={handleHideFilter}
+                    locale={locale}
+                    filterOpen={filterOpen}
+                />
+                {/*{filterOpen && <Filters handleHideFilter={handleHideFilter} locale={locale} />}*/}
+                {/*{showDatePopup && (*/}
+                {/*    <div className="filters-calendar">*/}
+                {/*        <DateRangePicker*/}
+                {/*            onChange={(item) => {*/}
+                {/*                setState([item.selection]);*/}
+                {/*                dispatch(*/}
+                {/*                    setPaginationAction({*/}
+                {/*                        type: PaginationType.ORDERS,*/}
+                {/*                        modifier: {*/}
+                {/*                            filters: {*/}
+                {/*                                ...filters,*/}
+                {/*                                created_at: [*/}
+                {/*                                    moment(item.selection.startDate).format(*/}
+                {/*                                        'YYYY-MM-DD'*/}
+                {/*                                    ),*/}
+                {/*                                    moment(item.selection.endDate).format(*/}
+                {/*                                        'YYYY-MM-DD'*/}
+                {/*                                    )*/}
+                {/*                                ]*/}
+                {/*                            },*/}
+                {/*                            offset: 0*/}
+                {/*                        }*/}
+                {/*                    })*/}
+                {/*                );*/}
+                {/*                dispatch(showDateSelectorAction(false));*/}
+                {/*            }}*/}
+                {/*            // showSelectionPreview={true}*/}
+                {/*            moveRangeOnFirstSelection={false}*/}
+                {/*            months={1}*/}
+                {/*            ranges={state}*/}
+                {/*            direction="horizontal"*/}
+                {/*        />*/}
+                {/*    </div>*/}
+                {/*)}*/}
                 <button
                     onClick={() => {
                         if (filterOpen) {
@@ -166,18 +168,20 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                 {items?.map((item: any) => (
                     <Fragment key={item.id}>
                         <tr>
-                            <td>
-                                <input
-                                    className="float-checkbox"
-                                    type="checkbox"
-                                    onChange={() => dispatch(checkIdsAction(item.id))}
-                                    value={item.id}
-                                    checked={
-                                        checkedIds.find((data: any) => data.id === item.id)
-                                            ?.checked || false
-                                    }
-                                />
-                            </td>
+                            {user.role_id === 2 && (
+                                <td>
+                                    <input
+                                        className="float-checkbox"
+                                        type="checkbox"
+                                        onChange={() => dispatch(checkIdsAction(item.id))}
+                                        value={item.id}
+                                        checked={
+                                            checkedIds.find((data: any) => data.id === item.id)
+                                                ?.checked || false
+                                        }
+                                    />
+                                </td>
+                            )}
                             <td style={{ width: '50px' }}>
                                 <i
                                     role="presentation"

@@ -193,6 +193,7 @@ class Checkout {
                     .then(async (res) => {
                         return {redirectUrl: res.data.data.payment_url, error: null}
                     }).catch(error => {
+                        console.log(error.message);
                         return {redirectUrl: null, error: error.message}
                     });
                 return {redirectUrl: multiSafePayClientRes.redirectUrl, error: multiSafePayClientRes.error}
