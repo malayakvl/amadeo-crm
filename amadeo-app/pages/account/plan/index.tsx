@@ -19,7 +19,7 @@ import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import CardValidator from 'card-validator';
 
-export default function Index({ session }: { session: any }) {
+export default function Index({ session, locale }: { session: any; locale: string }) {
     if (!session) return <></>;
     const dispatch = useDispatch();
     const t = useTranslations();
@@ -134,19 +134,23 @@ export default function Index({ session }: { session: any }) {
                                 <table className="w-full float-table">
                                     <tbody>
                                         {subscriptionInfo.paymentMethods.map((method: any) => (
-                                            <tr key={method.id}>
+                                            <tr key={method.id} className="py-2">
                                                 <td>
-                                                    ************{method.card.last4}{' '}
+                                                    ****{method.card.last4}
                                                     {method.card.brand}
                                                 </td>
                                                 <td>
                                                     {method.card.exp_month}/{method.card.exp_year}
                                                 </td>
-                                                <td>
+                                                <td
+                                                    style={{
+                                                        paddingTop: '10px',
+                                                        paddingBottom: '10px'
+                                                    }}>
                                                     {method.id !==
                                                         subscriptionInfo.defaultPayment && (
                                                         <span
-                                                            className="cursor-pointer gradient-btn-small"
+                                                            className=" cursor-pointer gradient-btn-small whitespace-nowrap"
                                                             role="presentation"
                                                             onClick={() =>
                                                                 dispatch(
@@ -163,7 +167,11 @@ export default function Index({ session }: { session: any }) {
                                                         <span>Default</span>
                                                     )}
                                                 </td>
-                                                <td>
+                                                <td
+                                                    style={{
+                                                        paddingTop: '10px',
+                                                        paddingBottom: '10px'
+                                                    }}>
                                                     {method.id !==
                                                         subscriptionInfo.defaultPayment && (
                                                         <span
@@ -281,7 +289,7 @@ export default function Index({ session }: { session: any }) {
                     <p>{t('No Payment info yet')}</p>
                 )}
             </div>
-            <ChangeSubscription />
+            <ChangeSubscription locale={locale} />
         </>
     );
 }

@@ -1,19 +1,16 @@
 import React, { useState } from 'react';
-import { useTranslations } from 'next-intl';
 import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
 import { paginationSelectorFactory } from '../../../redux/layouts/selectors';
 import { PaginationType } from '../../../constants';
 import { setPaginationAction } from '../../../redux/layouts';
-import Image from 'next/image';
+import { showDateSelectorAction } from '../../../redux/orders';
+import { showDatePopupSelector } from '../../../redux/orders/selectors';
 import { DateRangePicker } from 'react-date-range';
 import 'react-date-range/dist/styles.css'; // main css file
 
-import { showDateSelectorAction } from '../../../redux/orders';
-import { showDatePopupSelector } from '../../../redux/orders/selectors';
-
 const FilterDateRange: React.FC<any> = () => {
-    const t = useTranslations();
+    // const t = useTranslations();
     const dispatch = useDispatch();
     const { filters }: Layouts.Pagination = useSelector(
         paginationSelectorFactory(PaginationType.ORDERS)
@@ -35,25 +32,8 @@ const FilterDateRange: React.FC<any> = () => {
                 <div className="filters-calendar">
                     <DateRangePicker
                         onChange={(item) => {
+                            console.log(item.selection);
                             setState([item.selection]);
-                            // dispatch(
-                            //     setPaginationAction({
-                            //         type: PaginationType.ORDERS,
-                            //         modifier: {
-                            //             filters: {
-                            //                 ...filters,
-                            //                 created_at: [
-                            //                     moment(item.selection.startDate).format(
-                            //                         'YYYY-MM-DD'
-                            //                     ),
-                            //                     moment(item.selection.endDate).format('YYYY-MM-DD')
-                            //                 ]
-                            //             },
-                            //             offset: 0
-                            //         }
-                            //     })
-                            // );
-                            // dispatch(showDateSelectorAction(false));
                         }}
                         // showSelectionPreview={true}
                         moveRangeOnFirstSelection={false}
@@ -61,9 +41,33 @@ const FilterDateRange: React.FC<any> = () => {
                         ranges={state}
                         direction="horizontal"
                     />
-                    <span className="bg-blue-400 hover:bg-blue-700 text-white text-xs font-bold py-1 px-1.5 rounded float-right mr-3.5 mb-4">
-                        Apply
-                    </span>
+                    <div className="w-full px-2 py-2 text-right">
+                        <span
+                            role="presentation"
+                            onClick={() => {
+                                dispatch(
+                                    setPaginationAction({
+                                        type: PaginationType.ORDERS,
+                                        modifier: {
+                                            filters: {
+                                                ...filters,
+                                                created_at: [
+                                                    moment(state[0].startDate).format('YYYY-MM-DD'),
+                                                    moment(state[0].endDate).format('YYYY-MM-DD')
+                                                ]
+                                            },
+                                            offset: 0
+                                        }
+                                    })
+                                );
+                                dispatch(showDateSelectorAction(false));
+                            }}
+                            className="bg-blue-400 hover:bg-blue-500 text-white
+                                            text-xs font-bold py-1 px-1.5 cursor-pointer
+                                            rounded mr-3.5 mb-4">
+                            Apply
+                        </span>
+                    </div>
                 </div>
             )}
         </>
