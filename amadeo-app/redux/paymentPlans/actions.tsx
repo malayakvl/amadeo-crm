@@ -136,3 +136,24 @@ export const paymentPlanInfoAction: any = createAction(
             };
         }
 );
+
+export const requestDemoAction: any = createAction(
+    'pricing/SEND-REQUEST-DEMO',
+    async (data: any) =>
+        (dispatch: Type.Dispatch): Promise<void> => {
+            dispatch(showLoaderAction(true));
+            return axios
+                .post(`${baseUrl}/request-demo?locale=${data.locale}`, data.form)
+                .then(async (response: any) => {
+                    const callback = data.callback;
+                    if (typeof callback === 'function' && response.data.success) callback(true);
+                    dispatch(setSuccessToastAction(data.successMessage));
+                })
+                .catch((e) => {
+                    dispatch(setErrorToastAction(e.response.data.message || e.response.data.error));
+                })
+                .finally(() => {
+                    dispatch(showLoaderAction(false));
+                });
+        }
+);
