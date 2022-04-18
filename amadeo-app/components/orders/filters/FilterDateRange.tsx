@@ -7,7 +7,8 @@ import { setPaginationAction } from '../../../redux/layouts';
 import { showDateSelectorAction } from '../../../redux/orders';
 import { showDatePopupSelector } from '../../../redux/orders/selectors';
 import { DateRangePicker } from 'react-date-range';
-import 'react-date-range/dist/styles.css'; // main css file
+import 'react-date-range/dist/styles.css'; // main style file
+import 'react-date-range/dist/theme/default.css'; // theme css file
 
 const FilterDateRange: React.FC<any> = () => {
     // const t = useTranslations();
