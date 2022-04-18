@@ -193,16 +193,16 @@ export default function Pricing({ locale }: { locale: any }) {
                     <Fragment>
                         {/*{user?.email && (*/}
                         {/*    <Link href="/auth/signup">*/}
-                        {/*        <a>{t('Skip for now (Take trial)')}</a>*/}
+                        {/*        <a>{t('Skip for now')}</a>*/}
                         {/*    </Link>*/}
                         {/*)}*/}
                         {/*{!user?.email && (*/}
                         {/*    <Link href="/auth/signup">*/}
-                        {/*        <a>{t('Skip for now (Take trial)')}</a>*/}
+                        {/*        <a>{t('Skip for now')}</a>*/}
                         {/*    </Link>*/}
                         {/*)}*/}
                         <Link href="/auth/signup">
-                            <a>{t('Skip for now (Take trial)')}</a>
+                            <a>{t('Skip for now')}</a>
                         </Link>
                     </Fragment>
                 )}

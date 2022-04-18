@@ -42,7 +42,7 @@ export default function SidebarLayout({ children }: { children: any }) {
             {user.role_id === 3 && <SidebarAdmin />}
             <div
                 className={`relative h-full mt-4 md:mt-8 md:mb-10 ${
-                    !isSidebarOpen ? 'md:ml-24' : 'md:ml-64'
+                    !isSidebarOpen ? 'md:ml-8' : 'md:ml-64'
                 } md:pl-4 md:mr-8`}>
                 <div className="absolute top-3 left-4 md:hidden flex items-center">
                     <button
