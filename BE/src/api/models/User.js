@@ -4,6 +4,7 @@ import pool from './connect.js';
 import { logger } from '../../common/logger.js';
 import Stripe from 'stripe';
 import moment from "moment";
+import paymentPlanModel from "./PaymentPlan.js";
 
 const stripe = Stripe(process.env.STRIPE_API_KEY);
 /**
@@ -70,7 +71,7 @@ class User {
             client.release();
         }
     }
-    
+
     /**
      * Find user by email
      *
@@ -155,7 +156,7 @@ class User {
             client.release();
         }
     }
-    
+
     /**
      * Login or Register user via provider Facebook, Google, etc
      *
@@ -185,7 +186,7 @@ class User {
             client.release();
         }
     }
-    
+
     async createExistUserSubscription(userData, user) {
         const client = await pool.connect();
         try {
@@ -205,7 +206,7 @@ class User {
                     } else {
                         customerId = userData.user.customer_id;
                     }
-                    
+
                     // generate subscription always new for receive secret key for payment form;
                     const subscriptionObject = {
                         customer: customerId,
@@ -253,7 +254,7 @@ class User {
             client.release();
         }
     }
-    
+
     async deletePaymentMethod(user, paymentId) {
         try {
             await stripe.paymentMethods.detach(
@@ -271,8 +272,8 @@ class User {
             return { user: null, error: { code: 404, message: 'User Not found' } };
         }
     }
-    
-    
+
+
     async setupDefaultPayment(user, paymentId) {
         try {
             const customer = await stripe.customers.update(
@@ -295,7 +296,7 @@ class User {
             return { user: null, error: { code: 404, message: 'User Not found' } };
         }
     }
-    
+
     async getSubscriptionInfo(subscriptionId, customerId) {
         const client = await pool.connect();
         try {
@@ -319,7 +320,10 @@ class User {
             subscription.defaultPayment = customer.invoice_settings.default_payment_method;
             subscription.defaultPlanId = subscription.items.data[0].plan.id;
             subscription.dbPlans = dbPlansRes.rows;
-    
+
+            const paymentPlansInfo = await paymentPlanModel.fetchItems();
+            subscription.paymentPlanList = paymentPlansInfo;
+
             let invoices = await stripe.invoices.list({
                 limit: 3,
                 customer: customerId
@@ -352,7 +356,7 @@ class User {
             }
         }
     }
-    
+
     async createUserFromSubscription(userData ,planId, type) {
         const {
             salt,
@@ -376,13 +380,13 @@ class User {
                 return await this.createExistUserSubscription({ user: userData, type: type, planId:planId }, resUser.rows[0]);
             }
         } catch (e) {
-        
+
         } finally {
             client.release();
         }
     }
-    
-    
+
+
     async checkPayment (paymentIntent, paymentIntentSecret) {
         const client = await pool.connect();
         try {
@@ -397,7 +401,7 @@ class User {
                 const subscriptionRes = await client.query(`SELECT email FROM data.users
                     LEFT JOIN data.subscriptions ON data.subscriptions.user_id=data.users.id
                     WHERE customer_id='${paymentIntentResult.customer}'`);
-                
+
                 if (subscriptionRes.rows.length) {
                     paymentIntentResult.email = subscriptionRes.rows[0].email;
                     return { paymentIntent: paymentIntentResult}
@@ -416,8 +420,8 @@ class User {
             client.release();
         }
     }
-    
-    
+
+
     /**
      * Create user
      *
@@ -471,7 +475,7 @@ class User {
                 await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Buy item size config without qty', 'buy+item+size')`);
                 await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Buy simple product without config with qty', 'buy+item+qty')`);
                 await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Buy simple product without config without qty', 'buy+item')`);
-    
+
                 await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Sold item full config with qty', 'sold+item+color+size+quantity')`);
                 await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Sold item full config without qty', 'sold+item+color+size')`);
                 await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Sold item full config with qty (1)', 'sold+item+size+color+quantity')`);
@@ -482,7 +486,7 @@ class User {
                 await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Sold item size config without qty', 'sold+item+size')`);
                 await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Sold simple product without config with qty', 'sold+item+qty')`);
                 await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Sold simple product without config without qty', 'sold+item')`);
-    
+
                 await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Vendu item full config with qty', 'vendu+item+color+size+quantity')`);
                 await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Vendu item full config without qty', 'vendu+item+color+size')`);
                 await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Vendu item full config with qty (1)', 'vendu+item+size+color+quantity')`);
@@ -493,7 +497,7 @@ class User {
                 await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Vendu item size config without qty', 'vendu+item+size')`);
                 await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Vendu simple product without config with qty', 'vendu+item+qty')`);
                 await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Vendu simple product without config without qty', 'vendu+item')`);
-    
+
                 delete user.salt;
                 delete user.password;
                 return { user: user, error: null };
@@ -513,7 +517,7 @@ class User {
             client.release();
         }
     }
-    
+
     /**
      *
      * @param userData
@@ -690,13 +694,13 @@ class User {
         const query = `SELECT * FROM data.find_user_by_hash('${hash}', false);`;
         try {
             const res = await client.query(query);
-            
+
             if (res.rows.length > 0) {
                 const user = res.rows[0];
                 await client.query(`UPDATE data.users SET hash = null WHERE id = $1`, [user.id]);
                 return user;
             }
-            
+
             return null
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
@@ -723,7 +727,7 @@ class User {
             client.release();
         }
     }
-    
+
     /**
      * sync our user data with fb profile data
      * @param userData - user object
@@ -741,7 +745,7 @@ class User {
         try {
             await client.query(query);
             const user = await this.findUserByEmail(userData.email);
-            
+
             return {user: user};
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
@@ -768,7 +772,7 @@ class User {
             client.release();
         }
     }
-    
+
     /**
      *
      * @param searchStr - string
@@ -797,8 +801,8 @@ class User {
             client.release();
         }
     }
-    
-    
+
+
     /**
      *
      * @param userId
@@ -845,7 +849,7 @@ class User {
             client.release();
         }
     }
-    
+
     async addPaymentMethod(user, data) {
         try {
             const expPeriod = data.card_expire_date.split('/');
@@ -877,9 +881,9 @@ class User {
             }
             return { success: false, error: { code: 404, message: 'Cannot add payment method to customer' } };
         }
-    
+
     }
-    
+
     async updateSubscriptionPlan(user, planId) {
         try {
             // const paymentMethods = await  stripe.paymentMethods.list({ customer: user.customer_id, type: 'card' });
@@ -904,7 +908,7 @@ class User {
             return { success: false, error: { code: 404, message: 'Cannot add payment method to customer' } };
         }
     }
-    
+
     async unsubscribe(email) {
         const client = await pool.connect();
         try {
@@ -932,8 +936,8 @@ class User {
             client.release();
         }
     }
-    
-    
+
+
     async updateSellerSettings(userId, data) {
         const client = await pool.connect();
         try {
@@ -971,7 +975,7 @@ class User {
             client.release();
         }
     }
-    
+
     async generatePdf(user) {
         try {
             let invoices = await stripe.invoices.list({
@@ -995,9 +999,9 @@ class User {
                 }
             })
             console.log('INVOICE PDF', invoicePdf);
-            
+
             return { success: true, invoiceUrl: invoicePdf };
-            
+
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
                 logger.log(

@@ -10,4 +10,5 @@ export { default as FilterDelivery } from './filters/FilterDelivery';
 export { default as FilterNumber } from './filters/FilterNumber';
 export { default as FilterDate } from './filters/FilterDate';
 export { default as FilterSeller } from './filters/FilterSeller';
+export { default as FilterDateRange } from './filters/FilterDateRange';
 export { default as CancelConfirmation } from './CancelConfirmation';

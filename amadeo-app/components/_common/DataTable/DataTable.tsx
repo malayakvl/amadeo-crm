@@ -53,9 +53,11 @@ const DataTable: React.FC<Props> = ({
     // const showFilters = [PRODUCTS].includes(paginationType);
     // const hideEntries: boolean = [CATEGORIES, INVESTMENT].includes(paginationType);
     // const hideEntries = false;
-    const showIds: boolean = [PRODUCTS, CHATBOT, SHIPPING, ORDERS, PAYMENTS, WAITING].includes(
-        paginationType
-    );
+    const listShowIds = [PRODUCTS, CHATBOT, SHIPPING, PAYMENTS, WAITING];
+    if (user.role_id === 2) {
+        listShowIds.push(ORDERS);
+    }
+    const showIds: boolean = listShowIds.includes(paginationType);
     // const hideSearch: boolean = [INVESTMENT].includes(paginationType);
     // const hideSearch = false;
     const headers = TableHeaders[paginationType];
@@ -64,7 +66,8 @@ const DataTable: React.FC<Props> = ({
     if (paginationType === PaginationType.SHIPPING && user.role_id === 3) {
         delete headers[5];
     }
-    if (paginationType === PaginationType.ORDERS) {
+
+    if (paginationType === PaginationType.ORDERS && user.role_id === 2) {
         dropdownOptions = ['shipped', 'cancel'];
     }
 
