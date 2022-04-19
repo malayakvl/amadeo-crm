@@ -73,7 +73,7 @@ export default {
   // subscription decline payment
   "Your account payment has been declined": "Votre paiement de compte a été refusé !",
   "decline_message": "Nous sommes désolés de vous informer que nous n'avons pas réussi à traiter votre paiement récurrent de [amount]) EUR  pour votre abonnement LiveProShop.\n" +
-      "Veuillez utiliser le lien suivant et vous assurer que les informations de facturation utilisées sont complètes, exactes et valides, ou les mettre à jour si nécessaire"
+      "Veuillez utiliser le lien suivant et vous assurer que les informations de facturation utilisées sont complètes, exactes et valides, ou les mettre à jour si nécessaire",
 
 
   //requestDemoFromEmail
