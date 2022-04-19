@@ -3,7 +3,8 @@ import {
     fetchFormAction,
     stripePaymentIntentAction,
     paymentPlanInfoAction,
-    fetchStripeProductAction
+    fetchStripeProductAction,
+    requestDemoAction
 } from './actions';
 
 const initialState: {
@@ -93,7 +94,8 @@ export {
     fetchFormAction,
     stripePaymentIntentAction,
     paymentPlanInfoAction,
-    fetchStripeProductAction
+    fetchStripeProductAction,
+    requestDemoAction
 };
 
 // ------------------------------------

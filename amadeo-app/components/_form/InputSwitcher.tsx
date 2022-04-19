@@ -6,10 +6,16 @@ interface Props {
     name: string;
     label: string | null;
     props: any;
-    onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const InputSwitcher: React.FC<Props> = ({ style, name, label, props, onChange }) => {
+const InputSwitcher: React.FC<Props> = ({
+    style,
+    name,
+    label,
+    props,
+    onChange = props.handleChange
+}) => {
     const t = useTranslations();
 
     return (

@@ -2,15 +2,18 @@ import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import Router from 'next/router';
 import Image from 'next/image';
-import React, { Fragment, useEffect, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { userSelector } from '../../redux/user/selectors';
 import { session } from 'next-auth/client';
 import { showLoaderAction } from '../../redux/layouts/actions';
-import { fetchFormAction } from '../../redux/paymentPlans';
+import { fetchFormAction, requestDemoAction } from '../../redux/paymentPlans';
 import { itemsSelector } from '../../redux/paymentPlans/selectors';
 import { formatCurrency, parseTranslation } from '../../lib/functions';
 import FullLayout from '../../components/layout/FullLayout';
+import { InputText } from '../../components/_form';
+import { Formik, Form } from 'formik';
+import * as Yup from 'yup';
 
 type PriceProps = {
     planId: number;
@@ -94,11 +97,29 @@ const Price = ({
 };
 
 export default function Pricing({ locale }: { locale: any }) {
+    const t = useTranslations();
     const [selected, setSelected] = useState('business');
     const dispatch = useDispatch();
     const plans = useSelector(itemsSelector);
     const user = useSelector(userSelector);
     const [showTrial, setShowTrial] = useState(true);
+
+    const [success, setSuccess] = useState(false);
+
+    const validationSchema = Yup.object().shape({
+        email: Yup.string().email(t('Must be a valid email')).required(t('Required field'))
+    });
+
+    const handlerSubmit = (values: unknown) => {
+        dispatch(
+            requestDemoAction({
+                form: values,
+                successMessage: t('Your request has been sent'),
+                locale,
+                callback: setSuccess
+            })
+        );
+    };
 
     useEffect(() => {
         dispatch(showLoaderAction(true));
@@ -112,8 +133,6 @@ export default function Pricing({ locale }: { locale: any }) {
             }
         }
     }, [user?.email]);
-
-    const t = useTranslations();
 
     const Tick = ({
         disabled,
@@ -462,20 +481,53 @@ export default function Pricing({ locale }: { locale: any }) {
                     {t('It only takes 30 second to get started')}
                 </div>
             </div>
-            <div className="flex flex-wrap lg:flex-nowrap mt-8 mb-16 lg:max-w-2xl mx-auto">
-                <input
-                    className="form-control i-email icon-close h-14"
-                    placeholder={t('Enter contact email')}
-                    type="text"
-                />
-                <button className="lg:ml-5 gradient-btn h-14 w-full lg:max-w-max mt-4 lg:mt-0">
-                    <span className="text-lg">{t('Demandez use demo')}</span>
-                </button>
-            </div>
+            {success ? (
+                <div className="mt-8 mb-16 font-bold text-2xl text-center text-green-500">
+                    {t('Your request has been sent')}
+                </div>
+            ) : (
+                <Formik
+                    initialValues={{}}
+                    validationSchema={validationSchema}
+                    onSubmit={handlerSubmit}>
+                    {(props) => (
+                        <Form className="flex flex-wrap justify-center align-middle lg:flex-nowrap lg:max-w-2xl mt-8 mb-16 mx-auto">
+                            <InputText
+                                style={'h-14 text-lg w-full'}
+                                icon={'f-email'}
+                                label={null}
+                                name={'email'}
+                                placeholder={t('Enter contact email')}
+                                props={props}
+                                tips={null}
+                            />
+
+                            <div className="mb-6 min-w-max w-full lg:w-auto ">
+                                <button className="lg:ml-5 lg:mt-0 w-full gradient-btn hover:bg-indigo-600 focus:outline-none duration-100 ease-in-out">
+                                    <span className="text-lg">{t('Request a demo')}</span>
+                                </button>
+                            </div>
+                        </Form>
+                    )}
+                </Formik>
+            )}
         </div>
     );
 }
 
+{
+    /* <input
+            className="form-control i-email icon-close h-14"
+            placeholder={t('Enter contact email')}
+            type="text"
+        />
+        <button className="lg:ml-5 gradient-btn h-14 w-full lg:max-w-max mt-4 lg:mt-0">
+            <span className="text-lg">{t('Demandez use demo')}</span>
+        </button> */
+}
+{
+    /* </div> */
+}
 export async function getServerSideProps(context: any) {
     const { locale } = context;
     // const session = await getSession(context);

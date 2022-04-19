@@ -20,9 +20,10 @@ export default function Index() {
     const [selectedItem, setSelectedItem] = useState<any | null>();
 
     const validationSchema = Yup.object({
-        // order_timer: Yup.number().required(t('Required field')),
-        // type: Yup.string().required(t('Required field')),
-        // multisafe_api_key: Yup.string().required(t('Required field'))
+        free_shipping_timer: Yup.number().when('free_shipping_status', {
+            is: true,
+            then: Yup.number().required(t('Required field'))
+        })
     });
 
     useEffect(() => {
@@ -39,7 +40,7 @@ export default function Index() {
 
     const handlerConfirm = useCallback(() => {
         if (!selectedItem) return;
-        initialValues.free_shipping_status = !initialValues.free_shipping_status;
+        dispatch(submitFormAction(selectedItem));
         setSelectedItem(null);
     }, [selectedItem]);
 
@@ -58,18 +59,11 @@ export default function Index() {
                         initialValues={initialValues}
                         validationSchema={validationSchema}
                         onSubmit={(values) => {
-                            dispatch(submitFormAction(values));
+                            if (values.free_shipping_status !== initialValues.free_shipping_status)
+                                setSelectedItem(values);
+                            else dispatch(submitFormAction(values));
                         }}>
                         {(props) => {
-                            const onChangeConfigured = () => {
-                                if (!selectedItem) {
-                                    setSelectedItem({
-                                        status: props.values.free_shipping_status,
-                                        name: t('Free Shipping Window')
-                                    });
-                                    return false;
-                                }
-                            };
                             return (
                                 <form className="w-full md:w-1/2" onSubmit={props.handleSubmit}>
                                     {/* <div className="font-bold text-gray-350 text-lg mb-8 border-gray-200">
@@ -108,7 +102,6 @@ export default function Index() {
                                         name={'free_shipping_status'}
                                         style={null}
                                         props={props}
-                                        onChange={onChangeConfigured}
                                     />
                                     <div className="max-w-[300px]">
                                         <InputText
@@ -130,7 +123,10 @@ export default function Index() {
                                         props={props}
                                         tips={null}
                                     /> */}
-                                    <button type="submit" className="w-32 mt-8 gradient-btn">
+                                    <button
+                                        type="submit"
+                                        className="w-32 mt-8 gradient-btn"
+                                        disabled={!props.dirty}>
                                         {t('Save')}
                                     </button>
                                 </form>
@@ -142,8 +138,8 @@ export default function Index() {
             <ConfirmDialog
                 show={!!selectedItem}
                 text={t('Are you sure you want to {status} {name} method?', {
-                    status: selectedItem?.status ? t('disable') : t('enable'),
-                    name: selectedItem?.name
+                    status: selectedItem?.free_shipping_status ? t('disable') : t('enable'),
+                    name: t('Free Shipping Window')
                 })}
                 titleConfirm={t('Yes')}
                 titleCancel={t('Cancel')}

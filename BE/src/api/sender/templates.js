@@ -122,3 +122,13 @@ export const unsubscriberFromEmail = async (email = '', message, locale = locale
     </p>`)
   };
 };
+
+export const requestDemoFromEmail = async (email = '', locale = localeDefault) => {
+  const { default: t } = await import(`../sender/${locale}.js`);
+
+  return {
+    subject: `${t['Request Demo from']} ${email}`,
+    body: emailHtml(t, `
+    <p>${t['Request Demo from']} (${email})!</p>`)
+  };
+};

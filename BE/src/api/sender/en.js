@@ -55,4 +55,7 @@ export default {
 
   //contactUsFromEmail
   "Contact Us message from": "Contact Us message from",
+  
+  //requestDemoFromEmail
+  "Request Demo from": "Request Demo from",
 };
