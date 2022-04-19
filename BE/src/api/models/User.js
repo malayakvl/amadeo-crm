@@ -5,6 +5,8 @@ import { logger } from '../../common/logger.js';
 import Stripe from 'stripe';
 import moment from "moment";
 import paymentPlanModel from "./PaymentPlan.js";
+import {confirmSubscriptionEmail, confirmSubscriptionPaymentEmail, registerEmail} from "../sender/templates.js";
+import { sendMail } from "../lib/sendMail.js";
 
 const stripe = Stripe(process.env.STRIPE_API_KEY);
 /**
@@ -321,8 +323,8 @@ class User {
             subscription.defaultPlanId = subscription.items.data[0].plan.id;
             subscription.dbPlans = dbPlansRes.rows;
 
-            const paymentPlansInfo = await paymentPlanModel.fetchItems();
-            subscription.paymentPlanList = paymentPlansInfo;
+            // const paymentPlansInfo = await paymentPlanModel.fetchItems();
+            subscription.paymentPlanList = await paymentPlanModel.fetchItems();
 
             let invoices = await stripe.invoices.list({
                 limit: 3,
@@ -354,6 +356,7 @@ class User {
                     { message: e.message }
                 );
             }
+            return { subscription: null };
         }
     }
 
@@ -398,12 +401,29 @@ class User {
                 if (paymentIntentResult.status === 'succeeded') {
                     await client.query(querySubscription);
                 }
-                const subscriptionRes = await client.query(`SELECT email FROM data.users
+                const subscriptionRes = await client.query(`SELECT email, price FROM data.users
                     LEFT JOIN data.subscriptions ON data.subscriptions.user_id=data.users.id
+                    LEFT JOIN data.subscription_plans ON data.subscription_plans.id = data.subscriptions.plan_id
                     WHERE customer_id='${paymentIntentResult.customer}'`);
-
+                console.log('here we are');
                 if (subscriptionRes.rows.length) {
                     paymentIntentResult.email = subscriptionRes.rows[0].email;
+
+                    // send email about success payment and subscription
+                    const mail = await confirmSubscriptionEmail(subscriptionRes.rows[0].email, 'fr');
+                    sendMail(
+                        subscriptionRes.rows[0].email,
+                        mail.subject,
+                        mail.body
+                    );
+
+                    const mailPayment = await confirmSubscriptionPaymentEmail(subscriptionRes.rows[0].email, 'fr', subscriptionRes.rows[0].price);
+                    sendMail(
+                        subscriptionRes.rows[0].email,
+                        mailPayment.subject,
+                        mailPayment.body
+                    );
+
                     return { paymentIntent: paymentIntentResult}
                 }
             }

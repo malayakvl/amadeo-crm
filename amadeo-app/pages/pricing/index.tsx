@@ -11,6 +11,7 @@ import { fetchFormAction } from '../../redux/paymentPlans';
 import { itemsSelector } from '../../redux/paymentPlans/selectors';
 import { formatCurrency, parseTranslation } from '../../lib/functions';
 import FullLayout from '../../components/layout/FullLayout';
+import { skipExistUserSubscriptionAction } from '../../redux/user/actions';
 
 type PriceProps = {
     planId: number;
@@ -191,19 +192,29 @@ export default function Pricing({ locale }: { locale: any }) {
             <div className="underline text-center mt-8 lg:mt-10">
                 {showTrial && (
                     <Fragment>
-                        {/*{user?.email && (*/}
-                        {/*    <Link href="/auth/signup">*/}
-                        {/*        <a>{t('Skip for now')}</a>*/}
-                        {/*    </Link>*/}
-                        {/*)}*/}
-                        {/*{!user?.email && (*/}
-                        {/*    <Link href="/auth/signup">*/}
-                        {/*        <a>{t('Skip for now')}</a>*/}
-                        {/*    </Link>*/}
-                        {/*)}*/}
-                        <Link href="/auth/signup">
-                            <a>{t('Skip for now')}</a>
-                        </Link>
+                        {user?.email && (
+                            <span
+                                className="cursor-pointer"
+                                role="presentation"
+                                onClick={() => {
+                                    dispatch(
+                                        skipExistUserSubscriptionAction(
+                                            `${window.location.origin}/dashboard`,
+                                            locale
+                                        )
+                                    );
+                                }}>
+                                {t('Skip for now')}
+                            </span>
+                        )}
+                        {!user?.email && (
+                            <Link href="/auth/signup">
+                                <a>{t('Skip for now')}</a>
+                            </Link>
+                        )}
+                        {/*<Link href="/auth/signup">*/}
+                        {/*    <a>{t('Skip for now')}</a>*/}
+                        {/*</Link>*/}
                     </Fragment>
                 )}
             </div>

@@ -34,7 +34,7 @@ class AuthController {
             }
         )(req, res, next);
     }
-    
+
     authSellerLogin(req, res, next) {
         const { seller_email } = req.body;
         passport.authenticate('custom', { session: false },
@@ -55,7 +55,7 @@ class AuthController {
                         res.status(200).json({ user: sellerUser });
                     } else {
                         getTokensAndSetCookies(req, res, authUser.id, authUser.email);
-    
+
                         res.status(200).json({ user: authUser });
                     }
                 });
@@ -76,7 +76,7 @@ class AuthController {
         }
         res.status(200).json({ user: user });
     }
-    
+
     async authProviderLogin(req, res) {
         const { user, error } = await userModel.providerLogin(req.body);
         if (error) {
@@ -84,7 +84,7 @@ class AuthController {
         }
         res.status(200).json({ user: user });
     }
-    
+
     async authSubscriptionLogin(req, res) {
         const user = await userModel.findUserByEmail(req.body.seller_email);
         if (!user) {
@@ -140,16 +140,16 @@ class AuthController {
 
         const { user, error } = await userModel.create(createUserData);
         // create trial subscription
-        const userData = {
-            planId: 1,
-            type: 'trial',
-            user: {
-                email: email,
-                first_name: formData.first_name,
-                last_name: formData.last_name
-            }
-        }
-        await userModel.createExistUserSubscription(userData, user);
+        // const userData = {
+        //     planId: 1,
+        //     type: 'trial',
+        //     user: {
+        //         email: email,
+        //         first_name: formData.first_name,
+        //         last_name: formData.last_name
+        //     }
+        // }
+        // await userModel.createExistUserSubscription(userData, user);
 
         if (error) {
             return res.status(error.code).json(error);

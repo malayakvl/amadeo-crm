@@ -4,6 +4,7 @@ export { default as FilterValues } from './FilterValues';
 export { default as FilterAmount } from './filters/FilterAmount';
 export { default as FilterCountry } from './filters/FilterCountry';
 export { default as FilterDate } from './filters/FilterDate';
+export { default as FilterDateRange } from './filters/FilterDateRange';
 export { default as FilterBuyersCnt } from './filters/FilterBuyersCnt';
 export { default as FilterOrdersCnt } from './filters/FilterOrdersCnt';
 export { default as FilterSessionsCnt } from './filters/FilterSessionsCnt';

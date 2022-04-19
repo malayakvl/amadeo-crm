@@ -31,19 +31,19 @@ const Filters: React.FC<Props> = ({ handleHideFilter, locale, filterOpen }) => {
 
     useEffect(() => {
         dispatch(fetchFilerItems());
-        // document.addEventListener('mousedown', handleClick);
-        //
-        // return () => {
-        //     document.removeEventListener('mousedown', handleClick);
-        // };
+        document.addEventListener('mousedown', handleClick);
+
+        return () => {
+            document.removeEventListener('mousedown', handleClick);
+        };
     }, []);
 
-    // const handleClick = (e: any) => {
-    //     if (node?.current?.contains(e.target)) {
-    //         return;
-    //     }
-    //     handleHideFilter();
-    // };
+    const handleClick = (e: any) => {
+        if (node?.current?.contains(e.target)) {
+            return;
+        }
+        handleHideFilter();
+    };
 
     const reset = () => {
         dispatch(
@@ -70,7 +70,7 @@ const Filters: React.FC<Props> = ({ handleHideFilter, locale, filterOpen }) => {
         <div
             className={`${
                 filterOpen ? '' : 'w-0 p-0'
-            } fixed top-0 right-0 overflow-y-scroll fill-screen bg-white w-80 p-6 shadow-xl filters border max-h-screen`}
+            } fixed top-0 right-0 overflow-y-scroll fill-screen bg-white w-80 p-6 shadow-xl filters border min-h-screen max-h-screen`}
             ref={node}>
             <button
                 className={`${filterOpen ? '' : 'hidden'} filter-close-desktop`}

@@ -3,11 +3,11 @@ import countryModel from '../models/Country.js';
 import paymentPlanModel from '../models/PaymentPlan.js';
 import multer from 'multer';
 import fs from 'fs';
-import { unsubscriberFromEmail } from "../sender/templates.js";
+import { trialSubscriptionEmail, unsubscriberFromEmail } from "../sender/templates.js";
 import { sendMail } from "../lib/sendMail.js";
 
 class UserController {
-    
+
     async generateInvoice (req, res) {
         if (!req.user) {
             return res.status(401).json('Access deny');
@@ -17,7 +17,7 @@ class UserController {
             return res.status(200).json(invoice);
         }
     }
-    
+
     async getProfile(req, res) {
         const user = req.user;
 
@@ -48,7 +48,7 @@ class UserController {
 
         return res.status(200).json(response);
     }
-    
+
     async fetchSettings (req, res) {
         if (!req.user) {
             return res.status(401).json('Access deny');
@@ -56,7 +56,7 @@ class UserController {
         const data = await userModel.fetchUserSettings(req.user.id);
         return res.status(200).json({ item: data[0]});
     }
-    
+
     async updateSettings (req, res) {
         if (!req.user) {
             return res.status(401).json('Access deny');
@@ -64,8 +64,8 @@ class UserController {
         const data = await userModel.updateSellerSettings(req.user.id, req.body);
         return res.status(200).json({ success: data.success });
     }
-    
-    
+
+
     async fetchSellers (req, res) {
         if (!req.user) {
             return res.status(401).json('Access deny');
@@ -73,7 +73,7 @@ class UserController {
         const data = await userModel.findUsersSuggestion(req.query.searchStr, 2);
         return res.status(200).json({ result: data});
     }
-    
+
     async fetchBuyers (req, res) {
         if (!req.user) {
             return res.status(401).json('Access deny');
@@ -141,7 +141,7 @@ class UserController {
         }
         return res.status(402).json('Something wend wrong');
     }
-    
+
     async syncFb (req, res) {
         if (req.user) {
             const data = await userModel.syncFb(req.user, req.body);
@@ -151,7 +151,7 @@ class UserController {
         }
         return res.status(402).json('Something wend wrong');
     }
-    
+
     async createUserFromSubscription (req, res) {
         const data = await userModel.createUserFromSubscription(req.body.userData, req.body.planId, req.body.type);
         if (data.subscription) {
@@ -165,7 +165,7 @@ class UserController {
             return res.status(402).json('Something wend wrong');
         }
     }
-    
+
     async defaultPaymentSetup(req, res) {
         if (req.user) {
             const data = await userModel.setupDefaultPayment(req.user, req.body.paymentId);
@@ -180,7 +180,7 @@ class UserController {
             return res.status(402).json('Something wend wrong');
         }
     }
-    
+
     async deletePaymentMethod(req, res) {
         if (req.user) {
             const data = await userModel.deletePaymentMethod(req.user, req.body.paymentId);
@@ -195,11 +195,12 @@ class UserController {
             return res.status(402).json('Something wend wrong');
         }
     }
-    
-    
+
+
     async getSubscription(req, res) {
         if (req.user) {
             const data = await userModel.getSubscriptionInfo(req.user.subscription_id, req.user.customer_id);
+            console.log('DATA SUBSCRIPTION', data);
             if (data.subscription) {
                 return res.status(200).json({
                     subscription: data.subscription,
@@ -211,7 +212,7 @@ class UserController {
             return res.status(402).json('Something wend wrong');
         }
     }
-    
+
     async addPaymentMethod(req, res) {
         if (req.user) {
             const data = await userModel.addPaymentMethod(req.user, req.body);
@@ -229,7 +230,7 @@ class UserController {
             return res.status(402).json('Something wend wrong');
         }
     }
-    
+
     async updateSubscriptionPlan (req, res) {
         if (req.user) {
             const data = await userModel.updateSubscriptionPlan(req.user, req.body.planId);
@@ -247,7 +248,36 @@ class UserController {
             return res.status(402).json('Something wend wrong');
         }
     }
-    
+
+    async skipExistUserSubscription (req, res) {
+        if (req.user) {
+            const userData = {
+                planId: 1,
+                type: 'trial',
+                user: {
+                    email: req.user.email,
+                    first_name: req.user.first_name,
+                    last_name: req.user.last_name
+                }
+            }
+            const data = await userModel.createExistUserSubscription(userData, req.user);
+            const user = await userModel.findUserByEmail(req.user.email);
+
+            trialSubscriptionEmail(req.user.email, req.body.locale);
+
+            if (data.subscription) {
+                return res.status(200).json({
+                    user: user,
+                    subscription: data.subscription,
+                    clientSecret: data.subscription.status === 'trialing' ? null : data.subscription.latest_invoice.payment_intent.client_secret
+                });
+            } else {
+                return res.status(402).json('Something wend wrong');
+            }
+        }
+        return res.status(402).json('Something wend wrong');
+    }
+
     async createExistUserSubscription (req, res) {
         if (req.user) {
             const data = await userModel.createExistUserSubscription(req.body, req.user);
@@ -265,8 +295,8 @@ class UserController {
         }
         return res.status(402).json('Something wend wrong');
     }
-    
-    
+
+
     async checkPaymentStatus (req, res) {
         const data = await userModel.checkPayment(req.body.paymentIntent, req.body.paymentIntentSecret);
         if (data.paymentIntent) {
@@ -276,13 +306,13 @@ class UserController {
         }
         return res.status(200).json('Something wend wrong');
     }
-    
+
     async unsubscribe (req, res) {
         if (req.user) {
             // send email to support about unsubscribe
             const settings = paymentPlanModel.fetchSettings();
             const mail = await unsubscriberFromEmail(req.user.email, "User want unsubscribe from plan", 'fr');
-    
+
             sendMail(
                 settings.support_email,
                 mail.subject,

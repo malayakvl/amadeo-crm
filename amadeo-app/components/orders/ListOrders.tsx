@@ -41,14 +41,6 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
         paginationSelectorFactory(PaginationType.ORDERS)
     );
     const user = useSelector(userSelector);
-    // const [state, setState] = useState<any>([
-    //     {
-    //         startDate: new Date(),
-    //         endDate: null,
-    //         key: 'selection'
-    //     }
-    // ]);
-    // const showDatePopup = useSelector(showDatePopupSelector);
 
     const [showMoreConfigs, setShowMoreConfigs] = useState<any>({});
     const [filterOpen, setFilterOpen] = useState(false);
@@ -101,41 +93,6 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                     locale={locale}
                     filterOpen={filterOpen}
                 />
-                {/*{filterOpen && <Filters handleHideFilter={handleHideFilter} locale={locale} />}*/}
-                {/*{showDatePopup && (*/}
-                {/*    <div className="filters-calendar">*/}
-                {/*        <DateRangePicker*/}
-                {/*            onChange={(item) => {*/}
-                {/*                setState([item.selection]);*/}
-                {/*                dispatch(*/}
-                {/*                    setPaginationAction({*/}
-                {/*                        type: PaginationType.ORDERS,*/}
-                {/*                        modifier: {*/}
-                {/*                            filters: {*/}
-                {/*                                ...filters,*/}
-                {/*                                created_at: [*/}
-                {/*                                    moment(item.selection.startDate).format(*/}
-                {/*                                        'YYYY-MM-DD'*/}
-                {/*                                    ),*/}
-                {/*                                    moment(item.selection.endDate).format(*/}
-                {/*                                        'YYYY-MM-DD'*/}
-                {/*                                    )*/}
-                {/*                                ]*/}
-                {/*                            },*/}
-                {/*                            offset: 0*/}
-                {/*                        }*/}
-                {/*                    })*/}
-                {/*                );*/}
-                {/*                dispatch(showDateSelectorAction(false));*/}
-                {/*            }}*/}
-                {/*            // showSelectionPreview={true}*/}
-                {/*            moveRangeOnFirstSelection={false}*/}
-                {/*            months={1}*/}
-                {/*            ranges={state}*/}
-                {/*            direction="horizontal"*/}
-                {/*        />*/}
-                {/*    </div>*/}
-                {/*)}*/}
                 <button
                     onClick={() => {
                         if (filterOpen) {

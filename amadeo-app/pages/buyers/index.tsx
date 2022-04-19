@@ -31,7 +31,12 @@ export default function Buyers({ session, locale }: { session: any; locale: any 
                 <div className="mb-14 relative">
                     <FilterValues />
 
-                    {filterOpen && <Filters handleHideFilter={handleHideFilter} locale={locale} />}
+                    {/*{filterOpen && <Filters handleHideFilter={handleHideFilter} locale={locale} />}*/}
+                    <Filters
+                        handleHideFilter={handleHideFilter}
+                        locale={locale}
+                        filterOpen={filterOpen}
+                    />
 
                     <button
                         onClick={() => setFilterOpen(!filterOpen)}

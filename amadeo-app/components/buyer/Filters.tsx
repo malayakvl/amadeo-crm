@@ -11,9 +11,10 @@ import { userSelector } from '../../redux/user/selectors';
 interface Props {
     handleHideFilter: () => void;
     locale: string;
+    filterOpen: boolean;
 }
 
-const Filters: React.FC<Props> = ({ handleHideFilter, locale }) => {
+const Filters: React.FC<Props> = ({ handleHideFilter, locale, filterOpen }) => {
     const t = useTranslations();
     const dispatch = useDispatch();
     const user = useSelector(userSelector);
@@ -52,8 +53,13 @@ const Filters: React.FC<Props> = ({ handleHideFilter, locale }) => {
     };
 
     return (
+        // <div
+        //     className="right-8 -top-14 bg-white absolute md:right-36 w-80 p-6 shadow-xl rounded-3xl filters"
+        //     ref={node}>
         <div
-            className="right-8 -top-14 bg-white absolute md:right-36 w-80 p-6 shadow-xl rounded-3xl filters"
+            className={`${
+                filterOpen ? '' : 'w-0 p-0'
+            } fixed top-0 right-0 overflow-y-scroll fill-screen bg-white w-80 p-6 shadow-xl filters border min-h-screen max-h-screen`}
             ref={node}>
             <div className="pb-3 border-b flex justify-between mb-4">
                 <div className="text-gray-350 font-bold text-xl">{t('Filters')}</div>

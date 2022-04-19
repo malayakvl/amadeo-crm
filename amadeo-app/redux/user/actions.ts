@@ -95,6 +95,40 @@ export const createUserFromSubscriptionAction: any = createAction(
         }
 );
 
+export const skipExistUserSubscriptionAction: any = createAction(
+    'user/SKIP_EXIST_USER_SUBSCRIPTION',
+    async (redirectUrl: string, locale: string) =>
+        async (
+            dispatch: Type.Dispatch,
+            getState: () => State.Root
+        ): Promise<{ subscription: any; clientSecret: string }> => {
+            dispatch(showLoaderAction(true));
+            const state = getState();
+            const res = await axios.post(
+                `${baseUrl}/skip-exist-user-subscription`,
+                { locale: locale },
+                {
+                    headers: {
+                        ...authHeader(state.user.user.email)
+                    }
+                }
+            );
+            if (res.status) {
+                dispatch(showLoaderAction(false));
+            }
+            if (res.data.subscription.status === 'trialing') {
+                window.localStorage.removeItem('user');
+                window.localStorage.setItem('user', JSON.stringify(res.data.user));
+                dispatch(setUserAction(res.data.user));
+                window.location.href = redirectUrl;
+            }
+            return {
+                subscription: res.data.subscription,
+                clientSecret: res.data.clientSecret
+            };
+        }
+);
+
 export const createExistUserSubscriptionAction: any = createAction(
     'user/EXIST_USER_SUBSCRIPTION',
     async (data: any, planId: number, type: string | null) =>
@@ -172,6 +206,12 @@ export const fetchUserSubscriptionAction: any = createAction(
                     dispatch(showLoaderAction(false));
                     return {
                         subscription: res.data.subscription
+                    };
+                })
+                .catch(() => {
+                    dispatch(showLoaderAction(false));
+                    return {
+                        subscription: null
                     };
                 });
         }

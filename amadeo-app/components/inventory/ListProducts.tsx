@@ -158,6 +158,10 @@ const ListProducts: React.FC<any> = () => {
         );
     };
 
+    const handleHideFilter = useCallback(() => {
+        setFilterOpen(false);
+    }, []);
+
     return (
         <>
             <div className="mt-7">
@@ -166,7 +170,8 @@ const ListProducts: React.FC<any> = () => {
                         {t('Products')}
                         <span className="text-gray-180 font-normal text-sm"> {count} items</span>
                     </h2>
-                    {filterOpen && <Filters />}
+                    {/*{filterOpen && <Filters />}*/}
+                    <Filters filterOpen={filterOpen} handleHideFilter={handleHideFilter} />
                     <button
                         onClick={() => setFilterOpen(!filterOpen)}
                         className="absolute top-0 right-0 flex items-center text-sm border rounded-lg px-4 py-1">

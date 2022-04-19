@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useTranslations } from 'next-intl';
 import { userSelector } from '../../redux/user/selectors';
 import { getSession } from 'next-auth/client';
@@ -12,31 +12,14 @@ import {
     Filters,
     FilterValues
 } from '../../components/payments';
-import { showDatePopupSelector } from '../../redux/payments/selectors';
-import { setPaginationAction } from '../../redux/layouts';
 import { paginationSelectorFactory } from '../../redux/layouts/selectors';
-import { DateRangePicker } from 'react-date-range';
 import { PaginationType } from '../../constants';
-import moment from 'moment';
-
-import 'react-date-range/dist/styles.css'; // main css file
-import 'react-date-range/dist/theme/default.css';
-import { showDateSelectorAction } from '../../redux/payments'; // theme css file
 
 export default function Payments({ session }: { session: any }) {
     if (!session) return <></>;
     const t = useTranslations();
-    const dispatch = useDispatch();
+    // const dispatch = useDispatch();
     const user = useSelector(userSelector);
-
-    const [state, setState] = useState<any>([
-        {
-            startDate: new Date(),
-            endDate: null,
-            key: 'selection'
-        }
-    ]);
-    const showDatePopup = useSelector(showDatePopupSelector);
 
     const [filterOpen, setFilterOpen] = useState(false);
     const { filters }: Layouts.Pagination = useSelector(
@@ -76,46 +59,12 @@ export default function Payments({ session }: { session: any }) {
 
                             <FilterValues />
 
-                            {filterOpen && <Filters handleHideFilter={handleHideFilter} />}
-                            {showDatePopup && (
-                                <div className="filters-calendar">
-                                    <DateRangePicker
-                                        // editableDateInputs={true}
-                                        onChange={(item) => {
-                                            setState([item.selection]);
-                                            dispatch(
-                                                setPaginationAction({
-                                                    type: PaginationType.PAYMENTS,
-                                                    modifier: {
-                                                        filters: {
-                                                            ...filters,
-                                                            created_at: [
-                                                                moment(
-                                                                    item.selection.startDate
-                                                                ).format('YYYY-MM-DD'),
-                                                                moment(
-                                                                    item.selection.endDate
-                                                                ).format('YYYY-MM-DD')
-                                                            ]
-                                                        },
-                                                        offset: 0
-                                                    }
-                                                })
-                                            );
-                                            dispatch(showDateSelectorAction(false));
-                                        }}
-                                        moveRangeOnFirstSelection={false}
-                                        months={1}
-                                        ranges={state}
-                                        direction="horizontal"
-                                    />
-                                </div>
-                            )}
+                            <Filters handleHideFilter={handleHideFilter} filterOpen={filterOpen} />
                             <button
                                 onClick={() => {
-                                    if (filterOpen) {
-                                        dispatch(showDateSelectorAction(false));
-                                    }
+                                    // if (filterOpen) {
+                                    //     dispatch(showDateSelectorAction(false));
+                                    // }
                                     setFilterOpen(!filterOpen);
                                 }}
                                 className="absolute top-0 right-0 flex items-center text-sm border rounded-lg px-4 py-1">
