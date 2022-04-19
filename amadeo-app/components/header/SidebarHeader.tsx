@@ -59,12 +59,12 @@ const SidebarHeader: React.FC = () => {
     return (
         <div className="shadow-bottom pr-4 pb-5 md:pb-0 md:pr-0 md:shadow-none md:flex items-center align-middle">
             <div className="hidden md:flex w-full sm:w-1/2 md:w-3/5 lg:w-3/5 xl:w-3/5 items-center">
-                <form>
+                {/* <form>
                     <div className="relative">
                         <input className="form-control" placeholder="Click to Search" />
                         <i className="input-close" />
                     </div>
-                </form>
+                </form> */}
             </div>
             <div className="w-full sm:w-1/2 md:w-2/5 lg:w-2/5 xl:w-2/5 flex items-center justify-end">
                 <NoticeCounter delay={120000} />
