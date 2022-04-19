@@ -11,3 +11,4 @@ export { default as FilterAmount } from './filters/FilterAmount';
 export { default as FilterNumber } from './filters/FilterNumber';
 export { default as FilterSeller } from './filters/FilterSeller';
 export { default as FilterDate } from './filters/FilterDate';
+export { default as FilterDateRange } from './filters/FilterDateRange';

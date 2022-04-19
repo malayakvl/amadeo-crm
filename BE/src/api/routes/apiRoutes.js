@@ -166,6 +166,7 @@ apiRoutes.route('/checkout/confirm').post(CheckoutController.chechoutComfirmatio
 apiRoutes.route('/fb-authenticate').post(UserController.syncFb);
 
 apiRoutes.route('/exist-user-subscription').post(UserController.createExistUserSubscription);
+apiRoutes.route('/skip-exist-user-subscription').post(UserController.skipExistUserSubscription);
 
 apiRoutes.route('/shipping/create').post(ShippingController.create);
 apiRoutes.route('/shipping/fetch-all').get(ShippingController.fetchAll);

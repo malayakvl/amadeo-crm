@@ -1,7 +1,14 @@
 import React, { useEffect, useRef } from 'react';
 import { useTranslations } from 'next-intl';
 import { useDispatch, useSelector } from 'react-redux';
-import { FilterPayment, FilterAmount, FilterNumber, FilterDate, FilterSeller } from './index';
+import {
+    FilterPayment,
+    FilterAmount,
+    FilterNumber,
+    FilterDate,
+    FilterSeller,
+    FilterDateRange
+} from './index';
 import { fetchFilerItems } from '../../redux/payments';
 import { userSelector } from '../../redux/user/selectors';
 import { setPaginationAction } from '../../redux/layouts';
@@ -9,9 +16,10 @@ import { OrderStatus, PaginationType } from '../../constants';
 
 interface Props {
     handleHideFilter: () => void;
+    filterOpen: boolean;
 }
 
-const Filters: React.FC<Props> = ({ handleHideFilter }) => {
+const Filters: React.FC<Props> = ({ handleHideFilter, filterOpen }) => {
     const t = useTranslations();
     const dispatch = useDispatch();
     const user = useSelector(userSelector);
@@ -55,8 +63,13 @@ const Filters: React.FC<Props> = ({ handleHideFilter }) => {
     };
 
     return (
+        // <div
+        //     className="right-8 -top-14 bg-white absolute md:right-36 w-80 p-6 shadow-xl rounded-3xl filters"
+        //     ref={node}>
         <div
-            className="right-8 -top-14 bg-white absolute md:right-36 w-80 p-6 shadow-xl rounded-3xl filters"
+            className={`${
+                filterOpen ? '' : 'w-0 p-0'
+            } fixed top-0 right-0 overflow-y-scroll fill-screen bg-white w-80 p-6 shadow-xl filters border min-h-screen max-h-screen`}
             ref={node}>
             <div className="pb-3 border-b flex justify-between mb-4">
                 <div className="text-gray-350 font-bold text-xl">{t('Filters')}</div>
@@ -73,6 +86,8 @@ const Filters: React.FC<Props> = ({ handleHideFilter }) => {
                 {user.role_id === 3 && <FilterSeller />}
 
                 <FilterDate />
+
+                <FilterDateRange />
 
                 <FilterAmount />
 
