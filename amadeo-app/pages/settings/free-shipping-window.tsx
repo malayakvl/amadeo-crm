@@ -138,7 +138,7 @@ export default function Index() {
             <ConfirmDialog
                 show={!!selectedItem}
                 text={t('Are you sure you want to {status} {name} method?', {
-                    status: selectedItem?.free_shipping_status ? t('disable') : t('enable'),
+                    status: selectedItem?.free_shipping_status ? t('enable') : t('disable'),
                     name: t('Free Shipping Window')
                 })}
                 titleConfirm={t('Yes')}
