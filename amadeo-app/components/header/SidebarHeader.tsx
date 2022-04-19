@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import NoticeCounter from './NoticeCounter';
+// import NoticeCounter from './NoticeCounter';
 import { fetchLatestAction } from '../../redux/notifications';
 import { useDispatch, useSelector } from 'react-redux';
 import { signOut } from 'next-auth/client';
@@ -67,7 +67,7 @@ const SidebarHeader: React.FC = () => {
                 </form> */}
             </div>
             <div className="w-full sm:w-1/2 md:w-2/5 lg:w-2/5 xl:w-2/5 flex items-center justify-end">
-                <NoticeCounter delay={120000} />
+                {/* <NoticeCounter delay={120000} /> */}
 
                 {/*<span className="divider" />*/}
                 <div className="relative ml-7">
@@ -139,9 +139,10 @@ const SidebarHeader: React.FC = () => {
                                         </a>
                                     </Link>
                                 </li>
-                                <li>
+                                {/* <li>
                                     <Link href="/notifications">
                                         {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                                {/*
                                         <a
                                             role="presentation"
                                             onClick={() => setShowProfileMenu(!showProfileMenu)}>
@@ -149,7 +150,7 @@ const SidebarHeader: React.FC = () => {
                                             <span className="s-caption">{t('Notification')}</span>
                                         </a>
                                     </Link>
-                                </li>
+                                </li> */}
                                 <li>
                                     {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                                     <a
