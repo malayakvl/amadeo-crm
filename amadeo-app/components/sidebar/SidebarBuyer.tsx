@@ -35,7 +35,7 @@ const SidebarBuyer: React.FC = () => {
     return (
         <>
             <div
-                className={`sidebar ${!isSidebarOpen && !isMobile ? 'sb-minimize' : ''} ${
+                className={`sidebar ${!isSidebarOpen ? 'sb-minimize' : ''} ${
                     isSidebarOpen && isMobile ? 'mobile-open' : ''
                 }`}
                 ref={node}>

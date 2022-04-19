@@ -76,4 +76,6 @@ export default {
       "Veuillez utiliser le lien suivant et vous assurer que les informations de facturation utilisées sont complètes, exactes et valides, ou les mettre à jour si nécessaire"
 
 
+  //requestDemoFromEmail
+  "Request Demo from": "Demandez use demo",
 };

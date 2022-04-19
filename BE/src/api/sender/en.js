@@ -73,4 +73,7 @@ export default {
   "Your account payment has been declined": "Your account payment has been declined!",
   "decline_message": "We are sorry to inform you that we were unable to process your recurring payment of [amount] EUR for your LiveProShop subscription.\n" +
       "Please use the following link and make sure that the billing information used is complete, accurate and valid, or update it if necessary"
+  
+  //requestDemoFromEmail
+  "Request Demo from": "Request Demo from",
 };
