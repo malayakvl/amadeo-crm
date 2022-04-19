@@ -396,6 +396,7 @@ class User {
             const paymentIntentResult = await stripe.paymentIntents.retrieve(
                 paymentIntent
             );
+            console.log('STRIPE PAYMENT INTENT', paymentIntentResult);
             if (paymentIntentResult.client_secret === paymentIntentSecret) {
                 const querySubscription = `UPDATE data.subscriptions SET status='active' WHERE customer_id='${paymentIntentResult.customer}'`;
                 if (paymentIntentResult.status === 'succeeded') {
@@ -435,7 +436,7 @@ class User {
                     { message: e.message }
                 );
             }
-            return { user: null, error: { code: 404, message: 'User Not found' } };
+            return { user: null, error: { code: 404, message: 'Payment subscription error' } };
         } finally {
             client.release();
         }
