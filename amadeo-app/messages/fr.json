@@ -305,6 +305,7 @@
   "scheduled": "scheduled",
   "live": "live",
   "liveselling_descr": "In order to learn more go to the \"live selling rules\" page",
+  "liveselling_warning": "Oups! Vous ne pouvez pas programmer de live car vous n'avez pas encore choisi votre formule d'abonnement mensuel. Allez dans les paramètres de votre profil pour sélectionner le plan qui vous convient",
   "Read rules and download csv template here": "Read rules and download csv template here",
   "Settings": "Settings",
   "Cart duration": "Cart duration",

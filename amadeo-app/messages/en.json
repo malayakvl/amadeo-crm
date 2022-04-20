@@ -97,5 +97,8 @@
   "Shipping methods": "Shipping methods",
   "Save changes": "Save changes",
   "Empty": "Empty",
-  "Set a shipping threshold. In case order has reacted this amount, the shipping is free for this shopper": "Set a shipping threshold. In case order has reacted this amount, the shipping is free for this shopper"
+  "Set a shipping threshold. In case order has reacted this amount, the shipping is free for this shopper": "Set a shipping threshold. In case order has reacted this amount, the shipping is free for this shopper",
+  "liveselling_descr": "In order to learn more go to the \"live selling rules\" page",
+  "liveselling_warning": "Oups! Vous ne pouvez pas programmer de live car vous n'avez pas encore choisi votre formule d'abonnement mensuel. Allez dans les paramètres de votre profil pour sélectionner le plan qui vous convient"
+  
 }
