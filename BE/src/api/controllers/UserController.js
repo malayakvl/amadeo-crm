@@ -298,6 +298,8 @@ class UserController {
 
 
     async checkPaymentStatus (req, res) {
+        console.log(req.body.paymentIntent);
+        console.log(req.body.paymentIntentSecret);
         const data = await userModel.checkPayment(req.body.paymentIntent, req.body.paymentIntentSecret);
         if (data.paymentIntent) {
             return res.status(200).json({
