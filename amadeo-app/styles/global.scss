@@ -91,6 +91,18 @@
 ::-webkit-scrollbar-thumb {
   @apply bg-blue-350 rounded;
 }
+.transparent-scrollbar-thumb::-webkit-scrollbar-thumb {
+  @apply bg-transparent;
+}
+.transparent-scrollbar-thumb:hover::-webkit-scrollbar-thumb {
+  @apply bg-blue-350;
+}
+.rtl {
+  direction: rtl;
+}
+.ltr {
+  direction: ltr;
+}
 
 @import "components/buttons";
 @import "components/alerts";
