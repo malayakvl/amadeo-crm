@@ -118,10 +118,7 @@ const FilterQuantity: React.FC<any> = () => {
                                 type="text"
                                 placeholder={'0'}
                                 onChange={(e) => {
-                                    onSliderPriceChange([
-                                        parseFloat(e.target.value),
-                                        quantityRange[1]
-                                    ]);
+                                    onSliderPriceChange([+e.target.value || 0, quantityRange[1]]);
                                 }}
                                 onFocus={handleFocus}
                                 onKeyUp={() => changePriceDone()}
@@ -137,10 +134,7 @@ const FilterQuantity: React.FC<any> = () => {
                                 type="text"
                                 placeholder={`${filterData.quantity[1]}`}
                                 onChange={(e) => {
-                                    onSliderPriceChange([
-                                        quantityRange[0],
-                                        parseFloat(e.target.value)
-                                    ]);
+                                    onSliderPriceChange([quantityRange[0], +e.target.value || 0]);
                                 }}
                                 onFocus={handleFocus}
                                 onKeyUp={() => changePriceDone()}
