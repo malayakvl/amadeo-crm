@@ -244,7 +244,7 @@ export default function Index({ session, locale }: { session: any; locale: strin
                                         {subscriptionInfo.DBName}
                                         <br />
                                         <a
-                                            className="cursor-pointer text-xs gradient-btn-small"
+                                            className="cursor-pointer text-xs gradient-btn-small block max-w-max"
                                             href={subscriptionInfo.invoicePdf}
                                             target="_blank"
                                             rel="noreferrer">
@@ -263,7 +263,7 @@ export default function Index({ session, locale }: { session: any; locale: strin
                                     <td style={{ textAlign: 'center' }}>{prepareDayLeft()}</td>
                                     <td>
                                         <span
-                                            className="cursor-pointer gradient-btn-small"
+                                            className="cursor-pointer gradient-btn-small block max-w-max"
                                             role="presentation"
                                             onClick={() =>
                                                 dispatch(showChangeSubscriptionFormAction(true))

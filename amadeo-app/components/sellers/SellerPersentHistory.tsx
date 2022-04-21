@@ -11,7 +11,7 @@ import { showSellerPercentHistoryAction } from '../../redux/sellers';
 import { fetchHistoryAction } from '../../redux/sellers/actions';
 import moment from 'moment';
 
-const SellerPersent: React.FC<any> = () => {
+const SellerPersentHistory: React.FC<any> = () => {
     const t = useTranslations();
     const dispatch = useDispatch();
     const showModal = useSelector(showPersentHistoryFormSelector);
@@ -35,25 +35,25 @@ const SellerPersent: React.FC<any> = () => {
             <div className="modal-overlay absolute w-full h-full bg-gray-900 opacity-50" />
             <div className="modal-container bg-white w-12/12 md:max-w-screen-xl mx-auto rounded shadow-lg z-50 overflow-y-auto">
                 <div
-                    className="modal-content py-4 text-left px-6 overflow-auto"
+                    className="modal-close cursor-pointer z-50 ml-auto w-6"
+                    role="presentation"
+                    onClick={() => {
+                        dispatch(showSellerPercentHistoryAction(false));
+                        toggleModalPopup('.modal-seller-persent-history');
+                    }}>
+                    <img
+                        src="/images/close-modal.svg"
+                        className="fill-current text-black"
+                        alt={''}
+                    />
+                </div>
+                <div
+                    className="modal-content pb-4 text-left px-6 overflow-auto"
                     style={{ maxHeight: '90vh' }}>
                     <div className="flex justify-between items-center pb-3">
                         <p className="text-2xl font-bold">
                             {t('Transaction history')}: {selectedSeller}
                         </p>
-                        <div
-                            className="modal-close cursor-pointer z-50"
-                            role="presentation"
-                            onClick={() => {
-                                dispatch(showSellerPercentHistoryAction(false));
-                                toggleModalPopup('.modal-seller-persent-history');
-                            }}>
-                            <img
-                                src="/images/close-modal.svg"
-                                className="fill-current text-black"
-                                alt={''}
-                            />
-                        </div>
                     </div>
 
                     {/*Body*/}
@@ -96,4 +96,4 @@ const SellerPersent: React.FC<any> = () => {
     );
 };
 
-export default SellerPersent;
+export default SellerPersentHistory;

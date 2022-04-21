@@ -832,23 +832,20 @@ class User {
     async fetchUserSettings(userId) {
         const client = await pool.connect();
         try {
-            const query = `SELECT *
-                            FROM data.seller_settings WHERE user_id=${userId};`;
-            const res = await client.query(query);
+            const query = 'SELECT * FROM data.seller_settings WHERE user_id=$1;';
+            const res = await client.query(query, [userId]);
+
             if (res.rows.length > 0) {
                 if (res.rows[0].order_timer) {
-                    res.rows[0].order_timer = res.rows[0].order_timer.hours ? res.rows[0].order_timer.hours: res.rows[0].order_timer.days;
-                    res.rows[0].type = res.rows[0].order_timer.hours ? 'h': 'd';
-                } else {
-                    res.rows[0].order_time = '';
-                    res.rows[0].type = 'h';
+                    res.rows[0].type = res.rows[0].order_timer.days ? 'd' : 'h';
+                    res.rows[0].order_timer = res.rows[0].order_timer.hours ?? res.rows[0].order_timer.days ?? '';  
                 }
+
                 if (res.rows[0].free_shipping_timer) {
-                    res.rows[0].free_shipping_timer = res.rows[0].free_shipping_timer.hours ? res.rows[0].free_shipping_timer.hours: res.rows[0].free_shipping_timer.days;
-                } else {
-                    res.rows[0].free_shipping_timer = '';
+                    res.rows[0].free_shipping_timer = res.rows[0].free_shipping_timer.hours ?? res.rows[0].free_shipping_timer.days ?? '';
                 }
             }
+            
             return res.rows[0] ? res.rows : [{
                 user_id: userId,
                 order_timer: '',
@@ -856,7 +853,9 @@ class User {
                 free_shipping_timer: '',
                 free_shipping_status: '',
                 created_at: '',
-                updated_at: ''}];
+                updated_at: ''
+            }];
+
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
                 logger.log(
@@ -866,6 +865,7 @@ class User {
                 );
             }
             return { success: false, error: { code: 404, message: 'Users not found' } };
+
         } finally {
             client.release();
         }
@@ -962,26 +962,23 @@ class User {
     async updateSellerSettings(userId, data) {
         const client = await pool.connect();
         try {
-            let intervalDuration;
             let free_shipping_timer = '0 hour';
             if (data.free_shipping_status) {
-                free_shipping_timer = `${data.free_shipping_timer} hour${data.free_shipping_timer > 1 ? 's' : ''}`;
+                free_shipping_timer = `${data.free_shipping_timer || 0} hour${data.free_shipping_timer > 1 ? 's' : ''}`;
             }
-            if (data.type === 'h') {
-                intervalDuration = `${data.order_timer} hour${data.order_timer > 1 ? 's' : ''}`;
-            } else {
-                intervalDuration = `${data.order_timer} day${data.order_timer > 1 ? 's' : ''}`;
-            }
+
+            const intervalDuration = `${data.order_timer || 0} ${data.type === 'h'? 'hour' : 'day'}${data.order_timer > 1 ? 's' : ''}`;
+
             const query = `INSERT INTO data.seller_settings(user_id, order_timer, free_shipping_timer, free_shipping_status, multisafe_api_key)
-                VALUES (${userId}, '${intervalDuration}', '${free_shipping_timer}', ${data.free_shipping_status ? data.free_shipping_status : false}, $$${data.multisafe_api_key}$$)
-                ON CONFLICT ON CONSTRAINT seller_settings__pkey DO UPDATE SET
+                VALUES ($1, $2, $3, $4, $5) ON CONFLICT ON CONSTRAINT seller_settings__pkey DO UPDATE SET
                     order_timer = EXCLUDED.order_timer,
                     free_shipping_timer = EXCLUDED.free_shipping_timer,
                     free_shipping_status = EXCLUDED.free_shipping_status,
-                    multisafe_api_key = EXCLUDED.multisafe_api_key
-                ;`;
-            await client.query(query);
+                    multisafe_api_key = EXCLUDED.multisafe_api_key;`;
+            await client.query(query, [userId, intervalDuration, free_shipping_timer, !!data.free_shipping_status, data.multisafe_api_key]);
+
             return { success: true };
+
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
                 logger.log(
@@ -992,6 +989,7 @@ class User {
                 console.log('[updateSellerSettings] sql e.message = ', e.message);
             }
             return { success: false, error: { code: 404, message: 'Users not found' } };
+
         } finally {
             client.release();
         }
