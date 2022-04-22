@@ -37,7 +37,7 @@ declare namespace Products {
 
     interface Range {
         min: number;
-        main: number;
+        max: number;
     }
 
     interface Tag {

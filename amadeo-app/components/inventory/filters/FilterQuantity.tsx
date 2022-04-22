@@ -16,54 +16,58 @@ const FilterQuantity: React.FC<any> = () => {
     const { filters }: Layouts.Pagination = useSelector(
         paginationSelectorFactory(PaginationType.PRODUCTS)
     );
-    const filterData = useSelector(productAdditionalSelector);
+    const filterData: Products.Root['additional'] = useSelector(productAdditionalSelector);
     const [showBlock, setShowBlock] = useState<boolean>(true);
 
-    const [quantityRange, setQuantityRange] = useState(
-        filters.quantity[0] > 0 || filters.quantity[1] > 0 ? filters.quantity : [0, 0]
-    );
+    const [quantityRange, setQuantityRange] = useState<number[]>([]);
 
     const onSliderPriceChange = (_value: any) => {
+        _value[0] = isNumber(_value[0]) ? +_value[0] : filterData.qtyRange.min;
+        _value[1] = isNumber(_value[1]) ? +_value[1] : filterData.qtyRange.max;
+
+        if (_value[0] > _value[1]) _value[1] = _value[0];
+
         setQuantityRange(_value);
     };
 
     useEffect(() => {
         if (filters.quantity.length === 0) {
-            setQuantityRange([0, 0]);
+            setQuantityRange([filterData.qtyRange.min, filterData.qtyRange.max]);
         } else {
             setQuantityRange(filters.quantity);
         }
-    }, [filters.quantity]);
+    }, [filters.quantity, filterData.qtyRange]);
 
     const changePriceDone = () => {
-        if (isNumber(quantityRange[0]) && isNumber(quantityRange[1])) {
-            if (quantityRange[0] !== quantityRange[1]) {
-                dispatch(
-                    setPaginationAction({
-                        type: PaginationType.PRODUCTS,
-                        modifier: {
-                            filters: {
-                                ...filters,
-                                quantity: quantityRange
-                            },
-                            offset: 0
-                        }
-                    })
-                );
-            } else if (quantityRange[0] === quantityRange[1] && quantityRange[0] === 0) {
-                dispatch(
-                    setPaginationAction({
-                        type: PaginationType.PRODUCTS,
-                        modifier: {
-                            filters: {
-                                ...filters,
-                                quantity: []
-                            },
-                            offset: 0
-                        }
-                    })
-                );
-            }
+        if (
+            quantityRange[0] == filterData.qtyRange.min &&
+            quantityRange[1] == filterData.qtyRange.max
+        ) {
+            dispatch(
+                setPaginationAction({
+                    type: PaginationType.PRODUCTS,
+                    modifier: {
+                        filters: {
+                            ...filters,
+                            quantity: []
+                        },
+                        offset: 0
+                    }
+                })
+            );
+        } else {
+            dispatch(
+                setPaginationAction({
+                    type: PaginationType.PRODUCTS,
+                    modifier: {
+                        filters: {
+                            ...filters,
+                            quantity: quantityRange
+                        },
+                        offset: 0
+                    }
+                })
+            );
         }
     };
 
@@ -95,14 +99,14 @@ const FilterQuantity: React.FC<any> = () => {
                         <span className="filter-label" style={{ marginLeft: '-4px' }}>
                             {t('Quantity')}
                             <em className="float-right">
-                                {quantityRange[0]} - {filterData.quantity[1]}
+                                {filterData.qtyRange.min} - {filterData.qtyRange.max}
                             </em>
                         </span>
                         <Range
                             allowCross={false}
-                            step={10}
-                            min={0}
-                            max={filterData.quantity[1]}
+                            step={1}
+                            min={filterData.qtyRange.min}
+                            max={filterData.qtyRange.max}
                             onChange={onSliderPriceChange}
                             onAfterChange={onSliderAfterChange}
                             value={quantityRange}
@@ -116,9 +120,9 @@ const FilterQuantity: React.FC<any> = () => {
                             <input
                                 className="w-full form-control"
                                 type="text"
-                                placeholder={'0'}
+                                placeholder={String(filterData.qtyRange.min)}
                                 onChange={(e) => {
-                                    onSliderPriceChange([+e.target.value || 0, quantityRange[1]]);
+                                    onSliderPriceChange([e.target.value, quantityRange[1]]);
                                 }}
                                 onFocus={handleFocus}
                                 onKeyUp={() => changePriceDone()}
@@ -132,9 +136,9 @@ const FilterQuantity: React.FC<any> = () => {
                             <input
                                 className="w-full form-control"
                                 type="text"
-                                placeholder={`${filterData.quantity[1]}`}
+                                placeholder={`${filterData.qtyRange.max}`}
                                 onChange={(e) => {
-                                    onSliderPriceChange([quantityRange[0], +e.target.value || 0]);
+                                    onSliderPriceChange([quantityRange[0], e.target.value]);
                                 }}
                                 onFocus={handleFocus}
                                 onKeyUp={() => changePriceDone()}
