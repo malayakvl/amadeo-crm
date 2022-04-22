@@ -16,54 +16,58 @@ const filterPrice: React.FC<any> = () => {
     const { filters }: Layouts.Pagination = useSelector(
         paginationSelectorFactory(PaginationType.PRODUCTS)
     );
-    const filterData = useSelector(productAdditionalSelector);
+    const filterData: Products.Root['additional'] = useSelector(productAdditionalSelector);
     const [showBlock, setShowBlock] = useState<boolean>(true);
 
-    const [priceRange, setPriceRange] = useState(
-        filters.price[0] > 0 || filters.price[1] > 0 ? filters.price : [0, 0]
-    );
+    const [priceRange, setPriceRange] = useState<number[]>([]);
 
     const onSliderPriceChange = (_value: any) => {
+        _value[0] = isNumber(_value[0]) ? +_value[0] : filterData.priceRange.min;
+        _value[1] = isNumber(_value[1]) ? +_value[1] : filterData.priceRange.max;
+
+        if (_value[0] > _value[1]) _value[1] = _value[0];
+
         setPriceRange(_value);
     };
 
     useEffect(() => {
         if (filters.price.length === 0) {
-            setPriceRange([0, 0]);
+            setPriceRange([filterData.priceRange.min, filterData.priceRange.max]);
         } else {
             setPriceRange(filters.price);
         }
-    }, [filters.price]);
+    }, [filters.price, filterData.priceRange]);
 
     const changePriceDone = () => {
-        if (isNumber(priceRange[0]) && isNumber(priceRange[1])) {
-            if (priceRange[0] !== priceRange[1]) {
-                dispatch(
-                    setPaginationAction({
-                        type: PaginationType.PRODUCTS,
-                        modifier: {
-                            filters: {
-                                ...filters,
-                                price: priceRange
-                            },
-                            offset: 0
-                        }
-                    })
-                );
-            } else if (priceRange[0] === priceRange[1] && priceRange[0] === 0) {
-                dispatch(
-                    setPaginationAction({
-                        type: PaginationType.PRODUCTS,
-                        modifier: {
-                            filters: {
-                                ...filters,
-                                price: []
-                            },
-                            offset: 0
-                        }
-                    })
-                );
-            }
+        if (
+            priceRange[0] == filterData.priceRange.min &&
+            priceRange[1] == filterData.priceRange.max
+        ) {
+            dispatch(
+                setPaginationAction({
+                    type: PaginationType.PRODUCTS,
+                    modifier: {
+                        filters: {
+                            ...filters,
+                            price: []
+                        },
+                        offset: 0
+                    }
+                })
+            );
+        } else {
+            dispatch(
+                setPaginationAction({
+                    type: PaginationType.PRODUCTS,
+                    modifier: {
+                        filters: {
+                            ...filters,
+                            price: priceRange
+                        },
+                        offset: 0
+                    }
+                })
+            );
         }
     };
 
@@ -95,15 +99,15 @@ const filterPrice: React.FC<any> = () => {
                         <span className="filter-label" style={{ marginLeft: '-4px' }}>
                             {t('Price')}
                             <em className="float-right">
-                                {priceRange[0]} - {filterData.price[1]}
+                                {filterData.priceRange.min} - {filterData.priceRange.max}
                                 &euro;
                             </em>
                         </span>
                         <Range
                             allowCross={false}
                             step={1}
-                            min={0}
-                            max={filterData.price[1]}
+                            min={filterData.priceRange.min}
+                            max={filterData.priceRange.max}
                             onChange={onSliderPriceChange}
                             onAfterChange={onSliderAfterChange}
                             value={priceRange}
@@ -117,12 +121,9 @@ const filterPrice: React.FC<any> = () => {
                             <input
                                 className="w-full form-control"
                                 type="text"
-                                placeholder={formatCurrency(0)}
+                                placeholder={formatCurrency(filterData.priceRange.min)}
                                 onChange={(e) => {
-                                    onSliderPriceChange([
-                                        parseFloat(e.target.value),
-                                        priceRange[1]
-                                    ]);
+                                    onSliderPriceChange([e.target.value, priceRange[1]]);
                                 }}
                                 onFocus={handleFocus}
                                 onKeyUp={() => changePriceDone()}
@@ -136,12 +137,9 @@ const filterPrice: React.FC<any> = () => {
                             <input
                                 className="w-full form-control"
                                 type="text"
-                                placeholder={formatCurrency(filterData.price[1])}
+                                placeholder={formatCurrency(filterData.priceRange.max)}
                                 onChange={(e) => {
-                                    onSliderPriceChange([
-                                        priceRange[0],
-                                        parseFloat(e.target.value)
-                                    ]);
+                                    onSliderPriceChange([priceRange[0], e.target.value]);
                                 }}
                                 onFocus={handleFocus}
                                 onKeyUp={() => changePriceDone()}

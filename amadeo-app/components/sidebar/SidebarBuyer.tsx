@@ -39,9 +39,9 @@ const SidebarBuyer: React.FC = () => {
                     isSidebarOpen && isMobile ? 'mobile-open' : ''
                 }`}
                 ref={node}>
-                <div className="overflow-y-auto overflow-x-hidden flex flex-col justify-between flex-grow">
-                    <ul>
-                        <Brand />
+                <Brand />
+                <div className="overflow-y-auto overflow-x-hidden transparent-scrollbar-thumb rtl flex flex-col justify-between flex-grow">
+                    <ul className="ltr">
                         <li className="active">
                             <Link href={'/dashboard'}>
                                 <a>

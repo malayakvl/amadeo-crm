@@ -32,11 +32,10 @@
     background-size: 200px auto;
     width: 200px;
     height: 32px;
-    left: -15px;
-    top: 5px;
+    min-height: 32px;
     text-indent: -99999px;
     white-space: nowrap;
-    @apply block;
+    @apply block mx-4 mt-6 mb-10;
   }
 
   ul {
