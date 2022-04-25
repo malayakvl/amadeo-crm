@@ -9,6 +9,7 @@ import { Range } from 'rc-slider';
 import 'rc-slider/assets/index.css';
 import { productAdditionalSelector } from '../../../redux/products/selectors';
 import { isNumber } from '../../../lib/functions';
+import { useDebouncedCallback } from 'use-debounce';
 
 const FilterQuantity: React.FC<any> = () => {
     const t = useTranslations();
@@ -21,15 +22,6 @@ const FilterQuantity: React.FC<any> = () => {
 
     const [quantityRange, setQuantityRange] = useState<number[]>([]);
 
-    const onSliderPriceChange = (_value: any) => {
-        _value[0] = isNumber(_value[0]) ? +_value[0] : filterData.qtyRange.min;
-        _value[1] = isNumber(_value[1]) ? +_value[1] : filterData.qtyRange.max;
-
-        if (_value[0] > _value[1]) _value[1] = _value[0];
-
-        setQuantityRange(_value);
-    };
-
     useEffect(() => {
         if (filters.quantity.length === 0) {
             setQuantityRange([filterData.qtyRange.min, filterData.qtyRange.max]);
@@ -37,6 +29,10 @@ const FilterQuantity: React.FC<any> = () => {
             setQuantityRange(filters.quantity);
         }
     }, [filters.quantity, filterData.qtyRange]);
+
+    const onSliderPriceChange = (_value: any) => {
+        setQuantityRange(_value);
+    };
 
     const changePriceDone = () => {
         if (
@@ -78,6 +74,18 @@ const FilterQuantity: React.FC<any> = () => {
     const handleFocus = (e: any) => {
         e.target.select();
     };
+
+    const debouncedChangePriceDone = useDebouncedCallback(() => {
+        quantityRange[0] = isNumber(quantityRange[0]) ? +quantityRange[0] : filterData.qtyRange.min;
+        quantityRange[1] = isNumber(quantityRange[1]) ? +quantityRange[1] : filterData.qtyRange.max;
+
+        if (quantityRange[0] > filterData.qtyRange.max) quantityRange[0] = filterData.qtyRange.max;
+        if (quantityRange[1] < filterData.qtyRange.min) quantityRange[1] = filterData.qtyRange.min;
+
+        if (quantityRange[0] > quantityRange[1]) quantityRange[1] = quantityRange[0];
+
+        changePriceDone();
+    }, 1000);
 
     return (
         <div className="mb-4">
@@ -122,10 +130,13 @@ const FilterQuantity: React.FC<any> = () => {
                                 type="text"
                                 placeholder={String(filterData.qtyRange.min)}
                                 onChange={(e) => {
-                                    onSliderPriceChange([e.target.value, quantityRange[1]]);
+                                    onSliderPriceChange([
+                                        e.target.value.replace(/[^0-9]/g, ''),
+                                        quantityRange[1]
+                                    ]);
+                                    debouncedChangePriceDone();
                                 }}
                                 onFocus={handleFocus}
-                                onKeyUp={() => changePriceDone()}
                                 value={quantityRange[0]}
                             />
                         </div>
@@ -138,10 +149,13 @@ const FilterQuantity: React.FC<any> = () => {
                                 type="text"
                                 placeholder={`${filterData.qtyRange.max}`}
                                 onChange={(e) => {
-                                    onSliderPriceChange([quantityRange[0], e.target.value]);
+                                    onSliderPriceChange([
+                                        quantityRange[0],
+                                        e.target.value.replace(/[^0-9]/g, '')
+                                    ]);
+                                    debouncedChangePriceDone();
                                 }}
                                 onFocus={handleFocus}
-                                onKeyUp={() => changePriceDone()}
                                 value={quantityRange[1]}
                             />
                         </div>

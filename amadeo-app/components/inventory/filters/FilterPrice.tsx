@@ -9,6 +9,7 @@ import { Range } from 'rc-slider';
 import 'rc-slider/assets/index.css';
 import { productAdditionalSelector } from '../../../redux/products/selectors';
 import { formatCurrency, isNumber } from '../../../lib/functions';
+import { useDebouncedCallback } from 'use-debounce';
 
 const filterPrice: React.FC<any> = () => {
     const t = useTranslations();
@@ -19,16 +20,7 @@ const filterPrice: React.FC<any> = () => {
     const filterData: Products.Root['additional'] = useSelector(productAdditionalSelector);
     const [showBlock, setShowBlock] = useState<boolean>(true);
 
-    const [priceRange, setPriceRange] = useState<number[]>([]);
-
-    const onSliderPriceChange = (_value: any) => {
-        _value[0] = isNumber(_value[0]) ? +_value[0] : filterData.priceRange.min;
-        _value[1] = isNumber(_value[1]) ? +_value[1] : filterData.priceRange.max;
-
-        if (_value[0] > _value[1]) _value[1] = _value[0];
-
-        setPriceRange(_value);
-    };
+    const [priceRange, setPriceRange] = useState<any[]>([]);
 
     useEffect(() => {
         if (filters.price.length === 0) {
@@ -37,6 +29,10 @@ const filterPrice: React.FC<any> = () => {
             setPriceRange(filters.price);
         }
     }, [filters.price, filterData.priceRange]);
+
+    const onSliderPriceChange = (_value: any) => {
+        setPriceRange(_value);
+    };
 
     const changePriceDone = () => {
         if (
@@ -78,6 +74,18 @@ const filterPrice: React.FC<any> = () => {
     const handleFocus = (e: any) => {
         e.target.select();
     };
+
+    const debouncedChangePriceDone = useDebouncedCallback(() => {
+        priceRange[0] = isNumber(priceRange[0]) ? +priceRange[0] : filterData.priceRange.min;
+        priceRange[1] = isNumber(priceRange[1]) ? +priceRange[1] : filterData.priceRange.max;
+
+        if (priceRange[0] > filterData.priceRange.max) priceRange[0] = filterData.priceRange.max;
+        if (priceRange[1] < filterData.priceRange.min) priceRange[1] = filterData.priceRange.min;
+
+        if (priceRange[0] > priceRange[1]) priceRange[1] = priceRange[0];
+
+        changePriceDone();
+    }, 1000);
 
     return (
         <div className="mb-4">
@@ -123,10 +131,13 @@ const filterPrice: React.FC<any> = () => {
                                 type="text"
                                 placeholder={formatCurrency(filterData.priceRange.min)}
                                 onChange={(e) => {
-                                    onSliderPriceChange([e.target.value, priceRange[1]]);
+                                    onSliderPriceChange([
+                                        e.target.value.replace(/[^0-9.]/g, ''),
+                                        priceRange[1]
+                                    ]);
+                                    debouncedChangePriceDone();
                                 }}
                                 onFocus={handleFocus}
-                                onKeyUp={() => changePriceDone()}
                                 value={priceRange[0]}
                             />
                         </div>
@@ -139,10 +150,13 @@ const filterPrice: React.FC<any> = () => {
                                 type="text"
                                 placeholder={formatCurrency(filterData.priceRange.max)}
                                 onChange={(e) => {
-                                    onSliderPriceChange([priceRange[0], e.target.value]);
+                                    onSliderPriceChange([
+                                        priceRange[0],
+                                        e.target.value.replace(/[^0-9.]/g, '')
+                                    ]);
+                                    debouncedChangePriceDone();
                                 }}
                                 onFocus={handleFocus}
-                                onKeyUp={() => changePriceDone()}
                                 value={priceRange[1]}
                             />
                         </div>
