@@ -11,6 +11,7 @@ import { authHeader } from '../../lib/functions';
 import getConfig from 'next/config';
 import * as Yup from 'yup';
 import { getSession } from 'next-auth/client';
+import Head from 'next/head';
 
 const { publicRuntimeConfig } = getConfig();
 const url = `${publicRuntimeConfig.apiUrl}/api/shipping`;
@@ -37,6 +38,10 @@ export default function ShippingThreshold() {
 
     return (
         <>
+            <Head>
+                <title>Amadeo CRM - Settings - Free shipping threshold</title>
+            </Head>
+
             <div className="block-white-8 mr-10 white-shadow-big">
                 <div className="page-title">
                     <h1>{t('Settings')}</h1>

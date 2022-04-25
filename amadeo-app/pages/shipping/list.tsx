@@ -30,6 +30,7 @@ import { formatCurrency, parseTranslation } from '../../lib/functions';
 // import * as Yup from 'yup';
 import { getSession } from 'next-auth/client';
 import ConfirmDialog from '../../components/_common/ConfirmDialog';
+import Head from 'next/head';
 
 // const { publicRuntimeConfig } = getConfig();
 // const url = `${publicRuntimeConfig.apiUrl}/api/shipping`;
@@ -101,6 +102,10 @@ export default function List({ locale }: { locale: string }) {
 
     return (
         <>
+            <Head>
+                <title>Amadeo CRM - Settings - Shipping methods</title>
+            </Head>
+
             <div className="block-white-8 mr-10 white-shadow-big">
                 <div className="page-title">
                     <h1>{t('Shipping')}</h1>

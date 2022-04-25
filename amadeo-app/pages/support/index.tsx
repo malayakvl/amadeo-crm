@@ -8,6 +8,7 @@ import { userSelector } from '../../redux/user/selectors';
 import { sendMessage } from '../../redux/support/actions';
 import { setSuccessToastAction } from '../../redux/layouts';
 import { getSession } from 'next-auth/client';
+import Head from 'next/head';
 
 export default function Support({ locale }: { locale: string }) {
     const t = useTranslations();
@@ -29,6 +30,10 @@ export default function Support({ locale }: { locale: string }) {
 
     return (
         <>
+            <Head>
+                <title>Amadeo CRM - {t('Support')}</title>
+            </Head>
+
             <div className="block-white-8 mr-10 white-shadow-big">
                 <div className="page-title">
                     <h1>{t('Support')}</h1>

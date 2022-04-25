@@ -10,6 +10,7 @@ import { fetchFormAction } from '../../redux/settings';
 import { showLoaderAction } from '../../redux/layouts/actions';
 import { submitFormAction } from '../../redux/settings/actions';
 // import ConfirmDialog from '../../components/_common/ConfirmDialog';
+import Head from 'next/head';
 
 export default function PaymentSetting() {
     const t = useTranslations();
@@ -45,6 +46,10 @@ export default function PaymentSetting() {
 
     return (
         <>
+            <Head>
+                <title>Amadeo CRM - Payment Settings</title>
+            </Head>
+
             <div className="block-white-8 mr-10 white-shadow-big">
                 <div className="page-title">
                     <h1>{t('Settings')}</h1>
