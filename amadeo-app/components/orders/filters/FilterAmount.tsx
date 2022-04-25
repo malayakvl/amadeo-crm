@@ -9,6 +9,7 @@ import { Range } from 'rc-slider';
 import 'rc-slider/assets/index.css';
 import { filterDataSelector } from '../../../redux/orders/selectors';
 import { formatCurrency, isNumber } from '../../../lib/functions';
+import { useDebouncedCallback } from 'use-debounce';
 
 const FilterAmount: React.FC<any> = () => {
     const t = useTranslations();
@@ -21,15 +22,6 @@ const FilterAmount: React.FC<any> = () => {
 
     const [priceRange, setPriceRange] = useState<number[]>([]);
 
-    const onSliderPriceChange = (_value: any) => {
-        _value[0] = isNumber(_value[0]) ? +_value[0] : filterData.amounts[0];
-        _value[1] = isNumber(_value[1]) ? +_value[1] : filterData.amounts[1];
-
-        if (_value[0] > _value[1]) _value[1] = _value[0];
-
-        setPriceRange(_value);
-    };
-
     useEffect(() => {
         if (filters.total_amount.length === 0) {
             setPriceRange(filterData.amounts);
@@ -37,6 +29,10 @@ const FilterAmount: React.FC<any> = () => {
             setPriceRange(filters.total_amount);
         }
     }, [filters.total_amount, filterData.amounts]);
+
+    const onSliderPriceChange = (_value: any) => {
+        setPriceRange(_value);
+    };
 
     const changePriceDone = () => {
         if (priceRange[0] == filterData.amounts[0] && priceRange[1] == filterData.amounts[1]) {
@@ -75,6 +71,18 @@ const FilterAmount: React.FC<any> = () => {
     const handleFocus = (e: any) => {
         e.target.select();
     };
+
+    const debouncedChangePriceDone = useDebouncedCallback(() => {
+        priceRange[0] = isNumber(priceRange[0]) ? +priceRange[0] : filterData.amounts[0];
+        priceRange[1] = isNumber(priceRange[1]) ? +priceRange[1] : filterData.amounts[1];
+
+        if (priceRange[0] > filterData.amounts[1]) priceRange[0] = filterData.amounts[1];
+        if (priceRange[1] < filterData.amounts[0]) priceRange[1] = filterData.amounts[0];
+
+        if (priceRange[0] > priceRange[1]) priceRange[1] = priceRange[0];
+
+        changePriceDone();
+    }, 1000);
 
     return (
         <div className="mb-4">
@@ -121,12 +129,12 @@ const FilterAmount: React.FC<any> = () => {
                                 placeholder={formatCurrency(filterData.amounts[0])}
                                 onChange={(e) => {
                                     onSliderPriceChange([
-                                        e.target.value.replace(/[^0-9]/g, ''),
+                                        e.target.value.replace(/[^0-9.]/g, ''),
                                         priceRange[1]
                                     ]);
+                                    debouncedChangePriceDone();
                                 }}
                                 onFocus={handleFocus}
-                                onKeyUp={() => changePriceDone()}
                                 value={priceRange[0]}
                             />
                         </div>
@@ -141,8 +149,9 @@ const FilterAmount: React.FC<any> = () => {
                                 onChange={(e) => {
                                     onSliderPriceChange([
                                         priceRange[0],
-                                        e.target.value.replace(/[^0-9]/g, '')
+                                        e.target.value.replace(/[^0-9.]/g, '')
                                     ]);
+                                    debouncedChangePriceDone();
                                 }}
                                 onFocus={handleFocus}
                                 onKeyUp={() => changePriceDone()}
