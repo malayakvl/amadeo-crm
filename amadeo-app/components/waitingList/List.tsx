@@ -10,10 +10,10 @@ import { DataTable } from '../_common';
 import { fetchItemsAction } from '../../redux/waitingList';
 import moment from 'moment';
 import { baseApiUrl } from '../../constants';
-import { checkIdsAction, setPaginationAction } from '../../redux/layouts';
+import { setPaginationAction } from '../../redux/layouts';
 import { useTranslations } from 'next-intl';
 import { FilterValues, ListItems } from './index';
-import { checkedIdsSelector, paginationSelectorFactory } from '../../redux/layouts/selectors';
+import { paginationSelectorFactory } from '../../redux/layouts/selectors';
 import { DateRange } from 'react-date-range';
 import 'react-date-range/dist/styles.css'; // main css file
 import 'react-date-range/dist/theme/default.css';
@@ -28,9 +28,9 @@ const ListMessages: React.FC = () => {
     const dispatch = useDispatch();
     const items = useSelector(paginatedItemsSelector);
     const count = useSelector(itemsCountSelector);
-    const checkedIds = useSelector(checkedIdsSelector);
+    // const checkedIds = useSelector(checkedIdsSelector);
     const { filters }: Layouts.Pagination = useSelector(
-        paginationSelectorFactory(PaginationType.ORDERS)
+        paginationSelectorFactory(PaginationType.WAITING)
     );
     const [state, setState] = useState<any>([
         {
@@ -117,7 +117,7 @@ const ListMessages: React.FC = () => {
                 {items?.map((item: any) => (
                     <Fragment key={item.id}>
                         <tr>
-                            <td>
+                            {/* <td>
                                 <input
                                     className="float-checkbox"
                                     type="checkbox"
@@ -131,7 +131,7 @@ const ListMessages: React.FC = () => {
                                         )?.checked || false
                                     }
                                 />
-                            </td>
+                            </td> */}
                             <td style={{ width: '50px' }}>
                                 <i
                                     role="presentation"
@@ -153,7 +153,7 @@ const ListMessages: React.FC = () => {
                                     />
                                 )}
                                 {!item.configuration.previewphoto && (
-                                    <div className="border rounded-lg w-[85px] h-[95px] block flex items-center text-center">
+                                    <div className="border rounded-lg w-[85px] h-[95px] flex items-center text-center">
                                         <BanIcon
                                             width={30}
                                             height={30}
