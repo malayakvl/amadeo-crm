@@ -210,9 +210,8 @@ export default function Pricing({ locale }: { locale: any }) {
                         {t('Pricing that fits your size')}
                     </div>
                     <div>
-                        {t(
-                            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua'
-                        )}
+                        {t('Pricing built for businesses of all sizes.')}{' '}
+                        <b>{t("Always know what you'll pay.")}</b>
                     </div>
                 </div>
 
@@ -253,7 +252,7 @@ export default function Pricing({ locale }: { locale: any }) {
                         name={t('Basic')}
                         selected={selected === 'basic'}
                         price={49}
-                        desc="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor"
+                        desc={t('Best for live retailers that are small or starting out')}
                         sale={0}
                         session={session}
                         buttonText="Select"
@@ -265,7 +264,7 @@ export default function Pricing({ locale }: { locale: any }) {
                         name={t('Business')}
                         selected={selected === 'business'}
                         price={99}
-                        desc="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor"
+                        desc={t('Best for live retailers selling more than 5,000€ monthly')}
                         session={session}
                         sale={5}
                         buttonText="Select"
@@ -280,7 +279,7 @@ export default function Pricing({ locale }: { locale: any }) {
                         price={139}
                         session={session}
                         buttonText="Soon"
-                        desc="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor"
+                        desc={t('Best for retailers with sales over 50,000€ monthly')}
                         sale={3}
                         imageSrc={'/images/briefcase.png'}
                     />
