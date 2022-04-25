@@ -11,6 +11,7 @@ import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe, StripeElementsOptions } from '@stripe/stripe-js';
 import { CheckoutForm } from '../../components/checkout';
 import { planInfoSelector } from '../../redux/paymentPlans/selectors';
+import Head from 'next/head';
 import Link from 'next/link';
 import { isDataLoadingSelector } from '../../redux/layouts/selectors';
 import { paymentPlanInfoAction } from '../../redux/paymentPlans';
@@ -81,6 +82,10 @@ export default function Subscription({
 
     return (
         <>
+            <Head>
+                <title>Amadeo CRM - Subscription</title>
+            </Head>
+
             {clientSecret && (
                 <div className="flex justify-center h-[680px]">
                     <div className="rounded-lg border shadow-xl mt-10 flex w-[1000px] bg-white px-20 py-14">

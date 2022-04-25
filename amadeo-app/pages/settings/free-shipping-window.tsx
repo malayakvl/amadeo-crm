@@ -10,6 +10,7 @@ import { fetchFormAction } from '../../redux/settings';
 import { showLoaderAction } from '../../redux/layouts/actions';
 import { submitFormAction } from '../../redux/settings/actions';
 import ConfirmDialog from '../../components/_common/ConfirmDialog';
+import Head from 'next/head';
 
 export default function Index() {
     const t = useTranslations();
@@ -46,6 +47,10 @@ export default function Index() {
 
     return (
         <>
+            <Head>
+                <title>Amadeo CRM - Settings - Free shipping window</title>
+            </Head>
+
             <div className="block-white-8 mr-10 white-shadow-big">
                 <div className="page-title">
                     <h1>{t('Settings')}</h1>

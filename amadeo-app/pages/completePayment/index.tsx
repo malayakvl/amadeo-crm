@@ -7,7 +7,7 @@ import { useRouter } from 'next/router';
 import { checkPaymentStatusAction } from '../../redux/user';
 import { paymentIntentSelector, userSelector } from '../../redux/user/selectors';
 
-export default function Signup({
+export default function СompletePayment({
     paymentIntentSecret,
     paymentIntent
 }: {
@@ -50,7 +50,7 @@ export default function Signup({
     );
 }
 
-Signup.Layout = FullLayout;
+СompletePayment.Layout = FullLayout;
 
 export async function getServerSideProps(context: any) {
     const { req, locale } = context;

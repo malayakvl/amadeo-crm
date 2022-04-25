@@ -12,6 +12,7 @@ import {
 } from '../../../redux/orders/selectors';
 import { clearBase64Action, fetchOrderPdfAction } from '../../../redux/orders';
 import { showLoaderAction } from '../../../redux/layouts/actions';
+import Head from 'next/head';
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import '@react-pdf-viewer/default-layout/lib/styles/index.css';
 
@@ -56,6 +57,7 @@ export default function Index() {
     //         dispatch(showLoaderAction(false));
     //     }
     // }, [orderFetched]);
+
     useEffect(() => {
         if (orderFetched && base64Data) {
             setBlobData(base64toBlob(`data:application/pdf;base64,${base64Data}`));
@@ -76,6 +78,10 @@ export default function Index() {
 
     return (
         <>
+            <Head>
+                <title>Amadeo CRM - Order {orderNumber}</title>
+            </Head>
+
             {orderFetched && (
                 <Worker workerUrl="https://unpkg.com/pdfjs-dist@2.12.313/build/pdf.worker.js">
                     <div style={{ height: '750px' }}>

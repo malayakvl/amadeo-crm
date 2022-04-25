@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import { InfoBuyers, ListBuyers, Filters, FilterValues } from '../../components/buyer';
 import { paginationSelectorFactory } from '../../redux/layouts/selectors';
 import { PaginationType } from '../../constants';
+import Head from 'next/head';
 import Image from 'next/image';
 import { useCallback, useState } from 'react';
 
@@ -23,6 +24,10 @@ export default function Buyers({ session, locale }: { session: any; locale: any 
 
     return (
         <>
+            <Head>
+                <title>Amadeo CRM - Shoppers</title>
+            </Head>
+
             <div className="block-white-8 mr-10 white-shadow-big mb-8">
                 <InfoBuyers />
             </div>

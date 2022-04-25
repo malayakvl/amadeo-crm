@@ -17,6 +17,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ErrorMessage, Field, FieldArray, Form, Formik } from 'formik';
 import { InputText } from '../../../components/_form';
 import * as Yup from 'yup';
+import Head from 'next/head';
 import Image from 'next/image';
 import { baseApiUrl } from '../../../constants';
 import { fetchCountriesAction } from '../../../redux/countries/actions';
@@ -55,6 +56,12 @@ export default function EditMethod() {
 
     return (
         <>
+            <Head>
+                <title>
+                    Amadeo CRM - {t('Edit Shipping Method')} - {shipping.name}
+                </title>
+            </Head>
+
             <div className="page-title">
                 <h1>{t('Edit Shipping Method')}</h1>
             </div>
