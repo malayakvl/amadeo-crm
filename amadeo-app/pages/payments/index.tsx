@@ -36,11 +36,11 @@ export default function Payments({ session }: { session: any }) {
                 <title>Amadeo CRM - Payments</title>
             </Head>
 
-            <div className="block-white-8 mr-10 white-shadow-big">
+            <div className="block-white-8 mr-10 white-shadow-big max-w-screen-2xl">
                 <PaymentInfo />
             </div>
 
-            <div className="block-white-8 white-shadow-medium mt-8">
+            <div className="block-white-8 white-shadow-medium mt-8 max-w-screen-2xl">
                 <div className="lg:flex">
                     {user.role_id === 2 && (
                         <div className="mb-4 lg:mb-0 sm:w-80 p-4 bg-gray-100 rounded-lg shadow-inner">
