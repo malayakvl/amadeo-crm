@@ -41,9 +41,9 @@ export default function Payments({ session }: { session: any }) {
             </div>
 
             <div className="block-white-8 white-shadow-medium mt-8">
-                <div className="md:flex">
+                <div className="lg:flex">
                     {user.role_id === 2 && (
-                        <div className="mb-4 md:mb-0 w-80 p-4 bg-gray-100 rounded-lg shadow-inner">
+                        <div className="mb-4 lg:mb-0 sm:w-80 p-4 bg-gray-100 rounded-lg shadow-inner">
                             <div className="font-bold text-gray-350 text-lg pb-4">
                                 {t('Payment Methods')}
                             </div>
@@ -51,14 +51,16 @@ export default function Payments({ session }: { session: any }) {
                         </div>
                     )}
 
-                    <div className="md:ml-8 md:flex-1">
-                        <div className="flex border border-l-0 border-r-0 border-t-0 pb-5 mb-10 relative">
-                            {/*{t('Transactions')}*/}
-                            <h2 className="dark-blue-header">{t('Transactions')}</h2>
+                    <div className="lg:ml-8 lg:flex-1">
+                        <div className="flex justify-between border border-l-0 border-r-0 border-t-0 pb-5 mb-10 relative">
+                            <div className="flex flex-wrap">
+                                <h2 className="dark-blue-header mr-4">{t('Transactions')}</h2>
 
-                            <FilterValues />
+                                <FilterValues />
+                            </div>
 
                             <Filters handleHideFilter={handleHideFilter} filterOpen={filterOpen} />
+
                             <button
                                 onClick={() => {
                                     // if (filterOpen) {
@@ -66,7 +68,7 @@ export default function Payments({ session }: { session: any }) {
                                     // }
                                     setFilterOpen(!filterOpen);
                                 }}
-                                className="absolute top-0 right-0 flex items-center text-sm border rounded-lg px-4 py-1">
+                                className="flex items-center self-start text-sm border rounded-lg px-4 py-1">
                                 <Image width={16} height={16} src={'/images/filter.svg'} />
                                 <div className="font-medium text-gray-400 ml-2">{t('Filters')}</div>
                                 <div className="ml-2 font-bold rounded-full p-[2px] text-center bg-gray-400 text-xs h-5 w-5 text-white">

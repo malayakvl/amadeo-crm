@@ -80,7 +80,7 @@ const FilterValues: React.FC<any> = () => {
     return (
         <>
             {dataFetched && (
-                <div className="flex flex-wrap ml-8">
+                <div className="flex flex-wrap">
                     {filters.order_number && (
                         <div className="filter-value">
                             {t('search_by', {
