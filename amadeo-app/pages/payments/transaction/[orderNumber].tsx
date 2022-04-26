@@ -34,18 +34,18 @@ export default function Payments({ session }: { session: any }) {
                 <title>Amadeo CRM - Payment {orderNumber}</title>
             </Head>
 
-            <div className="block-white-8 mr-10 white-shadow-big">
+            <div className="block-white-8 mr-10 white-shadow-big max-w-screen-xl">
                 <PaymentInfo />
             </div>
 
-            <div className="block-white-8 white-shadow-medium mt-8 flex">
+            <div className="block-white-8 white-shadow-medium mt-8 flex max-w-screen-xl">
                 <div className="flex flex-col w-full">
                     <div className="md:flex justify-between mb-8 font-bold text-gray-350 text-lg py-4 border-b border-gray-200">
                         {t('Transaction details')}
 
                         <a
                             href={`/api/download-invoice/${orderNumber}`}
-                            className="mt-4 md:mt-0 flex px-5 py-3 rounded-lg text-base min-w-max align-middle border shadow-lg"
+                            className="mt-4 md:mt-0 flex px-5 py-3 rounded-lg text-base max-w-max align-middle border shadow-lg"
                             rel="noreferrer">
                             <Image width="20" height="18" src={'/images/download.svg'} />
                             <span className="pl-4 pt-px">{t('Download Invoice from emmisor')}</span>
