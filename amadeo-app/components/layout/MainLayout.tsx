@@ -34,7 +34,7 @@ export default function MainLayout({ children }: { children: any }) {
                 const storeUser = window.localStorage.getItem('user')
                     ? JSON.parse(window.localStorage.getItem('user') || '')
                     : {};
-                if (storeUser.id !== user.id) {
+                if (storeUser.id !== user.id || storeUser.status !== user.status) {
                     window.localStorage.setItem('user', JSON.stringify(user));
                 }
             }

@@ -235,7 +235,7 @@ class User {
                     // console.log('SUBSCRIPTION DB', subscription);
                     // return { subscription: null, error: { code: 404, message: 'User Not found' } };
                     const querySubscription = `SELECT * FROM data.set_subscriptions('${JSON.stringify(dbSubscription)}');`;
-                    // console.log(querySubscription);
+                    // console.log('[User.createExistUserSubscription] querySubscription = ', querySubscription);
                     await client.query(querySubscription);
                     return { subscription: subscription };
                 }
@@ -396,11 +396,11 @@ class User {
             const paymentIntentResult = await stripe.paymentIntents.retrieve(
                 paymentIntent
             );
-            console.log('[User.checkPayment] STRIPE PAYMENT INTENT', paymentIntentResult);
+            // console.log('[User.checkPayment] STRIPE PAYMENT INTENT', paymentIntentResult);
             if (paymentIntentResult.client_secret === paymentIntentSecret) {
                 const querySubscription = `UPDATE data.subscriptions SET status='active' WHERE customer_id='${paymentIntentResult.customer}'`;
                 if (paymentIntentResult.status === 'succeeded') {
-                    console.log('[User.checkPayment] succeeded querySubscription = ', querySubscription);
+                    // console.log('[User.checkPayment] succeeded querySubscription = ', querySubscription);
                     await client.query(querySubscription);
                 }
                 const subscriptionRes = await client.query(`SELECT email, price FROM data.users
@@ -426,7 +426,9 @@ class User {
                         mailPayment.body
                     );
 
-                    return { paymentIntent: paymentIntentResult}
+                    // console.log('[User.checkPayment] paymentIntent = ', paymentIntentResult);
+
+                    return { paymentIntent: paymentIntentResult }
                 }
             }
 
@@ -438,6 +440,7 @@ class User {
                     { message: e.message }
                 );
             }
+            console.log('[User.checkPayment] e.message = ', e.message);
             return { user: null, error: { code: 404, message: 'Payment subscription error' } };
 
         } finally {
