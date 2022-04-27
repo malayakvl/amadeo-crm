@@ -165,12 +165,16 @@ export const createExistUserSubscriptionAction: any = createAction(
 export const checkPaymentStatusAction: any = createAction(
     'user/CHECK_PAYMENT_STATUS',
     async (paymentIntent: string, paymentIntentSecret: string) =>
-        async (dispatch: Type.Dispatch): Promise<{ paymentIntent: any }> => {
+        async (
+            dispatch: Type.Dispatch,
+            getState: () => State.Root
+        ): Promise<{ paymentIntent: any; user?: User.User }> => {
             dispatch(showLoaderAction(true));
+            const state = getState();
             try {
                 const res = await axios.post(
                     `${baseUrl}/check-payment-status`,
-                    { paymentIntent: paymentIntent, paymentIntentSecret: paymentIntentSecret },
+                    { paymentIntent, paymentIntentSecret },
                     {
                         headers: { 'Content-Type': 'application/json' }
                     }
@@ -179,7 +183,8 @@ export const checkPaymentStatusAction: any = createAction(
                     dispatch(showLoaderAction(false));
                 }
                 return {
-                    paymentIntent: res.data.paymentIntent
+                    paymentIntent: res.data.paymentIntent,
+                    user: { ...state.user.user, ...res.data.user }
                 };
             } catch (e) {
                 dispatch(showLoaderAction(false));
@@ -190,6 +195,7 @@ export const checkPaymentStatusAction: any = createAction(
             }
         }
 );
+
 export const fetchUserSubscriptionAction: any = createAction(
     'user/SUBSCRIPTION_INFO',
     async () =>
