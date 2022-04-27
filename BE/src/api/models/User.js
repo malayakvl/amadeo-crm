@@ -390,23 +390,24 @@ class User {
     }
 
 
-    async checkPayment (paymentIntent, paymentIntentSecret) {
+    async checkPayment(paymentIntent, paymentIntentSecret) {
         const client = await pool.connect();
         try {
             const paymentIntentResult = await stripe.paymentIntents.retrieve(
                 paymentIntent
             );
-            console.log('STRIPE PAYMENT INTENT', paymentIntentResult);
+            console.log('[User.checkPayment] STRIPE PAYMENT INTENT', paymentIntentResult);
             if (paymentIntentResult.client_secret === paymentIntentSecret) {
                 const querySubscription = `UPDATE data.subscriptions SET status='active' WHERE customer_id='${paymentIntentResult.customer}'`;
                 if (paymentIntentResult.status === 'succeeded') {
+                    console.log('[User.checkPayment] succeeded querySubscription = ', querySubscription);
                     await client.query(querySubscription);
                 }
                 const subscriptionRes = await client.query(`SELECT email, price FROM data.users
                     LEFT JOIN data.subscriptions ON data.subscriptions.user_id=data.users.id
                     LEFT JOIN data.subscription_plans ON data.subscription_plans.id = data.subscriptions.plan_id
                     WHERE customer_id='${paymentIntentResult.customer}'`);
-                console.log('here we are');
+
                 if (subscriptionRes.rows.length) {
                     paymentIntentResult.email = subscriptionRes.rows[0].email;
 
@@ -428,6 +429,7 @@ class User {
                     return { paymentIntent: paymentIntentResult}
                 }
             }
+
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
                 logger.log(
@@ -437,6 +439,7 @@ class User {
                 );
             }
             return { user: null, error: { code: 404, message: 'Payment subscription error' } };
+
         } finally {
             client.release();
         }
@@ -986,7 +989,7 @@ class User {
                     'Model User (updateUserSettings) error:',
                     { message: e.message }
                 );
-                console.log('[updateSellerSettings] sql e.message = ', e.message);
+                console.log('[User.updateSellerSettings] sql e.message = ', e.message);
             }
             return { success: false, error: { code: 404, message: 'Users not found' } };
 
@@ -1017,7 +1020,7 @@ class User {
                     return;
                 }
             })
-            console.log('INVOICE PDF', invoicePdf);
+            // console.log('INVOICE PDF', invoicePdf);
 
             return { success: true, invoiceUrl: invoicePdf };
 
