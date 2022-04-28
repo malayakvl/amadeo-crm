@@ -25,24 +25,22 @@ const Header: React.FC = () => {
                 </div>
 
                 <Menu as="div" className="relative lg:hidden z-10">
-                    <div>
-                        <Menu.Button>
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                id="menu-button"
-                                className="h-6 w-6 cursor-pointer block"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor">
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth="2"
-                                    d="M4 6h16M4 12h16M4 18h16"
-                                />
-                            </svg>
-                        </Menu.Button>
-                    </div>
+                    <Menu.Button>
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            id="menu-button"
+                            className="h-6 w-6 cursor-pointer block"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
+                                d="M4 6h16M4 12h16M4 18h16"
+                            />
+                        </svg>
+                    </Menu.Button>
                     <Transition
                         as={Fragment}
                         enter="transition ease-out duration-100"
@@ -51,48 +49,51 @@ const Header: React.FC = () => {
                         leave="transition ease-in duration-75"
                         leaveFrom="transform opacity-100 scale-100"
                         leaveTo="transform opacity-0 scale-95">
-                        <Menu.Items className="absolute right-0 w-48 mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                            <div className="p-1 flex flex-col font-bold text-sm">
-                                <Menu.Item>
-                                    <Link href={'/'}>
-                                        <a className="m-2 hover:text-purple-400">Features</a>
-                                    </Link>
+                        <Menu.Items className="absolute right-0 w-48 mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none p-1 flex flex-col font-bold text-sm">
+                            <Link href={'/'}>
+                                <Menu.Item
+                                    as="a"
+                                    className="m-2 cursor-pointer hover:text-purple-400">
+                                    Features
                                 </Menu.Item>
-                                <Menu.Item>
-                                    <Link href={'/pricing'}>
-                                        <a
-                                            className={`m-2 ${
-                                                router.pathname == '/pricing'
-                                                    ? 'text-purple-400'
-                                                    : 'hover:text-purple-400'
-                                            }`}>
-                                            Pricing
-                                        </a>
-                                    </Link>
+                            </Link>
+                            <Link href={'/pricing'}>
+                                <Menu.Item
+                                    as="a"
+                                    className={`m-2 cursor-pointer ${
+                                        router.pathname == '/pricing'
+                                            ? 'text-purple-400'
+                                            : 'hover:text-purple-400'
+                                    }`}>
+                                    Pricing
                                 </Menu.Item>
-                                <Menu.Item>
-                                    <Link href={'/'}>
-                                        <a className="m-2 hover:text-purple-400 uppercase">Faq</a>
-                                    </Link>
+                            </Link>
+                            <Link href={'/'}>
+                                <Menu.Item
+                                    as="a"
+                                    className="m-2 cursor-pointer hover:text-purple-400 uppercase">
+                                    Faq
                                 </Menu.Item>
-                                <Menu.Item>
-                                    <Link href={'/'}>
-                                        <a className="m-2 hover:text-purple-400">Case Studies</a>
-                                    </Link>
+                            </Link>
+                            <Link href={'/'}>
+                                <Menu.Item
+                                    as="a"
+                                    className="m-2 cursor-pointer hover:text-purple-400">
+                                    Case Studies
                                 </Menu.Item>
-                                <Menu.Item>
-                                    <Link href={'/contact-us'}>
-                                        <a
-                                            className={`m-2 ${
-                                                router.pathname == '/contact-us'
-                                                    ? 'text-purple-400'
-                                                    : 'hover:text-purple-400'
-                                            }`}>
-                                            Contact Us
-                                        </a>
-                                    </Link>
+                            </Link>
+
+                            <Link href={'/contact-us'}>
+                                <Menu.Item
+                                    as="a"
+                                    className={`m-2 cursor-pointer ${
+                                        router.pathname == '/contact-us'
+                                            ? 'text-purple-400'
+                                            : 'hover:text-purple-400'
+                                    }`}>
+                                    Contact Us
                                 </Menu.Item>
-                            </div>
+                            </Link>
                         </Menu.Items>
                     </Transition>
                 </Menu>

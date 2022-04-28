@@ -33,7 +33,7 @@ const FilterDateRange: React.FC<any> = () => {
                 <div className="filters-calendar">
                     <DateRangePicker
                         onChange={(item) => {
-                            console.log(item.selection);
+                            // console.log(item.selection);
                             setState([item.selection]);
                         }}
                         // showSelectionPreview={true}

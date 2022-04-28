@@ -110,7 +110,7 @@ export default function Signup({
                             }}
                             validationSchema={validationSchema}
                             onSubmit={(values) => {
-                                console.log('DDDDDDDDDD');
+                                // console.log('DDDDDDDDDD');
                                 setLoginData({ email: values.email, password: values.password });
                                 dispatch(createUserFromSubscriptionAction(values, planId, type));
                             }}>
