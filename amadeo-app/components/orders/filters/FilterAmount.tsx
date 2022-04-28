@@ -91,7 +91,12 @@ const FilterAmount: React.FC<any> = () => {
                 className="flex justify-between mb-2 mt-3 cursor-pointer"
                 onClick={() => setShowBlock(!showBlock)}>
                 <div className="flex items-center">
-                    <Image width="10" height="10" src={'/images/lang-arrow.svg'} />
+                    <Image
+                        width="10"
+                        height="10"
+                        src={'/images/lang-arrow.svg'}
+                        className={showBlock ? 'rotate-180' : ''}
+                    />
                     <span className="ml-2 text-xs font-bold text-blue-350">{t('Spent')}</span>
                 </div>
                 <div className="text-sm font-thin text-gray-450">
@@ -154,7 +159,6 @@ const FilterAmount: React.FC<any> = () => {
                                     debouncedChangePriceDone();
                                 }}
                                 onFocus={handleFocus}
-                                onKeyUp={() => changePriceDone()}
                                 value={priceRange[1]}
                             />
                         </div>

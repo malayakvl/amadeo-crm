@@ -62,7 +62,12 @@ const FilterPayment: React.FC<any> = () => {
                         className="flex justify-between cursor-pointer border-b pb-3"
                         onClick={() => setShowBlock(!showBlock)}>
                         <div className="flex items-center">
-                            <Image width="10" height="10" src={'/images/lang-arrow.svg'} />
+                            <Image
+                                width="10"
+                                height="10"
+                                src={'/images/lang-arrow.svg'}
+                                className={showBlock ? 'rotate-180' : ''}
+                            />
                             <span className="ml-2 text-xs font-bold text-blue-350">
                                 {t('Payments')}
                             </span>
@@ -75,7 +80,7 @@ const FilterPayment: React.FC<any> = () => {
                         {showBlock && (
                             <>
                                 {filterData.payments.map((item: any) => (
-                                    <span className="block flex mb-2" key={item.id}>
+                                    <span className="flex mb-2" key={item.id}>
                                         <input
                                             type="checkbox"
                                             id={`payment_${item.id}`}

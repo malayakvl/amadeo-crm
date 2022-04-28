@@ -42,7 +42,12 @@ const FilterNumber: React.FC<any> = () => {
                 className="flex justify-between cursor-pointer border-b pb-3"
                 onClick={() => setShowBlock(!showBlock)}>
                 <div className="flex items-center">
-                    <Image width="10" height="10" src={'/images/lang-arrow.svg'} />
+                    <Image
+                        width="10"
+                        height="10"
+                        src={'/images/lang-arrow.svg'}
+                        className={showBlock ? 'rotate-180' : ''}
+                    />
                     <span className="ml-2 text-xs font-bold text-blue-350">
                         {t('order_number')}
                     </span>
