@@ -21,7 +21,7 @@ export default function Custom500() {
 
 Custom500.Layout = FullLayout;
 
-export const getStaticProps = ({ locale }) => {
+export const getStaticProps = ({ locale = 'fr' }) => {
     return {
         props: {
             messages: {

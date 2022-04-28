@@ -19,9 +19,11 @@ const SchedulePopup: React.FC<any> = () => {
     const t = useTranslations();
     const dispatch = useDispatch();
     const showModal = useSelector(showPopupSelector);
-    const {
-        plan_options: { feature_fb_schedule }
-    } = useSelector(userSelector);
+    // const {
+    //     plan_options: { feature_fb_schedule }
+    // } = useSelector(userSelector);
+
+    const feature_fb_schedule = useSelector(userSelector)?.plan_options?.feature_fb_schedule;
 
     // const scenarios = useSelector(scenariosSelector);
     const [startDate, setStartDate] = useState(new Date());
@@ -127,12 +129,23 @@ const SchedulePopup: React.FC<any> = () => {
                                                                     <InputMask
                                                                         style={{ width: '100px' }}
                                                                         className="form-control"
-                                                                        mask="99:99"
-                                                                        maskPlaceholder="HH:ii"
+                                                                        mask={[
+                                                                            /[0-2]/,
+                                                                            startTime[0] === '2'
+                                                                                ? /[0-3]/
+                                                                                : /[0-9]/,
+                                                                            ':',
+                                                                            /[0-5]/,
+                                                                            /[0-9]/
+                                                                        ]}
+                                                                        maskPlaceholder="00:00"
                                                                         onChange={(e) =>
                                                                             setStartTime(
                                                                                 e.target.value
                                                                             )
+                                                                        }
+                                                                        onFocus={(e) =>
+                                                                            e.target.select()
                                                                         }
                                                                         value={startTime}
                                                                     />
