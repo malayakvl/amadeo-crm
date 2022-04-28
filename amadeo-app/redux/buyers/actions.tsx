@@ -21,7 +21,7 @@ export const fetchItemsAction: any = createAction(
             const { limit, offset, sort, column, query, filters } = paginationSelectorFactory(
                 PaginationType.BUYERS
             )(state);
-            console.log('buyers filters = ', filters);
+            // console.log('buyers filters = ', filters);
             const queryFilter = JSON.stringify(filters);
             dispatch(showLoaderAction(true));
             return axios

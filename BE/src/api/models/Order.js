@@ -29,7 +29,7 @@ async function createInvoice (invoice, path) {
 
 
 async function generateHeader(doc, seller) {
-    console.log(seller);
+    // console.log(seller);
     doc
         .image("./public/images/logo.png", 90, 45, { width: 90 })
         .fillColor("#444444")
@@ -361,7 +361,7 @@ class Order {
             }
             const ordersQuery = `SELECT *
                                 FROM data.get_orders (${perPage}, ${offset}, '${JSON.stringify(_filters)}', '${column} ${sort}');`;
-            console.log(ordersQuery);
+            // console.log(ordersQuery);
             const res = await client.query(ordersQuery);
             const items = res.rows.length > 0 ? res.rows : [];
             const error = null;
@@ -478,7 +478,7 @@ class Order {
             const filter = JSON.stringify(_filters);
             const ordersQuery = `SELECT *
                                 FROM data.get_orders(1, 0, '${filter}');`;
-            console.log(ordersQuery);
+            // console.log(ordersQuery);
             const res = await client.query(ordersQuery);
             const dirUpload = `${process.env.DOWNLOAD_FOLDER}/orders/${userId}`;
 
