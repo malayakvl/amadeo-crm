@@ -116,9 +116,12 @@ const SchedulePopup: React.FC<any> = () => {
                                                                     className="form-control date-input"
                                                                     selected={startDate}
                                                                     onChange={(date: any) => {
-                                                                        setStartDate(date);
+                                                                        if (moment(date).isValid())
+                                                                            setStartDate(date);
                                                                     }}
                                                                     dateFormat="dd/MM/yyyy"
+                                                                    minDate={new Date()}
+                                                                    required
                                                                 />
                                                             </div>
                                                             <div className="mb-4 ml-5">
