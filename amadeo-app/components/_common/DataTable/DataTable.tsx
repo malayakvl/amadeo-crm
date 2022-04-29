@@ -272,8 +272,8 @@ const DataTable: React.FC<Props> = ({
                 <tbody>{renderTableBody()}</tbody>
             </table>
             {!loading && !hidePaginationBar && (
-                <div className="flex justify-between w-full mt-5 mb-10">
-                    <div className="w-[80px] mr-1">
+                <div className="flex justify-between min-w-max w-full mt-5 mb-10">
+                    <div className="w-16 mr-1">
                         <select value={limit} onChange={setLimit} className="form-control">
                             <option value={10}>10</option>
                             <option value={25}>25</option>
