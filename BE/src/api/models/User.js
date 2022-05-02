@@ -5,7 +5,7 @@ import { logger } from '../../common/logger.js';
 import Stripe from 'stripe';
 import moment from "moment";
 import paymentPlanModel from "./PaymentPlan.js";
-import {confirmSubscriptionEmail, confirmSubscriptionPaymentEmail, registerEmail} from "../sender/templates.js";
+import { confirmSubscriptionEmail, confirmSubscriptionPaymentEmail } from "../sender/templates.js";
 import { sendMail } from "../lib/sendMail.js";
 
 const stripe = Stripe(process.env.STRIPE_API_KEY);
@@ -399,7 +399,9 @@ class User {
             console.log('STRIPE PAYMENT INTENT', paymentIntentResult);
             if (paymentIntentResult.client_secret === paymentIntentSecret) {
                 const querySubscription = `UPDATE data.subscriptions SET status='active' WHERE customer_id='${paymentIntentResult.customer}'`;
+                console.log(querySubscription);
                 if (paymentIntentResult.status === 'succeeded') {
+                    console.log("run query");
                     await client.query(querySubscription);
                 }
                 const subscriptionRes = await client.query(`SELECT email, price FROM data.users
@@ -930,7 +932,7 @@ class User {
         }
     }
 
-    async unsubscribe(email) {
+    async unsubscribe() {
         const client = await pool.connect();
         try {
             const userRes = await client.query(`SELECT subscription_id FROM data.users
