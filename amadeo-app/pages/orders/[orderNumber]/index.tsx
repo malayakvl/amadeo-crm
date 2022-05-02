@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 import { orderFetchedSelector, orderBase64DataSelector } from '../../../redux/orders/selectors';
 import { clearBase64Action, fetchOrderPdfAction } from '../../../redux/orders';
 import { showLoaderAction } from '../../../redux/layouts/actions';
+import Head from 'next/head';
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import '@react-pdf-viewer/default-layout/lib/styles/index.css';
 
@@ -63,6 +64,10 @@ export default function Index() {
 
     return (
         <>
+            <Head>
+                <title>Amadeo CRM - Order {orderNumber}</title>
+            </Head>
+
             {base64Data && (
                 <Worker workerUrl="https://unpkg.com/pdfjs-dist@2.12.313/build/pdf.worker.js">
                     <div style={{ height: '750px' }}>

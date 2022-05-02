@@ -2,13 +2,17 @@
   @apply text-xs font-bold flex text-gray-180 items-center;
 
   .page-item, .page-item-next, .page-item-prev {
-    @apply px-3 py-1.5;
+    @apply mx-0.5;
 
     .page-link-prev, .page-link-next {
       background-repeat: no-repeat;
       width: 6px;
       height: 10px;
       @apply block;
+    }
+
+    .page-link {
+      @apply block px-3 py-2;
     }
   }
 
@@ -24,14 +28,16 @@
 
   .page-item-next {
     background-color: #F8F8F8;
-    @apply px-3 py-2.5 rounded-r-lg;
+    @apply rounded-r-lg;
 
     .page-link-next {
       background-image: url("../../public/images/next-arrow.svg");
+      background-position: center;
+      @apply p-4;
     }
   }
   .page-item-next.disabled {
-    @apply px-3 py-2.5 rounded-r-lg bg-white;
+    @apply bg-white;
 
     .page-link-next {
       background-image: url("../../public/images/next-arrow-d.svg");
@@ -40,14 +46,17 @@
 
   .page-item-prev {
     background-color: #F8F8F8;
-    @apply px-3 py-2.5 rounded-l-lg;
+    @apply rounded-l-lg;
 
     .page-link-prev {
       background-image: url("../../public/images/prev-arrow.svg");
+      background-position: center;
+      @apply p-4;
     }
   }
+
   .page-item-prev.disabled {
-    @apply px-3 py-2.5 rounded-l-lg bg-white;
+    @apply bg-white;
 
     .page-link-prev {
       background-image: url("../../public/images/prev-arrow-d.svg");

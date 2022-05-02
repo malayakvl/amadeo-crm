@@ -7,6 +7,7 @@ import { Formik, Form } from 'formik';
 import { InputText, InputTextarea } from '../../components/_form';
 import { submitFormAction } from '../../redux/contact-us/actions';
 import FullLayout from '../../components/layout/FullLayout';
+import Head from 'next/head';
 
 function ContactUs({ locale }: { locale: string }) {
     const t = useTranslations();
@@ -32,65 +33,71 @@ function ContactUs({ locale }: { locale: string }) {
     };
 
     return (
-        <div className="flex justify-center">
-            <div className="mt-10 rounded-lg bg-white w-96 p-10">
-                <div className="mb-8 font-bold text-3xl line-height-105percent">
-                    {t('Contact Us')}
-                </div>
-                {success ? (
-                    <div className="mb-4 font-bold text-2xl line-height-105percent w-72 text-green-500">
-                        {t('Your request has been sent')}
+        <>
+            <Head>
+                <title>Amadeo CRM - {t('Contact Us')}</title>
+            </Head>
+
+            <div className="flex justify-center">
+                <div className="mt-10 rounded-lg bg-white w-96 p-10">
+                    <div className="mb-8 font-bold text-3xl line-height-105percent">
+                        {t('Contact Us')}
                     </div>
-                ) : (
-                    <Formik
-                        initialValues={{}}
-                        validationSchema={SubmitSchema}
-                        onSubmit={handlerSubmit}>
-                        {(props) => (
-                            <Form className="mb-4">
-                                <InputText
-                                    icon={'f-fname'}
-                                    style={null}
-                                    label={null}
-                                    name={'name'}
-                                    placeholder={t('Name')}
-                                    props={props}
-                                    tips={null}
-                                />
+                    {success ? (
+                        <div className="mb-4 font-bold text-2xl line-height-105percent w-72 text-green-500">
+                            {t('Your request has been sent')}
+                        </div>
+                    ) : (
+                        <Formik
+                            initialValues={{}}
+                            validationSchema={SubmitSchema}
+                            onSubmit={handlerSubmit}>
+                            {(props) => (
+                                <Form className="mb-4">
+                                    <InputText
+                                        icon={'f-fname'}
+                                        style={null}
+                                        label={null}
+                                        name={'name'}
+                                        placeholder={t('Name')}
+                                        props={props}
+                                        tips={null}
+                                    />
 
-                                <InputText
-                                    style={null}
-                                    icon={'f-email'}
-                                    label={null}
-                                    name={'email'}
-                                    placeholder={'Email'}
-                                    props={props}
-                                    tips={null}
-                                />
+                                    <InputText
+                                        style={null}
+                                        icon={'f-email'}
+                                        label={null}
+                                        name={'email'}
+                                        placeholder={'Email'}
+                                        props={props}
+                                        tips={null}
+                                    />
 
-                                <InputTextarea
-                                    props={props}
-                                    label={null}
-                                    icon={'f-message'}
-                                    placeholder={t('Message')}
-                                    name="message"
-                                    style=""
-                                />
+                                    <InputTextarea
+                                        props={props}
+                                        label={null}
+                                        icon={'f-message'}
+                                        placeholder={t('Message')}
+                                        name="message"
+                                        style=""
+                                    />
 
-                                <div className="mb-6">
-                                    <button
-                                        className="gradient-btn w-full px-3 py-4 text-white bg-indigo-500 rounded-md
+                                    <div className="mb-6">
+                                        <button
+                                            className="gradient-btn w-full px-3 py-4 text-white bg-indigo-500 rounded-md
                                     hover:bg-indigo-600
                                     focus:outline-none duration-100 ease-in-out">
-                                        {t('Send')}
-                                    </button>
-                                </div>
-                            </Form>
-                        )}
-                    </Formik>
-                )}
+                                            {t('Send')}
+                                        </button>
+                                    </div>
+                                </Form>
+                            )}
+                        </Formik>
+                    )}
+                </div>
             </div>
-        </div>
+        </>
     );
 }
 ContactUs.Layout = FullLayout;

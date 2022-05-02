@@ -9,6 +9,7 @@ import { Range } from 'rc-slider';
 import 'rc-slider/assets/index.css';
 import { productAdditionalSelector } from '../../../redux/products/selectors';
 import { formatCurrency, isNumber } from '../../../lib/functions';
+import { useDebouncedCallback } from 'use-debounce';
 
 const filterPrice: React.FC<any> = () => {
     const t = useTranslations();
@@ -16,54 +17,53 @@ const filterPrice: React.FC<any> = () => {
     const { filters }: Layouts.Pagination = useSelector(
         paginationSelectorFactory(PaginationType.PRODUCTS)
     );
-    const filterData = useSelector(productAdditionalSelector);
+    const filterData: Products.Root['additional'] = useSelector(productAdditionalSelector);
     const [showBlock, setShowBlock] = useState<boolean>(true);
 
-    const [priceRange, setPriceRange] = useState(
-        filters.price[0] > 0 || filters.price[1] > 0 ? filters.price : [0, 0]
-    );
+    const [priceRange, setPriceRange] = useState<any[]>([]);
+
+    useEffect(() => {
+        if (filters.price.length === 0) {
+            setPriceRange([filterData.priceRange.min, filterData.priceRange.max]);
+        } else {
+            setPriceRange(filters.price);
+        }
+    }, [filters.price, filterData.priceRange]);
 
     const onSliderPriceChange = (_value: any) => {
         setPriceRange(_value);
     };
 
-    useEffect(() => {
-        if (filters.price.length === 0) {
-            setPriceRange([0, 0]);
-        } else {
-            setPriceRange(filters.price);
-        }
-    }, [filters.price]);
-
     const changePriceDone = () => {
-        if (isNumber(priceRange[0]) && isNumber(priceRange[1])) {
-            if (priceRange[0] !== priceRange[1]) {
-                dispatch(
-                    setPaginationAction({
-                        type: PaginationType.PRODUCTS,
-                        modifier: {
-                            filters: {
-                                ...filters,
-                                price: priceRange
-                            },
-                            offset: 0
-                        }
-                    })
-                );
-            } else if (priceRange[0] === priceRange[1] && priceRange[0] === 0) {
-                dispatch(
-                    setPaginationAction({
-                        type: PaginationType.PRODUCTS,
-                        modifier: {
-                            filters: {
-                                ...filters,
-                                price: []
-                            },
-                            offset: 0
-                        }
-                    })
-                );
-            }
+        if (
+            priceRange[0] == filterData.priceRange.min &&
+            priceRange[1] == filterData.priceRange.max
+        ) {
+            dispatch(
+                setPaginationAction({
+                    type: PaginationType.PRODUCTS,
+                    modifier: {
+                        filters: {
+                            ...filters,
+                            price: []
+                        },
+                        offset: 0
+                    }
+                })
+            );
+        } else {
+            dispatch(
+                setPaginationAction({
+                    type: PaginationType.PRODUCTS,
+                    modifier: {
+                        filters: {
+                            ...filters,
+                            price: priceRange
+                        },
+                        offset: 0
+                    }
+                })
+            );
         }
     };
 
@@ -75,6 +75,18 @@ const filterPrice: React.FC<any> = () => {
         e.target.select();
     };
 
+    const debouncedChangePriceDone = useDebouncedCallback(() => {
+        priceRange[0] = isNumber(priceRange[0]) ? +priceRange[0] : filterData.priceRange.min;
+        priceRange[1] = isNumber(priceRange[1]) ? +priceRange[1] : filterData.priceRange.max;
+
+        if (priceRange[0] > filterData.priceRange.max) priceRange[0] = filterData.priceRange.max;
+        if (priceRange[1] < filterData.priceRange.min) priceRange[1] = filterData.priceRange.min;
+
+        if (priceRange[0] > priceRange[1]) priceRange[1] = priceRange[0];
+
+        changePriceDone();
+    }, 1000);
+
     return (
         <div className="mb-4">
             <div
@@ -82,7 +94,12 @@ const filterPrice: React.FC<any> = () => {
                 className="flex justify-between mb-2 mt-3 cursor-pointer"
                 onClick={() => setShowBlock(!showBlock)}>
                 <div className="flex items-center">
-                    <Image width="10" height="10" src={'/images/lang-arrow.svg'} />
+                    <Image
+                        width="10"
+                        height="10"
+                        src={'/images/lang-arrow.svg'}
+                        className={showBlock ? 'rotate-180' : ''}
+                    />
                     <span className="ml-2 text-xs font-bold text-blue-350">{t('Price')}</span>
                 </div>
                 <div className="text-sm font-thin text-gray-450">
@@ -95,15 +112,15 @@ const filterPrice: React.FC<any> = () => {
                         <span className="filter-label" style={{ marginLeft: '-4px' }}>
                             {t('Price')}
                             <em className="float-right">
-                                {priceRange[0]} - {filterData.price[1]}
+                                {filterData.priceRange.min} - {filterData.priceRange.max}
                                 &euro;
                             </em>
                         </span>
                         <Range
                             allowCross={false}
                             step={1}
-                            min={0}
-                            max={filterData.price[1]}
+                            min={filterData.priceRange.min}
+                            max={filterData.priceRange.max}
                             onChange={onSliderPriceChange}
                             onAfterChange={onSliderAfterChange}
                             value={priceRange}
@@ -117,15 +134,15 @@ const filterPrice: React.FC<any> = () => {
                             <input
                                 className="w-full form-control"
                                 type="text"
-                                placeholder={formatCurrency(0)}
+                                placeholder={formatCurrency(filterData.priceRange.min)}
                                 onChange={(e) => {
                                     onSliderPriceChange([
-                                        parseFloat(e.target.value),
+                                        e.target.value.replace(/[^0-9.]/g, ''),
                                         priceRange[1]
                                     ]);
+                                    debouncedChangePriceDone();
                                 }}
                                 onFocus={handleFocus}
-                                onKeyUp={() => changePriceDone()}
                                 value={priceRange[0]}
                             />
                         </div>
@@ -136,15 +153,15 @@ const filterPrice: React.FC<any> = () => {
                             <input
                                 className="w-full form-control"
                                 type="text"
-                                placeholder={formatCurrency(filterData.price[1])}
+                                placeholder={formatCurrency(filterData.priceRange.max)}
                                 onChange={(e) => {
                                     onSliderPriceChange([
                                         priceRange[0],
-                                        parseFloat(e.target.value)
+                                        e.target.value.replace(/[^0-9.]/g, '')
                                     ]);
+                                    debouncedChangePriceDone();
                                 }}
                                 onFocus={handleFocus}
-                                onKeyUp={() => changePriceDone()}
                                 value={priceRange[1]}
                             />
                         </div>

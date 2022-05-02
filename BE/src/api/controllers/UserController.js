@@ -200,7 +200,7 @@ class UserController {
     async getSubscription(req, res) {
         if (req.user) {
             const data = await userModel.getSubscriptionInfo(req.user.subscription_id, req.user.customer_id);
-            console.log('DATA SUBSCRIPTION', data);
+            // console.log('DATA SUBSCRIPTION', data);
             if (data.subscription) {
                 return res.status(200).json({
                     subscription: data.subscription,
@@ -298,12 +298,19 @@ class UserController {
 
 
     async checkPaymentStatus (req, res) {
-        console.log(req.body.paymentIntent);
-        console.log(req.body.paymentIntentSecret);
+        // console.log(req.body.paymentIntent);
+        // console.log(req.body.paymentIntentSecret);
         const data = await userModel.checkPayment(req.body.paymentIntent, req.body.paymentIntentSecret);
         if (data.paymentIntent) {
+            const user = await userModel.findUserByEmail(data.paymentIntent.email);
+            delete user.salt;
+            delete user.password;
+            delete user.hash;
+            delete user.expired_at;
+
             return res.status(200).json({
-                paymentIntent: data.paymentIntent
+                paymentIntent: data.paymentIntent,
+                user
             });
         }
         return res.status(200).json('Something wend wrong');

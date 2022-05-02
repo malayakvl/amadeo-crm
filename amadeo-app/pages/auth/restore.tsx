@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { validEmailSelector } from '../../redux/profile/selectors';
 import { useEffect } from 'react';
 import FullLayout from '../../components/layout/FullLayout';
+import Head from 'next/head';
 import Image from 'next/image';
 import { setSuccessToastAction, setErrorToastAction } from '../../redux/layouts';
 
@@ -32,62 +33,68 @@ function Restore({ locale }: { locale: string }) {
     });
 
     return (
-        <div className="flex justify-center">
-            <div className="rounded-lg border shadow-xl mt-10 bg-white w-96 p-10 pb-16">
-                <div className="flex">
-                    <div className="font-bold text-3xl line-height-105percent mb-2">
-                        Forgot your Password?
+        <>
+            <Head>
+                <title>Amadeo CRM - Restore Password</title>
+            </Head>
+
+            <div className="flex justify-center">
+                <div className="rounded-lg border shadow-xl mt-10 bg-white w-96 p-10 pb-16">
+                    <div className="flex">
+                        <div className="font-bold text-3xl line-height-105percent mb-2">
+                            Forgot your Password?
+                        </div>
+                        <Image
+                            className=""
+                            width={64}
+                            height={64}
+                            src="/images/keys.svg"
+                            layout="fixed"
+                            alt=""
+                        />
                     </div>
-                    <Image
-                        className=""
-                        width={64}
-                        height={64}
-                        src="/images/keys.svg"
-                        layout="fixed"
-                        alt=""
-                    />
+
+                    <div className="text-sm mb-10">
+                        No problem! just write your associated email and we will send you a recovery
+                        link.
+                    </div>
+
+                    <Formik
+                        initialValues={{ email: '' }}
+                        validationSchema={SubmitSchema}
+                        onSubmit={(values) => {
+                            dispatch(restorePasswordAction(values, locale));
+                        }}>
+                        {(props) =>
+                            validEmail === 'yes' ? (
+                                <div className="mb-4 font-bold text-2xl line-height-105percent w-72 text-green-500">
+                                    {t('We send you recovery link, please check your mailbox')}
+                                </div>
+                            ) : (
+                                <form onSubmit={props.handleSubmit}>
+                                    <InputText
+                                        style={null}
+                                        icon={'f-email'}
+                                        label={null}
+                                        name={'email'}
+                                        placeholder={'Email'}
+                                        props={props}
+                                        tips={null}
+                                    />
+
+                                    <button
+                                        type="submit"
+                                        disabled={props.isSubmitting}
+                                        className="mt-6 gradient-btn w-full">
+                                        Send me a Recovery Link
+                                    </button>
+                                </form>
+                            )
+                        }
+                    </Formik>
                 </div>
-
-                <div className="text-sm mb-10">
-                    No problem! just write your associated email and we will send you a recovery
-                    link.
-                </div>
-
-                <Formik
-                    initialValues={{ email: '' }}
-                    validationSchema={SubmitSchema}
-                    onSubmit={(values) => {
-                        dispatch(restorePasswordAction(values, locale));
-                    }}>
-                    {(props) =>
-                        validEmail === 'yes' ? (
-                            <div className="mb-4 font-bold text-2xl line-height-105percent w-72 text-green-500">
-                                {t('We send you recovery link, please check your mailbox')}
-                            </div>
-                        ) : (
-                            <form onSubmit={props.handleSubmit}>
-                                <InputText
-                                    style={null}
-                                    icon={'f-email'}
-                                    label={null}
-                                    name={'email'}
-                                    placeholder={'Email'}
-                                    props={props}
-                                    tips={null}
-                                />
-
-                                <button
-                                    type="submit"
-                                    disabled={props.isSubmitting}
-                                    className="mt-6 gradient-btn w-full">
-                                    Send me a Recovery Link
-                                </button>
-                            </form>
-                        )
-                    }
-                </Formik>
             </div>
-        </div>
+        </>
     );
 }
 Restore.Layout = FullLayout;

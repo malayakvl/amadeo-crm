@@ -9,6 +9,7 @@ import { itemSelector } from '../../redux/settings/selectors';
 import { fetchFormAction } from '../../redux/settings';
 import { showLoaderAction } from '../../redux/layouts/actions';
 import { submitFormAction } from '../../redux/settings/actions';
+import Head from 'next/head';
 // import ConfirmDialog from '../../components/_common/ConfirmDialog';
 
 export default function Index() {
@@ -45,6 +46,10 @@ export default function Index() {
 
     return (
         <>
+            <Head>
+                <title>Amadeo CRM - Settings - Cart duration</title>
+            </Head>
+
             <div className="block-white-8 mr-10 white-shadow-big">
                 <div className="page-title">
                     <h1>{t('Settings')}</h1>

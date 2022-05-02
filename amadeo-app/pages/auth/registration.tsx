@@ -1,4 +1,5 @@
 import React from 'react';
+import Head from 'next/head';
 import FullLayout from '../../components/layout/FullLayout';
 import getConfig from 'next/config';
 import BuyerRegistration from '../../components/form/BuyerRegistration';
@@ -17,7 +18,15 @@ function Registration({ locale, invitation }: { locale: string; invitation: any 
         Form = <SellerRegistration email={invitation.email} locale={locale} />;
     }
 
-    return <div className="flex justify-center">{Form}</div>;
+    return (
+        <>
+            <Head>
+                <title>Amadeo CRM - Registration</title>
+            </Head>
+
+            <div className="flex justify-center">{Form}</div>
+        </>
+    );
 }
 Registration.Layout = FullLayout;
 

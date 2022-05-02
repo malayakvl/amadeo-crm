@@ -8,7 +8,8 @@ import { setPaginationAction } from '../../../redux/layouts';
 import Image from 'next/image';
 import { Range } from 'rc-slider';
 import 'rc-slider/assets/index.css';
-import { formatCurrency } from '../../../lib/functions';
+import { formatCurrency, isNumber } from '../../../lib/functions';
+import { useDebouncedCallback } from 'use-debounce';
 
 const FilterAmount: React.FC<any> = () => {
     const t = useTranslations();
@@ -19,39 +20,22 @@ const FilterAmount: React.FC<any> = () => {
     const filterData = useSelector(filterDataSelector);
     const [showBlock, setShowBlock] = useState<boolean>(true);
 
-    const [amountRange, setAmountRange] = useState(
-        filters.total_amount?.[0] > 0 || filters.total_amount?.[1] > 0
-            ? filters.total_amount
-            : [0, 0]
-    );
+    const [amountRange, setAmountRange] = useState<number[]>([]);
+
+    useEffect(() => {
+        if (filters.total_amount?.length === 0) {
+            setAmountRange(filterData.amounts);
+        } else {
+            setAmountRange(filters.total_amount);
+        }
+    }, [filters.total_amount, filterData.amounts]);
 
     const onSliderPriceChange = (_value: any) => {
         setAmountRange(_value);
     };
 
-    useEffect(() => {
-        if (filters.total_amount?.length === 0) {
-            setAmountRange([0, 0]);
-        } else {
-            setAmountRange(filters.total_amount);
-        }
-    }, [filters.total_amount]);
-
     const changePriceDone = () => {
-        if (amountRange[0] !== amountRange[1]) {
-            dispatch(
-                setPaginationAction({
-                    type: PaginationType.BUYERS,
-                    modifier: {
-                        filters: {
-                            ...filters,
-                            total_amount: amountRange
-                        },
-                        offset: 0
-                    }
-                })
-            );
-        } else if (amountRange[0] === amountRange[1] && amountRange[0] === 0) {
+        if (amountRange[0] == filterData.amounts[0] && amountRange[1] == filterData.amounts[1]) {
             dispatch(
                 setPaginationAction({
                     type: PaginationType.BUYERS,
@@ -59,6 +43,19 @@ const FilterAmount: React.FC<any> = () => {
                         filters: {
                             ...filters,
                             total_amount: []
+                        },
+                        offset: 0
+                    }
+                })
+            );
+        } else {
+            dispatch(
+                setPaginationAction({
+                    type: PaginationType.BUYERS,
+                    modifier: {
+                        filters: {
+                            ...filters,
+                            total_amount: amountRange
                         },
                         offset: 0
                     }
@@ -75,6 +72,18 @@ const FilterAmount: React.FC<any> = () => {
         e.target.select();
     };
 
+    const debouncedChangePriceDone = useDebouncedCallback(() => {
+        amountRange[0] = isNumber(amountRange[0]) ? +amountRange[0] : filterData.amounts[0];
+        amountRange[1] = isNumber(amountRange[1]) ? +amountRange[1] : filterData.amounts[1];
+
+        if (amountRange[0] > filterData.amounts[1]) amountRange[0] = filterData.amounts[1];
+        if (amountRange[1] < filterData.amounts[0]) amountRange[1] = filterData.amounts[0];
+
+        if (amountRange[0] > amountRange[1]) amountRange[1] = amountRange[0];
+
+        changePriceDone();
+    }, 1000);
+
     return (
         <div className="mb-4">
             <div
@@ -82,7 +91,12 @@ const FilterAmount: React.FC<any> = () => {
                 className="flex justify-between mb-2 mt-3 cursor-pointer"
                 onClick={() => setShowBlock(!showBlock)}>
                 <div className="flex items-center">
-                    <Image width="10" height="10" src={'/images/lang-arrow.svg'} />
+                    <Image
+                        width="10"
+                        height="10"
+                        src={'/images/lang-arrow.svg'}
+                        className={showBlock ? 'rotate-180' : ''}
+                    />
                     <span className="ml-2 text-xs font-bold text-blue-350">{t('Spent')}</span>
                 </div>
                 <div className="text-sm font-thin text-gray-450">
@@ -95,14 +109,14 @@ const FilterAmount: React.FC<any> = () => {
                         <span className="filter-label" style={{ marginLeft: '-4px' }}>
                             {t('Price')}
                             <em className="float-right">
-                                {amountRange[0]} - {filterData.amounts[1]}
+                                {filterData.amounts[0]} - {filterData.amounts[1]}
                                 &euro;
                             </em>
                         </span>
                         <Range
                             allowCross={false}
                             step={1}
-                            min={0}
+                            min={filterData.amounts[0]}
                             max={filterData.amounts[1]}
                             onChange={onSliderPriceChange}
                             onAfterChange={onSliderAfterChange}
@@ -117,14 +131,14 @@ const FilterAmount: React.FC<any> = () => {
                             <input
                                 className="w-full form-control"
                                 type="text"
-                                placeholder={formatCurrency(0)}
+                                placeholder={formatCurrency(filterData.amounts[0])}
                                 onChange={(e) => {
                                     onSliderPriceChange([
-                                        e.target.value.replace(/[^0-9]/g, ''),
+                                        e.target.value.replace(/[^0-9.]/g, ''),
                                         amountRange[1]
                                     ]);
+                                    debouncedChangePriceDone();
                                 }}
-                                onKeyUp={() => changePriceDone()}
                                 onFocus={handleFocus}
                                 value={amountRange[0]}
                             />
@@ -140,11 +154,11 @@ const FilterAmount: React.FC<any> = () => {
                                 onChange={(e) => {
                                     onSliderPriceChange([
                                         amountRange[0],
-                                        e.target.value.replace(/[^0-9]/g, '')
+                                        e.target.value.replace(/[^0-9.]/g, '')
                                     ]);
+                                    debouncedChangePriceDone();
                                 }}
                                 onFocus={handleFocus}
-                                onKeyUp={() => changePriceDone()}
                                 value={amountRange[1]}
                             />
                         </div>

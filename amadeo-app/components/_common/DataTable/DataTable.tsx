@@ -45,7 +45,7 @@ const DataTable: React.FC<Props> = ({
     switcherOnClick,
     hideBulk
 }) => {
-    const { PRODUCTS, CHATBOT, SHIPPING, ORDERS, PAYMENTS, WAITING } = PaginationType;
+    const { PRODUCTS, CHATBOT, SHIPPING, ORDERS, PAYMENTS } = PaginationType;
     const t = useTranslations();
     const checkedIds = useSelector(checkedIdsSelector);
     const switchAllHeader = useSelector(switchHeaderSelector);
@@ -53,7 +53,7 @@ const DataTable: React.FC<Props> = ({
     // const showFilters = [PRODUCTS].includes(paginationType);
     // const hideEntries: boolean = [CATEGORIES, INVESTMENT].includes(paginationType);
     // const hideEntries = false;
-    const listShowIds = [PRODUCTS, CHATBOT, SHIPPING, PAYMENTS, WAITING];
+    const listShowIds = [PRODUCTS, CHATBOT, SHIPPING, PAYMENTS];
     if (user.role_id === 2) {
         listShowIds.push(ORDERS);
     }
@@ -272,8 +272,8 @@ const DataTable: React.FC<Props> = ({
                 <tbody>{renderTableBody()}</tbody>
             </table>
             {!loading && !hidePaginationBar && (
-                <div className="flex justify-between w-full mt-5 mb-10">
-                    <div className="w-[85px]">
+                <div className="flex justify-between min-w-max w-full mt-5 mb-10">
+                    <div className="w-16 mr-1">
                         <select value={limit} onChange={setLimit} className="form-control">
                             <option value={10}>10</option>
                             <option value={25}>25</option>

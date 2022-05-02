@@ -5,7 +5,7 @@ import { logger } from '../../common/logger.js';
 import Stripe from 'stripe';
 import moment from "moment";
 import paymentPlanModel from "./PaymentPlan.js";
-import { confirmSubscriptionEmail, confirmSubscriptionPaymentEmail } from "../sender/templates.js";
+import {confirmSubscriptionEmail, confirmSubscriptionPaymentEmail, registerEmail} from "../sender/templates.js";
 import { sendMail } from "../lib/sendMail.js";
 
 const stripe = Stripe(process.env.STRIPE_API_KEY);
@@ -235,7 +235,7 @@ class User {
                     // console.log('SUBSCRIPTION DB', subscription);
                     // return { subscription: null, error: { code: 404, message: 'User Not found' } };
                     const querySubscription = `SELECT * FROM data.set_subscriptions('${JSON.stringify(dbSubscription)}');`;
-                    // console.log(querySubscription);
+                    // console.log('[User.createExistUserSubscription] querySubscription = ', querySubscription);
                     await client.query(querySubscription);
                     return { subscription: subscription };
                 }
@@ -390,25 +390,24 @@ class User {
     }
 
 
-    async checkPayment (paymentIntent, paymentIntentSecret) {
+    async checkPayment(paymentIntent, paymentIntentSecret) {
         const client = await pool.connect();
         try {
             const paymentIntentResult = await stripe.paymentIntents.retrieve(
                 paymentIntent
             );
-            console.log('STRIPE PAYMENT INTENT', paymentIntentResult);
+            // console.log('[User.checkPayment] STRIPE PAYMENT INTENT', paymentIntentResult);
             if (paymentIntentResult.client_secret === paymentIntentSecret) {
                 const querySubscription = `UPDATE data.subscriptions SET status='active' WHERE customer_id='${paymentIntentResult.customer}'`;
-                console.log(querySubscription);
                 if (paymentIntentResult.status === 'succeeded') {
-                    console.log("run query");
+                    // console.log('[User.checkPayment] succeeded querySubscription = ', querySubscription);
                     await client.query(querySubscription);
                 }
                 const subscriptionRes = await client.query(`SELECT email, price FROM data.users
                     LEFT JOIN data.subscriptions ON data.subscriptions.user_id=data.users.id
                     LEFT JOIN data.subscription_plans ON data.subscription_plans.id = data.subscriptions.plan_id
                     WHERE customer_id='${paymentIntentResult.customer}'`);
-                console.log('here we are');
+
                 if (subscriptionRes.rows.length) {
                     paymentIntentResult.email = subscriptionRes.rows[0].email;
 
@@ -427,9 +426,12 @@ class User {
                         mailPayment.body
                     );
 
-                    return { paymentIntent: paymentIntentResult}
+                    // console.log('[User.checkPayment] paymentIntent = ', paymentIntentResult);
+
+                    return { paymentIntent: paymentIntentResult }
                 }
             }
+
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
                 logger.log(
@@ -438,7 +440,9 @@ class User {
                     { message: e.message }
                 );
             }
+            console.log('[User.checkPayment] e.message = ', e.message);
             return { user: null, error: { code: 404, message: 'Payment subscription error' } };
+
         } finally {
             client.release();
         }
@@ -834,23 +838,20 @@ class User {
     async fetchUserSettings(userId) {
         const client = await pool.connect();
         try {
-            const query = `SELECT *
-                            FROM data.seller_settings WHERE user_id=${userId};`;
-            const res = await client.query(query);
+            const query = 'SELECT * FROM data.seller_settings WHERE user_id=$1;';
+            const res = await client.query(query, [userId]);
+
             if (res.rows.length > 0) {
                 if (res.rows[0].order_timer) {
-                    res.rows[0].order_timer = res.rows[0].order_timer.hours ? res.rows[0].order_timer.hours: res.rows[0].order_timer.days;
-                    res.rows[0].type = res.rows[0].order_timer.hours ? 'h': 'd';
-                } else {
-                    res.rows[0].order_time = '';
-                    res.rows[0].type = 'h';
+                    res.rows[0].type = res.rows[0].order_timer.days ? 'd' : 'h';
+                    res.rows[0].order_timer = res.rows[0].order_timer.hours ?? res.rows[0].order_timer.days ?? '';
                 }
+
                 if (res.rows[0].free_shipping_timer) {
-                    res.rows[0].free_shipping_timer = res.rows[0].free_shipping_timer.hours ? res.rows[0].free_shipping_timer.hours: res.rows[0].free_shipping_timer.days;
-                } else {
-                    res.rows[0].free_shipping_timer = '';
+                    res.rows[0].free_shipping_timer = res.rows[0].free_shipping_timer.hours ?? res.rows[0].free_shipping_timer.days ?? '';
                 }
             }
+
             return res.rows[0] ? res.rows : [{
                 user_id: userId,
                 order_timer: '',
@@ -858,7 +859,9 @@ class User {
                 free_shipping_timer: '',
                 free_shipping_status: '',
                 created_at: '',
-                updated_at: ''}];
+                updated_at: ''
+            }];
+
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
                 logger.log(
@@ -868,6 +871,7 @@ class User {
                 );
             }
             return { success: false, error: { code: 404, message: 'Users not found' } };
+
         } finally {
             client.release();
         }
@@ -932,7 +936,7 @@ class User {
         }
     }
 
-    async unsubscribe() {
+    async unsubscribe(email) {
         const client = await pool.connect();
         try {
             const userRes = await client.query(`SELECT subscription_id FROM data.users
@@ -964,26 +968,23 @@ class User {
     async updateSellerSettings(userId, data) {
         const client = await pool.connect();
         try {
-            let intervalDuration;
             let free_shipping_timer = '0 hour';
             if (data.free_shipping_status) {
-                free_shipping_timer = `${data.free_shipping_timer} hour${data.free_shipping_timer > 1 ? 's' : ''}`;
+                free_shipping_timer = `${data.free_shipping_timer || 0} hour${data.free_shipping_timer > 1 ? 's' : ''}`;
             }
-            if (data.type === 'h') {
-                intervalDuration = `${data.order_timer} hour${data.order_timer > 1 ? 's' : ''}`;
-            } else {
-                intervalDuration = `${data.order_timer} day${data.order_timer > 1 ? 's' : ''}`;
-            }
+
+            const intervalDuration = `${data.order_timer || 0} ${data.type === 'h'? 'hour' : 'day'}${data.order_timer > 1 ? 's' : ''}`;
+
             const query = `INSERT INTO data.seller_settings(user_id, order_timer, free_shipping_timer, free_shipping_status, multisafe_api_key)
-                VALUES (${userId}, '${intervalDuration}', '${free_shipping_timer}', ${data.free_shipping_status ? data.free_shipping_status : false}, $$${data.multisafe_api_key}$$)
-                ON CONFLICT ON CONSTRAINT seller_settings__pkey DO UPDATE SET
+                VALUES ($1, $2, $3, $4, $5) ON CONFLICT ON CONSTRAINT seller_settings__pkey DO UPDATE SET
                     order_timer = EXCLUDED.order_timer,
                     free_shipping_timer = EXCLUDED.free_shipping_timer,
                     free_shipping_status = EXCLUDED.free_shipping_status,
-                    multisafe_api_key = EXCLUDED.multisafe_api_key
-                ;`;
-            await client.query(query);
+                    multisafe_api_key = EXCLUDED.multisafe_api_key;`;
+            await client.query(query, [userId, intervalDuration, free_shipping_timer, !!data.free_shipping_status, data.multisafe_api_key]);
+
             return { success: true };
+
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
                 logger.log(
@@ -991,9 +992,10 @@ class User {
                     'Model User (updateUserSettings) error:',
                     { message: e.message }
                 );
-                console.log('[updateSellerSettings] sql e.message = ', e.message);
+                console.log('[User.updateSellerSettings] sql e.message = ', e.message);
             }
             return { success: false, error: { code: 404, message: 'Users not found' } };
+
         } finally {
             client.release();
         }
@@ -1021,7 +1023,7 @@ class User {
                     return;
                 }
             })
-            console.log('INVOICE PDF', invoicePdf);
+            // console.log('INVOICE PDF', invoicePdf);
 
             return { success: true, invoiceUrl: invoicePdf };
 
