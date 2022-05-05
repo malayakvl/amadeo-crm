@@ -398,11 +398,59 @@ class User {
             );
             // console.log('[User.checkPayment] STRIPE PAYMENT INTENT', paymentIntentResult);
             if (paymentIntentResult.client_secret === paymentIntentSecret) {
-                const querySubscription = `UPDATE data.subscriptions SET status='active' WHERE customer_id='${paymentIntentResult.customer}'`;
-                if (paymentIntentResult.status === 'succeeded') {
-                    // console.log('[User.checkPayment] succeeded querySubscription = ', querySubscription);
-                    await client.query(querySubscription);
-                }
+                // setup payment intent as default payment method
+                await stripe.customers.update(
+                    paymentIntentResult.customer,
+                    {
+                        invoice_settings: {
+                            default_payment_method: paymentIntentResult.payment_method
+                        }
+                    }
+                );
+                const stripeCustomer = await stripe.customers.retrieve(paymentIntentResult.customer);
+                const dbUser = await this.findUserByEmail(stripeCustomer.email);
+                // create subscription here
+                const resPlan = await client.query(`SELECT * FROM data.subscription_plans WHERE id = '${planId}'`);
+                const resSettings = await client.query('SELECT * FROM data.system_settings WHERE id=1');
+                if (resPlan.rows.length) {
+                    const subscriptionObject = {
+                        customer: paymentIntentResult.customer,
+                        items: [{
+                            plan: resPlan.rows[0].stripe_id
+                        }],
+                        payment_behavior: 'default_incomplete',
+                        expand: ['latest_invoice.payment_intent'],
+                    };
+                    // subscriptionObject.coupon =  'free-period';
+                    if (type === 'trial') {
+                        subscriptionObject.trial_period_days = resSettings.rows[0].trial_period;
+                    } else {
+                        subscriptionObject.coupon =  'free-period';
+                    }
+                    const subscription = await stripe.subscriptions.create(subscriptionObject);
+                    const dbSubscription = {
+                        user_id: dbUser.id,
+                        plan_id: planId,
+                        customer_id: paymentIntentResult.customer,
+                        subscription_id: subscription.id,
+                        status: subscription.status,
+                        period_start: subscription.current_period_start,
+                        period_end: subscription.current_period_end,
+                        is_trial: type === 'trial'
+                    }
+                    const _querySubscription = `SELECT * FROM data.set_subscriptions('${JSON.stringify(dbSubscription)}');`;
+                    await client.query(_querySubscription);
+
+                    const querySubscription = `UPDATE data.subscriptions SET status='${subscription.status}' WHERE customer_id='${paymentIntentResult.customer}'`;
+                    if (paymentIntentResult.status === 'succeeded') {
+                        await client.query(querySubscription);
+                    }
+                    const subscriptionRes = await client.query(`SELECT email, price FROM data.users
+//                 const querySubscription = `UPDATE data.subscriptions SET status='active' WHERE customer_id='${paymentIntentResult.customer}'`;
+//                 if (paymentIntentResult.status === 'succeeded') {
+//                     // console.log('[User.checkPayment] succeeded querySubscription = ', querySubscription);
+//                     await client.query(querySubscription);
+//                 }
                 const subscriptionRes = await client.query(`SELECT email, price FROM data.users
                     LEFT JOIN data.subscriptions ON data.subscriptions.user_id=data.users.id
                     LEFT JOIN data.subscription_plans ON data.subscription_plans.id = data.subscriptions.plan_id
