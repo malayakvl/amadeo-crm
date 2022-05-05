@@ -128,6 +128,7 @@ export const skipExistUserSubscriptionAction: any = createAction(
             };
         }
 );
+
 export const createExistUserSubscriptionAction: any = createAction(
     'user/EXIST_USER_SUBSCRIPTION',
     async (data: any, planId: number, type: string | null) =>
@@ -160,9 +161,15 @@ export const createExistUserSubscriptionAction: any = createAction(
             };
         }
 );
+
 export const checkPaymentStatusAction: any = createAction(
     'user/CHECK_PAYMENT_STATUS',
-    async (paymentIntent: string, paymentIntentSecret: string) =>
+    async (
+            paymentIntent: string,
+            paymentIntentSecret: string,
+            planId: number,
+            type: string | null
+        ) =>
         async (
             dispatch: Type.Dispatch,
             getState: () => State.Root
@@ -171,8 +178,8 @@ export const checkPaymentStatusAction: any = createAction(
             const state = getState();
             try {
                 const res = await axios.post(
-                    `${baseUrl}/check-payment-status`,
-                    { paymentIntent, paymentIntentSecret },
+                    `${baseUrl}/check-payment-status?planId=${planId}`,
+                    { paymentIntent, paymentIntentSecret, planId, type },
                     {
                         headers: { 'Content-Type': 'application/json' }
                     }
@@ -371,8 +378,6 @@ export const generateInvoiceStripeAction: any = createAction(
                 });
         }
 );
-
-// http://localhost:3000/complete?payment_intent=pi_3KfQDVDBSh7ykoyW1UZ7i0GM&payment_intent_client_secret=pi_3KfQDVDBSh7ykoyW1UZ7i0GM_secret_O7RljPcB3glQMv9zlLgOV1mui&redirect_status=succeeded
 
 export const setUserAction: any = createAction('user/SET_USER');
 export const hideRegisterFormAction: any = createAction('user/HIDE_REGISTER_FORM');
