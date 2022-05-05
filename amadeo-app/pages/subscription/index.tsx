@@ -17,14 +17,10 @@ import { isDataLoadingSelector } from '../../redux/layouts/selectors';
 import { paymentPlanInfoAction } from '../../redux/paymentPlans';
 import { formatCurrency } from '../../lib/functions';
 import { createExistUserSubscriptionAction } from '../../redux/user';
-import Router from 'next/router';
+import Router, { useRouter } from 'next/router';
 import getConfig from 'next/config';
 const { publicRuntimeConfig } = getConfig();
 const stripeKey = publicRuntimeConfig.stripeKey;
-
-// const stripePromise = loadStripe(
-//     'pk_test_51KVgrtDBSh7ykoyWbEIYSADVKagIP8DCzx1kLlwZbcCc9XFlvEcQGWZ2kIwJ5JhA6u0mps4WY82kiN634aKbxG8r00uGxWTloi'
-// );
 
 const stripePromise = loadStripe(stripeKey);
 
@@ -39,6 +35,7 @@ export default function Subscription({
 }) {
     const dispatch = useDispatch();
     const t = useTranslations();
+    const { query } = useRouter();
 
     const user = useSelector(userSelector);
 
@@ -49,14 +46,16 @@ export default function Subscription({
     const [clientSecret, setClientSecret] = useState('');
 
     useEffect(() => {
+        if (!stripeClientSecret) {
+            dispatch(paymentPlanInfoAction(planId));
+        }
         // Create PaymentIntent and Plan Price as soon as the page loads
-        dispatch(paymentPlanInfoAction(planId));
     }, []);
 
     useEffect(() => {
         // Create PaymentIntent and Plan Price as soon as the page loads
-        if (user.email) {
-            dispatch(createExistUserSubscriptionAction(user, planId, type));
+        if (user.email && !stripeClientSecret) {
+            dispatch(createExistUserSubscriptionAction(user, planId, query.type));
         }
     }, [planId, user?.email, type]);
 
@@ -80,6 +79,7 @@ export default function Subscription({
         clientSecret,
         appearance
     };
+
     return (
         <>
             <Head>
@@ -91,14 +91,18 @@ export default function Subscription({
                     <div className="rounded-lg border shadow-xl mt-10 flex w-[1000px] bg-white px-20 py-14">
                         <div className="font-bold mt-8 pr-12 w-2/4">
                             <div className="text-2xl line-height-105percent mb-9 w-full">
-                                <span className="block mt-2 mb-4">
-                                    {t('Selected plan')}: {planInfo.name}
-                                </span>
-                                <span className="block mt-2 mb-4">
-                                    {t('Selected plan Price')}:{' '}
-                                    {formatCurrency(planInfo.stripeInfo.unit_amount / 100)}
-                                </span>
-                                {type === 'trial' && (
+                                {query.type !== 'trial' && (
+                                    <>
+                                        <span className="block mt-2 mb-4">
+                                            {t('Selected plan')}: {planInfo.name}
+                                        </span>
+                                        <span className="block mt-2 mb-4">
+                                            {t('Selected plan Price')}:{' '}
+                                            {formatCurrency(planInfo.stripeInfo.unit_amount / 100)}
+                                        </span>
+                                    </>
+                                )}
+                                {query.type === 'trial' && (
                                     <span className="block mt-2 mb-4">{t('trial_notice')}</span>
                                 )}
                             </div>

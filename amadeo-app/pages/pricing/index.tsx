@@ -5,14 +5,14 @@ import Image from 'next/image';
 import Head from 'next/head';
 import { Fragment, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { userSelector } from '../../redux/user/selectors';
+import { clientSecretSelector, userSelector } from '../../redux/user/selectors';
 import { session } from 'next-auth/client';
 import { showLoaderAction } from '../../redux/layouts/actions';
 import { fetchFormAction, requestDemoAction } from '../../redux/paymentPlans';
 import { itemsSelector } from '../../redux/paymentPlans/selectors';
 import { formatCurrency, parseTranslation } from '../../lib/functions';
 import FullLayout from '../../components/layout/FullLayout';
-import { skipExistUserSubscriptionAction } from '../../redux/user/actions';
+import { skipExistUserSubscriptionAction } from '../../redux/user';
 import { InputText } from '../../components/_form';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
@@ -66,6 +66,7 @@ const Price = ({
                 <span className="text-base"> /month</span>
                 {sale > 0 && <div className="text-xs font-bold">{sale}% of sale</div>}
             </div>
+
             <button
                 onClick={() => {
                     if (user?.email) {
@@ -79,6 +80,20 @@ const Price = ({
                 } w-full mt-7 justify-self-end`}>
                 {buttonText}
             </button>
+
+            {/*<button*/}
+            {/*    onClick={() => {*/}
+            {/*        if (user?.email) {*/}
+            {/*            Router.push(`/subscription?planId=${planId}&type=trial`);*/}
+            {/*        } else {*/}
+            {/*            Router.push(`/auth/subscription?planId=${planId}&type=trial`);*/}
+            {/*        }*/}
+            {/*    }}*/}
+            {/*    className={`${*/}
+            {/*        disabled ? 'disabled-btn' : 'gradient-btn'*/}
+            {/*    } w-full mt-7 justify-self-end`}>*/}
+            {/*    {t('Select Trial')}*/}
+            {/*</button>*/}
         </div>
     );
 };
@@ -90,6 +105,7 @@ export default function Pricing({ locale }: { locale: any }) {
     const plans = useSelector(itemsSelector);
     const user = useSelector(userSelector);
     const [showTrial, setShowTrial] = useState(true);
+    const stripeClientSecret = useSelector(clientSecretSelector);
 
     const [success, setSuccess] = useState(false);
 
@@ -120,6 +136,12 @@ export default function Pricing({ locale }: { locale: any }) {
             }
         }
     }, [user?.email]);
+
+    useEffect(() => {
+        if (stripeClientSecret) {
+            Router.push(`/subscription?type=trial&planId=1`);
+        }
+    }, [stripeClientSecret]);
 
     const Tick = ({
         disabled,
@@ -223,9 +245,6 @@ export default function Pricing({ locale }: { locale: any }) {
                                     <a>{t('Skip for now')}</a>
                                 </Link>
                             )}
-                            {/*<Link href="/auth/signup">*/}
-                            {/*    <a>{t('Skip for now')}</a>*/}
-                            {/*</Link>*/}
                         </Fragment>
                     )}
                 </div>
