@@ -16,6 +16,10 @@ import getConfig from 'next/config';
 const { publicRuntimeConfig } = getConfig();
 const stripeKey = publicRuntimeConfig.stripeKey;
 
+// const stripePromise = loadStripe(
+//     'pk_test_51KVgrtDBSh7ykoyWbEIYSADVKagIP8DCzx1kLlwZbcCc9XFlvEcQGWZ2kIwJ5JhA6u0mps4WY82kiN634aKbxG8r00uGxWTloi'
+// );
+
 const stripePromise = loadStripe(stripeKey);
 
 export default function Signup({
