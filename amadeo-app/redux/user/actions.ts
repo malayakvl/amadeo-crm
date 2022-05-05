@@ -162,12 +162,7 @@ export const createExistUserSubscriptionAction: any = createAction(
 );
 export const checkPaymentStatusAction: any = createAction(
     'user/CHECK_PAYMENT_STATUS',
-    async (
-            paymentIntent: string,
-            paymentIntentSecret: string,
-            planId: number,
-            type: string | null
-        ) =>
+    async (paymentIntent: string, paymentIntentSecret: string) =>
         async (
             dispatch: Type.Dispatch,
             getState: () => State.Root
@@ -176,8 +171,8 @@ export const checkPaymentStatusAction: any = createAction(
             const state = getState();
             try {
                 const res = await axios.post(
-                    `${baseUrl}/check-payment-status?planId=${planId}`,
-                    { paymentIntent, paymentIntentSecret, planId, type },
+                    `${baseUrl}/check-payment-status`,
+                    { paymentIntent, paymentIntentSecret },
                     {
                         headers: { 'Content-Type': 'application/json' }
                     }

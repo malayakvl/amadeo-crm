@@ -7,8 +7,7 @@ import {
     createUserFromSubscriptionAction,
     checkPaymentStatusAction,
     fetchUserSubscriptionAction,
-    showChangeSubscriptionFormAction,
-    skipExistUserSubscriptionAction
+    showChangeSubscriptionFormAction
 } from './actions';
 
 // const initialState: State.User = {
@@ -74,18 +73,6 @@ const ACTION_HANDLERS: any = {
             ...state
         })
     },
-    [skipExistUserSubscriptionAction]: {
-        next: (
-            state: State.User,
-            action: Type.ReduxAction<Pick<State.User, 'subscription' | 'clientSecret'>>
-        ): State.User => ({
-            ...state,
-            ...action.payload
-        }),
-        throw: (state: State.User): State.User => ({
-            ...state
-        })
-    },
     [checkPaymentStatusAction]: {
         next: (
             state: State.User,
@@ -126,8 +113,7 @@ export {
     createUserFromSubscriptionAction,
     checkPaymentStatusAction,
     fetchUserSubscriptionAction,
-    showChangeSubscriptionFormAction,
-    skipExistUserSubscriptionAction
+    showChangeSubscriptionFormAction
 };
 
 // ------------------------------------

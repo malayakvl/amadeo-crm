@@ -5,14 +5,14 @@ import Image from 'next/image';
 import Head from 'next/head';
 import { Fragment, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { clientSecretSelector, userSelector } from '../../redux/user/selectors';
+import { userSelector } from '../../redux/user/selectors';
 import { session } from 'next-auth/client';
 import { showLoaderAction } from '../../redux/layouts/actions';
 import { fetchFormAction, requestDemoAction } from '../../redux/paymentPlans';
 import { itemsSelector } from '../../redux/paymentPlans/selectors';
 import { formatCurrency, parseTranslation } from '../../lib/functions';
 import FullLayout from '../../components/layout/FullLayout';
-import { skipExistUserSubscriptionAction } from '../../redux/user';
+import { skipExistUserSubscriptionAction } from '../../redux/user/actions';
 import { InputText } from '../../components/_form';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
@@ -90,7 +90,6 @@ export default function Pricing({ locale }: { locale: any }) {
     const plans = useSelector(itemsSelector);
     const user = useSelector(userSelector);
     const [showTrial, setShowTrial] = useState(true);
-    const stripeClientSecret = useSelector(clientSecretSelector);
 
     const [success, setSuccess] = useState(false);
 
@@ -121,12 +120,6 @@ export default function Pricing({ locale }: { locale: any }) {
             }
         }
     }, [user?.email]);
-
-    useEffect(() => {
-        if (stripeClientSecret) {
-            Router.push(`/subscription?type=trial&planId=1`);
-        }
-    }, [stripeClientSecret]);
 
     const Tick = ({
         disabled,
@@ -230,6 +223,9 @@ export default function Pricing({ locale }: { locale: any }) {
                                     <a>{t('Skip for now')}</a>
                                 </Link>
                             )}
+                            {/*<Link href="/auth/signup">*/}
+                            {/*    <a>{t('Skip for now')}</a>*/}
+                            {/*</Link>*/}
                         </Fragment>
                     )}
                 </div>
