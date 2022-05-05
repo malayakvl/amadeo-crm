@@ -7,7 +7,7 @@ import { useRouter } from 'next/router';
 import { checkPaymentStatusAction } from '../../redux/user';
 import { paymentIntentSelector, userSelector } from '../../redux/user/selectors';
 
-export default function СompletePayment({
+export default function CompletePayment({
     paymentIntentSecret,
     paymentIntent
 }: {
