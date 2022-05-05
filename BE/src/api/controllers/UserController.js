@@ -159,7 +159,9 @@ class UserController {
             return res.status(200).json({
                 user: null,
                 subscription: data.subscription,
-                clientSecret: data.subscription.status === 'trialing' ? null : data.subscription.latest_invoice.payment_intent.client_secret
+                planId: data.planId,
+                // clientSecret: data.subscription.status === 'trialing' ? null : data.subscription.latest_invoice.payment_intent.client_secret
+                clientSecret: data.subscription.status === 'trialing' ? null : data.setupIntent.client_secret
             });
         } else {
             return res.status(402).json('Something wend wrong');
@@ -269,7 +271,9 @@ class UserController {
                 return res.status(200).json({
                     user: user,
                     subscription: data.subscription,
-                    clientSecret: data.subscription.status === 'trialing' ? null : data.subscription.latest_invoice.payment_intent.client_secret
+                    planId: data.planId,
+                    // clientSecret: data.subscription.status === 'trialing' ? null : data.subscription.latest_invoice.payment_intent.client_secret
+                    clientSecret: data.subscription.status === 'trialing' ? null : data.setupIntent.client_secret
                 });
             } else {
                 return res.status(402).json('Something wend wrong');
@@ -287,7 +291,9 @@ class UserController {
                 return res.status(200).json({
                     user: user,
                     subscription: data.subscription,
-                    clientSecret: data.subscription.status === 'trialing' ? null : data.subscription.latest_invoice.payment_intent.client_secret
+                    planId: data.planId,
+                    // clientSecret: data.subscription.status === 'trialing' ? null : data.subscription.latest_invoice.payment_intent.client_secret
+                    clientSecret: data.subscription.status === 'trialing' ? null : data.setupIntent.client_secret
                 });
             } else {
                 return res.status(402).json('Something wend wrong');
@@ -300,7 +306,7 @@ class UserController {
     async checkPaymentStatus (req, res) {
         // console.log(req.body.paymentIntent);
         // console.log(req.body.paymentIntentSecret);
-        const data = await userModel.checkPayment(req.body.paymentIntent, req.body.paymentIntentSecret);
+        const data = await userModel.checkPayment(req.body.paymentIntent, req.body.paymentIntentSecret, req.body.planId, req.body.type);
         if (data.paymentIntent) {
             const user = await userModel.findUserByEmail(data.paymentIntent.email);
             delete user.salt;
