@@ -46,7 +46,6 @@ const CheckoutUnregisteredForm = () => {
             dispatch(showLoaderAction(false));
         }
     };
-
     return (
         <form onSubmit={handleSubmitPayment}>
             <PaymentElement />

@@ -461,7 +461,6 @@ class User {
                     LEFT JOIN data.subscriptions ON data.subscriptions.user_id=data.users.id
                     LEFT JOIN data.subscription_plans ON data.subscription_plans.id = data.subscriptions.plan_id
                     WHERE customer_id='${paymentIntentResult.customer}'`);
-                    console.log('[User.checkPayment]', subscriptionRes.rows[0]);
 
                     if (subscriptionRes.rows.length) {
                         paymentIntentResult.email = subscriptionRes.rows[0].email;

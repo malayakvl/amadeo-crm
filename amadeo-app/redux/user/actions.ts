@@ -161,7 +161,6 @@ export const createExistUserSubscriptionAction: any = createAction(
             };
         }
 );
-
 export const checkPaymentStatusAction: any = createAction(
     'user/CHECK_PAYMENT_STATUS',
     async (

@@ -66,7 +66,6 @@ export default function CompletePayment({
         </div>
     );
 }
-
 CompletePayment.Layout = FullLayout;
 
 export async function getServerSideProps(context: any) {

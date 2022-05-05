@@ -66,7 +66,6 @@ const Price = ({
                 <span className="text-base"> /month</span>
                 {sale > 0 && <div className="text-xs font-bold">{sale}% of sale</div>}
             </div>
-
             <button
                 onClick={() => {
                     if (user?.email) {

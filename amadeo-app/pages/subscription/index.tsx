@@ -79,7 +79,6 @@ export default function Subscription({
         clientSecret,
         appearance
     };
-
     return (
         <>
             <Head>
