@@ -454,7 +454,6 @@ class User {
 
                     const querySubscription = `UPDATE data.subscriptions SET status='${subscription.status}' WHERE customer_id='${paymentIntentResult.customer}'`;
                     if (paymentIntentResult.status === 'succeeded') {
-                        console.log('[User.checkPayment] succeeded querySubscription = ', querySubscription);
                         await client.query(querySubscription);
                     }
                     const subscriptionRes = await client.query(`SELECT email, price FROM data.users

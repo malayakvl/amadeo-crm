@@ -21,7 +21,6 @@ import Router, { useRouter } from 'next/router';
 import getConfig from 'next/config';
 const { publicRuntimeConfig } = getConfig();
 const stripeKey = publicRuntimeConfig.stripeKey;
-
 const stripePromise = loadStripe(stripeKey);
 
 export default function Subscription({

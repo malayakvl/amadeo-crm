@@ -15,7 +15,6 @@ import { CheckoutForm } from '../../components/checkout';
 import getConfig from 'next/config';
 const { publicRuntimeConfig } = getConfig();
 const stripeKey = publicRuntimeConfig.stripeKey;
-
 const stripePromise = loadStripe(stripeKey);
 
 export default function Signup({

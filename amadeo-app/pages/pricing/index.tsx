@@ -79,20 +79,6 @@ const Price = ({
                 } w-full mt-7 justify-self-end`}>
                 {buttonText}
             </button>
-
-            {/*<button*/}
-            {/*    onClick={() => {*/}
-            {/*        if (user?.email) {*/}
-            {/*            Router.push(`/subscription?planId=${planId}&type=trial`);*/}
-            {/*        } else {*/}
-            {/*            Router.push(`/auth/subscription?planId=${planId}&type=trial`);*/}
-            {/*        }*/}
-            {/*    }}*/}
-            {/*    className={`${*/}
-            {/*        disabled ? 'disabled-btn' : 'gradient-btn'*/}
-            {/*    } w-full mt-7 justify-self-end`}>*/}
-            {/*    {t('Select Trial')}*/}
-            {/*</button>*/}
         </div>
     );
 };

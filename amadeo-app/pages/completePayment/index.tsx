@@ -38,20 +38,6 @@ export default function CompletePayment({
                 seller_email: stripePaymentIntent?.email,
                 callbackUrl: `${window.location.origin}/dashboard`
             });
-
-            // if (!user?.email) {
-            //     signIn('credentials_subscription_login', {
-            //         email: stripePaymentIntent?.email,
-            //         seller_email: stripePaymentIntent?.email,
-            //         callbackUrl: `${window.location.origin}/dashboard`
-            //     });
-            // } else {
-            //     signIn('credentials_subscription_login', {
-            //         email: stripePaymentIntent?.email,
-            //         seller_email: stripePaymentIntent?.email,
-            //         callbackUrl: `${window.location.origin}/dashboard`
-            //     });
-            // }
         }
     }, [stripePaymentIntent?.email]);
 
@@ -66,6 +52,7 @@ export default function CompletePayment({
         </div>
     );
 }
+
 CompletePayment.Layout = FullLayout;
 
 export async function getServerSideProps(context: any) {
