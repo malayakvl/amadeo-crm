@@ -214,7 +214,6 @@ export default function Signup({
 }
 
 Signup.Layout = FullLayout;
-
 export async function getServerSideProps(context: any) {
     const { req, locale } = context;
     const session = await getSession({ req });

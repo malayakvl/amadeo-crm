@@ -49,8 +49,7 @@ export default function СompletePayment({
         </div>
     );
 }
-
-СompletePayment.Layout = FullLayout;
+CompletePayment.Layout = FullLayout;
 
 export async function getServerSideProps(context: any) {
     const { req, locale } = context;
