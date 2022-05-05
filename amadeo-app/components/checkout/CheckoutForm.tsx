@@ -4,7 +4,6 @@ import { useTranslations } from 'next-intl';
 import { showLoaderAction } from '../../redux/layouts/actions';
 import { useDispatch } from 'react-redux';
 import getConfig from 'next/config';
-import { useRouter } from 'next/router';
 const { publicRuntimeConfig } = getConfig();
 const siteUrl = publicRuntimeConfig.siteUrl;
 
@@ -13,7 +12,6 @@ const CheckoutUnregisteredForm = () => {
     const elements = useElements();
     const t = useTranslations();
     const dispatch = useDispatch();
-    const { query } = useRouter();
 
     const handleSubmitPayment = async (event: any) => {
         // We don't want to let default form submission happen here,
@@ -26,18 +24,11 @@ const CheckoutUnregisteredForm = () => {
             return;
         }
         dispatch(showLoaderAction(true));
-        // const result = await stripe.confirmPayment({
-        //     //`Elements` instance that was used to create the Payment Element
-        //     elements,
-        //     confirmParams: {
-        //         return_url: `${siteUrl}/completePayment`
-        //     }
-        // });
-        const result = await stripe.confirmSetup({
+        const result = await stripe.confirmPayment({
             //`Elements` instance that was used to create the Payment Element
             elements,
             confirmParams: {
-                return_url: `${siteUrl}/completePayment?planId=${query.planId}&type=${query.type}`
+                return_url: `${siteUrl}/completePayment`
             }
         });
 
@@ -49,7 +40,6 @@ const CheckoutUnregisteredForm = () => {
     return (
         <form onSubmit={handleSubmitPayment}>
             <PaymentElement />
-            {/*<CardElement />*/}
             <button disabled={!stripe} className="gradient-btn w-full mt-4">
                 {t('Confirm Payment')}
             </button>
