@@ -36,3 +36,11 @@ export const orderFetchedSelector = createSelector(
     rootSelector,
     (waitingList: State.WaitingList): boolean => waitingList.orderFetched
 );
+export const showQtyPopupSelector = createSelector(
+    rootSelector,
+    (waitingList: State.WaitingList): boolean => waitingList.showQtyModal
+);
+export const selectedConfiguarationIdSelector = createSelector(
+    rootSelector,
+    (waitingList: State.WaitingList): number | null => waitingList.selectedConfiguarationId
+);

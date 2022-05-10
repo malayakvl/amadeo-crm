@@ -9,6 +9,8 @@ declare namespace WaitingList {
         fileterData: any;
         showDateSelector: boolean;
         orderFetched: boolean;
+        showQtyModal: boolean;
+        selectedConfiguarationId: number | null;
     }
 
     interface DataItem {

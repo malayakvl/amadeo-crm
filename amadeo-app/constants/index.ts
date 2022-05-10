@@ -125,8 +125,9 @@ export const TableHeaders: { [key in PaginationType]: Type.DataTableHeader[] } =
             sortKey: 'order_items_waiting_list.id_cnt',
             titleKey: 'Shopper',
             iconClass: 'icon-tbl-users'
-        }
-        // { sortKey: 'country', iconClass: 'icon-tbl-country' },
+        },
+        { titleKey: 'Change quantity' },
+        { titleKey: 'Run' }
         // { sortKey: 'country', iconClass: 'icon-tbl-sh-cart' },
         // { sortKey: 'payment', iconClass: 'icon-tbl-card' },
         // { titleKey: 'Products' },

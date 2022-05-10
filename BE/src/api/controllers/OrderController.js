@@ -16,8 +16,8 @@ class OrderController {
             return res.status(200).json({ count: data.size, items: data.items});
         }
     }
-    
-    
+
+
     async fetchFilters (req, res) {
         if (!req.user) {
             return res.status(401).json('Access deny');
@@ -26,7 +26,7 @@ class OrderController {
             return res.status(200).json({ items: items.res });
         }
     }
-    
+
     async generateInvoice (req, res) {
         if (!req.user) {
             return res.status(401).json('Access deny');
@@ -36,8 +36,29 @@ class OrderController {
             return res.status(200).json({ fileName: order.filename, success: true, filebase64: order.fileEncoded });
         }
     }
-    
-    
+
+    async updateProductConfigQty(req, res) {
+        const { selectedConfigurationId, itemQty } = req.body;
+        console.log(selectedConfigurationId);
+        if (!req.user) {
+            return res.status(401).json('Access deny');
+        } else {
+            await orderModel.updateProductConfigQty(selectedConfigurationId, itemQty);
+            return res.status(200).json({ success:  true });
+        }
+    }
+
+    async runWaitWorkflow(req, res) {
+        const { sessionId, productConfigurationId } = req.body;
+        if (!req.user) {
+            return res.status(401).json('Access deny');
+        } else {
+            await orderModel.runWaitWorkflow(sessionId, productConfigurationId);
+            return res.status(200).json({ success:  true });
+        }
+    }
+
+
     async fetchWaitingList (req, res) {
         const { limit, offset, queryFilter, column, sort } = req.query;
         if (!req.user) {
@@ -47,7 +68,7 @@ class OrderController {
             return res.status(200).json({ count: data.size, items: data.items});
         }
     }
-    
+
     async createOrders (req, res) {
         await orderModel.createOrders(req.query.sessionId);
         // if (!data.error) {
@@ -57,7 +78,7 @@ class OrderController {
         // }
         return res.status(200).json({success: true, message: 'creating orders'});
     }
-    
+
     async setupShipped (req, res) {
         if (!req.user) {
             return res.status(401).json('Access deny');
@@ -68,7 +89,7 @@ class OrderController {
             return res.status(200).json({ data: data.success });
         }
     }
-    
+
     async bulkCancel (req, res) {
         if (!req.user) {
             return res.status(401).json('Access deny');
@@ -79,7 +100,7 @@ class OrderController {
             return res.status(200).json({ data: data.success });
         }
     }
-    
+
 }
 
 export default new OrderController();
