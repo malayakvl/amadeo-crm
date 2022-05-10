@@ -100,6 +100,7 @@ export default function Subscription({
                                             {t('Selected plan Price')}:{' '}
                                             {formatCurrency(planInfo.stripeInfo.unit_amount / 100)}
                                         </span>
+                                        <span className="block mt-2 mb-4">{t('trial_notice')}</span>
                                     </>
                                 )}
                                 {query.type === 'trial' && (

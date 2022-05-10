@@ -256,6 +256,61 @@ class Order {
         }
     }
 
+    async updateProductConfigQty(configId, qty) {
+        const client = await pool.connect();
+        try {
+            const waitListQuery = `UPDATE data.product_configurations SET quantity=${qty} WHERE id=${configId};`;
+            console.log(waitListQuery);
+            await client.query(waitListQuery);
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error (runWaitWorkflow):',
+                    { message: e.message }
+                );
+            }
+            const items = null;
+            const error = {
+                code: 500,
+                message: 'Error get list of users'
+            };
+            return {
+                items,
+                error
+            };
+        } finally {
+            client.release();
+        }
+    }
+
+    async runWaitWorkflow(sessionId, productConfigurationId) {
+        const client = await pool.connect();
+        try {
+            const waitListQuery = `SELECT * FROM data.set_orders_from_waiting_list_by_product(${sessionId}, ${productConfigurationId});`;
+            await client.query(waitListQuery);
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error (runWaitWorkflow):',
+                    { message: e.message }
+                );
+            }
+            const items = null;
+            const error = {
+                code: 500,
+                message: 'Error get list of users'
+            };
+            return {
+                items,
+                error
+            };
+        } finally {
+            client.release();
+        }
+    }
+
     async fetchWaitingItems (page, perPage = 20, user, isRead = false, reqOffset = null, filters, column, sort) {
         const client = await pool.connect();
         try {

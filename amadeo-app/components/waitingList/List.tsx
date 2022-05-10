@@ -7,12 +7,17 @@ import {
 } from '../../redux/waitingList/selectors';
 import { PaginationType } from '../../constants';
 import { DataTable } from '../_common';
-import { fetchItemsAction } from '../../redux/waitingList';
+import {
+    fetchItemsAction,
+    setupConfiguarationIdAction,
+    showPopupQtyAction
+} from '../../redux/waitingList';
+import { runWatingAction } from '../../redux/waitingList/actions';
 import moment from 'moment';
 import { baseApiUrl } from '../../constants';
 import { setPaginationAction } from '../../redux/layouts';
 import { useTranslations } from 'next-intl';
-import { FilterValues, ListItems } from './index';
+import { FilterValues, ListItems, ShowQtyModal } from './index';
 import { paginationSelectorFactory } from '../../redux/layouts/selectors';
 import { DateRange } from 'react-date-range';
 import 'react-date-range/dist/styles.css'; // main css file
@@ -203,7 +208,36 @@ const ListMessages: React.FC = () => {
                                 {item.item_buyers.length}x{' '}
                                 <span className="red-yellow-gradient-text">{t('shopper (s)')}</span>
                             </td>
-                            {/*<td></td>*/}
+                            <td>
+                                <span
+                                    onClick={() => {
+                                        dispatch(
+                                            setupConfiguarationIdAction(
+                                                item.product_configuration_id
+                                            )
+                                        );
+                                        dispatch(showPopupQtyAction(true));
+                                    }}
+                                    role="presentation"
+                                    className="cursor-pointer">
+                                    {t('Change qty')}
+                                </span>
+                            </td>
+                            <td>
+                                <span
+                                    onClick={() => {
+                                        dispatch(
+                                            runWatingAction(
+                                                item.live_sessions_id,
+                                                item.product_configuration_id
+                                            )
+                                        );
+                                    }}
+                                    className="gradient-btn cursor-pointer"
+                                    role="presentation">
+                                    {t('Run')}
+                                </span>
+                            </td>
                         </tr>
                         <tr
                             className={
@@ -221,6 +255,7 @@ const ListMessages: React.FC = () => {
                     </Fragment>
                 ))}
             </DataTable>
+            <ShowQtyModal />
         </div>
     );
 };

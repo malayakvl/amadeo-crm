@@ -5,7 +5,9 @@ import {
     setEmptyFormAction,
     showPopupAction,
     fetchFilerItems,
-    showDateSelectorAction
+    showDateSelectorAction,
+    showPopupQtyAction,
+    setupConfiguarationIdAction
 } from './actions';
 
 const initialState: {
@@ -18,6 +20,8 @@ const initialState: {
     fileterData: any;
     showDateSelector: boolean;
     orderFetched: boolean;
+    showQtyModal: boolean;
+    selectedConfiguarationId: number | null;
 } = {
     isFetched: false,
     loading: false,
@@ -32,7 +36,9 @@ const initialState: {
         amounts: []
     },
     showDateSelector: false,
-    orderFetched: false
+    orderFetched: false,
+    showQtyModal: false,
+    selectedConfiguarationId: null
 };
 
 const ACTION_HANDLERS: any = {
@@ -95,6 +101,18 @@ const ACTION_HANDLERS: any = {
             ...state,
             showDateSelector: action.payload
         })
+    },
+    [showPopupQtyAction]: {
+        next: (state: State.WaitingList, action: Action<boolean>): State.WaitingList => ({
+            ...state,
+            showQtyModal: action.payload
+        })
+    },
+    [setupConfiguarationIdAction]: {
+        next: (state: State.WaitingList, action: Action<number | null>): State.WaitingList => ({
+            ...state,
+            selectedConfiguarationId: action.payload
+        })
     }
 };
 
@@ -104,7 +122,9 @@ export {
     showPopupAction,
     setEmptyFormAction,
     fetchFilerItems,
-    showDateSelectorAction
+    showDateSelectorAction,
+    showPopupQtyAction,
+    setupConfiguarationIdAction
 };
 
 // ------------------------------------

@@ -1,5 +1,5 @@
 import { createAction } from 'redux-actions';
-import { authHeader } from '../../lib/functions';
+import { authHeader, toggleModalPopup } from '../../lib/functions';
 import axios from 'axios';
 import getConfig from 'next/config';
 const { publicRuntimeConfig } = getConfig();
@@ -93,8 +93,65 @@ export const fetchItemAction: any = createAction(
             };
         }
 );
+export const runWatingAction: any = createAction(
+    'orders/RUN_WAITING_LIST',
+    async (sessionId: number, productConfigurationId: number) =>
+        async (
+            dispatch: Type.Dispatch,
+            getState: () => State.Root
+        ): Promise<{ item: Livesessions.DataItem }> => {
+            const state = getState();
+            dispatch(showLoaderAction(true));
+            const res = await axios.post(
+                `${baseUrl}/order/run-wait-workflow`,
+                { sessionId: sessionId, productConfigurationId: productConfigurationId },
+                {
+                    headers: {
+                        ...authHeader(state.user.user.email)
+                    }
+                }
+            );
+            if (res.status) {
+                dispatch(showLoaderAction(false));
+                dispatch(fetchItemsAction());
+                // dispatch(showItemAction(true));
+            }
+            return {
+                item: res.data.item
+            };
+        }
+);
+export const updateProductConfigQtyAction: any = createAction(
+    'orders/UPDAE_PRODUCT_CONFIG_QTY',
+    async (data: any) =>
+        async (
+            dispatch: Type.Dispatch,
+            getState: () => State.Root
+        ): Promise<{ item: Livesessions.DataItem }> => {
+            const state = getState();
+            dispatch(showLoaderAction(true));
+            const res = await axios.post(`${baseUrl}/order/update-config-qty`, data, {
+                headers: {
+                    ...authHeader(state.user.user.email)
+                }
+            });
+            if (res.status) {
+                dispatch(showLoaderAction(false));
+                dispatch(setupConfiguarationIdAction(null));
+                dispatch(fetchItemsAction());
+                dispatch(showPopupQtyAction(false));
+                toggleModalPopup('.modal-wait-qty');
+                // dispatch(showItemAction(true));
+            }
+            return {
+                item: res.data.item
+            };
+        }
+);
 
 export const showPopupAction: any = createAction('orders/SHOW_POPUP');
 export const showDateSelectorAction: any = createAction('orders/SHOW_DATE_POPUP');
 export const setEmptyFormAction: any = createAction('orders/EMPTY_FORM');
+export const showPopupQtyAction: any = createAction('waiting/SHOW_QTY_FORM');
+export const setupConfiguarationIdAction: any = createAction('waiting/SETUP_CONFIG_QTY');
 // export const showItemAction: any = createAction('orders/CHATBOT_SHOWITEM');
