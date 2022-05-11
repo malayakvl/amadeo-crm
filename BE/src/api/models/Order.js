@@ -256,12 +256,16 @@ class Order {
         }
     }
 
-    async updateProductConfigQty(configId, qty) {
+    async updateProductConfigQty(configId, qty, sessionId) {
         const client = await pool.connect();
         try {
-            const waitListQuery = `UPDATE data.product_configurations SET quantity=${qty} WHERE id=${configId};`;
-            console.log(waitListQuery);
+            const updtQuery = `UPDATE data.product_configurations SET quantity=${qty} WHERE id=${configId};`;
+            await client.query(updtQuery);
+
+            // run workflow for update waiting items
+            const waitListQuery = `SELECT * FROM data.set_orders_from_waiting_list_by_product(${sessionId}, ${configId});`;
             await client.query(waitListQuery);
+
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
                 logger.log(

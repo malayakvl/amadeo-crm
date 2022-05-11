@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { toggleModalPopup } from '../../lib/functions';
 import { useTranslations } from 'next-intl';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectedConfiguarationIdSelector } from '../../redux/waitingList/selectors';
+import { selectedConfiguarationItemSelector } from '../../redux/waitingList/selectors';
 import * as Yup from 'yup';
 import { InputText } from '../_form';
 import { Formik } from 'formik';
@@ -17,7 +17,7 @@ const ShowQtyModal: React.FC<any> = () => {
     const t = useTranslations();
     const dispatch = useDispatch();
     const showModal = useSelector(showQtyPopupSelector);
-    const selectedConfigurationId = useSelector(selectedConfiguarationIdSelector);
+    const selectedConfigurationItem = useSelector(selectedConfiguarationItemSelector);
     useEffect(() => {
         if (showModal) {
             toggleModalPopup('.modal-wait-qty');
@@ -63,8 +63,11 @@ const ShowQtyModal: React.FC<any> = () => {
                                     validationSchema={validationSchema}
                                     onSubmit={(values) => {
                                         const data: any = {
-                                            selectedConfigurationId: selectedConfigurationId,
-                                            itemQty: values.itemQty
+                                            selectedConfigurationId:
+                                                selectedConfigurationItem.product_configuration_id,
+                                            itemQty: values.itemQty,
+                                            liveSessionId:
+                                                selectedConfigurationItem.live_sessions_id
                                         };
                                         dispatch(updateProductConfigQtyAction(data));
                                     }}>

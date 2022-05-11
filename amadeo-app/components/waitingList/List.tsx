@@ -12,7 +12,7 @@ import {
     setupConfiguarationIdAction,
     showPopupQtyAction
 } from '../../redux/waitingList';
-import { runWatingAction } from '../../redux/waitingList/actions';
+// import { runWatingAction } from '../../redux/waitingList/actions';
 import moment from 'moment';
 import { baseApiUrl } from '../../constants';
 import { setPaginationAction } from '../../redux/layouts';
@@ -211,11 +211,12 @@ const ListMessages: React.FC = () => {
                             <td>
                                 <span
                                     onClick={() => {
-                                        dispatch(
-                                            setupConfiguarationIdAction(
-                                                item.product_configuration_id
-                                            )
-                                        );
+                                        // dispatch(
+                                        //     setupConfiguarationIdAction(
+                                        //         item.product_configuration_id
+                                        //     )
+                                        // );
+                                        dispatch(setupConfiguarationIdAction(item));
                                         dispatch(showPopupQtyAction(true));
                                     }}
                                     role="presentation"
@@ -223,21 +224,21 @@ const ListMessages: React.FC = () => {
                                     {t('Change qty')}
                                 </span>
                             </td>
-                            <td>
-                                <span
-                                    onClick={() => {
-                                        dispatch(
-                                            runWatingAction(
-                                                item.live_sessions_id,
-                                                item.product_configuration_id
-                                            )
-                                        );
-                                    }}
-                                    className="gradient-btn cursor-pointer"
-                                    role="presentation">
-                                    {t('Run')}
-                                </span>
-                            </td>
+                            {/*<td>*/}
+                            {/*    <span*/}
+                            {/*        onClick={() => {*/}
+                            {/*            dispatch(*/}
+                            {/*                runWatingAction(*/}
+                            {/*                    item.live_sessions_id,*/}
+                            {/*                    item.product_configuration_id*/}
+                            {/*                )*/}
+                            {/*            );*/}
+                            {/*        }}*/}
+                            {/*        className="gradient-btn cursor-pointer"*/}
+                            {/*        role="presentation">*/}
+                            {/*        {t('Run')}*/}
+                            {/*    </span>*/}
+                            {/*</td>*/}
                         </tr>
                         <tr
                             className={

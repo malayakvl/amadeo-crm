@@ -40,7 +40,7 @@ export const showQtyPopupSelector = createSelector(
     rootSelector,
     (waitingList: State.WaitingList): boolean => waitingList.showQtyModal
 );
-export const selectedConfiguarationIdSelector = createSelector(
+export const selectedConfiguarationItemSelector = createSelector(
     rootSelector,
-    (waitingList: State.WaitingList): number | null => waitingList.selectedConfiguarationId
+    (waitingList: State.WaitingList): any => waitingList.selectedConfiguarationItem
 );
