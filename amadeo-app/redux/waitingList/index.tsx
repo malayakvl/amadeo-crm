@@ -21,7 +21,7 @@ const initialState: {
     showDateSelector: boolean;
     orderFetched: boolean;
     showQtyModal: boolean;
-    selectedConfiguarationId: number | null;
+    selectedConfiguarationItem: any;
 } = {
     isFetched: false,
     loading: false,
@@ -38,7 +38,7 @@ const initialState: {
     showDateSelector: false,
     orderFetched: false,
     showQtyModal: false,
-    selectedConfiguarationId: null
+    selectedConfiguarationItem: null
 };
 
 const ACTION_HANDLERS: any = {
@@ -109,9 +109,9 @@ const ACTION_HANDLERS: any = {
         })
     },
     [setupConfiguarationIdAction]: {
-        next: (state: State.WaitingList, action: Action<number | null>): State.WaitingList => ({
+        next: (state: State.WaitingList, action: Action<any>): State.WaitingList => ({
             ...state,
-            selectedConfiguarationId: action.payload
+            selectedConfiguarationItem: action.payload
         })
     }
 };

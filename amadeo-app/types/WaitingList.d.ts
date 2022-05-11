@@ -10,7 +10,7 @@ declare namespace WaitingList {
         showDateSelector: boolean;
         orderFetched: boolean;
         showQtyModal: boolean;
-        selectedConfiguarationId: number | null;
+        selectedConfiguarationItem: any;
     }
 
     interface DataItem {

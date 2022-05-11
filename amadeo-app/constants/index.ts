@@ -126,8 +126,8 @@ export const TableHeaders: { [key in PaginationType]: Type.DataTableHeader[] } =
             titleKey: 'Shopper',
             iconClass: 'icon-tbl-users'
         },
-        { titleKey: 'Change quantity' },
-        { titleKey: 'Run' }
+        { titleKey: 'Change quantity' }
+        // { titleKey: 'Run' }
         // { sortKey: 'country', iconClass: 'icon-tbl-sh-cart' },
         // { sortKey: 'payment', iconClass: 'icon-tbl-card' },
         // { titleKey: 'Products' },

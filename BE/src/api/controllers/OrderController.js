@@ -38,12 +38,11 @@ class OrderController {
     }
 
     async updateProductConfigQty(req, res) {
-        const { selectedConfigurationId, itemQty } = req.body;
-        console.log(selectedConfigurationId);
+        const { selectedConfigurationId, itemQty, liveSessionId } = req.body;
         if (!req.user) {
             return res.status(401).json('Access deny');
         } else {
-            await orderModel.updateProductConfigQty(selectedConfigurationId, itemQty);
+            await orderModel.updateProductConfigQty(selectedConfigurationId, itemQty, liveSessionId);
             return res.status(200).json({ success:  true });
         }
     }
